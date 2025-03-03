@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Magic Travel - Cadastro de Vendas</title>
+
+  <!-- ========== CSS do Template (PlainAdmin) ========== -->
+  <!-- Ajuste se necessário o caminho dos arquivos CSS -->
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="assets/css/lineicons.css" />
+  <link rel="stylesheet" href="assets/css/quill/bubble.css" />
+  <link rel="stylesheet" href="assets/css/quill/snow.css" />
+  <link rel="stylesheet" href="assets/css/fullcalendar.css" />
+  <link rel="stylesheet" href="assets/css/morris.css" />
+  <link rel="stylesheet" href="assets/css/datatable.css" />
+  <link rel="stylesheet" href="assets/css/main.css" />
+
+  <!-- ========== Estilos Extras Para o Formulário ========== -->
+  <style>
+    .form-container {
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 6px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .form-container h1 {
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+    }
+    .form-container h2 {
+      margin-top: 20px;
+      margin-bottom: 15px;
+      font-size: 1.2rem;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 5px;
+    }
+    .form-group { margin-bottom: 15px; }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+    input[type="text"],
+    input[type="tel"],
+    input[type="email"],
+    input[type="date"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 6px 10px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    textarea { resize: vertical; }
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      margin-bottom: 5px;
+    }
+    .col-50 {
+      width: 50%;
+      padding-right: 10px;
+      box-sizing: border-box;
+    }
+    .col-33 {
+      width: 33.3333%;
+      padding-right: 10px;
+      box-sizing: border-box;
+    }
+    .col-25 {
+      width: 25%;
+      padding-right: 10px;
+      box-sizing: border-box;
+    }
+    .col-100 {
+      width: 100%;
+      padding-right: 0;
+      box-sizing: border-box;
+    }
+    .row > .col-50:last-child,
+    .row > .col-33:last-child,
+    .row > .col-25:last-child {
+      padding-right: 0;
+    }
+    .btn {
+      background-color: #3a86ff;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: background-color 0.2s ease-in-out;
+      margin-top: 10px;
+    }
+    .btn:hover {
+      background-color: #2a5fb2;
+    }
+    @media (max-width: 768px) {
+      .col-50,
+      .col-33,
+      .col-25 {
+        width: 100%;
+        padding-right: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ======== Preloader (padrão do template) =========== -->
+  <div id="preloader">
+    <div class="spinner"></div>
+  </div>
+  <!-- ======== Preloader =========== -->
+
+  <!-- 
+    Espaços para carregar header e sidebar por meio de JavaScript 
+    (arquivo "header.html" e "sidebar.html" externos)
+  -->
+  <div id="header-container"></div>
+  <div id="sidebar-container"></div>
+
+  <!-- ======== main-wrapper start =========== -->
+  <main class="main-wrapper">
+    <!-- ========== SEÇÃO PRINCIPAL ONDE INSERIMOS O FORMULÁRIO ========== -->
+    <section class="tab-components pt-30">
+      <div class="container-fluid">
+        <div class="form-layout-wrapper">
+          <div class="row">
+            <div class="col-12">
+              <div class="card-style mb-30">
+                <div class="form-container">
+                  <h1>Cadastro de Vendas</h1>
+                  <form id="salesForm">
+                    <!-- Seção: Informações Gerais -->
+                    <section>
+                      <h2>Informações Gerais</h2>
+                      <div class="row">
+                        <div class="form-group col-50">
+                          <label for="data_venda">Data da Venda:</label>
+                          <input type="date" id="data_venda" name="data_venda" required>
+                        </div>
+                        <div class="form-group col-50">
+                          <label for="nome">Nome do Passageiro:</label>
+                          <input type="text" id="nome" name="nome" placeholder="Nome do Passageiro" required>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-50">
+                          <label for="email">E-mail:</label>
+                          <input type="email" id="email" name="email" placeholder="E-mail" required>
+                        </div>
+                        <div class="form-group col-50">
+                          <label for="telefone">Telefone:</label>
+                          <input type="tel" id="telefone" name="telefone" placeholder="Telefone" required>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-50">
+                          <label for="data_nascimento">Data de Nascimento:</label>
+                          <input type="date" id="data_nascimento" name="data_nascimento" required>
+                        </div>
+                        <div class="form-group col-50">
+                          <label for="cpf">CPF:</label>
+                          <input type="text" id="cpf" name="cpf" placeholder="CPF" required>
+                        </div>
+                      </div>
+                    </section>
+
+                    <!-- Seção: Emissão -->
+                    <section>
+                      <h2>Emissão</h2>
+                      <div class="row">
+                        <div class="form-group col-50">
+                          <label for="data_utilizacao">Data de Utilização:</label>
+                          <input type="date" id="data_utilizacao" name="data_utilizacao" required>
+                        </div>
+                        <div class="form-group col-50">
+                          <label for="destino">Destino:</label>
+                          <input type="text" id="destino" name="destino" required>
+                        </div>
+                      </div>
+                      <div class="form-group col-100">
+                        <label for="item">Categoria:</label>
+                        <select id="item" name="item" required>
+                          <option value="">Selecione</option>
+                          <option value="Ingressos">Ingressos</option>
+                          <option value="Hospedagem">Hospedagem</option>
+                          <option value="Aluguel de Carro">Aluguel de Carro</option>
+                          <option value="Passagem Aérea">Passagem Aérea</option>
+                          <option value="Cruzeiro">Cruzeiro</option>
+                          <option value="Guiamento Remoto">Guiamento Remoto</option>
+                          <option value="Seguro Viagem">Seguro Viagem</option>
+                        </select>
+                      </div>
+                    </section>
+
+                    <!-- Seção: Financeiro -->
+                    <section>
+                      <h2>Financeiro</h2>
+                      <div class="row">
+                        <div class="form-group col-33">
+                          <label for="nome_comprador">Nome do Pagador:</label>
+                          <input type="text" id="nome_comprador" name="nome_comprador" required>
+                        </div>
+                        <div class="form-group col-33">
+                          <label for="gateway">Gateway:</label>
+                          <select id="gateway" name="gateway" required>
+                            <option value="ValePay">ValePay</option>
+                            <option value="PagBank">PagBank</option>
+                            <option value="PayPal">PayPal</option>
+                            <option value="Pix Direto">Pix Direto</option>
+                          </select>
+                        </div>
+                        <div class="form-group col-33">
+                          <label for="meio_pgto">Meio de Pagamento:</label>
+                          <select id="meio_pgto" name="meio_pgto" required>
+                            <option value="Pix">Pix</option>
+                            <option value="Cartão">Cartão</option>
+                            <option value="Boleto">Boleto</option>
+                            <option value="Split">Split</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-25">
+                          <label for="bandeira_cartao">Bandeira do Cartão:</label>
+                          <input type="text" id="bandeira_cartao" name="bandeira_cartao">
+                        </div>
+                        <div class="form-group col-25">
+                          <label for="parcelas">Parcelas:</label>
+                          <input type="number" id="parcelas" name="parcelas" min="1" max="12">
+                        </div>
+                        <div class="form-group col-25">
+                          <label for="valor_venda">Valor da Venda:</label>
+                          <input type="number" id="valor_venda" name="valor_venda" step="0.01" required>
+                        </div>
+                        <div class="form-group col-25">
+                          <label for="valor_repassado">Valor Repassado:</label>
+                          <input type="number" id="valor_repassado" name="valor_repassado" step="0.01" required>
+                        </div>
+                      </div>
+                    </section>
+
+                    <!-- Seção: Comercial -->
+                    <section>
+                      <h2>Comercial</h2>
+                      <div class="row">
+                        <div class="form-group col-50">
+                          <label for="origem_cliente">Origem do Cliente:</label>
+                          <select id="origem_cliente" name="origem_cliente">
+                            <option value="Indicação">Indicação</option>
+                            <option value="Blog">Blog</option>
+                            <option value="Site">Site</option>
+                            <option value="Anúncio">Anúncio</option>
+                            <option value="Direct do Instagram">Direct do Instagram</option>
+                          </select>
+                        </div>
+                        <div class="form-group col-50">
+                          <label for="cliente_de">Cliente Atendido Por:</label>
+                          <select id="cliente_de" name="cliente_de" required>
+                            <option value="">Selecione</option>
+                            <option value="Matheus Alvarenga">Matheus Alvarenga</option>
+                            <option value="Raphaela Raposo">Raphaela Raposo</option>
+                            <option value="Vanessa Barreto">Vanessa Barreto</option>
+                            <option value="Breno Severiano">Breno Severiano</option>
+                            <option value="Mariane Nunes">Mariane Nunes</option>
+                            <option value="Guilherme Raimundi">Guilherme Raimundi</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-50">
+                          <label for="efetivado_por">Venda Finalizada Por:</label>
+                          <select id="efetivado_por" name="efetivado_por" required>
+                            <option value="">Selecione</option>
+                            <option value="Matheus Alvarenga">Matheus Alvarenga</option>
+                            <option value="Raphaela Raposo">Raphaela Raposo</option>
+                            <option value="Vanessa Barreto">Vanessa Barreto</option>
+                            <option value="Breno Severiano">Breno Severiano</option>
+                            <option value="Mariane Nunes">Mariane Nunes</option>
+                            <option value="Guilherme Raimundi">Guilherme Raimundi</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-100">
+                          <label for="observacoes_operacionais">Observações Operacionais:</label>
+                          <textarea id="observacoes_operacionais" name="observacoes_operacionais" rows="3" placeholder="Digite suas observações operacionais"></textarea>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-100">
+                          <label for="observacoes_financeiras">Observações Financeiras:</label>
+                          <textarea id="observacoes_financeiras" name="observacoes_financeiras" rows="3" placeholder="Digite suas observações financeiras"></textarea>
+                        </div>
+                      </div>
+                    </section>
+
+                    <!-- Campos Ocultos -->
+                    <input type="hidden" id="id" name="id">
+                    <input type="hidden" id="mes_venda" name="mes_venda">
+                    <input type="hidden" id="uf" name="uf">
+                    <input type="hidden" id="valor_comissao" name="valor_comissao">
+                    <input type="hidden" id="markup" name="markup">
+                    <input type="hidden" id="comissao_do_agente" name="comissao_do_agente">
+                    <input type="hidden" id="data_pgto" name="data_pgto">
+                    <input type="hidden" id="recebido" name="recebido">
+                    <input type="hidden" id="data_repasse" name="data_repasse">
+
+                    <button id="submitButton" type="button" class="btn">Salvar</button>
+                  </form>
+                </div><!-- /form-container -->
+              </div><!-- /card-style -->
+            </div><!-- /col-12 -->
+          </div><!-- /row -->
+        </div><!-- /form-layout-wrapper -->
+      </div><!-- /container-fluid -->
+    </section>
+
+    <!-- ========== footer start (padrão do template) ========== -->
+    <footer class="footer">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-6 order-last order-md-first">
+            <div class="copyright text-center text-md-start">
+              <p class="text-sm">
+                Designed and Developed by
+                <a href="https://plainadmin.com" rel="nofollow" target="_blank">PlainAdmin</a>
+              </p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="terms d-flex justify-content-center justify-content-md-end">
+              <a href="#0" class="text-sm">Term & Conditions</a>
+              <a href="#0" class="text-sm ml-15">Privacy & Policy</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!-- ========== footer end ========== -->
+  </main>
+  <!-- ======== main-wrapper end =========== -->
+
+  <!-- ============ Theme Option Start (opcional do template) ============= -->
+  <button class="option-btn">
+    <i class="lni lni-cog"></i>
+  </button>
+  <div class="option-overlay"></div>
+  <div class="option-box">
+    <div class="option-header">
+      <h5>Settings</h5>
+      <button class="option-btn-close text-gray">
+        <i class="lni lni-close"></i>
+      </button>
+    </div>
+    <h6 class="mb-10">Layout</h6>
+    <ul class="mb-30">
+      <li><button class="leftSidebarButton active">Left Sidebar</button></li>
+      <li><button class="rightSidebarButton">Right Sidebar</button></li>
+    </ul>
+    <h6 class="mb-10">Theme</h6>
+    <ul class="d-flex flex-wrap align-items-center">
+      <li><button class="lightThemeButton active">Light Theme + Sidebar 1</button></li>
+      <li><button class="darkThemeButton">Dark Theme + Sidebar 1</button></li>
+    </ul>
+  </div>
+  <!-- ============ Theme Option End ============= -->
+
+  <!-- ========= Scripts do Template (PlainAdmin) ======== -->
+  <script src="assets/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/Chart.min.js"></script>
+  <script src="assets/js/apexcharts.min.js"></script>
+  <script src="assets/js/dynamic-pie-chart.js"></script>
+  <script src="assets/js/moment.min.js"></script>
+  <script src="assets/js/fullcalendar.js"></script>
+  <script src="assets/js/jvectormap.min.js"></script>
+  <script src="assets/js/world-merc.js"></script>
+  <script src="assets/js/polyfill.js"></script>
+  <script src="assets/js/quill.min.js"></script>
+  <script src="assets/js/datatable.js"></script>
+  <script src="assets/js/Sortable.min.js"></script>
+  <script src="assets/js/main.js"></script>
+
+  <!-- ========== Script do Formulário Magic Travel ========== -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // 1) Carregar o Header e a Sidebar dinamicamente
+      fetch('header.html')
+        .then(response => response.text())
+        .then(html => {
+          document.getElementById('header-container').innerHTML = html;
+        })
+        .catch(err => console.log("Erro ao carregar header:", err));
+
+      fetch('sidebar.html')
+        .then(response => response.text())
+        .then(html => {
+          document.getElementById('sidebar-container').innerHTML = html;
+        })
+        .catch(err => console.log("Erro ao carregar sidebar:", err));
+
+
+      // 2) Gerar ID automaticamente ao carregar a página
+      const idField = document.getElementById('id');
+      if (idField) {
+        fetch('https://magictraveltur.com/get_next_id.php')
+          .then(response => response.json())
+          .then(data => {
+            idField.value = data.next_id || 2501; 
+          })
+          .catch(console.error);
+      }
+
+      // 3) Preencher Mês da Venda e Data de Pagamento com base na Data da Venda
+      const dataVendaField = document.getElementById('data_venda');
+      const mesVendaField = document.getElementById('mes_venda');
+      const dataPgtoField = document.getElementById('data_pgto');
+      if (dataVendaField && mesVendaField && dataPgtoField) {
+        dataVendaField.addEventListener('change', function () {
+          const dataVenda = new Date(this.value);
+          if (!isNaN(dataVenda.getTime())) {
+            const mesVenda = dataVenda.toLocaleString('default', { month: 'long' });
+            mesVendaField.value = mesVenda;
+            dataPgtoField.value = this.value;
+          }
+        });
+      }
+
+      // 4) Preencher UF automaticamente com base no DDD do Telefone
+      const telefoneField = document.getElementById('telefone');
+      const ufField = document.getElementById('uf');
+      if (telefoneField && ufField) {
+        telefoneField.addEventListener('blur', function () {
+          const ddd = this.value.replace(/\D/g, '').slice(0, 2);
+          const estados = {
+            '91': 'PA', '92': 'AM', '93': 'PA', '94': 'PA', '95': 'RR', '96': 'AP', '97': 'AM',
+            '98': 'MA', '99': 'MA', '71': 'BA', '73': 'BA', '74': 'BA', '75': 'BA', '77': 'BA',
+            '81': 'PE', '82': 'AL', '83': 'PB', '84': 'RN', '85': 'CE', '86': 'PI', '87': 'PE',
+            '88': 'CE', '89': 'PI', '61': 'DF', '62': 'GO', '63': 'TO', '64': 'GO', '65': 'MT',
+            '66': 'MT', '67': 'MS', '11': 'SP', '12': 'SP', '13': 'SP', '14': 'SP', '15': 'SP',
+            '16': 'SP', '17': 'SP', '18': 'SP', '19': 'SP', '21': 'RJ', '22': 'RJ', '24': 'RJ',
+            '27': 'ES', '28': 'ES', '31': 'MG', '32': 'MG', '33': 'MG', '34': 'MG', '35': 'MG',
+            '37': 'MG', '38': 'MG', '41': 'PR', '42': 'PR', '43': 'PR', '44': 'PR', '45': 'PR',
+            '46': 'PR', '47': 'SC', '48': 'SC', '49': 'SC', '51': 'RS', '53': 'RS', '54': 'RS',
+            '55': 'RS'
+          };
+          ufField.value = estados[ddd] || '';
+        });
+      }
+
+      // 5) Lógica do botão "Salvar"
+      const submitButton = document.getElementById('submitButton');
+      if (submitButton) {
+        submitButton.addEventListener('click', function () {
+          const valorVenda = parseFloat(document.getElementById('valor_venda')?.value) || 0;
+          const valorRepassado = parseFloat(document.getElementById('valor_repassado')?.value) || 0;
+          
+          // receitaAgencia = valorRepassado
+          const receitaAgencia = valorRepassado;
+          const valorComissaoField = document.getElementById('valor_comissao');
+          if (valorComissaoField) {
+            valorComissaoField.value = receitaAgencia.toFixed(2);
+          }
+          
+          // Markup = (receitaAgencia / valorRepassado) * 100
+          const markupField = document.getElementById('markup');
+          if (markupField) {
+            const markup = valorRepassado > 0 ? (receitaAgencia / valorRepassado) * 100 : 0;
+            markupField.value = markup.toFixed(2);
+          }
+
+          // Determinar Comissão do Agente com base na categoria
+          const categoria = document.getElementById('item')?.value || "";
+          const comissaoDoAgenteField = document.getElementById('comissao_do_agente');
+          const comissoes = {
+            "Ingressos": 0.003,
+            "Hospedagem": 0.003,
+            "Passagem Aérea": 0.01,
+            "Seguro Viagem": 0.1,
+            "Guiamento Remoto": 0.12,
+            "Aluguel de Carro": 0.01,
+            "Cruzeiro": 0.01
+          };
+          const comissaoDoAgente = valorRepassado * (comissoes[categoria] || 0);
+          if (comissaoDoAgenteField) {
+            comissaoDoAgenteField.value = comissaoDoAgente.toFixed(2);
+          }
+
+          // Preencher Data de Repasse com base no Meio de Pagamento
+          const dataVenda = new Date(document.getElementById('data_venda')?.value);
+          const meioPagamento = document.getElementById('meio_pgto')?.value || "";
+          const dataRepasseField = document.getElementById('data_repasse');
+          if (!isNaN(dataVenda.getTime()) && dataRepasseField) {
+            const dataRepasse = new Date(dataVenda);
+            if (meioPagamento === 'Pix') {
+              dataRepasse.setDate(dataRepasse.getDate());
+            } else if (meioPagamento === 'Cartão') {
+              dataRepasse.setDate(dataRepasse.getDate() + 2);
+            }
+            dataRepasseField.value = dataRepasse.toISOString().split('T')[0];
+          }
+
+          // Enviar dados via fetch
+          const form = document.getElementById('salesForm');
+          if (form) {
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+            
+            fetch('https://magictraveltur.com/process_form.php', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(data)
+            })
+              .then(response => {
+                if (!response.ok) {
+                  return response.json().then(err => {
+                    console.error('Erro no servidor:', err);
+                    alert(`Erro no servidor: ${err.error || 'Erro desconhecido'}`);
+                    throw new Error(err.error || 'Erro desconhecido');
+                  });
+                }
+                return response.json();
+              })
+              .then(result => {
+                if (result.success) {
+                  alert('Dados salvos com sucesso!');
+                  window.location.reload(true);
+                } else {
+                  alert(result.error || 'Erro ao salvar os dados.');
+                }
+              })
+              .catch(error => {
+                alert('Erro ao processar os dados: ' + error.message);
+              });
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
