@@ -172,17 +172,25 @@
           const data = await response.json();
 
           if (data.success) {
-            // Redireciona para a área logada
+            // data.user agora possui todos os campos que você retornou
+            console.log(data.user); // Para conferir no console
+
+            // Exemplo de como usar os dados:
+            // Exibir na tela, armazenar, etc.
+            const userFullName = data.user.full_name; 
+            const userEmail    = data.user.email; 
+            const userFoto     = data.user.fotodeperfil;
+
+            // (Opcional) Armazene no localStorage para acessar de outras páginas
+            localStorage.setItem('affiliate_user', JSON.stringify(data.user));
+
+            // Redirecionar
             window.location.href = 'http://businessplace.airland.com.br/index.html';
           } else {
+            // Exibe mensagem de erro
             errorDiv.innerText = data.error || 'Email ou senha incorretos!';
             errorDiv.style.display = 'block';
           }
-        } catch (err) {
-          console.error(err);
-          errorDiv.innerText = 'Ocorreu um erro ao realizar o login.';
-          errorDiv.style.display = 'block';
-        }
       });
     });
   </script>
