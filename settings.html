@@ -16,13 +16,13 @@
   <link rel="stylesheet" href="assets/css/morris.css" />
   <link rel="stylesheet" href="assets/css/datatable.css" />
   <link rel="stylesheet" href="assets/css/main.css" />
-</head>
 
-<style>
+  <style>
     body {
       display: none;
     }
-</style>
+  </style>
+</head>
 
 <body>
   <!-- ======== Preloader =========== -->
@@ -991,7 +991,7 @@
         console.log("Resposta da Sessão:", result);
         if (result.logged_in) {
           // Se estiver logado, exibe o conteúdo removendo o display: none
-          document.head.style.display = "block";
+          document.body.style.display = "block";
         } else {
           // Se não estiver logado, redireciona para a página de login
           window.location.replace("https://businessplace.airland.com.br/signin.html");
