@@ -118,16 +118,17 @@
   </div>
   <!-- ======== Preloader =========== -->
 
-  <!-- 
-    Espaços para carregar header e sidebar por meio de JavaScript 
-    (arquivo "header.html" e "sidebar.html" externos)
-  -->
-  <div id="header-container"></div>
-  <div id="sidebar-container"></div>
+  <!-- SIDEBAR: vamos injetar sidebar.html aqui -->
+  <aside id="sidebar-container" class="sidebar-nav-wrapper"></aside>
+  <!-- Overlay (para mobile) -->
+  <div class="overlay"></div>
 
   <!-- ======== main-wrapper start =========== -->
   <main class="main-wrapper">
-    <!-- ========== SEÇÃO PRINCIPAL ONDE INSERIMOS O FORMULÁRIO ========== -->
+    <!-- HEADER: vamos injetar header.html aqui -->
+    <div id="header-container"></div>
+
+    <!-- SEÇÃO PRINCIPAL ONDE INSERIMOS O FORMULÁRIO ========== -->
     <section class="tab-components pt-30">
       <div class="container-fluid">
         <div class="form-layout-wrapper">
@@ -373,7 +374,7 @@
   </div>
   <!-- ============ Theme Option End ============= -->
 
-  <!-- ========= Scripts do Template (PlainAdmin) ======== -->
+  <!-- ========== Scripts do Template (PlainAdmin) ======== -->
   <script src="assets/js/bootstrap.bundle.min.js"></script>
   <script src="assets/js/Chart.min.js"></script>
   <script src="assets/js/apexcharts.min.js"></script>
@@ -391,14 +392,9 @@
   <!-- ========== Script do Formulário Magic Travel ========== -->
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // 1) Carregar o Header e a Sidebar dinamicamente
-      fetch('header.html')
-        .then(response => response.text())
-        .then(html => {
-          document.getElementById('header-container').innerHTML = html;
-        })
-        .catch(err => console.log("Erro ao carregar header:", err));
-
+      /************************************************************
+       * 1) Carregar header e sidebar dinamicamente, na ordem certa
+       ************************************************************/
       fetch('sidebar.html')
         .then(response => response.text())
         .then(html => {
@@ -406,8 +402,16 @@
         })
         .catch(err => console.log("Erro ao carregar sidebar:", err));
 
+      fetch('header.html')
+        .then(response => response.text())
+        .then(html => {
+          document.getElementById('header-container').innerHTML = html;
+        })
+        .catch(err => console.log("Erro ao carregar header:", err));
 
-      // 2) Gerar ID automaticamente ao carregar a página
+      /************************************************************
+       * 2) Gerar ID automaticamente ao carregar a página
+       ************************************************************/
       const idField = document.getElementById('id');
       if (idField) {
         fetch('https://magictraveltur.com/get_next_id.php')
@@ -418,7 +422,9 @@
           .catch(console.error);
       }
 
-      // 3) Preencher Mês da Venda e Data de Pagamento com base na Data da Venda
+      /************************************************************
+       * 3) Preencher Mês da Venda e Data de Pagamento c/ Data da Venda
+       ************************************************************/
       const dataVendaField = document.getElementById('data_venda');
       const mesVendaField = document.getElementById('mes_venda');
       const dataPgtoField = document.getElementById('data_pgto');
@@ -433,7 +439,9 @@
         });
       }
 
-      // 4) Preencher UF automaticamente com base no DDD do Telefone
+      /************************************************************
+       * 4) Preencher UF automaticamente com base no DDD do Telefone
+       ************************************************************/
       const telefoneField = document.getElementById('telefone');
       const ufField = document.getElementById('uf');
       if (telefoneField && ufField) {
@@ -455,7 +463,9 @@
         });
       }
 
-      // 5) Lógica do botão "Salvar"
+      /************************************************************
+       * 5) Botão "Salvar": preparar e enviar dados ao servidor
+       ************************************************************/
       const submitButton = document.getElementById('submitButton');
       if (submitButton) {
         submitButton.addEventListener('click', function () {
@@ -476,7 +486,7 @@
             markupField.value = markup.toFixed(2);
           }
 
-          // Determinar Comissão do Agente com base na categoria
+          // Comissão do Agente com base na categoria
           const categoria = document.getElementById('item')?.value || "";
           const comissaoDoAgenteField = document.getElementById('comissao_do_agente');
           const comissoes = {
@@ -493,7 +503,7 @@
             comissaoDoAgenteField.value = comissaoDoAgente.toFixed(2);
           }
 
-          // Preencher Data de Repasse com base no Meio de Pagamento
+          // Data de Repasse (Pix imediato, Cartão +2 dias, etc.)
           const dataVenda = new Date(document.getElementById('data_venda')?.value);
           const meioPagamento = document.getElementById('meio_pgto')?.value || "";
           const dataRepasseField = document.getElementById('data_repasse');
@@ -507,7 +517,7 @@
             dataRepasseField.value = dataRepasse.toISOString().split('T')[0];
           }
 
-          // Enviar dados via fetch
+          // Envio via fetch
           const form = document.getElementById('salesForm');
           if (form) {
             const formData = new FormData(form);
