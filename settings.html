@@ -1003,28 +1003,8 @@
       }
     }
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', checkSession);
-    } else {
-      checkSession();
-    }
-  </script>
-  // ========= All Javascript files linkup ========
-  <script src="assets/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/js/Chart.min.js"></script>
-  <script src="assets/js/apexcharts.min.js"></script>
-  <script src="assets/js/dynamic-pie-chart.js"></script>
-  <script src="assets/js/moment.min.js"></script>
-  <script src="assets/js/fullcalendar.js"></script>
-  <script src="assets/js/jvectormap.min.js"></script>
-  <script src="assets/js/world-merc.js"></script>
-  <script src="assets/js/polyfill.js"></script>
-  <script src="assets/js/quill.min.js"></script>
-  <script src="assets/js/datatable.js"></script>
-  <script src="assets/js/Sortable.min.js"></script>
-  <script src="assets/js/main.js"></script>
-
-  <script>
+    // Executa a verificação assim que o DOM estiver carregado
+    document.addEventListener("DOMContentLoaded", checkSession);
 
     document.addEventListener("DOMContentLoaded", function() {
       // Supondo que você tenha o ID do usuário atual (por exemplo, armazenado em uma variável ou obtido via sessão)
@@ -1049,8 +1029,21 @@
         })
         .catch(error => console.error("Erro na API:", error));
     });
-</script>
-</script>
+  </script>
+  <!-- ========= All Javascript files linkup ======== -->
+  <script src="assets/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/Chart.min.js"></script>
+  <script src="assets/js/apexcharts.min.js"></script>
+  <script src="assets/js/dynamic-pie-chart.js"></script>
+  <script src="assets/js/moment.min.js"></script>
+  <script src="assets/js/fullcalendar.js"></script>
+  <script src="assets/js/jvectormap.min.js"></script>
+  <script src="assets/js/world-merc.js"></script>
+  <script src="assets/js/polyfill.js"></script>
+  <script src="assets/js/quill.min.js"></script>
+  <script src="assets/js/datatable.js"></script>
+  <script src="assets/js/Sortable.min.js"></script>
+  <script src="assets/js/main.js"></script>
 
 </body>
 
