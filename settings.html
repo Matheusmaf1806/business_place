@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -732,7 +733,7 @@
                   <div class="profile-info">
                     <div class="info">
                       <div class="image">
-                        <img src="assets/images/profile/profile-image.png" alt="" />
+                        <img id="profileImage" src="" alt="Profile Image" />
                       </div>
                       <div>
                         <h6 class="fw-500" id="dropdownUserName"></h6>
@@ -746,12 +747,12 @@
                     <div class="author-info flex items-center !p-1">
                       <div class="image">
                         <!-- O id "profileImage" será atualizado com a URL do fotodeperfil -->
-                        <img src="" alt="Profile Image" id="profileImage">
+                        <img id="profileImageDropdown" src="" alt="Profile Image" />
                       </div>
                       <div class="content">
-                        <!-- IDs para os nomes e e-mail, para serem preenchidos via API -->
                         <h4 class="text-sm" id="dropdownUserName"></h4>
-                        <a class="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white text-xs" href="#" id="dropdownUserEmail"></a>
+                        <a class="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white text-xs"
+                           href="#" id="dropdownUserEmail"></a>
                       </div>
                     </div>                    
                   </li>
@@ -831,7 +832,7 @@
               <div class="profile-info">
                 <div class="d-flex align-items-center mb-30">
                   <div class="profile-image">
-                    <img src="assets/images/profile/profile-1.png" alt="" />
+                    <img id="profileImageLeft" src="" alt="Foto Perfil" />
                     <div class="update-image">
                       <input type="file" />
                       <label for=""><i class="lni lni-cloud-upload"></i></label>
