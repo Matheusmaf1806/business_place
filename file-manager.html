@@ -1153,7 +1153,6 @@
 
     // Executa a verificação assim que o DOM estiver carregado
     document.addEventListener("DOMContentLoaded", checkSession);
-  </script>
   <!-- ========= All Javascript files linkup ======== -->
   <script src="assets/js/bootstrap.bundle.min.js"></script>
   <script src="assets/js/Chart.min.js"></script>
@@ -1172,478 +1171,386 @@
   <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
   <script src="assets/js/script.js"></script>
 
-
   <script>
     /***************************************
-     * Configurações e Variáveis Globais
-     ***************************************/
-    const UPLOAD_URL = "https://airland.com.br/upload_voucher.php";
-    const LIST_URL   = "https://airland.com.br/list_vouchers.php";
+ * Configurações e Variáveis Globais
+ ***************************************/
+  const UPLOAD_URL = "https://airland.com.br/upload_voucher.php";
+  const LIST_URL   = "https://airland.com.br/list_vouchers.php";
   
-    const disneyVoucherConfig = {
-      images: [
-        { url: "https://businessplace.airland.com.br/images/Logofundo.png", left: 66, top: 47, width: 171, height: 47, pages: "0" },
-        { url: "https://business.magictraveltur.com/image/Tarja.png",    left: 178, top: 31, width: 350, height: 26, pages: "0" }
-      ]
-    };
+  const disneyVoucherConfig = {
+    images: [
+      { url: "https://businessplace.airland.com.br/images/Logofundo.png", left: 66, top: 47, width: 171, height: 47, pages: "0" },
+      { url: "https://business.magictraveltur.com/image/Tarja.png",    left: 178, top: 31, width: 350, height: 26, pages: "0" }
+    ]
+  };
   
-    const universalVoucherConfig = {
-      images: [
-          { url: "https://businessplace.airland.com.br/images/Logofundo.png", left: 352, top: 47, width: 196, height: 44, pages: "all" },
-        { url: "https://business.magictraveltur.com/image/Tarja.png",    left: 15.92, top: 504.22, width: 571.74, height: 160.32, pages: "all" }
-      ]
-    };
+  const universalVoucherConfig = {
+    images: [
+      { url: "https://businessplace.airland.com.br/images/Logofundo.png", left: 352, top: 47, width: 196, height: 44, pages: "all" },
+      { url: "https://business.magictraveltur.com/image/Tarja.png",    left: 15.92, top: 504.22, width: 571.74, height: 160.32, pages: "all" }
+    ]
+  };
   
-    const seaWorldVoucherConfig = {
-      images: [
-        { url: "https://business.magictraveltur.com/image/Tarja.png",    left: 225, top: 644, width: 146, height: 16, pages: "all" },
-        { url: "https://businessplace.airland.com.br/images/Logofundo.png", left: 447, top: 51, width: 83, height: 23, pages: "all" }
-      ]
-    };
+  const seaWorldVoucherConfig = {
+    images: [
+      { url: "https://business.magictraveltur.com/image/Tarja.png",    left: 225, top: 644, width: 146, height: 16, pages: "all" },
+      { url: "https://businessplace.airland.com.br/images/Logofundo.png", left: 447, top: 51, width: 83, height: 23, pages: "all" }
+    ]
+  };
   
-    /***************************************
-     * Funções Auxiliares (PDF, Upload)
-     ***************************************/
-    // Converte File -> ArrayBuffer
-    function fileToArrayBuffer(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = e => resolve(e.target.result);
-        reader.onerror = e => reject(e);
-        reader.readAsArrayBuffer(file);
-      });
-    }
-  
-    // Baixa imagem como arrayBuffer
-    async function fetchImageAsBytes(url) {
-      const resp = await fetch(url);
-      if (!resp.ok) throw new Error("Erro ao buscar imagem: " + url);
-      return await resp.arrayBuffer();
-    }
-  
-    // Insere imagens no PDF de acordo com a configuração
-    async function mergePDFWithConfig(originalPdfBytes, config) {
-      const pdfDoc = await PDFLib.PDFDocument.load(originalPdfBytes);
-      const totalPages = pdfDoc.getPageCount();
-  
-      for (const img of config.images) {
-        const imgBytes = await fetchImageAsBytes(img.url);
-        let embeddedImg;
-        try {
-          embeddedImg = await pdfDoc.embedPng(imgBytes);
-        } catch {
-          embeddedImg = await pdfDoc.embedJpg(imgBytes);
-        }
-  
-        if (img.pages === "all") {
-          for (let i = 0; i < totalPages; i++) {
-            const page = pdfDoc.getPage(i);
-            const { height } = page.getSize();
-            const x = img.left ?? 0;
-            const y = height - (img.top ?? 0) - (img.height ?? embeddedImg.height);
-            page.drawImage(embeddedImg, { x, y, width: img.width, height: img.height });
-          }
-        } else {
-          const pageIndex = parseInt(img.pages, 10) || 0;
-          if (pageIndex >= 0 && pageIndex < totalPages) {
-            const page = pdfDoc.getPage(pageIndex);
-            const { height } = page.getSize();
-            const x = img.left ?? 0;
-            const y = height - (img.top ?? 0) - (img.height ?? embeddedImg.height);
-            page.drawImage(embeddedImg, { x, y, width: img.width, height: img.height });
-          }
-        }
-      }
-      return pdfDoc.save();
-    }
-  
-    // Upload do PDF final para o servidor
-    async function uploadFinalPDF(pdfBytes, category) {
-      const blob = new Blob([pdfBytes], { type: "application/pdf" });
-      const fd = new FormData();
-      fd.append("pdfFile", blob, "VoucherEditado.pdf");
-      fd.append("voucherType", category);
-  
-      const resp = await fetch(UPLOAD_URL, { method: "POST", body: fd });
-      if (!resp.ok) {
-        const errData = await resp.json().catch(() => ({}));
-        throw new Error(errData.error || "Falha no upload_voucher.php");
-      }
-      const data = await resp.json();
-      if (!data.success) throw new Error(data.error || "Falha ao salvar PDF");
-      return data;
-    }
-  
-    /***************************************
-     * Lógica Principal do Formulário (Converter)
-     ***************************************/
-    document.addEventListener("DOMContentLoaded", () => {
-      const voucherTypeSelect = document.getElementById("voucherType");
-      const pdfFileInput = document.getElementById("pdfFile");
-      const convertButton = document.getElementById("convertButton");
-  
-      convertButton.addEventListener("click", async () => {
-        const category = voucherTypeSelect.value;
-        const file = pdfFileInput.files[0];
-        if (!category) {
-          alert("Selecione uma categoria!");
-          return;
-        }
-        if (!file) {
-          alert("Selecione um arquivo PDF!");
-          return;
-        }
-  
-        try {
-          // Lê o PDF original
-          const originalPdfBytes = await fileToArrayBuffer(file);
-  
-          // Seleciona a configuração de acordo com a categoria
-          let config = { images: [] };
-          if (category === "Disney") config = disneyVoucherConfig;
-          else if (category === "Universal") config = universalVoucherConfig;
-          else if (category === "SeaWorld") config = seaWorldVoucherConfig;
-          // Para "Hotéis" não há alterações
-  
-          // Realiza o merge do PDF com as imagens
-          const finalPdfBytes = await mergePDFWithConfig(originalPdfBytes, config);
-  
-          // Efetua o upload do PDF final
-          await uploadFinalPDF(finalPdfBytes, category);
-          alert("PDF salvo com sucesso para " + category + "!");
-          loadRecentVouchers(); // Recarrega a lista de vouchers recentes
-        } catch (err) {
-          console.error("Erro: ", err);
-          alert("Erro ao processar: " + err.message);
-        }
-      });
-  
-      // Carrega a lista de vouchers recentes ao iniciar
-      loadRecentVouchers();
+  /***************************************
+   * Funções Auxiliares (PDF, Upload)
+   ***************************************/
+  function fileToArrayBuffer(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = e => resolve(e.target.result);
+      reader.onerror = e => reject(e);
+      reader.readAsArrayBuffer(file);
     });
+  }
   
-    /***************************************
-     * Listagem e Paginação de Vouchers Recentes
-     ***************************************/
-    let allRecords = [];
-    let currentPage = 1;
-    const pageSize = 10; // Número de vouchers por página
+  async function fetchImageAsBytes(url) {
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error("Erro ao buscar imagem: " + url);
+    return await resp.arrayBuffer();
+  }
   
-    const recentFilesContainer = document.getElementById("recentFilesContainer");
-    const prevPageBtn = document.getElementById("prevPageBtn");
-    const nextPageBtn = document.getElementById("nextPageBtn");
-    const paginationInfo = document.getElementById("paginationInfo");
+  async function mergePDFWithConfig(originalPdfBytes, config) {
+    const pdfDoc = await PDFLib.PDFDocument.load(originalPdfBytes);
+    const totalPages = pdfDoc.getPageCount();
   
-    // Função para carregar os vouchers recentes via list_vouchers.php
-    async function loadRecentVouchers() {
+    for (const img of config.images) {
+      const imgBytes = await fetchImageAsBytes(img.url);
+      let embeddedImg;
       try {
-        const resp = await fetch(LIST_URL);
-        if (!resp.ok) throw new Error("Erro ao acessar list_vouchers.php");
-        const data = await resp.json();
-        allRecords = data;
-        currentPage = 1;
-        renderCurrentPage();
-      } catch (err) {
-        console.error("Erro ao carregar vouchers:", err);
+        embeddedImg = await pdfDoc.embedPng(imgBytes);
+      } catch {
+        embeddedImg = await pdfDoc.embedJpg(imgBytes);
+      }
+  
+      if (img.pages === "all") {
+        for (let i = 0; i < totalPages; i++) {
+          const page = pdfDoc.getPage(i);
+          const { height } = page.getSize();
+          const x = img.left ?? 0;
+          const y = height - (img.top ?? 0) - (img.height ?? embeddedImg.height);
+          page.drawImage(embeddedImg, { x, y, width: img.width, height: img.height });
+        }
+      } else {
+        const pageIndex = parseInt(img.pages, 10) || 0;
+        if (pageIndex >= 0 && pageIndex < totalPages) {
+          const page = pdfDoc.getPage(pageIndex);
+          const { height } = page.getSize();
+          const x = img.left ?? 0;
+          const y = height - (img.top ?? 0) - (img.height ?? embeddedImg.height);
+          page.drawImage(embeddedImg, { x, y, width: img.width, height: img.height });
+        }
       }
     }
+    return pdfDoc.save();
+  }
   
-    // Renderiza a página atual dos vouchers
-    // Renderiza a página atual dos vouchers
-    function renderCurrentPage() {
-      recentFilesContainer.innerHTML = "";
-      const totalPages = Math.ceil(allRecords.length / pageSize);
-      if (totalPages < 1) {
-        paginationInfo.textContent = "Nenhum registro encontrado";
-        prevPageBtn.disabled = true;
-        nextPageBtn.disabled = true;
+  async function uploadFinalPDF(pdfBytes, category) {
+    const blob = new Blob([pdfBytes], { type: "application/pdf" });
+    const fd = new FormData();
+    fd.append("pdfFile", blob, "VoucherEditado.pdf");
+    fd.append("voucherType", category);
+  
+    const resp = await fetch(UPLOAD_URL, { method: "POST", body: fd });
+    if (!resp.ok) {
+      const errData = await resp.json().catch(() => ({}));
+      throw new Error(errData.error || "Falha no upload_voucher.php");
+    }
+    const data = await resp.json();
+    if (!data.success) throw new Error(data.error || "Falha ao salvar PDF");
+    return data;
+  }
+  
+  /***************************************
+   * Lógica Principal do Formulário (Converter)
+   ***************************************/
+  document.addEventListener("DOMContentLoaded", () => {
+    const voucherTypeSelect = document.getElementById("voucherType");
+    const pdfFileInput = document.getElementById("pdfFile");
+    const convertButton = document.getElementById("convertButton");
+  
+    convertButton.addEventListener("click", async () => {
+      const category = voucherTypeSelect.value;
+      const file = pdfFileInput.files[0];
+      if (!category) {
+        alert("Selecione uma categoria!");
         return;
       }
-      if (currentPage > totalPages) currentPage = totalPages;
-
-      const startIndex = (currentPage - 1) * pageSize;
-      const endIndex = startIndex + pageSize;
-      const pageItems = allRecords.slice(startIndex, endIndex);
-
-      // Monta o HTML para cada voucher recente
-      pageItems.forEach(item => {
-        // Cria o container para o voucher
-        const itemDiv = document.createElement("div");
-        itemDiv.className = "recent-file-item d-flex align-items-center justify-content-between";
-
-        // Parte esquerda: ícone e informações
-        const leftPart = document.createElement("div");
-        leftPart.className = "d-flex align-items-center";
-
-        const iconDiv = document.createElement("div");
-        iconDiv.className = "icon";
-
-        // Define o SVG a ser usado conforme a categoria
-        let iconSVG = "";
-        if (item.category === "Disney") {
-          iconSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width:24px; height:24px; fill: currentColor;">
-                      <title>auto-fix</title>
-                      <path d="M7.5,5.6L5,7L6.4,4.5L5,2L7.5,3.4L10,2L8.6,4.5L10,7L7.5,5.6M19.5,15.4L22,14L20.6,16.5L22,19L19.5,17.6L17,19L18.4,16.5L17,14L19.5,15.4M22,2L20.6,4.5L22,7L19.5,5.6L17,7L18.4,4.5L17,2L19.5,3.4L22,2M13.34,12.78L15.78,10.34L13.66,8.22L11.22,10.66L13.34,12.78M14.37,7.29L16.71,9.63C17.1,10 17.1,10.65 16.71,11.04L5.04,22.71C4.65,23.1 4,23.1 3.63,22.71L1.29,20.37C0.9,20 0.9,19.35 1.29,18.96L12.96,7.29C13.35,6.9 14,6.9 14.37,7.29Z"/>
-                    </svg>`;
-        } else if (item.category === "SeaWorld") {
-          iconSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width:24px; height:24px; fill: currentColor;">
-                      <title>dolphin</title>
-                      <path d="M20 7C20 7 20 3 15 3C13.47 3 12.15 3.19 11 3.5C10.5 3.06 7.26 .309 4 3.57L6.56 6.13C2.5 10.53 4 18 4 18S1 18 1 22C1 22 5 21 5 21C5 21 9 22 9 22C9 18 6 18 6 18S6.85 12.24 13 11.18V14C15 14 15.68 12.19 15.89 11H18C22 11 23 10 23 9S21 7 20 7M18 8C17.45 8 17 7.55 17 7S17.45 6 18 6 19 6.45 19 7 18.55 8 18 8Z"/>
-                    </svg>`;
-        } else if (item.category === "Universal") {
-          iconSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width:24px; height:24px; fill: currentColor;">
-                      <title>earth</title>
-                      <path d="M17.9,17.39C17.64,16.59 16.89,16 16,16H15V13A1,1 0 0,0 14,12H8V10H10A1,1 0 0,0 11,9V7H13A2,2 0 0,0 15,5V4.59C17.93,5.77 20,8.64 20,12C20,14.08 19.2,15.97 17.9,17.39M11,19.93C7.05,19.44 4,16.08 4,12C4,11.38 4.08,10.78 4.21,10.21L9,15V16A2,2 0 0,0 11,18M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"/>
-                    </svg>`;
-        } else if (item.category === "Hospedagem") {
-          iconSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width:24px; height:24px; fill: currentColor;">
-                      <title>bed</title>
-                      <path d="M19,7H11V14H3V5H1V20H3V17H21V20H23V11A4,4 0 0,0 19,7M7,13A3,3 0 0,0 10,10A3,3 0 0,0 7,7A3,3 0 0,0 4,10A3,3 0 0,0 7,13Z"/>
-                    </svg>`;
-        } else {
-          // Ícone padrão (opcional)
-          iconSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width:24px; height:24px; fill: currentColor;">
-                      <title>default</title>
-                      <circle cx="12" cy="12" r="10"/>
-                    </svg>`;
-        }
-      
-        iconDiv.innerHTML = iconSVG;
-      
-        const textWrap = document.createElement("div");
-        textWrap.style.marginLeft = "10px";
-        const h6 = document.createElement("h6");
-        h6.textContent = `Voucher ${item.category}`;
-        const p = document.createElement("p");
-        p.classList.add("text-sm");
-        p.textContent = item.created_at || "(sem data)";
-      
-        textWrap.appendChild(h6);
-        textWrap.appendChild(p);
-        leftPart.appendChild(iconDiv);
-        leftPart.appendChild(textWrap);
-      
-        // Parte direita: link de download com ícone
-        const rightPart = document.createElement("div");
-        const a = document.createElement("a");
-        a.classList.add("text-sm", "text-medium", "download-link");
-        a.href = item.downloadURL;
-        a.target = "_blank";
-        a.innerHTML = `<i class="lni lni-download" style="margin-right: 4px;"></i>Download`;
-        rightPart.appendChild(a);
-      
-        itemDiv.appendChild(leftPart);
-        itemDiv.appendChild(rightPart);
-      
-        recentFilesContainer.appendChild(itemDiv);
-      });
-      
-      paginationInfo.textContent = `Página ${currentPage} de ${totalPages}`;
-      prevPageBtn.disabled = (currentPage <= 1);
-      nextPageBtn.disabled = (currentPage >= totalPages);
+      if (!file) {
+        alert("Selecione um arquivo PDF!");
+        return;
+      }
+  
+      try {
+        const originalPdfBytes = await fileToArrayBuffer(file);
+        let config = { images: [] };
+        if (category === "Disney") config = disneyVoucherConfig;
+        else if (category === "Universal") config = universalVoucherConfig;
+        else if (category === "SeaWorld") config = seaWorldVoucherConfig;
+        // Para "Hotéis" não há alterações
+  
+        const finalPdfBytes = await mergePDFWithConfig(originalPdfBytes, config);
+        await uploadFinalPDF(finalPdfBytes, category);
+        alert("PDF salvo com sucesso para " + category + "!");
+        loadRecentVouchers();
+      } catch (err) {
+        console.error("Erro: ", err);
+        alert("Erro ao processar: " + err.message);
+      }
+    });
+    loadRecentVouchers();
+  });
+  
+  /***************************************
+   * Listagem e Paginação de Vouchers Recentes
+   ***************************************/
+  let allRecords = [];
+  let currentPage = 1;
+  const pageSize = 10; // Número de vouchers por página
+  
+  const recentFilesContainer = document.getElementById("recentFilesContainer");
+  const prevPageBtn = document.getElementById("prevPageBtn");
+  const nextPageBtn = document.getElementById("nextPageBtn");
+  const paginationInfo = document.getElementById("paginationInfo");
+  
+  async function loadRecentVouchers() {
+    try {
+      const resp = await fetch(LIST_URL);
+      if (!resp.ok) throw new Error("Erro ao acessar list_vouchers.php");
+      const data = await resp.json();
+      allRecords = data;
+      currentPage = 1;
+      renderCurrentPage();
+      updateChartDataForWeek();
+    } catch (err) {
+      console.error("Erro ao carregar vouchers:", err);
     }
-      
-    prevPageBtn.addEventListener("click", () => {
-      if (currentPage > 1) {
-        currentPage--;
-        renderCurrentPage();
+  }
+  
+  function renderCurrentPage() {
+    recentFilesContainer.innerHTML = "";
+    const totalPages = Math.ceil(allRecords.length / pageSize);
+    if (totalPages < 1) {
+      paginationInfo.textContent = "Nenhum registro encontrado";
+      prevPageBtn.disabled = true;
+      nextPageBtn.disabled = true;
+      return;
+    }
+    if (currentPage > totalPages) currentPage = totalPages;
+  
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    const pageItems = allRecords.slice(startIndex, endIndex);
+  
+    pageItems.forEach(item => {
+      const itemDiv = document.createElement("div");
+      itemDiv.className = "recent-file-item d-flex align-items-center justify-content-between";
+  
+      const leftPart = document.createElement("div");
+      leftPart.className = "d-flex align-items-center";
+  
+      const iconDiv = document.createElement("div");
+      iconDiv.className = "icon";
+  
+      let iconSVG = "";
+      if (item.category === "Disney") {
+        iconSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width:24px; height:24px; fill: currentColor;">
+                    <title>auto-fix</title>
+                    <path d="M7.5,5.6L5,7L6.4,4.5L5,2L7.5,3.4L10,2L8.6,4.5L10,7L7.5,5.6M19.5,15.4L22,14L20.6,16.5L22,19L19.5,17.6L17,19L18.4,16.5L17,14L19.5,15.4M22,2L20.6,4.5L22,7L19.5,5.6L17,7L18.4,4.5L17,2L19.5,3.4L22,2M13.34,12.78L15.78,10.34L13.66,8.22L11.22,10.66L13.34,12.78M14.37,7.29L16.71,9.63C17.1,10 17.1,10.65 16.71,11.04L5.04,22.71C4.65,23.1 4,23.1 3.63,22.71L1.29,20.37C0.9,20 0.9,19.35 1.29,18.96L12.96,7.29C13.35,6.9 14,6.9 14.37,7.29Z"/>
+                  </svg>`;
+      } else if (item.category === "SeaWorld") {
+        iconSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width:24px; height:24px; fill: currentColor;">
+                    <title>dolphin</title>
+                    <path d="M20 7C20 7 20 3 15 3C13.47 3 12.15 3.19 11 3.5C10.5 3.06 7.26 .309 4 3.57L6.56 6.13C2.5 10.53 4 18 4 18S1 18 1 22C1 22 5 21 5 21C5 21 9 22 9 22C9 18 6 18 6 18S6.85 12.24 13 11.18V14C15 14 15.68 12.19 15.89 11H18C22 11 23 10 23 9S21 7 20 7M18 8C17.45 8 17 7.55 17 7S17.45 6 18 6 19 6.45 19 7 18.55 8 18 8Z"/>
+                  </svg>`;
+      } else if (item.category === "Universal") {
+        iconSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width:24px; height:24px; fill: currentColor;">
+                    <title>earth</title>
+                    <path d="M17.9,17.39C17.64,16.59 16.89,16 16,16H15V13A1,1 0 0,0 14,12H8V10H10A1,1 0 0,0 11,9V7H13A2,2 0 0,0 15,5V4.59C17.93,5.77 20,8.64 20,12C20,14.08 19.2,15.97 17.9,17.39M11,19.93C7.05,19.44 4,16.08 4,12C4,11.38 4.08,10.78 4.21,10.21L9,15V16A2,2 0 0,0 11,18M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"/>
+                  </svg>`;
+      } else if (item.category === "Hospedagem") {
+        iconSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width:24px; height:24px; fill: currentColor;">
+                    <title>bed</title>
+                    <path d="M19,7H11V14H3V5H1V20H3V17H21V20H23V11A4,4 0 0,0 19,7M7,13A3,3 0 0,0 10,10A3,3 0 0,0 7,7A3,3 0 0,0 4,10A3,3 0 0,0 7,13Z"/>
+                  </svg>`;
+      } else {
+        iconSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width:24px; height:24px; fill: currentColor;">
+                    <title>default</title>
+                    <circle cx="12" cy="12" r="10"/>
+                  </svg>`;
       }
-    });
-      
-    nextPageBtn.addEventListener("click", () => {
-      const totalPages = Math.ceil(allRecords.length / pageSize);
-      if (currentPage < totalPages) {
-        currentPage++;
-        renderCurrentPage();
-      }
-    });
-      
-    // Carrega a listagem ao iniciar (caso o DOM já esteja carregado)
-    document.addEventListener("DOMContentLoaded", () => {
-      loadRecentVouchers();
+      iconDiv.innerHTML = iconSVG;
+  
+      const textWrap = document.createElement("div");
+      textWrap.style.marginLeft = "10px";
+      const h6 = document.createElement("h6");
+      h6.textContent = `Voucher ${item.category}`;
+      const p = document.createElement("p");
+      p.classList.add("text-sm");
+      p.textContent = item.created_at || "(sem data)";
+      textWrap.appendChild(h6);
+      textWrap.appendChild(p);
+      leftPart.appendChild(iconDiv);
+      leftPart.appendChild(textWrap);
+  
+      const rightPart = document.createElement("div");
+      const a = document.createElement("a");
+      a.classList.add("text-sm", "text-medium", "download-link");
+      a.href = item.downloadURL;
+      a.target = "_blank";
+      a.innerHTML = `<i class="lni lni-download" style="margin-right: 4px;"></i>Download`;
+      rightPart.appendChild(a);
+  
+      itemDiv.appendChild(leftPart);
+      itemDiv.appendChild(rightPart);
+  
+      recentFilesContainer.appendChild(itemDiv);
     });
   
-    /***************************************
-     * Chart.js (Relatório de Vouchers)
-     ***************************************/
-      // Lida com o tema do gráfico
-      const darkThemeButton = document.querySelector(".darkThemeButton");
-      const lightThemeButton = document.querySelector(".lightThemeButton");
+    paginationInfo.textContent = `Página ${currentPage} de ${totalPages}`;
+    prevPageBtn.disabled = (currentPage <= 1);
+    nextPageBtn.disabled = (currentPage >= totalPages);
+  }
   
-      function applyThemeColors(isDark) {
-        if (isDark) {
-          chart4.options.scales.x.ticks.color = "#838C9A";
-          chart4.options.scales.y.ticks.color = "#838C9A";
-          chart4.options.scales.y.grid.borderColor = "#2b2b42";
-        } else {
-          chart4.options.scales.x.ticks.color = "#5A6A85";
-          chart4.options.scales.y.ticks.color = "#5A6A85";
-          chart4.options.scales.y.grid.borderColor = "rgba(143,146,161,.1)";
-        }
-        chart4.update();
-      }
-
-    // Função que retorna o início (domingo) e o fim (sábado) da semana atual
-    function getCurrentWeekRange() {
-      const now = new Date();
-      const day = now.getDay(); // domingo = 0, segunda = 1, etc.
-      const start = new Date(now);
-      start.setDate(now.getDate() - day);
-      start.setHours(0, 0, 0, 0);
-      const end = new Date(start);
-      end.setDate(start.getDate() + 6);
-      end.setHours(23, 59, 59, 999);
-      return { start, end };
+  prevPageBtn.addEventListener("click", () => {
+    if (currentPage > 1) {
+      currentPage--;
+      renderCurrentPage();
     }
-
-    // Função que filtra os registros (allRecords) para o período da semana atual e agrupa por categoria
-    function getWeekData() {
-      const { start, end } = getCurrentWeekRange();
-      // Filtra vouchers cuja data de criação esteja dentro do intervalo
-      const weekRecords = allRecords.filter(item => {
-        const created = new Date(item.created_at); // supondo que created_at seja uma string ISO
-        return created >= start && created <= end;
-      });
-      // Agrupa os registros por categoria
-      const counts = {};
-      weekRecords.forEach(item => {
-        const cat = item.category;
-        counts[cat] = (counts[cat] || 0) + 1;
-      });
-      return counts;
+  });
+  
+  nextPageBtn.addEventListener("click", () => {
+    const totalPages = Math.ceil(allRecords.length / pageSize);
+    if (currentPage < totalPages) {
+      currentPage++;
+      renderCurrentPage();
     }
-
-    // Variáveis globais para o Chart.js (inicialmente vazio)
-    // Variável global para o gráfico
-    let chart4;
-
-    // Função que retorna o início (domingo) e o fim (sábado) da semana atual
-    function getCurrentWeekRange() {
-      const now = new Date();
-      const day = now.getDay(); // domingo = 0, segunda = 1, etc.
-      const start = new Date(now);
-      start.setDate(now.getDate() - day);
-      start.setHours(0, 0, 0, 0);
-      const end = new Date(start);
-      end.setDate(start.getDate() + 6);
-      end.setHours(23, 59, 59, 999);
-      return { start, end };
-    }
-
-    // Função que filtra os registros (allRecords) para o período da semana atual e agrupa por categoria
-    function getWeekData() {
-      const { start, end } = getCurrentWeekRange();
-      // Filtra vouchers cuja data de criação esteja dentro do intervalo
-      const weekRecords = allRecords.filter(item => {
-        const created = new Date(item.created_at); // created_at deve estar em formato ISO
-        return created >= start && created <= end;
-      });
-      // Agrupa os registros por categoria
-      const counts = {};
-      weekRecords.forEach(item => {
-        const cat = item.category;
-        counts[cat] = (counts[cat] || 0) + 1;
-      });
-      return counts;
-    }
-
-    // Atualiza os dados do gráfico com base na semana vigente
-    function updateChartDataForWeek() {
-      const counts = getWeekData();
-      const labels = Object.keys(counts);
-      const data = Object.values(counts);
-      // Atualiza o gráfico
-      chart4.data.labels = labels;
-      chart4.data.datasets[0].data = data;
-      // Atualiza as cores de acordo com a categoria (ajuste conforme sua necessidade)
-      chart4.data.datasets[0].backgroundColor = labels.map(label => {
-        if (label === "Disney") return "#3377FF";
-        else if (label === "Universal") return "#93CFE2";
-        else if (label === "SeaWorld") return "#F98DB4";
-        else if (label === "Hotéis") return "#FFA500"; // exemplo para Hotéis
-        else return "#CCCCCC";
-      });
-      chart4.update();
-    }
-
-    // Inicializa o gráfico (usa a variável global chart4)
-    function initChart() {
-      const ctx4 = document.getElementById("Chart4").getContext("2d");
-      chart4 = new Chart(ctx4, {
-        type: "bar",
-        data: {
-          labels: [], // serão definidas quando os dados estiverem disponíveis
-          datasets: [{
-            label: "Vouchers",
-            data: [], // serão definidas posteriormente
-            backgroundColor: [],
-            borderColor: "transparent",
-            borderRadius: 20,
-            borderWidth: 5,
-            barThickness: 20
-          }]
+  });
+  
+  /***************************************
+   * Chart.js (Relatório de Vouchers)
+   ***************************************/
+  function getCurrentWeekRange() {
+    const now = new Date();
+    const day = now.getDay();
+    const start = new Date(now);
+    start.setDate(now.getDate() - day);
+    start.setHours(0, 0, 0, 0);
+    const end = new Date(start);
+    end.setDate(start.getDate() + 6);
+    end.setHours(23, 59, 59, 999);
+    return { start, end };
+  }
+  
+  function getWeekData() {
+    const { start, end } = getCurrentWeekRange();
+    const weekRecords = allRecords.filter(item => {
+      const created = new Date(item.created_at);
+      return created >= start && created <= end;
+    });
+    const counts = {};
+    weekRecords.forEach(item => {
+      const cat = item.category;
+      counts[cat] = (counts[cat] || 0) + 1;
+    });
+    return counts;
+  }
+  
+  let chart4;
+  function updateChartDataForWeek() {
+    const counts = getWeekData();
+    const labels = Object.keys(counts);
+    const data = Object.values(counts);
+    chart4.data.labels = labels;
+    chart4.data.datasets[0].data = data;
+    chart4.data.datasets[0].backgroundColor = labels.map(label => {
+      if (label === "Disney") return "#3377FF";
+      else if (label === "Universal") return "#93CFE2";
+      else if (label === "SeaWorld") return "#F98DB4";
+      else if (label === "Hotéis") return "#FFA500";
+      else return "#CCCCCC";
+    });
+    chart4.update();
+  }
+  
+  function initChart() {
+    const ctx4 = document.getElementById("Chart4").getContext("2d");
+    chart4 = new Chart(ctx4, {
+      type: "bar",
+      data: {
+        labels: [],
+        datasets: [{
+          label: "Vouchers",
+          data: [],
+          backgroundColor: [],
+          borderColor: "transparent",
+          borderRadius: 20,
+          borderWidth: 5,
+          barThickness: 20
+        }]
+      },
+      options: {
+        layout: { padding: 0 },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: "#F3F6F8",
+            titleColor: "#8F92A1",
+            bodyColor: "#171717",
+            displayColors: false,
+            enabled: true
+          }
         },
-        options: {
-          layout: { padding: 0 },
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              backgroundColor: "#F3F6F8",
-              titleColor: "#8F92A1",
-              bodyColor: "#171717",
-              displayColors: false,
-              enabled: true
-            }
+        scales: {
+          x: {
+            grid: { display: false, drawBorder: false },
+            ticks: { padding: 20, color: "#8F92A1" }
           },
-          scales: {
-            x: {
-              grid: { display: false, drawBorder: false },
-              ticks: { padding: 20, color: "#8F92A1" }
-            },
-            y: {
-              grid: { display: false, drawTicks: false, drawBorder: false },
-              ticks: { padding: 20 }
-            }
+          y: {
+            grid: { display: false, drawTicks: false, drawBorder: false },
+            ticks: { padding: 20 }
           }
         }
-      });
-    }
-
-    // Carrega os vouchers recentes (da API) e atualiza o gráfico
-    function loadRecentVouchers() {
-      fetch(LIST_URL)
-        .then(resp => {
-          if (!resp.ok) throw new Error("Erro ao acessar list_vouchers.php");
-          return resp.json();
-        })
-        .then(data => {
-          allRecords = data; // atualiza a variável global com os registros da API
-          currentPage = 1;
-          renderCurrentPage();
-          updateChartDataForWeek(); // atualiza o gráfico para a semana vigente
-        })
-        .catch(err => {
-          console.error("Erro ao carregar vouchers:", err);
-        });
-    }
-
-    // Exemplo: Se você quiser mudar o período com um select (Semana, Mês, Ano)
-    const timeRangeSelect = document.querySelector(".select-position select.light-bg");
-    if (timeRangeSelect) {
-      timeRangeSelect.addEventListener("change", function() {
-        const value = this.value;
-        if (value === "Semana") {
-          updateChartDataForWeek();
-        }
-        // Você pode implementar funções para 'Mês' ou 'Ano' aqui
-      });
-    }
-
-    // Ao carregar o DOM, inicializa o gráfico e carrega os vouchers
-    document.addEventListener("DOMContentLoaded", () => {
-      initChart();
-      loadRecentVouchers();
+      }
     });
+  }
+  
+  /***************************************
+   * Checagem de Sessão
+   ***************************************/
+  async function checkSession() {
+    try {
+      const response = await fetch("https://airland.com.br/affiliatesacess/login_api.php/check", {
+        credentials: 'include'
+      });
+      const result = await response.json();
+      console.log("Resposta da Sessão:", result);
+      if (result.logged_in) {
+        document.body.style.display = "block";
+      } else {
+        window.location.replace("https://businessplace.airland.com.br/signin.html");
+      }
+    } catch (error) {
+      console.error("Erro ao verificar a sessão:", error);
+      window.location.replace("https://businessplace.airland.com.br/signin.html");
+    }
+  }
+  
+  /***************************************
+   * Inicialização Geral
+   ***************************************/
+  document.addEventListener("DOMContentLoaded", () => {
+    checkSession();
+    initChart();
+    loadRecentVouchers();
+  });
   </script>
-  </body>
+</body>
 </html>
