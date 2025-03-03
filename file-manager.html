@@ -1133,16 +1133,16 @@
     // Função para checar a sessão via API
     async function checkSession() {
       try {
-        // Realiza a requisição à API (envia cookies/credenciais)
         const response = await fetch("https://airland.com.br/affiliatesacess/login_api.php/check", {
           credentials: 'include'
         });
         const result = await response.json();
         console.log("Resposta da Sessão:", result);
-        // Se estiver logado, mostra o conteúdo; senão, redireciona
         if (result.logged_in) {
+          // Se estiver logado, exibe o conteúdo removendo o display: none
           document.body.style.display = "block";
         } else {
+          // Se não estiver logado, redireciona para a página de login
           window.location.replace("https://businessplace.airland.com.br/signin.html");
         }
       } catch (error) {
