@@ -4168,6 +4168,7 @@ h6,
 .header .header-right .profile-box .profile-info .info .image img {
   width: 100%;
   border-radius: 50%;
+  height: 100%;
 }
 .header .header-right .profile-box .profile-info .info p {
   font-size: 12px;
@@ -4835,6 +4836,7 @@ h6,
 .settings-card-1 .profile-info .profile-image img {
   width: 100%;
   border-radius: 50%;
+  height: 100%;
 }
 .settings-card-1 .profile-info .profile-image .update-image {
   position: absolute;
