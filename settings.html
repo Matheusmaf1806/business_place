@@ -973,11 +973,11 @@
         if (result.logged_in) {
           document.body.style.display = "block";
         } else {
-          window.location.replace("https://businessplace.airland.com.br/settings.html");
+          window.location.replace("https://businessplace.airland.com.br/signin.html");
         }
       } catch (error) {
         console.error("Erro ao verificar a sessão:", error);
-        window.location.replace("https://businessplace.airland.com.br/settings.html");
+        window.location.replace("https://businessplace.airland.com.br/signin.html");
       }
     }
 
@@ -998,7 +998,7 @@
 
             if (result.success) {
               localStorage.removeItem("userLoggedIn");
-              window.location.replace("https://businessplace.airland.com.br/settings.html");
+              window.location.replace("https://businessplace.airland.com.br/signin.html");
             } else {
               alert("Erro ao sair. Tente novamente.");
             }
