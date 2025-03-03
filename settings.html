@@ -980,6 +980,22 @@
     </div>
   </div>
   <!-- ============ Theme Option End ============= -->
+    
+  <!-- ========= All Javascript files linkup ======== -->
+  <script src="assets/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/Chart.min.js"></script>
+  <script src="assets/js/apexcharts.min.js"></script>
+  <script src="assets/js/dynamic-pie-chart.js"></script>
+  <script src="assets/js/moment.min.js"></script>
+  <script src="assets/js/fullcalendar.js"></script>
+  <script src="assets/js/jvectormap.min.js"></script>
+  <script src="assets/js/world-merc.js"></script>
+  <script src="assets/js/polyfill.js"></script>
+  <script src="assets/js/quill.min.js"></script>
+  <script src="assets/js/datatable.js"></script>
+  <script src="assets/js/Sortable.min.js"></script>
+  <script src="assets/js/main.js"></script>
+
   <script>
     // Função para checar a sessão via API
     async function checkSession() {
@@ -1004,45 +1020,30 @@
 
     // Executa a verificação assim que o DOM estiver carregado
     document.addEventListener("DOMContentLoaded", checkSession);
-    
-  <!-- ========= All Javascript files linkup ======== -->
-  <script src="assets/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/js/Chart.min.js"></script>
-  <script src="assets/js/apexcharts.min.js"></script>
-  <script src="assets/js/dynamic-pie-chart.js"></script>
-  <script src="assets/js/moment.min.js"></script>
-  <script src="assets/js/fullcalendar.js"></script>
-  <script src="assets/js/jvectormap.min.js"></script>
-  <script src="assets/js/world-merc.js"></script>
-  <script src="assets/js/polyfill.js"></script>
-  <script src="assets/js/quill.min.js"></script>
-  <script src="assets/js/datatable.js"></script>
-  <script src="assets/js/Sortable.min.js"></script>
-  <script src="assets/js/main.js"></script>
 
-<script>document.addEventListener("DOMContentLoaded", function() {
-  // Supondo que você tenha o ID do usuário atual (por exemplo, armazenado em uma variável ou obtido via sessão)
-  const userId = 1; // Substitua por como você obtém o ID do usuário logado
+    document.addEventListener("DOMContentLoaded", function() {
+      // Supondo que você tenha o ID do usuário atual (por exemplo, armazenado em uma variável ou obtido via sessão)
+      const userId = 1; // Substitua por como você obtém o ID do usuário logado
 
-  fetch(`airland.com.br/affiliatesacess/get_user_profile.php?id=${userId}`)
-    .then(response => response.json())
-    .then(result => {
-      if(result.success) {
-        const data = result.data;
-        // Atualiza o nome no header
-        document.getElementById("userName").textContent = data.primeiro_nome + " " + data.ultimo_nome;
-        // Atualiza o dropdown
-        document.getElementById("dropdownUserName").textContent = data.primeiro_nome + " " + data.ultimo_nome;
-        document.getElementById("dropdownUserEmail").textContent = data.email;
-        // Atualiza as imagens de perfil
-        document.getElementById("profileImage").src = data.fotodeperfil;
-        // Se houver outros locais onde a imagem é usada, atualize-os também
-      } else {
-        console.error("Erro:", result.error);
-      }
-    })
-    .catch(error => console.error("Erro na API:", error));
-});
+      fetch(`https://airland.com.br/affiliatesacess/get_user_profile.php?id=${userId}`)
+        .then(response => response.json())
+        .then(result => {
+          if(result.success) {
+            const data = result.data;
+            // Atualiza o nome no header
+            document.getElementById("userName").textContent = data.primeiro_nome + " " + data.ultimo_nome;
+            // Atualiza o dropdown
+            document.getElementById("dropdownUserName").textContent = data.primeiro_nome + " " + data.ultimo_nome;
+            document.getElementById("dropdownUserEmail").textContent = data.email;
+            // Atualiza as imagens de perfil
+            document.getElementById("profileImage").src = data.fotodeperfil;
+            // Se houver outros locais onde a imagem é usada, atualize-os também
+          } else {
+            console.error("Erro:", result.error);
+          }
+        })
+        .catch(error => console.error("Erro na API:", error));
+    });
 </script>
 
 </body>
