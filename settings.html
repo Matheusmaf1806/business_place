@@ -983,31 +983,6 @@
 
     document.addEventListener("DOMContentLoaded", checkSession);
 
-    /*******************************************************
-     * 2) Logout
-     *******************************************************/
-    document.addEventListener("DOMContentLoaded", () => {
-      const logoutBtn = document.getElementById("logoutBtn");
-      if (logoutBtn) {
-        logoutBtn.addEventListener("click", async function () {
-          try {
-            const response = await fetch("https://airland.com.br/affiliatesacess/login_api.php/logout", {
-              credentials: 'include'
-            });
-            const result = await response.json();
-
-            if (result.success) {
-              localStorage.removeItem("userLoggedIn");
-              window.location.replace("https://businessplace.airland.com.br/signin.html");
-            } else {
-              alert("Erro ao sair. Tente novamente.");
-            }
-          } catch (error) {
-            console.error("Erro ao sair:", error);
-          }
-        });
-      }
-    });
   </script>
   // ========= All Javascript files linkup ========
   <script src="assets/js/bootstrap.bundle.min.js"></script>
