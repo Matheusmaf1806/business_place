@@ -1003,9 +1003,12 @@
       }
     }
 
-    // Executa a verificação assim que o DOM estiver carregado
-    document.addEventListener("DOMContentLoaded", checkSession);
-  <!-- ========= All Javascript files linkup ======== -->
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', checkSession);
+    } else {
+      checkSession();
+    }
+  // ========= All Javascript files linkup ========
   <script src="assets/js/bootstrap.bundle.min.js"></script>
   <script src="assets/js/Chart.min.js"></script>
   <script src="assets/js/apexcharts.min.js"></script>
