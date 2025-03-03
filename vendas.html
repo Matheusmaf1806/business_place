@@ -118,14 +118,14 @@
   </div>
   <!-- ======== Preloader =========== -->
 
-  <!-- SIDEBAR: vamos injetar sidebar.html aqui -->
+  <!-- SIDEBAR: vamos injetar hesi.html aqui (trecho do sidebar) -->
   <aside id="sidebar-container" class="sidebar-nav-wrapper"></aside>
   <!-- Overlay (para mobile) -->
   <div class="overlay"></div>
 
   <!-- ======== main-wrapper start =========== -->
   <main class="main-wrapper">
-    <!-- HEADER: vamos injetar header.html aqui -->
+    <!-- HEADER: vamos injetar hesi.html aqui (trecho do header) -->
     <div id="header-container"></div>
 
     <!-- SEÇÃO PRINCIPAL ONDE INSERIMOS O FORMULÁRIO ========== -->
@@ -393,21 +393,23 @@
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       /************************************************************
-       * 1) Carregar header e sidebar dinamicamente, na ordem certa
+       * 1) Carregar "hesi.html" duas vezes (para sidebar e header)
        ************************************************************/
-      fetch('sidebar.html')
+      // 1.1) Injetar HESI no sidebar
+      fetch('hesi.html')
         .then(response => response.text())
         .then(html => {
           document.getElementById('sidebar-container').innerHTML = html;
         })
-        .catch(err => console.log("Erro ao carregar sidebar:", err));
+        .catch(err => console.log("Erro ao carregar hesi.html (sidebar):", err));
 
-      fetch('header.html')
+      // 1.2) Injetar HESI no header
+      fetch('hesi.html')
         .then(response => response.text())
         .then(html => {
           document.getElementById('header-container').innerHTML = html;
         })
-        .catch(err => console.log("Erro ao carregar header:", err));
+        .catch(err => console.log("Erro ao carregar hesi.html (header):", err));
 
       /************************************************************
        * 2) Gerar ID automaticamente ao carregar a página
@@ -426,8 +428,8 @@
        * 3) Preencher Mês da Venda e Data de Pagamento c/ Data da Venda
        ************************************************************/
       const dataVendaField = document.getElementById('data_venda');
-      const mesVendaField = document.getElementById('mes_venda');
-      const dataPgtoField = document.getElementById('data_pgto');
+      const mesVendaField  = document.getElementById('mes_venda');
+      const dataPgtoField  = document.getElementById('data_pgto');
       if (dataVendaField && mesVendaField && dataPgtoField) {
         dataVendaField.addEventListener('change', function () {
           const dataVenda = new Date(this.value);
@@ -443,7 +445,7 @@
        * 4) Preencher UF automaticamente com base no DDD do Telefone
        ************************************************************/
       const telefoneField = document.getElementById('telefone');
-      const ufField = document.getElementById('uf');
+      const ufField       = document.getElementById('uf');
       if (telefoneField && ufField) {
         telefoneField.addEventListener('blur', function () {
           const ddd = this.value.replace(/\D/g, '').slice(0, 2);
@@ -469,12 +471,12 @@
       const submitButton = document.getElementById('submitButton');
       if (submitButton) {
         submitButton.addEventListener('click', function () {
-          const valorVenda = parseFloat(document.getElementById('valor_venda')?.value) || 0;
+          const valorVenda     = parseFloat(document.getElementById('valor_venda')?.value) || 0;
           const valorRepassado = parseFloat(document.getElementById('valor_repassado')?.value) || 0;
           
           // receitaAgencia = valorRepassado
-          const receitaAgencia = valorRepassado;
-          const valorComissaoField = document.getElementById('valor_comissao');
+          const receitaAgencia      = valorRepassado;
+          const valorComissaoField  = document.getElementById('valor_comissao');
           if (valorComissaoField) {
             valorComissaoField.value = receitaAgencia.toFixed(2);
           }
@@ -487,7 +489,7 @@
           }
 
           // Comissão do Agente com base na categoria
-          const categoria = document.getElementById('item')?.value || "";
+          const categoria           = document.getElementById('item')?.value || "";
           const comissaoDoAgenteField = document.getElementById('comissao_do_agente');
           const comissoes = {
             "Ingressos": 0.003,
@@ -503,9 +505,9 @@
             comissaoDoAgenteField.value = comissaoDoAgente.toFixed(2);
           }
 
-          // Data de Repasse (Pix imediato, Cartão +2 dias, etc.)
-          const dataVenda = new Date(document.getElementById('data_venda')?.value);
-          const meioPagamento = document.getElementById('meio_pgto')?.value || "";
+          // Data de Repasse
+          const dataVenda        = new Date(document.getElementById('data_venda')?.value);
+          const meioPagamento    = document.getElementById('meio_pgto')?.value || "";
           const dataRepasseField = document.getElementById('data_repasse');
           if (!isNaN(dataVenda.getTime()) && dataRepasseField) {
             const dataRepasse = new Date(dataVenda);
