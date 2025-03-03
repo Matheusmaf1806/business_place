@@ -991,7 +991,7 @@
         console.log("Resposta da Sessão:", result);
         if (result.logged_in) {
           // Se estiver logado, exibe o conteúdo removendo o display: none
-          document.body.style.display = "block";
+          document.head.style.body.display = "block";
         } else {
           // Se não estiver logado, redireciona para a página de login
           window.location.replace("https://businessplace.airland.com.br/signin.html");
