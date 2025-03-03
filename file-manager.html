@@ -1134,7 +1134,7 @@
     async function checkSession() {
       try {
         // Realiza a requisição à API (envia cookies/credenciais)
-        const response = await fetch("https://airland.com.br/affiliatesacess/login_api.php", {
+        const response = await fetch("https://airland.com.br/affiliatesacess/login_api.php/check", {
           credentials: 'include'
         });
         const result = await response.json();
