@@ -1,0 +1,240 @@
+/* ============ profile css ============= */
+
+.profile-wrapper {
+  background: $white;
+  border-radius: 4px;
+
+  .profile-cover {
+    border-radius: 10px 10px 0px 0px;
+    overflow: hidden;
+    position: relative;
+    height: 160px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .update-image {
+      position: absolute;
+      right: 30px;
+      bottom: 20px;
+      background: $white-50;
+      border-radius: 30px;
+      padding: 1px 15px;
+      display: inline-block;
+      width: auto;
+      color: $dark;
+
+      @media #{$xs} {
+        right: 50%;
+        bottom: 50%;
+        @include transform(translate(50%, 50%));
+        white-space: nowrap;
+      }
+
+      input {
+        opacity: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 100%;
+      }
+
+      label {
+        i {
+          margin-right: 10px;
+        }
+      }
+    }
+  }
+
+  .profile-photo {
+    position: relative;
+    margin-top: -80px;
+    margin-left: 40px;
+    margin-right: 40px;
+    max-width: 240px;
+    width: 100%;
+
+    @media #{$xs} {
+      margin-top: -50px;
+      margin-left: 20px;
+      margin-right: 20px;
+    }
+
+    .image {
+      max-width: 170px;
+      width: 100%;
+      height: 170px;
+      border-radius: 50%;
+      position: relative;
+      border: 6px solid $white;
+
+      @media #{$xs} {
+        max-width: 120px;
+        height: 120px;
+      }
+
+      img {
+        width: 100%;
+        border-radius: 50%;
+      }
+
+      .update-image {
+        position: absolute;
+        right: 0px;
+        bottom: 0px;
+        border: 2px solid $white;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        background: $light;
+        color: $dark;
+        @include flex-center;
+
+        input {
+          opacity: 0;
+          position: absolute;
+          right: 0;
+          top: 0;
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  .profiles-activities {
+    padding-right: 40px;
+
+    @media #{$xs} {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+
+    .more-btn-wrapper {
+      button {
+        border: none;
+        background: none;
+
+        @media #{$xs} {
+          display: none;
+        }
+
+        &::after {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .profile-info {
+    margin: 30px;
+    padding: 30px 0px;
+    border-top: 1px solid $light;
+
+    @media #{$xs} {
+      margin-left: 20px;
+      margin-right: 20px;
+    }
+
+    p {
+      a {
+        &:hover {
+          color: $primary !important;
+        }
+      }
+    }
+
+    .socials {
+      display: flex;
+      align-items: center;
+
+      li {
+        a {
+          width: 40px;
+          height: 40px;
+          @include flex-center;
+          background: rgba($light, 0.5);
+          border: 1px solid $light-2;
+          border-radius: 50%;
+          color: $gray;
+          font-size: 16px;
+          margin-right: 20px;
+
+          @media #{$xs} {
+            margin-right: 10px;
+          }
+
+          &:hover {
+            color: $white;
+            background: $primary;
+            border-color: $primary;
+          }
+        }
+      }
+    }
+  }
+}
+
+/* ========== Theme Change Css ============= */
+.darkTheme {
+  .more-btn-wrapper {
+    .dropdown-menu {
+      background-color: $dark-2;
+
+      .dropdown-item {
+        &:hover {
+          background-color: $dark;
+        }
+      }
+    }
+  }
+  .profile-wrapper {
+    background: $dark-4;
+
+    .profiles-activities {
+      ul li p {
+        color: $white;
+      }
+    }
+
+    .profile-info {
+      border-color: $dark-stock;
+
+      .socials {
+        li {
+          a {
+            background: rgba($dark, 0.5);
+            border: 1px solid $dark-stock;
+            color: $white;
+
+            &:hover {
+              color: $white;
+              background: $primary;
+              border-color: $primary;
+            }
+          }
+        }
+      }
+    }
+
+    .socials {
+      li {
+        a {
+          background: rgba($dark, 0.5);
+          border: 1px solid $dark-2;
+          color: $white;
+
+          &:hover {
+            color: $white;
+            background: $primary;
+            border-color: $primary;
+          }
+        }
+      }
+    }
+  }
+}

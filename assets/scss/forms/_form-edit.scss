@@ -1,0 +1,56 @@
+/* ========== Form Editors ========= */
+
+.form-editor-wrapper {
+  .ql-toolbar {
+    &.ql-snow {
+      border-color: $black-10;
+      border-radius: 4px 4px 0px 0px;
+    }
+  }
+
+  .ql-container {
+    &.ql-snow {
+      border-color: $black-10;
+      border-radius: 0px 0px 4px 4px;
+
+      .ql-editor {
+        min-height: 350px;
+      }
+    }
+  }
+
+  .ql-bubble .ql-tooltip {
+    z-index: 999;
+  }
+}
+
+/* ======= Theme Change ========== */
+
+.darkTheme {
+  .ql-editor.ql-blank::before {
+    color: rgba($light, 0.5);
+  }
+
+  .ql-snow {
+    .ql-picker {
+      color: $white-50;
+    }
+    .ql-formats {
+      .ql-stroke {
+        stroke: $white-50;
+      }
+      .ql-fill {
+        fill: $white-50;
+      }
+    }
+  }
+
+  .form-editor-wrapper {
+    .ql-toolbar,
+    .ql-container {
+      &.ql-snow {
+        border-color: $dark-stock;
+      }
+    }
+  }
+}

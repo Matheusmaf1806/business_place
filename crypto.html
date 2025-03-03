@@ -1,0 +1,2637 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="shortcut icon" href="assets/images/favicon.svg" type="image/x-icon" />
+  <title>Crypto Dashboard | PlainAdmin Demo</title>
+
+  <!-- ========== All CSS files linkup ========= -->
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="assets/css/lineicons.css" />
+  <link rel="stylesheet" href="assets/css/quill/bubble.css" />
+  <link rel="stylesheet" href="assets/css/quill/snow.css" />
+  <link rel="stylesheet" href="assets/css/fullcalendar.css" />
+  <link rel="stylesheet" href="assets/css/morris.css" />
+  <link rel="stylesheet" href="assets/css/datatable.css" />
+  <link rel="stylesheet" href="assets/css/main.css" />
+</head>
+
+<body>
+  <!-- ======== Preloader =========== -->
+  <div id="preloader">
+    <div class="spinner"></div>
+  </div>
+  <!-- ======== Preloader =========== -->
+
+  <!-- ======== sidebar-nav start =========== -->
+  <aside class="sidebar-nav-wrapper">
+    <div class="navbar-logo">
+      <a href="index.html">
+        <img src="assets/images/logo/logo.svg" alt="logo" />
+      </a>
+    </div>
+    <nav class="sidebar-nav">
+      <ul>
+        <li class="nav-item nav-item-has-children">
+          <a href="#0" data-bs-toggle="collapse" data-bs-target="#ddmenu_1" aria-controls="ddmenu_1"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M8.74999 18.3333C12.2376 18.3333 15.1364 15.8128 15.7244 12.4941C15.8448 11.8143 15.2737 11.25 14.5833 11.25H9.99999C9.30966 11.25 8.74999 10.6903 8.74999 10V5.41666C8.74999 4.7263 8.18563 4.15512 7.50586 4.27556C4.18711 4.86357 1.66666 7.76243 1.66666 11.25C1.66666 15.162 4.83797 18.3333 8.74999 18.3333Z" />
+                <path
+                  d="M17.0833 10C17.7737 10 18.3432 9.43708 18.2408 8.75433C17.7005 5.14918 14.8508 2.29947 11.2457 1.75912C10.5629 1.6568 10 2.2263 10 2.91665V9.16666C10 9.62691 10.3731 10 10.8333 10H17.0833Z" />
+              </svg>
+            </span>
+            <span class="text">Dashboard</span>
+          </a>
+          <ul id="ddmenu_1" class="collapse show dropdown-nav">
+            <li>
+              <a href="index.html"> eCommerce </a>
+            </li>
+            <li>
+              <a href="analytics-dashboard.html">
+                <span class="text">
+                  Analytics <span class="pro-badge">Pro </span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="crypto.html" class="active">
+                <span class="text">
+                  Crypto <span class="pro-badge">Pro </span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="crm-dashboard.html">
+                <span class="text">
+                  CRM <span class="pro-badge">Pro</span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="marketing-dashboard.html">
+                <span class="text">
+                  Marketing <span class="pro-badge">Pro</span>
+                </span>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item nav-item-has-children">
+          <a href="#0" class="collapsed" data-bs-toggle="collapse" data-bs-target="#ddmenu_2" aria-controls="ddmenu_2"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M11.8097 1.66667C11.8315 1.66667 11.8533 1.6671 11.875 1.66796V4.16667C11.875 5.43232 12.901 6.45834 14.1667 6.45834H16.6654C16.6663 6.48007 16.6667 6.50186 16.6667 6.5237V16.6667C16.6667 17.5872 15.9205 18.3333 15 18.3333H5.00001C4.07954 18.3333 3.33334 17.5872 3.33334 16.6667V3.33334C3.33334 2.41286 4.07954 1.66667 5.00001 1.66667H11.8097ZM6.66668 7.70834C6.3215 7.70834 6.04168 7.98816 6.04168 8.33334C6.04168 8.67851 6.3215 8.95834 6.66668 8.95834H10C10.3452 8.95834 10.625 8.67851 10.625 8.33334C10.625 7.98816 10.3452 7.70834 10 7.70834H6.66668ZM6.04168 11.6667C6.04168 12.0118 6.3215 12.2917 6.66668 12.2917H13.3333C13.6785 12.2917 13.9583 12.0118 13.9583 11.6667C13.9583 11.3215 13.6785 11.0417 13.3333 11.0417H6.66668C6.3215 11.0417 6.04168 11.3215 6.04168 11.6667ZM6.66668 14.375C6.3215 14.375 6.04168 14.6548 6.04168 15C6.04168 15.3452 6.3215 15.625 6.66668 15.625H13.3333C13.6785 15.625 13.9583 15.3452 13.9583 15C13.9583 14.6548 13.6785 14.375 13.3333 14.375H6.66668Z" />
+                <path
+                  d="M13.125 2.29167L16.0417 5.20834H14.1667C13.5913 5.20834 13.125 4.74197 13.125 4.16667V2.29167Z" />
+              </svg>
+            </span>
+            <span class="text">Pages</span>
+          </a>
+          <ul id="ddmenu_2" class="collapse dropdown-nav">
+            <li>
+              <a href="settings.html"> Settings </a>
+            </li>
+            <li>
+              <a href="projects.html">
+                <span class="text">
+                  Projects <span class="pro-badge">Pro</span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="clients.html">
+                <span class="text">
+                  Clients <span class="pro-badge">Pro</span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="pricing.html">
+                <span class="text">
+                  Pricing <span class="pro-badge">Pro</span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="chat.html">
+                <span class="text">
+                  Chat <span class="pro-badge">Pro</span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="error-page.html">
+                <span class="text">
+                  Error Page <span class="pro-badge">Pro</span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="blank-page.html"> Blank Page </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="kanban.html">
+            <span class="icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M2.49999 3.33333C2.03976 3.33333 1.66666 3.70643 1.66666 4.16666V7.49999C1.66666 7.96023 2.03976 8.33333 2.49999 8.33333H5.83332C6.29356 8.33333 6.66666 7.96023 6.66666 7.49999V4.16666C6.66666 3.70643 6.29356 3.33333 5.83332 3.33333H2.49999Z" />
+                <path
+                  d="M2.49999 11.6667C2.03976 11.6667 1.66666 12.0398 1.66666 12.5V15.8333C1.66666 16.2936 2.03976 16.6667 2.49999 16.6667H5.83332C6.29356 16.6667 6.66666 16.2936 6.66666 15.8333V12.5C6.66666 12.0398 6.29356 11.6667 5.83332 11.6667H2.49999Z" />
+                <path
+                  d="M8.33334 4.16667C8.33334 3.8215 8.61318 3.54167 8.95834 3.54167H17.7083C18.0535 3.54167 18.3333 3.8215 18.3333 4.16667C18.3333 4.51185 18.0535 4.79167 17.7083 4.79167H8.95834C8.61318 4.79167 8.33334 4.51185 8.33334 4.16667Z" />
+                <path
+                  d="M8.33334 7.5C8.33334 7.15483 8.61318 6.875 8.95834 6.875H14.7917C15.1368 6.875 15.4167 7.15483 15.4167 7.5C15.4167 7.84517 15.1368 8.125 14.7917 8.125H8.95834C8.61318 8.125 8.33334 7.84517 8.33334 7.5Z" />
+                <path
+                  d="M8.95834 11.875C8.61318 11.875 8.33334 12.1548 8.33334 12.5C8.33334 12.8452 8.61318 13.125 8.95834 13.125H17.7083C18.0535 13.125 18.3333 12.8452 18.3333 12.5C18.3333 12.1548 18.0535 11.875 17.7083 11.875H8.95834Z" />
+                <path
+                  d="M8.95834 15.2083C8.61318 15.2083 8.33334 15.4882 8.33334 15.8333C8.33334 16.1785 8.61318 16.4583 8.95834 16.4583H14.7917C15.1368 16.4583 15.4167 16.1785 15.4167 15.8333C15.4167 15.4882 15.1368 15.2083 14.7917 15.2083H8.95834Z" />
+              </svg>
+            </span>
+            <span class="text">
+              Kanban <span class="pro-badge">Pro</span>
+            </span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="file-manager.html">
+            <span class="icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M18.3333 15C18.3333 15.9205 17.5872 16.6667 16.6667 16.6667H3.33332C2.41285 16.6667 1.66666 15.9205 1.66666 15V4.99999C1.66666 4.07952 2.41285 3.33333 3.33332 3.33333H7.64296C8.085 3.33333 8.50891 3.50892 8.82149 3.82149L10.3452 5.34517C10.6577 5.65774 11.0817 5.83333 11.5237 5.83333H16.6667C17.5872 5.83333 18.3333 6.57952 18.3333 7.49999V15Z" />
+                <path
+                  d="M16.4583 4.58333L16.0637 3.79399C15.9225 3.51166 15.6339 3.33333 15.3183 3.33333H10.1011L11.2291 4.46129C11.3072 4.53943 11.4132 4.58333 11.5237 4.58333H16.4583Z" />
+              </svg>
+            </span>
+            <span class="text">
+              File Manager <span class="pro-badge">Pro</span>
+            </span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="profile.html">
+            <span class="icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M3.33334 11.6667C3.33334 10.7462 4.07954 10 5.00001 10H15C15.9205 10 16.6667 10.7462 16.6667 11.6667C16.6667 15.3486 13.6819 18.3333 10 18.3333C6.31811 18.3333 3.33334 15.3486 3.33334 11.6667Z" />
+                <path
+                  d="M13.3333 4.99999C13.3333 6.84094 11.8409 8.33332 9.99999 8.33332C8.15904 8.33332 6.66666 6.84094 6.66666 4.99999C6.66666 3.15904 8.15904 1.66666 9.99999 1.66666C11.8409 1.66666 13.3333 3.15904 13.3333 4.99999Z" />
+              </svg>
+            </span>
+            <span class="text">
+              Profile <span class="pro-badge">Pro</span>
+            </span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="invoice.html">
+            <span class="icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M3.33334 3.35442C3.33334 2.4223 4.07954 1.66666 5.00001 1.66666H15C15.9205 1.66666 16.6667 2.4223 16.6667 3.35442V16.8565C16.6667 17.5519 15.8827 17.9489 15.3333 17.5317L13.8333 16.3924C13.537 16.1673 13.1297 16.1673 12.8333 16.3924L10.5 18.1646C10.2037 18.3896 9.79634 18.3896 9.50001 18.1646L7.16668 16.3924C6.87038 16.1673 6.46298 16.1673 6.16668 16.3924L4.66668 17.5317C4.11731 17.9489 3.33334 17.5519 3.33334 16.8565V3.35442ZM4.79168 5.04218C4.79168 5.39173 5.0715 5.6751 5.41668 5.6751H10C10.3452 5.6751 10.625 5.39173 10.625 5.04218C10.625 4.69264 10.3452 4.40927 10 4.40927H5.41668C5.0715 4.40927 4.79168 4.69264 4.79168 5.04218ZM5.41668 7.7848C5.0715 7.7848 4.79168 8.06817 4.79168 8.41774C4.79168 8.76724 5.0715 9.05066 5.41668 9.05066H10C10.3452 9.05066 10.625 8.76724 10.625 8.41774C10.625 8.06817 10.3452 7.7848 10 7.7848H5.41668ZM4.79168 11.7932C4.79168 12.1428 5.0715 12.4262 5.41668 12.4262H10C10.3452 12.4262 10.625 12.1428 10.625 11.7932C10.625 11.4437 10.3452 11.1603 10 11.1603H5.41668C5.0715 11.1603 4.79168 11.4437 4.79168 11.7932ZM13.3333 4.40927C12.9882 4.40927 12.7083 4.69264 12.7083 5.04218C12.7083 5.39173 12.9882 5.6751 13.3333 5.6751H14.5833C14.9285 5.6751 15.2083 5.39173 15.2083 5.04218C15.2083 4.69264 14.9285 4.40927 14.5833 4.40927H13.3333ZM12.7083 8.41774C12.7083 8.76724 12.9882 9.05066 13.3333 9.05066H14.5833C14.9285 9.05066 15.2083 8.76724 15.2083 8.41774C15.2083 8.06817 14.9285 7.7848 14.5833 7.7848H13.3333C12.9882 7.7848 12.7083 8.06817 12.7083 8.41774ZM13.3333 11.1603C12.9882 11.1603 12.7083 11.4437 12.7083 11.7932C12.7083 12.1428 12.9882 12.4262 13.3333 12.4262H14.5833C14.9285 12.4262 15.2083 12.1428 15.2083 11.7932C15.2083 11.4437 14.9285 11.1603 14.5833 11.1603H13.3333Z" />
+              </svg>
+            </span>
+            <span class="text">Invoice</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="task.html">
+            <span class="icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M2.49999 3.33334C2.03976 3.33334 1.66666 3.70644 1.66666 4.16668V5.83334C1.66666 6.29358 2.03976 6.66668 2.49999 6.66668H4.16666C4.62689 6.66668 4.99999 6.29358 4.99999 5.83334V4.16668C4.99999 3.70644 4.62689 3.33334 4.16666 3.33334H2.49999Z" />
+                <path
+                  d="M2.49999 8.33334C2.03976 8.33334 1.66666 8.70643 1.66666 9.16668V10.8333C1.66666 11.2936 2.03976 11.6667 2.49999 11.6667H4.16666C4.62689 11.6667 4.99999 11.2936 4.99999 10.8333V9.16668C4.99999 8.70643 4.62689 8.33334 4.16666 8.33334H2.49999Z" />
+                <path
+                  d="M1.66666 14.1667C1.66666 13.7064 2.03976 13.3333 2.49999 13.3333H4.16666C4.62689 13.3333 4.99999 13.7064 4.99999 14.1667V15.8333C4.99999 16.2936 4.62689 16.6667 4.16666 16.6667H2.49999C2.03976 16.6667 1.66666 16.2936 1.66666 15.8333V14.1667Z" />
+                <path
+                  d="M7.29166 4.375C6.94648 4.375 6.66666 4.65483 6.66666 5C6.66666 5.34517 6.94648 5.625 7.29166 5.625H17.7083C18.0535 5.625 18.3333 5.34517 18.3333 5C18.3333 4.65483 18.0535 4.375 17.7083 4.375H7.29166Z" />
+                <path
+                  d="M6.66666 10C6.66666 9.65483 6.94648 9.375 7.29166 9.375H17.7083C18.0535 9.375 18.3333 9.65483 18.3333 10C18.3333 10.3452 18.0535 10.625 17.7083 10.625H7.29166C6.94648 10.625 6.66666 10.3452 6.66666 10Z" />
+                <path
+                  d="M7.29166 14.375C6.94648 14.375 6.66666 14.6548 6.66666 15C6.66666 15.3452 6.94648 15.625 7.29166 15.625H17.7083C18.0535 15.625 18.3333 15.3452 18.3333 15C18.3333 14.6548 18.0535 14.375 17.7083 14.375H7.29166Z">
+              </svg>
+            </span>
+            <span class="text">
+              Task <span class="pro-badge">Pro</span>
+            </span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="calendar.html">
+            <span class="icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M14.7917 2.5C14.7917 2.15483 14.5118 1.875 14.1667 1.875C13.8215 1.875 13.5417 2.15483 13.5417 2.5V3.33333H6.45832V2.5C6.45832 2.15483 6.1785 1.875 5.83332 1.875C5.48815 1.875 5.20832 2.15483 5.20832 2.5V3.33333H3.33332C2.41285 3.33333 1.66666 4.07952 1.66666 5V6.04167H18.3333V5C18.3333 4.07952 17.5872 3.33333 16.6667 3.33333H14.7917V2.5Z" />
+                <path
+                  d="M18.3333 7.29166H1.66666V15C1.66666 15.9205 2.41285 16.6667 3.33332 16.6667H16.6667C17.5872 16.6667 18.3333 15.9205 18.3333 15V7.29166Z" />
+              </svg>
+            </span>
+            <span class="text">
+              Calendar <span class="pro-badge">Pro</span>
+            </span>
+          </a>
+        </li>
+        <li class="nav-item nav-item-has-children">
+          <a href="#0" class="collapsed" data-bs-toggle="collapse" data-bs-target="#ddmenu_3" aria-controls="ddmenu_3"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M14.9211 10.1294C15.1652 9.88534 15.1652 9.48967 14.9211 9.24559L10.7544 5.0789C10.5103 4.83482 10.1147 4.83482 9.87057 5.0789C9.62649 5.32297 9.62649 5.71871 9.87057 5.96278L12.9702 9.06251H1.97916C1.63398 9.06251 1.35416 9.34234 1.35416 9.68751C1.35416 10.0327 1.63398 10.3125 1.97916 10.3125H12.9702L9.87057 13.4123C9.62649 13.6563 9.62649 14.052 9.87057 14.2961C10.1147 14.5402 10.5103 14.5402 10.7544 14.2961L14.9211 10.1294Z" />
+                <path
+                  d="M11.6383 15.18L15.805 11.0133C16.5373 10.2811 16.5373 9.09391 15.805 8.36166L11.6383 4.195C11.2722 3.82888 10.7923 3.64582 10.3125 3.64582V3.02082C10.3125 2.10035 11.0587 1.35416 11.9792 1.35416H16.9792C17.8997 1.35416 18.6458 2.10035 18.6458 3.02082V16.3542C18.6458 17.2747 17.8997 18.0208 16.9792 18.0208H11.9792C11.0587 18.0208 10.3125 17.2747 10.3125 16.3542V15.7292C10.7923 15.7292 11.2722 15.5461 11.6383 15.18Z" />
+              </svg>
+            </span>
+            <span class="text">Auth</span>
+          </a>
+          <ul id="ddmenu_3" class="collapse dropdown-nav">
+            <li>
+              <a href="signin.html"> Sign In </a>
+            </li>
+            <li>
+              <a href="signup.html"> Sign Up </a>
+            </li>
+            <li>
+              <a href="reset-password.html">
+                <span class="text">
+                  Reset Password <span class="pro-badge">Pro</span>
+                </span>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <span class="divider">
+          <hr />
+        </span>
+        <li class="nav-item nav-item-has-children">
+          <a href="#0" class="collapsed" data-bs-toggle="collapse" data-bs-target="#ddmenu_4" aria-controls="ddmenu_4"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M1.66666 5.41669C1.66666 3.34562 3.34559 1.66669 5.41666 1.66669C7.48772 1.66669 9.16666 3.34562 9.16666 5.41669C9.16666 7.48775 7.48772 9.16669 5.41666 9.16669C3.34559 9.16669 1.66666 7.48775 1.66666 5.41669Z" />
+                <path
+                  d="M1.66666 14.5834C1.66666 12.5123 3.34559 10.8334 5.41666 10.8334C7.48772 10.8334 9.16666 12.5123 9.16666 14.5834C9.16666 16.6545 7.48772 18.3334 5.41666 18.3334C3.34559 18.3334 1.66666 16.6545 1.66666 14.5834Z" />
+                <path
+                  d="M10.8333 5.41669C10.8333 3.34562 12.5123 1.66669 14.5833 1.66669C16.6544 1.66669 18.3333 3.34562 18.3333 5.41669C18.3333 7.48775 16.6544 9.16669 14.5833 9.16669C12.5123 9.16669 10.8333 7.48775 10.8333 5.41669Z" />
+                <path
+                  d="M10.8333 14.5834C10.8333 12.5123 12.5123 10.8334 14.5833 10.8334C16.6544 10.8334 18.3333 12.5123 18.3333 14.5834C18.3333 16.6545 16.6544 18.3334 14.5833 18.3334C12.5123 18.3334 10.8333 16.6545 10.8333 14.5834Z" />
+              </svg>
+            </span>
+            <span class="text">UI Elements </span>
+          </a>
+          <ul id="ddmenu_4" class="collapse dropdown-nav">
+            <li>
+              <a href="accordion.html">
+                <span class="text">
+                  Accordion <span class="pro-badge">Pro</span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="alerts.html"> Alerts </a>
+            </li>
+            <li>
+              <a href="buttons.html"> Buttons </a>
+            </li>
+            <li>
+              <a href="button-group.html">
+                <span class="text">
+                  Button Group <span class="pro-badge">Pro</span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="breadcrumb.html">
+                <span class="text">
+                  Breadcrumb <span class="pro-badge">Pro</span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="badges.html">
+                <span class="text">
+                  Badges <span class="pro-badge">Pro</span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="cards.html"> Cards </a>
+            </li>
+            <li>
+              <a href="carousel.html">
+                <span class="text">
+                  Carousel <span class="pro-badge">Pro</span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="dropdown.html">
+                <span class="text">
+                  Dropdown <span class="pro-badge">Pro</span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="list.html">
+                <span class="text">
+                  List <span class="pro-badge">Pro</span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="modals.html">
+                <span class="text">
+                  Modals <span class="pro-badge">Pro</span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="pagination.html">
+                <span class="text">
+                  Pagination <span class="pro-badge">Pro</span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="progress-bars.html">
+                <span class="text">
+                  Progress Bars <span class="pro-badge">Pro</span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="tabs.html">
+                <span class="text">
+                  Tabs <span class="pro-badge">Pro</span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="typography.html"> Typography </a>
+            </li>
+            <li>
+              <a href="videos.html">
+                <span class="text">
+                  Videos <span class="pro-badge">Pro</span>
+                </span>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item nav-item-has-children">
+          <a href="#0" class="collapsed" data-bs-toggle="collapse" data-bs-target="#ddmenu_55" aria-controls="ddmenu_55"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M5.48663 1.1466C5.77383 0.955131 6.16188 1.03274 6.35335 1.31994L6.87852 2.10769C7.20508 2.59755 7.20508 3.23571 6.87852 3.72556L6.35335 4.51331C6.16188 4.80052 5.77383 4.87813 5.48663 4.68666C5.19943 4.49519 5.12182 4.10715 5.31328 3.81994L5.83845 3.03219C5.88511 2.96221 5.88511 2.87105 5.83845 2.80106L5.31328 2.01331C5.12182 1.72611 5.19943 1.33806 5.48663 1.1466Z" />
+                <path
+                  d="M2.49999 5.83331C2.03976 5.83331 1.66666 6.2064 1.66666 6.66665V10.8333C1.66666 13.5948 3.90523 15.8333 6.66666 15.8333H9.99999C12.1856 15.8333 14.0436 14.431 14.7235 12.4772C14.8134 12.4922 14.9058 12.5 15 12.5H16.6667C17.5872 12.5 18.3333 11.7538 18.3333 10.8333V8.33331C18.3333 7.41284 17.5872 6.66665 16.6667 6.66665H15C15 6.2064 14.6269 5.83331 14.1667 5.83331H2.49999ZM14.9829 11.2496C14.9942 11.1123 15 10.9735 15 10.8333V7.91665H16.6667C16.8967 7.91665 17.0833 8.10319 17.0833 8.33331V10.8333C17.0833 11.0634 16.8967 11.25 16.6667 11.25H15L14.9898 11.2498L14.9829 11.2496Z" />
+                <path
+                  d="M8.85332 1.31994C8.6619 1.03274 8.27383 0.955131 7.98663 1.1466C7.69943 1.33806 7.62182 1.72611 7.81328 2.01331L8.33848 2.80106C8.38507 2.87105 8.38507 2.96221 8.33848 3.03219L7.81328 3.81994C7.62182 4.10715 7.69943 4.49519 7.98663 4.68666C8.27383 4.87813 8.6619 4.80052 8.85332 4.51331L9.37848 3.72556C9.70507 3.23571 9.70507 2.59755 9.37848 2.10769L8.85332 1.31994Z" />
+                <path
+                  d="M10.4867 1.1466C10.7738 0.955131 11.1619 1.03274 11.3533 1.31994L11.8785 2.10769C12.2051 2.59755 12.2051 3.23571 11.8785 3.72556L11.3533 4.51331C11.1619 4.80052 10.7738 4.87813 10.4867 4.68666C10.1994 4.49519 10.1218 4.10715 10.3133 3.81994L10.8385 3.03219C10.8851 2.96221 10.8851 2.87105 10.8385 2.80106L10.3133 2.01331C10.1218 1.72611 10.1994 1.33806 10.4867 1.1466Z" />
+                <path
+                  d="M2.49999 16.6667C2.03976 16.6667 1.66666 17.0398 1.66666 17.5C1.66666 17.9602 2.03976 18.3334 2.49999 18.3334H14.1667C14.6269 18.3334 15 17.9602 15 17.5C15 17.0398 14.6269 16.6667 14.1667 16.6667H2.49999Z" />
+              </svg>
+            </span>
+            <span class="text">Icons</span>
+          </a>
+          <ul id="ddmenu_55" class="collapse dropdown-nav">
+            <li>
+              <a href="icons.html"> LineIcons </a>
+            </li>
+            <li>
+              <a href="mdi-icons.html"> MDI Icons </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item nav-item-has-children">
+          <a href="#0" class="collapsed" data-bs-toggle="collapse" data-bs-target="#ddmenu_5" aria-controls="ddmenu_5"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M4.16666 3.33335C4.16666 2.41288 4.91285 1.66669 5.83332 1.66669H14.1667C15.0872 1.66669 15.8333 2.41288 15.8333 3.33335V16.6667C15.8333 17.5872 15.0872 18.3334 14.1667 18.3334H5.83332C4.91285 18.3334 4.16666 17.5872 4.16666 16.6667V3.33335ZM6.04166 5.00002C6.04166 5.3452 6.32148 5.62502 6.66666 5.62502H13.3333C13.6785 5.62502 13.9583 5.3452 13.9583 5.00002C13.9583 4.65485 13.6785 4.37502 13.3333 4.37502H6.66666C6.32148 4.37502 6.04166 4.65485 6.04166 5.00002ZM6.66666 6.87502C6.32148 6.87502 6.04166 7.15485 6.04166 7.50002C6.04166 7.8452 6.32148 8.12502 6.66666 8.12502H13.3333C13.6785 8.12502 13.9583 7.8452 13.9583 7.50002C13.9583 7.15485 13.6785 6.87502 13.3333 6.87502H6.66666ZM6.04166 10C6.04166 10.3452 6.32148 10.625 6.66666 10.625H9.99999C10.3452 10.625 10.625 10.3452 10.625 10C10.625 9.65485 10.3452 9.37502 9.99999 9.37502H6.66666C6.32148 9.37502 6.04166 9.65485 6.04166 10ZM9.99999 16.6667C10.9205 16.6667 11.6667 15.9205 11.6667 15C11.6667 14.0795 10.9205 13.3334 9.99999 13.3334C9.07949 13.3334 8.33332 14.0795 8.33332 15C8.33332 15.9205 9.07949 16.6667 9.99999 16.6667Z" />
+              </svg>
+            </span>
+            <span class="text"> Forms </span>
+          </a>
+          <ul id="ddmenu_5" class="collapse dropdown-nav">
+            <li>
+              <a href="form-elements.html"> From Elements </a>
+            </li>
+            <li>
+              <a href="form-layout.html">
+                <span class="text">
+                  Form Layout <span class="pro-badge">Pro</span>
+                </span>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="tables.html">
+            <span class="icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M1.66666 4.16667C1.66666 3.24619 2.41285 2.5 3.33332 2.5H16.6667C17.5872 2.5 18.3333 3.24619 18.3333 4.16667V9.16667C18.3333 10.0872 17.5872 10.8333 16.6667 10.8333H3.33332C2.41285 10.8333 1.66666 10.0872 1.66666 9.16667V4.16667Z" />
+                <path
+                  d="M1.875 13.75C1.875 13.4048 2.15483 13.125 2.5 13.125H17.5C17.8452 13.125 18.125 13.4048 18.125 13.75C18.125 14.0952 17.8452 14.375 17.5 14.375H2.5C2.15483 14.375 1.875 14.0952 1.875 13.75Z" />
+                <path
+                  d="M2.5 16.875C2.15483 16.875 1.875 17.1548 1.875 17.5C1.875 17.8452 2.15483 18.125 2.5 18.125H17.5C17.8452 18.125 18.125 17.8452 18.125 17.5C18.125 17.1548 17.8452 16.875 17.5 16.875H2.5Z" />
+              </svg>
+            </span>
+            <span class="text">Tables</span>
+          </a>
+        </li>
+        <span class="divider">
+          <hr />
+        </span>
+
+        <li class="nav-item nav-item-has-children">
+          <a href="#0" class="collapsed" data-bs-toggle="collapse" data-bs-target="#ddmenu_77" aria-controls="ddmenu_77"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M13.125 3.33337C13.125 2.9882 12.8452 2.70837 12.5 2.70837C12.1548 2.70837 11.875 2.9882 11.875 3.33337V5.83337H8.125V3.33337C8.125 2.9882 7.84518 2.70837 7.5 2.70837C7.15482 2.70837 6.875 2.9882 6.875 3.33337V5.83337H6.66667C5.74619 5.83337 5 6.57957 5 7.50004V10C5 12.3012 6.86548 14.1667 9.16667 14.1667H9.375V18.3334C9.375 18.6785 9.65483 18.9584 10 18.9584C10.3452 18.9584 10.625 18.6785 10.625 18.3334V14.1667H10.8333C13.1345 14.1667 15 12.3012 15 10V7.50004C15 6.57957 14.2538 5.83337 13.3333 5.83337H13.125V3.33337Z" />
+              </svg>
+            </span>
+            <span class="text"> Form Plugins </span>
+          </a>
+          <ul id="ddmenu_77" class="collapse dropdown-nav">
+            <li>
+              <a href="form-edit.html">
+                <span class="text">
+                  QuillJs <span class="pro-badge">Pro</span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="form-validation.html">
+                <span class="text">
+                  Form Validation <span class="pro-badge">Pro</span>
+                </span>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <li class="nav-item nav-item-has-children">
+          <a href="#0" class="collapsed" data-bs-toggle="collapse" data-bs-target="#ddmenu_7" aria-controls="ddmenu_7"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M4.16666 4.16675C4.16666 2.78604 6.77833 1.66675 9.99999 1.66675C13.2217 1.66675 15.8333 2.78604 15.8333 4.16675V4.57073C15.8027 4.60316 15.7678 4.637 15.7282 4.6722C15.4683 4.90251 15.0568 5.13848 14.4946 5.34931C13.3747 5.76924 11.7858 6.04175 9.99999 6.04175C8.21415 6.04175 6.62521 5.76924 5.5054 5.34931C4.94318 5.13848 4.53162 4.90251 4.27185 4.6722C4.23215 4.637 4.19726 4.60316 4.16666 4.57073V4.16675Z" />
+                <path
+                  d="M4.16666 6.10992V8.73742C4.19726 8.76983 4.23215 8.80367 4.27185 8.83883C4.53162 9.06917 4.94318 9.30517 5.5054 9.516C6.62521 9.93592 8.21415 10.2084 9.99999 10.2084C11.7858 10.2084 13.3747 9.93592 14.4946 9.516C15.0568 9.30517 15.4683 9.06917 15.7282 8.83883C15.7678 8.80367 15.8027 8.76983 15.8333 8.73742V6.10992C15.5592 6.26222 15.2563 6.39865 14.9335 6.51972C13.6404 7.00462 11.8961 7.29175 9.99999 7.29175C8.10394 7.29175 6.35954 7.00462 5.06649 6.51972C4.74364 6.39865 4.44074 6.26222 4.16666 6.10992Z" />
+                <path
+                  d="M15.8333 10.2766C15.5592 10.4289 15.2563 10.5653 14.9335 10.6864C13.6404 11.1712 11.8961 11.4584 9.99999 11.4584C8.10394 11.4584 6.35954 11.1712 5.06649 10.6864C4.74364 10.5653 4.44074 10.4289 4.16666 10.2766V12.904C4.19726 12.9365 4.23215 12.9703 4.27185 13.0055C4.53162 13.2358 4.94318 13.4718 5.5054 13.6826C6.62521 14.1025 8.21415 14.375 9.99999 14.375C11.7858 14.375 13.3747 14.1025 14.4946 13.6826C15.0568 13.4718 15.4683 13.2358 15.7282 13.0055C15.7678 12.9703 15.8027 12.9365 15.8333 12.904V10.2766Z" />
+                <path
+                  d="M15.8333 14.4432C15.5592 14.5956 15.2563 14.732 14.9335 14.8531C13.6404 15.3379 11.8961 15.6251 9.99999 15.6251C8.10394 15.6251 6.35954 15.3379 5.06649 14.8531C4.74364 14.732 4.44074 14.5956 4.16666 14.4432V15.8334C4.16666 17.2142 6.77833 18.3334 9.99999 18.3334C13.2217 18.3334 15.8333 17.2142 15.8333 15.8334V14.4432Z" />
+              </svg>
+            </span>
+            <span class="text"> Data Tables </span>
+          </a>
+          <ul id="ddmenu_7" class="collapse dropdown-nav">
+            <li>
+              <a href="basic-table.html">
+                <span class="text">
+                  Basic Table <span class="pro-badge">Pro</span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="tables-responsive.html">
+                <span class="text">
+                  Responsive Table <span class="pro-badge">Pro</span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="datatables.html">
+                <span class="text">
+                  Data Table <span class="pro-badge">Pro</span>
+                </span>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item nav-item-has-children">
+          <a href="#0" class="collapsed" data-bs-toggle="collapse" data-bs-target="#ddmenu_8" aria-controls="ddmenu_8"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M1.66666 1.04175C2.01183 1.04175 2.29166 1.32157 2.29166 1.66675V16.6667C2.29166 17.2421 2.75802 17.7084 3.33332 17.7084H18.3333C18.6785 17.7084 18.9583 17.9882 18.9583 18.3334C18.9583 18.6786 18.6785 18.9584 18.3333 18.9584H3.33332C2.06767 18.9584 1.04166 17.9324 1.04166 16.6667V1.66675C1.04166 1.32157 1.32148 1.04175 1.66666 1.04175Z" />
+                <path
+                  d="M4.16666 5.00008C4.16666 4.53985 4.53976 4.16675 4.99999 4.16675H8.33332C8.79357 4.16675 9.16666 4.53985 9.16666 5.00008V15.0001C9.16666 15.4603 8.79357 15.8334 8.33332 15.8334H4.99999C4.53976 15.8334 4.16666 15.4603 4.16666 15.0001V5.00008Z" />
+                <path
+                  d="M11.6667 8.33337C11.2064 8.33337 10.8333 8.70646 10.8333 9.16671V15C10.8333 15.4603 11.2064 15.8334 11.6667 15.8334H15C15.4603 15.8334 15.8333 15.4603 15.8333 15V9.16671C15.8333 8.70646 15.4603 8.33337 15 8.33337H11.6667Z" />
+              </svg>
+            </span>
+            <span class="text"> Charts </span>
+          </a>
+          <ul id="ddmenu_8" class="collapse dropdown-nav">
+            <li>
+              <a href="chart-js.html">
+                <span class="text">
+                  ChartJs <span class="pro-badge">Pro</span>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a href="apex-chart.html">
+                <span class="text">
+                  Apex Chart <span class="pro-badge">Pro</span>
+                </span>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="notification.html">
+            <span class="icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M10.8333 2.50008C10.8333 2.03984 10.4602 1.66675 9.99999 1.66675C9.53975 1.66675 9.16666 2.03984 9.16666 2.50008C9.16666 2.96032 9.53975 3.33341 9.99999 3.33341C10.4602 3.33341 10.8333 2.96032 10.8333 2.50008Z" />
+                <path
+                  d="M17.5 5.41673C17.5 7.02756 16.1942 8.33339 14.5833 8.33339C12.9725 8.33339 11.6667 7.02756 11.6667 5.41673C11.6667 3.80589 12.9725 2.50006 14.5833 2.50006C16.1942 2.50006 17.5 3.80589 17.5 5.41673Z" />
+                <path
+                  d="M11.4272 2.69637C10.9734 2.56848 10.4947 2.50006 10 2.50006C7.10054 2.50006 4.75003 4.85057 4.75003 7.75006V9.20873C4.75003 9.72814 4.62082 10.2393 4.37404 10.6963L3.36705 12.5611C2.89938 13.4272 3.26806 14.5081 4.16749 14.9078C7.88074 16.5581 12.1193 16.5581 15.8326 14.9078C16.732 14.5081 17.1007 13.4272 16.633 12.5611L15.626 10.6963C15.43 10.3333 15.3081 9.93606 15.2663 9.52773C15.0441 9.56431 14.8159 9.58339 14.5833 9.58339C12.2822 9.58339 10.4167 7.71791 10.4167 5.41673C10.4167 4.37705 10.7975 3.42631 11.4272 2.69637Z" />
+                <path
+                  d="M7.48901 17.1925C8.10004 17.8918 8.99841 18.3335 10 18.3335C11.0016 18.3335 11.9 17.8918 12.511 17.1925C10.8482 17.4634 9.15183 17.4634 7.48901 17.1925Z" />
+              </svg>
+            </span>
+            <span class="text">Notifications</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="promo-box">
+      <div class="promo-icon">
+        <img class="mx-auto" src="./assets/images/logo/logo-icon-big.svg" alt="Logo">
+      </div>
+      <h3>Upgrade to PRO</h3>
+      <p>Improve your development process and start doing more with PlainAdmin PRO!</p>
+      <a href="https://plainadmin.com/pro" target="_blank" rel="nofollow" class="main-btn primary-btn btn-hover">
+        Upgrade to PRO
+      </a>
+    </div>
+  </aside>
+  <div class="overlay"></div>
+  <!-- ======== sidebar-nav end =========== -->
+
+  <!-- ======== main-wrapper start =========== -->
+  <main class="main-wrapper">
+    <!-- ========== header start ========== -->
+    <header class="header">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-5 col-md-5 col-6">
+            <div class="header-left d-flex align-items-center">
+              <div class="menu-toggle-btn mr-15">
+                <button id="menu-toggle" class="main-btn primary-btn btn-hover">
+                  <i class="lni lni-chevron-left me-2"></i> Menu
+                </button>
+              </div>
+              <div class="header-search d-none d-md-flex">
+                <form action="#">
+                  <input type="text" placeholder="Search..." />
+                  <button><i class="lni lni-search-alt"></i></button>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-7 col-md-7 col-6">
+            <div class="header-right">
+              <!-- notification start -->
+              <div class="notification-box ml-15 d-none d-md-flex">
+                <button class="dropdown-toggle" type="button" id="notification" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M11 20.1667C9.88317 20.1667 8.88718 19.63 8.23901 18.7917H13.761C13.113 19.63 12.1169 20.1667 11 20.1667Z"
+                      fill="" />
+                    <path
+                      d="M10.1157 2.74999C10.1157 2.24374 10.5117 1.83333 11 1.83333C11.4883 1.83333 11.8842 2.24374 11.8842 2.74999V2.82604C14.3932 3.26245 16.3051 5.52474 16.3051 8.24999V14.287C16.3051 14.5301 16.3982 14.7633 16.564 14.9352L18.2029 16.6342C18.4814 16.9229 18.2842 17.4167 17.8903 17.4167H4.10961C3.71574 17.4167 3.5185 16.9229 3.797 16.6342L5.43589 14.9352C5.6017 14.7633 5.69485 14.5301 5.69485 14.287V8.24999C5.69485 5.52474 7.60672 3.26245 10.1157 2.82604V2.74999Z"
+                      fill="" />
+                  </svg>
+                  <span></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notification">
+                  <li>
+                    <a href="#0">
+                      <div class="image">
+                        <img src="assets/images/lead/lead-6.png" alt="" />
+                      </div>
+                      <div class="content">
+                        <h6>
+                          John Doe
+                          <span class="text-regular">
+                            comment on a product.
+                          </span>
+                        </h6>
+                        <p>
+                          Lorem ipsum dolor sit amet, consect etur adipiscing
+                          elit Vivamus tortor.
+                        </p>
+                        <span>10 mins ago</span>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#0">
+                      <div class="image">
+                        <img src="assets/images/lead/lead-1.png" alt="" />
+                      </div>
+                      <div class="content">
+                        <h6>
+                          Jonathon
+                          <span class="text-regular">
+                            like on a product.
+                          </span>
+                        </h6>
+                        <p>
+                          Lorem ipsum dolor sit amet, consect etur adipiscing
+                          elit Vivamus tortor.
+                        </p>
+                        <span>10 mins ago</span>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <!-- notification end -->
+              <!-- message start -->
+              <div class="header-message-box ml-15 d-none d-md-flex">
+                <button class="dropdown-toggle" type="button" id="message" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M7.74866 5.97421C7.91444 5.96367 8.08162 5.95833 8.25005 5.95833C12.5532 5.95833 16.0417 9.4468 16.0417 13.75C16.0417 13.9184 16.0364 14.0856 16.0259 14.2514C16.3246 14.138 16.6127 14.003 16.8883 13.8482L19.2306 14.629C19.7858 14.8141 20.3141 14.2858 20.129 13.7306L19.3482 11.3882C19.8694 10.4604 20.1667 9.38996 20.1667 8.25C20.1667 4.70617 17.2939 1.83333 13.75 1.83333C11.0077 1.83333 8.66702 3.55376 7.74866 5.97421Z"
+                      fill="" />
+                    <path
+                      d="M14.6667 13.75C14.6667 17.2938 11.7939 20.1667 8.25004 20.1667C7.11011 20.1667 6.03962 19.8694 5.11182 19.3482L2.76946 20.129C2.21421 20.3141 1.68597 19.7858 1.87105 19.2306L2.65184 16.8882C2.13062 15.9604 1.83338 14.89 1.83338 13.75C1.83338 10.2062 4.70622 7.33333 8.25004 7.33333C11.7939 7.33333 14.6667 10.2062 14.6667 13.75ZM5.95838 13.75C5.95838 13.2437 5.54797 12.8333 5.04171 12.8333C4.53545 12.8333 4.12504 13.2437 4.12504 13.75C4.12504 14.2563 4.53545 14.6667 5.04171 14.6667C5.54797 14.6667 5.95838 14.2563 5.95838 13.75ZM9.16671 13.75C9.16671 13.2437 8.7563 12.8333 8.25004 12.8333C7.74379 12.8333 7.33338 13.2437 7.33338 13.75C7.33338 14.2563 7.74379 14.6667 8.25004 14.6667C8.7563 14.6667 9.16671 14.2563 9.16671 13.75ZM11.4584 14.6667C11.9647 14.6667 12.375 14.2563 12.375 13.75C12.375 13.2437 11.9647 12.8333 11.4584 12.8333C10.9521 12.8333 10.5417 13.2437 10.5417 13.75C10.5417 14.2563 10.9521 14.6667 11.4584 14.6667Z"
+                      fill="" />
+                  </svg>
+                  <span></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="message">
+                  <li>
+                    <a href="#0">
+                      <div class="image">
+                        <img src="assets/images/lead/lead-5.png" alt="" />
+                      </div>
+                      <div class="content">
+                        <h6>Jacob Jones</h6>
+                        <p>Hey!I can across your profile and ...</p>
+                        <span>10 mins ago</span>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#0">
+                      <div class="image">
+                        <img src="assets/images/lead/lead-3.png" alt="" />
+                      </div>
+                      <div class="content">
+                        <h6>John Doe</h6>
+                        <p>Would you mind please checking out</p>
+                        <span>12 mins ago</span>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#0">
+                      <div class="image">
+                        <img src="assets/images/lead/lead-2.png" alt="" />
+                      </div>
+                      <div class="content">
+                        <h6>Anee Lee</h6>
+                        <p>Hey! are you available for freelance?</p>
+                        <span>1h ago</span>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <!-- message end -->
+              <!-- profile start -->
+              <div class="profile-box ml-15">
+                <button class="dropdown-toggle bg-transparent border-0" type="button" id="profile"
+                  data-bs-toggle="dropdown" aria-expanded="false">
+                  <div class="profile-info">
+                    <div class="info">
+                      <div class="image">
+                        <img src="assets/images/profile/profile-image.png" alt="" />
+                      </div>
+                      <div>
+                        <h6 class="fw-500">Adam Joe</h6>
+                        <p>Admin</p>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profile">
+                  <li>
+                    <div class="author-info flex items-center !p-1">
+                      <div class="image">
+                        <img src="assets/images/profile/profile-image.png" alt="image">
+                      </div>
+                      <div class="content">
+                        <h4 class="text-sm">Adam Joe</h4>
+                        <a class="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white text-xs"
+                          href="#">Email@gmail.com</a>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="#0">
+                      <i class="lni lni-user"></i> View Profile
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#0">
+                      <i class="lni lni-alarm"></i> Notifications
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#0"> <i class="lni lni-inbox"></i> Messages </a>
+                  </li>
+                  <li>
+                    <a href="#0"> <i class="lni lni-cog"></i> Settings </a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="#0"> <i class="lni lni-exit"></i> Sign Out </a>
+                  </li>
+                </ul>
+              </div>
+              <!-- profile end -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- ========== header end ========== -->
+
+    <!-- ========== section start ========== -->
+    <section class="section">
+      <div class="container-fluid">
+        <!-- ========== title-wrapper start ========== -->
+        <div class="title-wrapper pt-30">
+          <div class="row align-items-center">
+            <div class="col-md-6">
+              <div class="title">
+                <h2>Crypto Currency Dashboard</h2>
+              </div>
+            </div>
+            <!-- end col -->
+            <div class="col-md-6">
+              <div class="breadcrumb-wrapper">
+                <nav aria-label="breadcrumb">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                      <a href="#0">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                      Crypto
+                    </li>
+                  </ol>
+                </nav>
+              </div>
+            </div>
+            <!-- end col -->
+          </div>
+          <!-- end row -->
+        </div>
+        <!-- ========== title-wrapper end ========== -->
+        <div class="row">
+          <div class="col-xl-3 col-lg-4 col-sm-6">
+            <div class="icon-card icon-card-3 mb-30">
+              <div class="card-content">
+                <div class="icon opacity-100 orange">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M11 24V20.978H10V24H8V20.978H3.031L3.531 18H4.61C5.494 18 6 17.149 6 16.293V7.404C6 6.571 5.515 6 4.635 6H3V3H8V0H10V3H11V0H13V3.053C17.315 3.199 19.024 4.834 19.514 6.678C20.094 8.858 18.657 10.688 17.421 11.134C18.922 11.516 21 12.625 21 15.184C21 18.667 18.312 21 13 21V24H11ZM10 12.994V18C13.969 18 16.688 17.625 16.688 15.484C16.688 13.188 13.75 12.994 10 12.994ZM10 11C12.211 11 15.578 10.844 15.578 8.5C15.578 6.5 13.5 6 10 6V11Z"
+                      fill="white" />
+                  </svg>
+                </div>
+                <div class="content">
+                  <h3 class="text-bold mb-10">$ 1042.56</h3>
+                  <p class="text-success">
+                    +23.4%
+                    <span class="text-sm text-gray">This week</span>
+                  </p>
+                </div>
+              </div>
+              <div class="chart">
+                <canvas id="myChart1" style="width: 100%; height: 120px"></canvas>
+              </div>
+            </div>
+            <!-- End Icon Cart -->
+          </div>
+          <!-- End Col -->
+          <div class="col-xl-3 col-lg-4 col-sm-6">
+            <div class="icon-card icon-card-3 mb-30">
+              <div class="card-content">
+                <div class="icon opacity-100 purple">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M12 0C5.3726 0 0 5.37259 0 12C0 18.6274 5.3726 24 12 24C18.6274 24 24 18.6274 24 12C23.9924 5.37573 18.6243 0.00758861 12 0ZM17.8879 10.6801C17.4417 11.0743 16.9264 11.3824 16.3679 11.5886C15.9727 11.7165 15.6111 11.9312 15.3098 12.2174C14.9098 13.1698 15.1554 14.2713 15.9227 14.9637C15.9488 14.9899 15.9734 15.0178 15.9962 15.0474C16.9614 16.2842 16.8633 18.0439 15.7668 19.1657C14.5528 20.3776 12.5865 20.3776 11.3722 19.1657C10.6039 18.2437 10.3529 16.9962 10.7044 15.8486C10.7894 15.1856 10.5626 14.5201 10.0899 14.0471C9.62091 13.5951 8.97062 13.383 8.3253 13.4711C7.17775 13.8222 5.93054 13.5703 5.009 12.8018C3.79556 11.5899 3.79448 9.62381 5.00637 8.4106C5.00717 8.40958 5.0082 8.40878 5.009 8.40798C6.13037 7.31066 7.89084 7.21254 9.1273 8.1786C9.99291 9.03392 11.2751 9.32192 11.9566 8.86341C12.2438 8.56283 12.4588 8.20106 12.5859 7.80529C12.7921 7.24734 13.0997 6.73254 13.4934 6.28682C14.7068 5.07333 16.6739 5.07333 17.8874 6.28659C19.1011 7.50003 19.1011 9.46712 17.8879 10.6806V10.6801Z"
+                      fill="white" />
+                    <path
+                      d="M14.7055 7.49748C14.4717 7.79777 14.2867 8.13314 14.158 8.4912C13.9234 9.1972 13.4902 9.82086 12.9108 10.2875C11.277 11.1648 9.25682 10.8256 7.99916 9.46275C7.44378 9.09023 6.70355 9.15509 6.22143 9.61863C5.67732 10.1619 5.6768 11.0437 6.22012 11.5878L6.22143 11.5889C6.54944 11.9156 7.01664 11.9674 8.0143 11.7848C8.21653 11.7482 8.42156 11.7296 8.62716 11.7296C9.62671 11.7458 10.5828 12.1408 11.3024 12.8345C12.1742 13.7064 12.5786 14.9415 12.3908 16.1603C12.2051 17.1555 12.2569 17.6243 12.5852 17.9531C13.1295 18.4964 14.011 18.4964 14.5554 17.9531C15.0257 17.4506 15.0723 16.685 14.666 16.1293C13.3378 14.8693 13.0181 12.8756 13.886 11.2634C14.3527 10.6843 14.9763 10.2517 15.6823 10.0178C16.0409 9.88858 16.3765 9.70257 16.6765 9.4672C17.2203 8.92309 17.2203 8.04102 16.6763 7.49719C16.1319 6.95336 15.2494 6.95336 14.7055 7.49748Z"
+                      fill="white" />
+                  </svg>
+                </div>
+                <div class="content">
+                  <h3 class="text-bold mb-10">$ 22,720</h3>
+                  <p class="text-success">
+                    +15.5%
+                    <span class="text-sm text-gray">This week</span>
+                  </p>
+                </div>
+              </div>
+              <div class="chart">
+                <canvas id="myChart2" style="width: 100%; height: 120px"></canvas>
+              </div>
+            </div>
+            <!-- End Icon Cart -->
+          </div>
+          <!-- End Col -->
+          <div class="col-xl-3 col-lg-4 col-sm-6">
+            <div class="icon-card icon-card-3 mb-30">
+              <div class="card-content">
+                <div class="icon opacity-100 primary">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M5.26074 10.7537L12.3211 7.77143L19.1643 10.8299L12.3103 0L5.26074 10.7537ZM5.28247 14.0626L12.332 18.1551L19.5228 14.0626L12.3972 24L5.28247 14.0626Z"
+                      fill="white" />
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M12.3537 9.22998L5 12.332L12.3537 16.4245L19.501 12.4191L12.3537 9.22998Z" fill="white" />
+                  </svg>
+                </div>
+                <div class="content">
+                  <h3 class="text-bold mb-10">$ 168,1.09</h3>
+                  <p class="text-success">
+                    +35.3%
+                    <span class="text-sm text-gray">This week</span>
+                  </p>
+                </div>
+              </div>
+              <div class="chart">
+                <canvas id="myChart3" style="width: 100%; height: 120px"></canvas>
+              </div>
+            </div>
+            <!-- End Icon Cart -->
+          </div>
+          <!-- End Col -->
+          <div class="col-xl-3 col-lg-4 col-sm-6">
+            <div class="icon-card icon-card-3 mb-30">
+              <div class="card-content">
+                <div class="icon opacity-100 deep-blue">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g clip-path="url(#clip0)">
+                      <path
+                        d="M12 22.7013C17.9102 22.7013 22.7013 17.9102 22.7013 12C22.7013 6.08992 17.9102 1.29883 12 1.29883C6.08992 1.29883 1.29883 6.08992 1.29883 12C1.29883 17.9102 6.08992 22.7013 12 22.7013Z"
+                        fill="#345D9D" />
+                      <path
+                        d="M12 0C9.62663 0 7.30655 0.703788 5.33316 2.02236C3.35977 3.34094 1.8217 5.21509 0.913451 7.4078C0.00519937 9.60051 -0.232441 12.0133 0.230582 14.3411C0.693605 16.6689 1.83649 18.8071 3.51472 20.4853C5.19295 22.1635 7.33115 23.3064 9.65892 23.7694C11.9867 24.2324 14.3995 23.9948 16.5922 23.0866C18.7849 22.1783 20.6591 20.6402 21.9776 18.6668C23.2962 16.6935 24 14.3734 24 12C24.0046 10.4287 23.6996 8.87191 23.1026 7.41848C22.5055 5.96505 21.628 4.64345 20.5202 3.52915C19.4123 2.41484 18.0959 1.52965 16.646 0.924121C15.196 0.318589 13.641 0.00457211 12.0697 0H12ZM12.2034 12.4068L10.954 16.6199H17.6368C17.6811 16.6183 17.7252 16.6255 17.7667 16.641C17.8082 16.6565 17.8462 16.6801 17.8786 16.7103C17.911 16.7405 17.9371 16.7768 17.9554 16.8171C17.9738 16.8575 17.984 16.901 17.9855 16.9453V17.0557L17.4044 19.0605C17.3787 19.1553 17.3216 19.2386 17.2424 19.2967C17.1632 19.3548 17.0667 19.3842 16.9685 19.3801H6.74093L8.45521 13.54L6.53754 14.1211L6.97337 12.7845L8.89105 12.2034L11.3027 4.00969C11.3292 3.91541 11.3865 3.83272 11.4655 3.7748C11.5445 3.71688 11.6406 3.68705 11.7385 3.69007H14.3245C14.3687 3.68852 14.4129 3.69571 14.4544 3.71123C14.4958 3.72674 14.5339 3.75029 14.5662 3.78051C14.5986 3.81074 14.6247 3.84705 14.6431 3.88737C14.6614 3.92769 14.6716 3.97123 14.6731 4.0155V4.12591L12.6392 11.0412L14.5569 10.46L14.1501 11.8547L12.2034 12.4068Z"
+                        fill="white" />
+                    </g>
+                    <defs>
+                      <clipPath id="clip0">
+                        <rect width="24" height="24" fill="white" />
+                      </clipPath>
+                    </defs>
+                  </svg>
+                </div>
+                <div class="content">
+                  <h3 class="text-bold mb-10">$ 33.67,50</h3>
+                  <p class="text-success">
+                    +12.7%
+                    <span class="text-sm text-gray"> This week </span>
+                  </p>
+                </div>
+              </div>
+              <div class="chart">
+                <canvas id="myChart4" style="width: 100%; height: 120px"></canvas>
+              </div>
+            </div>
+            <!-- End Icon Cart -->
+          </div>
+          <!-- End Col -->
+        </div>
+        <!-- End Row -->
+        <div class="row">
+          <div class="col-lg-5">
+            <div class="card-style mb-30">
+              <div class="title d-flex justify-content-between align-items-center">
+                <h6 class="mb-10">Current Statistic</h6>
+                <div class="more-btn-wrapper mb-10">
+                  <button class="more-btn dropdown-toggle" id="moreAction" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    <i class="lni lni-more-alt"></i>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="moreAction">
+                    <li class="dropdown-item">
+                      <a href="#0" class="text-gray">Add All</a>
+                    </li>
+                    <li class="dropdown-item">
+                      <a href="#0" class="text-gray">Remove All</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="chart">
+                <div id="doughnutChart1" style="width: 100%; height: 350px"></div>
+                <div class="doughnutChart-legend">
+                  <ul>
+                    <li class="primary">
+                      <span class="left">Income</span>
+                      <span class="right">49%</span>
+                    </li>
+                    <li class="orange">
+                      <span class="left">Installment </span>
+                      <span class="right">19%</span>
+                    </li>
+                    <li class="danger">
+                      <span class="left">Spends </span>
+                      <span class="right">30%</span>
+                    </li>
+                    <li class="warning">
+                      <span class="left">Invest </span>
+                      <span class="right">5%</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <!-- end card -->
+          </div>
+          <!-- end col -->
+          <div class="col-lg-7">
+            <div class="card-style mb-30">
+              <div class="title d-flex flex-wrap align-items-center justify-content-between mb-10">
+                <div class="left">
+                  <h6 class="text-medium mb-2">Market Overview</h6>
+                  <p class="text-gray text-sm">
+                    Lorem ipsum dolor sit amet, consectetur
+                  </p>
+                </div>
+                <div class="right">
+                  <div class="select-style-1 mb-2">
+                    <div class="select-position select-sm">
+                      <select class="light-bg">
+                        <option value="">Monthly</option>
+                        <option value="">Yearly</option>
+                        <option value="">Weekly</option>
+                      </select>
+                    </div>
+                  </div>
+                  <!-- end select -->
+                </div>
+              </div>
+              <!-- End Title -->
+              <div class="chart">
+                <div id="legend3">
+                  <ul class="legend3 d-flex align-items-center mb-30">
+                    <li>
+                      <div class="d-flex">
+                        <span class="bg-color primary-bg"> </span>
+                        <div class="text">
+                          <p class="text-sm text-dark">ETH</p>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="d-flex">
+                        <span class="bg-color info-bg"></span>
+                        <div class="text">
+                          <p class="text-sm text-dark">XMR</p>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="d-flex">
+                        <span class="bg-color purple-bg"></span>
+                        <div class="text">
+                          <p class="text-sm text-dark">LTC</p>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="d-flex">
+                        <span class="bg-color success-bg"></span>
+                        <div class="text">
+                          <p class="text-sm text-dark">BTC</p>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <canvas id="Chart5" style="width: 100%; height: 400px; margin-left: -35px;"></canvas>
+              </div>
+            </div>
+          </div>
+          <!-- End Col -->
+        </div>
+        <!-- End Row -->
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card-style card-wrapper mb-30">
+              <div class="single-card-wrapper">
+                <div class="single-card purple-bg">
+                  <span class="text-sm text-white fw-500">Main Balance</span>
+                  <h3>$536,231.22</h3>
+                  <div class="card-info">
+                    <div class="mr-15">
+                      <span>VALID THRU</span>
+                      <p>8/12</p>
+                    </div>
+                    <div>
+                      <span>CARD HOLDER</span>
+                      <p>Musharoff Chy</p>
+                    </div>
+                  </div>
+
+                  <span class="bg-shape">
+                    <svg width="330" height="200" viewBox="0 0 330 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <mask id="mask0" style="mask-type: alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="330"
+                        height="200">
+                        <rect width="330" height="200" rx="10" fill="#6647BF" />
+                      </mask>
+                      <g mask="url(#mask0)">
+                        <path opacity="0.3" d="M274 200C274 184.536 286.536 172 302 172V200H274Z" fill="white" />
+                        <path opacity="0.1" d="M246 172H274V200H246V172Z" fill="white" />
+                        <path opacity="0.3" d="M302 172C302 156.536 314.536 144 330 144V172H302Z" fill="white" />
+                        <path opacity="0.3" d="M246 172C246 156.536 258.536 144 274 144V172H246Z" fill="white" />
+                        <path opacity="0.6" d="M274 144C289.464 144 302 156.536 302 172H274V144Z" fill="white" />
+                        <circle opacity="0.05" cx="11.5" cy="9.5" r="99.5" fill="white" />
+                        <circle opacity="0.05" cx="11.5" cy="9.5" r="68.5" fill="white" />
+                        <circle opacity="0.08" cx="11.5" cy="9.5" r="35.5" fill="white" />
+                      </g>
+                    </svg>
+                  </span>
+                </div>
+              </div>
+              <div class="single-card-wrapper">
+                <div class="single-card primary-bg">
+                  <span class="text-sm text-white fw-500">Main Balance</span>
+                  <h3>$120,412.01</h3>
+                  <div class="card-info">
+                    <div class="mr-15">
+                      <span>VALID THRU</span>
+                      <p>4/21</p>
+                    </div>
+                    <div>
+                      <span>CARD HOLDER</span>
+                      <p>Shafiq Hammad</p>
+                    </div>
+                  </div>
+
+                  <span class="bg-shape">
+                    <svg width="330" height="200" viewBox="0 0 330 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <mask id="mask0" style="mask-type: alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="330"
+                        height="200">
+                        <rect width="330" height="200" rx="10" fill="#6647BF" />
+                      </mask>
+                      <g mask="url(#mask0)">
+                        <path opacity="0.3" d="M274 200C274 184.536 286.536 172 302 172V200H274Z" fill="white" />
+                        <path opacity="0.1" d="M246 172H274V200H246V172Z" fill="white" />
+                        <path opacity="0.3" d="M302 172C302 156.536 314.536 144 330 144V172H302Z" fill="white" />
+                        <path opacity="0.3" d="M246 172C246 156.536 258.536 144 274 144V172H246Z" fill="white" />
+                        <path opacity="0.6" d="M274 144C289.464 144 302 156.536 302 172H274V144Z" fill="white" />
+                        <circle opacity="0.05" cx="11.5" cy="9.5" r="99.5" fill="white" />
+                        <circle opacity="0.05" cx="11.5" cy="9.5" r="68.5" fill="white" />
+                        <circle opacity="0.08" cx="11.5" cy="9.5" r="35.5" fill="white" />
+                      </g>
+                    </svg>
+                  </span>
+                </div>
+              </div>
+              <div class="single-card-wrapper">
+                <div class="single-card success-bg">
+                  <span class="text-sm text-white fw-500">Main Balance</span>
+                  <h3>$255,233</h3>
+                  <div class="card-info">
+                    <div class="mr-15">
+                      <span>VALID THRU</span>
+                      <p>5/10</p>
+                    </div>
+                    <div>
+                      <span>CARD HOLDER</span>
+                      <p>Naimur Rahman</p>
+                    </div>
+                  </div>
+
+                  <span class="bg-shape">
+                    <svg width="330" height="200" viewBox="0 0 330 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <mask id="mask0" style="mask-type: alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="330"
+                        height="200">
+                        <rect width="330" height="200" rx="10" fill="#6647BF" />
+                      </mask>
+                      <g mask="url(#mask0)">
+                        <path opacity="0.3" d="M274 200C274 184.536 286.536 172 302 172V200H274Z" fill="white" />
+                        <path opacity="0.1" d="M246 172H274V200H246V172Z" fill="white" />
+                        <path opacity="0.3" d="M302 172C302 156.536 314.536 144 330 144V172H302Z" fill="white" />
+                        <path opacity="0.3" d="M246 172C246 156.536 258.536 144 274 144V172H246Z" fill="white" />
+                        <path opacity="0.6" d="M274 144C289.464 144 302 156.536 302 172H274V144Z" fill="white" />
+                        <circle opacity="0.05" cx="11.5" cy="9.5" r="99.5" fill="white" />
+                        <circle opacity="0.05" cx="11.5" cy="9.5" r="68.5" fill="white" />
+                        <circle opacity="0.08" cx="11.5" cy="9.5" r="35.5" fill="white" />
+                      </g>
+                    </svg>
+                  </span>
+                </div>
+              </div>
+              <div class="single-card-wrapper">
+                <div class="single-card danger-bg">
+                  <span class="text-sm text-white fw-500">Main Balance</span>
+                  <h3>$255,233</h3>
+                  <div class="card-info">
+                    <div class="mr-15">
+                      <span>VALID THRU</span>
+                      <p>5/10</p>
+                    </div>
+                    <div>
+                      <span>CARD HOLDER</span>
+                      <p>Naimur Rahman</p>
+                    </div>
+                  </div>
+
+                  <span class="bg-shape">
+                    <svg width="330" height="200" viewBox="0 0 330 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <mask id="mask0" style="mask-type: alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="330"
+                        height="200">
+                        <rect width="330" height="200" rx="10" fill="#6647BF" />
+                      </mask>
+                      <g mask="url(#mask0)">
+                        <path opacity="0.3" d="M274 200C274 184.536 286.536 172 302 172V200H274Z" fill="white" />
+                        <path opacity="0.1" d="M246 172H274V200H246V172Z" fill="white" />
+                        <path opacity="0.3" d="M302 172C302 156.536 314.536 144 330 144V172H302Z" fill="white" />
+                        <path opacity="0.3" d="M246 172C246 156.536 258.536 144 274 144V172H246Z" fill="white" />
+                        <path opacity="0.6" d="M274 144C289.464 144 302 156.536 302 172H274V144Z" fill="white" />
+                        <circle opacity="0.05" cx="11.5" cy="9.5" r="99.5" fill="white" />
+                        <circle opacity="0.05" cx="11.5" cy="9.5" r="68.5" fill="white" />
+                        <circle opacity="0.08" cx="11.5" cy="9.5" r="35.5" fill="white" />
+                      </g>
+                    </svg>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- End Row -->
+        <div class="row">
+          <div class="col-lg-6 col-xl-12 col-xxl-6">
+            <div class="card-style activity-card mb-30">
+              <div class="title d-flex flex-wrap align-items-center justify-content-between mb-10">
+                <div class="left mb-2">
+                  <h6 class="text-medium mb-2">Recent Activities</h6>
+                  <p class="text-gray text-sm">Lorem ipsum dolor sit amet.</p>
+                </div>
+                <div class="right mb-2">
+                  <div class="button-group">
+                    <a href="javascript:void(0)" class="active">Monthly</a>
+                    <a href="javascript:void(0)">Weekly</a>
+                    <a href="javascript:void(0)">Today</a>
+                  </div>
+                </div>
+              </div>
+              <!-- End Title -->
+              <div class="table-responsive">
+                <table class="table activity-table">
+                  <tbody>
+                    <tr>
+                      <td>
+                        <div class="d-flex">
+                          <div class="icon orange-bg">
+                            <span class="status success-bg"></span>
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
+                              xmlns="http://www.w3.org/2000/svg">
+                              <path
+                                d="M6.41667 14V12.2372H5.83333V14H4.66667V12.2372H1.76808L2.05975 10.5H2.68917C3.20483 10.5 3.5 10.0036 3.5 9.50425V4.319C3.5 3.83308 3.21708 3.5 2.70375 3.5H1.75V1.75H4.66667V0H5.83333V1.75H6.41667V0H7.58333V1.78092C10.1004 1.86608 11.0973 2.81983 11.3832 3.8955C11.7215 5.16717 10.8832 6.23467 10.1622 6.49483C11.0378 6.71767 12.25 7.36458 12.25 8.85733C12.25 10.8891 10.682 12.25 7.58333 12.25V14H6.41667ZM5.83333 7.57983V10.5C8.14858 10.5 9.73467 10.2812 9.73467 9.03233C9.73467 7.693 8.02083 7.57983 5.83333 7.57983ZM5.83333 6.41667C7.12308 6.41667 9.08717 6.32567 9.08717 4.95833C9.08717 3.79167 7.875 3.5 5.83333 3.5V6.41667Z"
+                                fill="white" />
+                            </svg>
+                          </div>
+                          <span class="text-sm text-gray ms-2 fw-500">
+                            Bitcoin
+                          </span>
+                        </div>
+                      </td>
+                      <td class="time">
+                        <p class="text-sm fw-500 text-gray">06:24:45 AM</p>
+                      </td>
+                      <td>
+                        <p class="text-sm fw-500 text-gray">+$5,553</p>
+                      </td>
+                      <td class="text-end">
+                        <span class="status-btn">Completed</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="d-flex">
+                          <div class="icon primary-bg">
+                            <span class="status danger-bg"></span>
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
+                              xmlns="http://www.w3.org/2000/svg">
+                              <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M3.06885 6.27302L7.18741 4.53333L11.1793 6.31746L7.18108 0L3.06885 6.27302ZM3.08152 8.20317L7.19375 10.5905L11.3884 8.20317L7.23177 14L3.08152 8.20317Z"
+                                fill="white" />
+                              <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M7.20639 5.38416L2.91675 7.19368L7.20639 9.58098L11.3757 7.24447L7.20639 5.38416Z"
+                                fill="white" />
+                            </svg>
+                          </div>
+                          <span class="text-sm text-gray ms-2 fw-500">
+                            Ethereum
+                          </span>
+                        </div>
+                      </td>
+                      <td class="time">
+                        <p class="text-sm fw-500 text-gray">06:24:45 AM</p>
+                      </td>
+                      <td>
+                        <p class="text-sm fw-500 text-gray">+$5,553</p>
+                      </td>
+                      <td class="text-end">
+                        <span class="status-btn">Pending</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="d-flex">
+                          <div class="icon deep-blue-bg">
+                            <span class="status success-bg"></span>
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
+                              xmlns="http://www.w3.org/2000/svg">
+                              <g clip-path="url(#clip0)">
+                                <path
+                                  d="M6.99994 13.2423C10.4475 13.2423 13.2423 10.4475 13.2423 6.99994C13.2423 3.55237 10.4475 0.757568 6.99994 0.757568C3.55237 0.757568 0.757568 3.55237 0.757568 6.99994C0.757568 10.4475 3.55237 13.2423 6.99994 13.2423Z"
+                                  fill="#345D9D" />
+                                <path
+                                  d="M7 0C5.61553 0 4.26216 0.410543 3.11101 1.17971C1.95987 1.94888 1.06266 3.04213 0.532846 4.32122C0.00303298 5.6003 -0.13559 7.00777 0.134506 8.36563C0.404603 9.7235 1.07129 10.9708 2.05026 11.9497C3.02922 12.9287 4.2765 13.5954 5.63437 13.8655C6.99224 14.1356 8.3997 13.997 9.67879 13.4672C10.9579 12.9373 12.0511 12.0401 12.8203 10.889C13.5895 9.73785 14 8.38447 14 7C14.0027 6.08342 13.8248 5.17528 13.4765 4.32745C13.1282 3.47961 12.6163 2.70868 11.9701 2.05867C11.3239 1.40866 10.5559 0.892298 9.71014 0.539071C8.86435 0.185843 7.95726 0.00266706 7.04068 0H7ZM7.11865 7.23729L6.38983 9.69492H10.2881C10.314 9.69401 10.3397 9.6982 10.3639 9.70726C10.3881 9.71631 10.4103 9.73004 10.4292 9.74767C10.4481 9.7653 10.4633 9.78648 10.474 9.81C10.4847 9.83352 10.4907 9.85892 10.4915 9.88475V9.94915L10.1525 11.1186C10.1376 11.1739 10.1043 11.2225 10.0581 11.2564C10.0119 11.2903 9.95555 11.3075 9.89831 11.3051H3.93221L4.93221 7.8983L3.81356 8.23729L4.0678 7.45763L5.18644 7.11864L6.59322 2.33898C6.60871 2.28399 6.64215 2.23576 6.68823 2.20197C6.7343 2.16818 6.79035 2.15078 6.84746 2.15254H8.35594C8.38176 2.15164 8.40751 2.15583 8.43171 2.16488C8.45591 2.17393 8.47809 2.18767 8.49698 2.2053C8.51587 2.22293 8.5311 2.24411 8.54179 2.26763C8.55249 2.29115 8.55845 2.31655 8.55932 2.34237V2.40678L7.37288 6.44068L8.49153 6.1017L8.25424 6.91525L7.11865 7.23729Z"
+                                  fill="white" />
+                              </g>
+                              <defs>
+                                <clipPath id="clip0">
+                                  <rect width="14" height="14" fill="white" />
+                                </clipPath>
+                              </defs>
+                            </svg>
+                          </div>
+                          <span class="text-sm text-gray ms-2 fw-500">
+                            Litecoin
+                          </span>
+                        </div>
+                      </td>
+                      <td class="time">
+                        <p class="text-sm fw-500 text-gray">06:24:45 AM</p>
+                      </td>
+                      <td>
+                        <p class="text-sm fw-500 text-gray">+$5,553</p>
+                      </td>
+                      <td class="text-end">
+                        <span class="status-btn">Completed</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="d-flex">
+                          <div class="icon purple-bg">
+                            <span class="status danger-bg"></span>
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
+                              xmlns="http://www.w3.org/2000/svg">
+                              <path
+                                d="M7 0C3.13402 0 0 3.13401 0 7C0 10.866 3.13402 14 7 14C10.866 14 14 10.866 14 7C13.9956 3.13584 10.8642 0.00442669 7 0ZM10.4346 6.23006C10.1743 6.45999 9.87372 6.63976 9.54792 6.76C9.31738 6.8346 9.10648 6.95986 8.93071 7.1268C8.69741 7.68237 8.84068 8.32494 9.28821 8.72884C9.30348 8.74411 9.31781 8.76041 9.33111 8.77767C9.89415 9.49911 9.83695 10.5256 9.19728 11.18C8.48911 11.887 7.3421 11.887 6.6338 11.18C6.18563 10.6421 6.03916 9.91445 6.24423 9.24504C6.29383 8.85824 6.16153 8.47004 5.8858 8.19417C5.6122 7.9305 5.23286 7.80674 4.85643 7.85817C4.18702 8.06294 3.45948 7.916 2.92192 7.4677C2.21408 6.76076 2.21345 5.61389 2.92038 4.90619C2.92085 4.90559 2.92145 4.90512 2.92192 4.90465C3.57605 4.26455 4.60299 4.20732 5.32426 4.77085C5.8292 5.26979 6.57717 5.43779 6.97467 5.17032C7.1422 4.99499 7.26764 4.78395 7.3418 4.55308C7.46204 4.22762 7.64147 3.92731 7.87114 3.66731C8.57898 2.95944 9.72645 2.95944 10.4343 3.66718C11.1423 4.37502 11.1423 5.52249 10.4346 6.23036V6.23006Z"
+                                fill="white" />
+                              <path
+                                d="M8.57819 4.37361C8.44179 4.54878 8.33389 4.74441 8.25882 4.95328C8.12195 5.36511 7.86925 5.72892 7.53128 6.00112C6.57821 6.51289 5.39977 6.31499 4.66613 5.52001C4.34217 5.30271 3.91036 5.34055 3.62913 5.61095C3.31173 5.92788 3.31143 6.44225 3.62836 6.75962C3.62866 6.75979 3.62883 6.76009 3.62913 6.76025C3.82046 6.95082 4.093 6.98106 4.67497 6.87452C4.79294 6.85319 4.91254 6.84235 5.03247 6.84235C5.61554 6.85179 6.17324 7.08222 6.59301 7.48686C7.10158 7.99546 7.33748 8.71596 7.22791 9.4269C7.11958 10.0075 7.14981 10.2809 7.34131 10.4727C7.65885 10.7896 8.17305 10.7896 8.49059 10.4727C8.76496 10.1796 8.79212 9.73297 8.55515 9.40887C7.78032 8.67386 7.59385 7.51082 8.10012 6.57042C8.37235 6.23258 8.73612 5.98022 9.14796 5.84378C9.35716 5.76842 9.55293 5.65991 9.72793 5.52261C10.0452 5.20521 10.0452 4.69068 9.72779 4.37344C9.41026 4.05621 8.89589 4.05637 8.57865 4.37378L8.57819 4.37361Z"
+                                fill="white" />
+                            </svg>
+                          </div>
+                          <span class="text-sm text-gray ms-2 fw-500">
+                            Ripple
+                          </span>
+                        </div>
+                      </td>
+                      <td class="time">
+                        <p class="text-sm fw-500 text-gray">06:24:45 AM</p>
+                      </td>
+                      <td>
+                        <p class="text-sm fw-500 text-gray">+$5,553</p>
+                      </td>
+                      <td class="text-end">
+                        <span class="status-btn">Canceled</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="d-flex">
+                          <div class="icon orange-bg">
+                            <span class="status success-bg"></span>
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
+                              xmlns="http://www.w3.org/2000/svg">
+                              <path
+                                d="M6.41667 14V12.2372H5.83333V14H4.66667V12.2372H1.76808L2.05975 10.5H2.68917C3.20483 10.5 3.5 10.0036 3.5 9.50425V4.319C3.5 3.83308 3.21708 3.5 2.70375 3.5H1.75V1.75H4.66667V0H5.83333V1.75H6.41667V0H7.58333V1.78092C10.1004 1.86608 11.0973 2.81983 11.3832 3.8955C11.7215 5.16717 10.8832 6.23467 10.1622 6.49483C11.0378 6.71767 12.25 7.36458 12.25 8.85733C12.25 10.8891 10.682 12.25 7.58333 12.25V14H6.41667ZM5.83333 7.57983V10.5C8.14858 10.5 9.73467 10.2812 9.73467 9.03233C9.73467 7.693 8.02083 7.57983 5.83333 7.57983ZM5.83333 6.41667C7.12308 6.41667 9.08717 6.32567 9.08717 4.95833C9.08717 3.79167 7.875 3.5 5.83333 3.5V6.41667Z"
+                                fill="white" />
+                            </svg>
+                          </div>
+                          <span class="text-sm text-gray ms-2 fw-500">
+                            Bitcoin
+                          </span>
+                        </div>
+                      </td>
+                      <td class="time">
+                        <p class="text-sm fw-500 text-gray">06:24:45 AM</p>
+                      </td>
+                      <td>
+                        <p class="text-sm fw-500 text-gray">+$5,553</p>
+                      </td>
+                      <td class="text-end">
+                        <span class="status-btn">Completed</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="d-flex">
+                          <div class="icon primary-bg">
+                            <span class="status danger-bg"></span>
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
+                              xmlns="http://www.w3.org/2000/svg">
+                              <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M3.06885 6.27302L7.18741 4.53333L11.1793 6.31746L7.18108 0L3.06885 6.27302ZM3.08152 8.20317L7.19375 10.5905L11.3884 8.20317L7.23177 14L3.08152 8.20317Z"
+                                fill="white" />
+                              <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M7.20639 5.38416L2.91675 7.19368L7.20639 9.58098L11.3757 7.24447L7.20639 5.38416Z"
+                                fill="white" />
+                            </svg>
+                          </div>
+                          <span class="text-sm text-gray ms-2 fw-500">
+                            Ethereum
+                          </span>
+                        </div>
+                      </td>
+                      <td class="time">
+                        <p class="text-sm fw-500 text-gray">06:24:45 AM</p>
+                      </td>
+                      <td>
+                        <p class="text-sm fw-500 text-gray">+$5,553</p>
+                      </td>
+                      <td class="text-end">
+                        <span class="status-btn">Pending</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div class="d-flex">
+                          <div class="icon deep-blue-bg">
+                            <span class="status success-bg"></span>
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
+                              xmlns="http://www.w3.org/2000/svg">
+                              <g clip-path="url(#clip0)">
+                                <path
+                                  d="M6.99994 13.2423C10.4475 13.2423 13.2423 10.4475 13.2423 6.99994C13.2423 3.55237 10.4475 0.757568 6.99994 0.757568C3.55237 0.757568 0.757568 3.55237 0.757568 6.99994C0.757568 10.4475 3.55237 13.2423 6.99994 13.2423Z"
+                                  fill="#345D9D" />
+                                <path
+                                  d="M7 0C5.61553 0 4.26216 0.410543 3.11101 1.17971C1.95987 1.94888 1.06266 3.04213 0.532846 4.32122C0.00303298 5.6003 -0.13559 7.00777 0.134506 8.36563C0.404603 9.7235 1.07129 10.9708 2.05026 11.9497C3.02922 12.9287 4.2765 13.5954 5.63437 13.8655C6.99224 14.1356 8.3997 13.997 9.67879 13.4672C10.9579 12.9373 12.0511 12.0401 12.8203 10.889C13.5895 9.73785 14 8.38447 14 7C14.0027 6.08342 13.8248 5.17528 13.4765 4.32745C13.1282 3.47961 12.6163 2.70868 11.9701 2.05867C11.3239 1.40866 10.5559 0.892298 9.71014 0.539071C8.86435 0.185843 7.95726 0.00266706 7.04068 0H7ZM7.11865 7.23729L6.38983 9.69492H10.2881C10.314 9.69401 10.3397 9.6982 10.3639 9.70726C10.3881 9.71631 10.4103 9.73004 10.4292 9.74767C10.4481 9.7653 10.4633 9.78648 10.474 9.81C10.4847 9.83352 10.4907 9.85892 10.4915 9.88475V9.94915L10.1525 11.1186C10.1376 11.1739 10.1043 11.2225 10.0581 11.2564C10.0119 11.2903 9.95555 11.3075 9.89831 11.3051H3.93221L4.93221 7.8983L3.81356 8.23729L4.0678 7.45763L5.18644 7.11864L6.59322 2.33898C6.60871 2.28399 6.64215 2.23576 6.68823 2.20197C6.7343 2.16818 6.79035 2.15078 6.84746 2.15254H8.35594C8.38176 2.15164 8.40751 2.15583 8.43171 2.16488C8.45591 2.17393 8.47809 2.18767 8.49698 2.2053C8.51587 2.22293 8.5311 2.24411 8.54179 2.26763C8.55249 2.29115 8.55845 2.31655 8.55932 2.34237V2.40678L7.37288 6.44068L8.49153 6.1017L8.25424 6.91525L7.11865 7.23729Z"
+                                  fill="white" />
+                              </g>
+                              <defs>
+                                <clipPath id="clip0">
+                                  <rect width="14" height="14" fill="white" />
+                                </clipPath>
+                              </defs>
+                            </svg>
+                          </div>
+                          <span class="text-sm text-gray ms-2 fw-500">
+                            Litecoin
+                          </span>
+                        </div>
+                      </td>
+                      <td class="time">
+                        <p class="text-sm fw-500 text-gray">06:24:45 AM</p>
+                      </td>
+                      <td>
+                        <p class="text-sm fw-500 text-gray">+$5,553</p>
+                      </td>
+                      <td class="text-end">
+                        <span class="status-btn">Completed</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <!-- End Col -->
+          <div class="col-md-6 col-lg-3 col-xl-6 col-xxl-3">
+            <div class="card-style mb-30">
+              <div class="title d-flex flex-wrap align-items-center justify-content-between mb-10">
+                <div class="left">
+                  <h6 class="text-medium mb-2">Sell Order</h6>
+                </div>
+                <div class="right mb-2">
+                  <div class="more-btn-wrapper mb-10">
+                    <button class="more-btn dropdown-toggle" id="moreAction" data-bs-toggle="dropdown"
+                      aria-expanded="false">
+                      <i class="lni lni-more-alt"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="moreAction">
+                      <li class="dropdown-item">
+                        <a href="#0" class="text-gray">Add All</a>
+                      </li>
+                      <li class="dropdown-item">
+                        <a href="#0" class="text-gray">Remove All</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <!-- End Title -->
+
+              <div class="select-style-1 mb-2">
+                <div class="select-position select-sm">
+                  <select class="radius-30">
+                    <option value="">Bitcion</option>
+                    <option value="">Ethereum</option>
+                    <option value="">Litecion</option>
+                  </select>
+                </div>
+              </div>
+              <!-- end select -->
+
+              <div class="table-responsive">
+                <table class="table sell-order-table">
+                  <thead>
+                    <tr>
+                      <th>
+                        <h6 class="text-sm fw-500">Price</h6>
+                      </th>
+                      <th>
+                        <h6 class="text-sm fw-500">Amount</h6>
+                      </th>
+                      <th class="text-end">
+                        <h6 class="text-sm fw-500">Total</h6>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p class="text-sm fw-500 text-gray">65.8</p>
+                      </td>
+                      <td>
+                        <p class="text-sm fw-500 text-gray">17.10</p>
+                      </td>
+                      <td class="text-end">
+                        <p class="text-sm fw-500 text-gray">$251,77</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p class="text-sm fw-500 text-gray">65.8</p>
+                      </td>
+                      <td>
+                        <p class="text-sm fw-500 text-gray">17.10</p>
+                      </td>
+                      <td class="text-end">
+                        <p class="text-sm fw-500 text-gray">$251,77</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p class="text-sm fw-500 text-gray">65.8</p>
+                      </td>
+                      <td>
+                        <p class="text-sm fw-500 text-gray">17.10</p>
+                      </td>
+                      <td class="text-end">
+                        <p class="text-sm fw-500 text-gray">$251,77</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p class="text-sm fw-500 text-gray">65.8</p>
+                      </td>
+                      <td>
+                        <p class="text-sm fw-500 text-gray">17.10</p>
+                      </td>
+                      <td class="text-end">
+                        <p class="text-sm fw-500 text-gray">$251,77</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p class="text-sm fw-500 text-gray">65.8</p>
+                      </td>
+                      <td>
+                        <p class="text-sm fw-500 text-gray">17.10</p>
+                      </td>
+                      <td class="text-end">
+                        <p class="text-sm fw-500 text-gray">$251,77</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p class="text-sm fw-500 text-gray">65.8</p>
+                      </td>
+                      <td>
+                        <p class="text-sm fw-500 text-gray">17.10</p>
+                      </td>
+                      <td class="text-end">
+                        <p class="text-sm fw-500 text-gray">$251,77</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p class="text-sm fw-500 text-gray">65.8</p>
+                      </td>
+                      <td>
+                        <p class="text-sm fw-500 text-gray">17.10</p>
+                      </td>
+                      <td class="text-end">
+                        <p class="text-sm fw-500 text-gray">$251,77</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <!-- End Col -->
+          <div class="col-md-6 col-lg-3 col-xl-6 col-xxl-3">
+            <div class="card-style mb-30">
+              <div class="title d-flex flex-wrap align-items-center justify-content-between mb-10">
+                <div class="left">
+                  <h6 class="text-medium mb-2">Buy Order</h6>
+                </div>
+                <div class="right mb-2">
+                  <div class="more-btn-wrapper mb-10">
+                    <button class="more-btn dropdown-toggle" id="moreAction" data-bs-toggle="dropdown"
+                      aria-expanded="false">
+                      <i class="lni lni-more-alt"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="moreAction">
+                      <li class="dropdown-item">
+                        <a href="#0" class="text-gray">Add All</a>
+                      </li>
+                      <li class="dropdown-item">
+                        <a href="#0" class="text-gray">Remove All</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <!-- End Title -->
+
+              <div class="select-style-1 mb-2">
+                <div class="select-position select-sm">
+                  <select class="radius-30">
+                    <option value="">Bitcion</option>
+                    <option value="">Ethereum</option>
+                    <option value="">Litecion</option>
+                  </select>
+                </div>
+              </div>
+              <!-- end select -->
+
+              <div class="table-responsive">
+                <table class="table sell-order-table">
+                  <thead>
+                    <tr>
+                      <th>
+                        <h6 class="text-sm fw-500">Price</h6>
+                      </th>
+                      <th>
+                        <h6 class="text-sm fw-500">Amount</h6>
+                      </th>
+                      <th class="text-end">
+                        <h6 class="text-sm fw-500">Total</h6>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p class="text-sm fw-500 text-gray">65.8</p>
+                      </td>
+                      <td>
+                        <p class="text-sm fw-500 text-gray">17.10</p>
+                      </td>
+                      <td class="text-end">
+                        <p class="text-sm fw-500 text-gray">$251,77</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p class="text-sm fw-500 text-gray">65.8</p>
+                      </td>
+                      <td>
+                        <p class="text-sm fw-500 text-gray">17.10</p>
+                      </td>
+                      <td class="text-end">
+                        <p class="text-sm fw-500 text-gray">$251,77</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p class="text-sm fw-500 text-gray">65.8</p>
+                      </td>
+                      <td>
+                        <p class="text-sm fw-500 text-gray">17.10</p>
+                      </td>
+                      <td class="text-end">
+                        <p class="text-sm fw-500 text-gray">$251,77</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p class="text-sm fw-500 text-gray">65.8</p>
+                      </td>
+                      <td>
+                        <p class="text-sm fw-500 text-gray">17.10</p>
+                      </td>
+                      <td class="text-end">
+                        <p class="text-sm fw-500 text-gray">$251,77</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p class="text-sm fw-500 text-gray">65.8</p>
+                      </td>
+                      <td>
+                        <p class="text-sm fw-500 text-gray">17.10</p>
+                      </td>
+                      <td class="text-end">
+                        <p class="text-sm fw-500 text-gray">$251,77</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p class="text-sm fw-500 text-gray">65.8</p>
+                      </td>
+                      <td>
+                        <p class="text-sm fw-500 text-gray">17.10</p>
+                      </td>
+                      <td class="text-end">
+                        <p class="text-sm fw-500 text-gray">$251,77</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p class="text-sm fw-500 text-gray">65.8</p>
+                      </td>
+                      <td>
+                        <p class="text-sm fw-500 text-gray">17.10</p>
+                      </td>
+                      <td class="text-end">
+                        <p class="text-sm fw-500 text-gray">$251,77</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <!-- End Col -->
+        </div>
+        <!-- End Row -->
+        <div class="row">
+          <div class="col-md-6 col-lg-4">
+            <div class="card-style mb-30">
+              <div class="title d-flex flex-wrap align-items-center justify-content-between mb-20">
+                <div class="left">
+                  <h6 class="text-medium mb-2">Buy Crypto Coins</h6>
+                </div>
+                <div class="right mb-2">
+                  <div class="more-btn-wrapper">
+                    <button class="more-btn dropdown-toggle" id="moreAction" data-bs-toggle="dropdown"
+                      aria-expanded="false">
+                      <i class="lni lni-more-alt"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="moreAction">
+                      <li class="dropdown-item">
+                        <a href="#0" class="text-gray">Add All</a>
+                      </li>
+                      <li class="dropdown-item">
+                        <a href="#0" class="text-gray">Remove All</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <!-- End Title -->
+              <form class="buy-sell-form">
+                <div class="field-group mb-20">
+                  <label for="" class="text-sm text-gray block mb-10">
+                    Enter Your Money
+                  </label>
+                  <div class="input-group">
+                    <input type="text" placeholder="10000" />
+                    <div class="select-style-1 mb-0">
+                      <div class="select-position">
+                        <select>
+                          <option value="">USD</option>
+                          <option value="">XMR</option>
+                          <option value="">BTC</option>
+                          <option value="">LTC</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="field-group mb-20">
+                  <label for="" class="text-sm text-gray block mb-10">
+                    Your Crypto Coins Converted to
+                  </label>
+                  <div class="input-group">
+                    <input type="text" placeholder="0.253" />
+                    <div class="select-style-1 mb-0">
+                      <div class="select-position">
+                        <select>
+                          <option value="">BTC</option>
+                          <option value="">XMR</option>
+                          <option value="">USD</option>
+                          <option value="">LTC</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="buy-sell-btn">
+                  <button class="main-btn btn-sm success-btn">
+                    Buy Coins
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <!-- End Col -->
+          <div class="col-md-6 col-lg-4">
+            <div class="card-style mb-30">
+              <div class="title d-flex flex-wrap align-items-center justify-content-between mb-20">
+                <div class="left">
+                  <h6 class="text-medium mb-2">Sell Crypto Coins</h6>
+                </div>
+                <div class="right mb-2">
+                  <div class="more-btn-wrapper">
+                    <button class="more-btn dropdown-toggle" id="moreAction" data-bs-toggle="dropdown"
+                      aria-expanded="false">
+                      <i class="lni lni-more-alt"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="moreAction">
+                      <li class="dropdown-item">
+                        <a href="#0" class="text-gray">Add All</a>
+                      </li>
+                      <li class="dropdown-item">
+                        <a href="#0" class="text-gray">Remove All</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <!-- End Title -->
+              <form class="buy-sell-form">
+                <div class="field-group mb-20">
+                  <label for="" class="text-sm text-gray block mb-10">
+                    Enter Crypto Coin
+                  </label>
+                  <div class="input-group">
+                    <input type="text" placeholder="0.456" />
+                    <div class="select-style-1 mb-0">
+                      <div class="select-position">
+                        <select>
+                          <option value="">BTC</option>
+                          <option value="">XMR</option>
+                          <option value="">USD</option>
+                          <option value="">LTC</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="field-group mb-20">
+                  <label for="" class="text-sm text-gray block mb-10">
+                    Your Money Converted to
+                  </label>
+                  <div class="input-group">
+                    <input type="text" placeholder="2,356" />
+                    <div class="select-style-1 mb-0">
+                      <div class="select-position">
+                        <select>
+                          <option value="">USD</option>
+                          <option value="">XMR</option>
+                          <option value="">BTC</option>
+                          <option value="">LTC</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="buy-sell-btn">
+                  <button class="main-btn btn-sm danger-btn">
+                    Sell Coins
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <!-- End Col -->
+          <div class="col-md-6 col-lg-4">
+            <div class="card-style mb-30">
+              <div class="title d-flex flex-wrap align-items-center justify-content-between">
+                <div class="left">
+                  <h6 class="text-medium mb-2">Quick Transfer</h6>
+                </div>
+              </div>
+              <!-- End Title -->
+              <form class="buy-sell-form">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="input-group-2 mb-10">
+                      <label>From</label>
+
+                      <div class="select-style-1 mb-0">
+                        <div class="select-position">
+                          <select>
+                            <option value="">USD</option>
+                            <option value="">XMR</option>
+                            <option value="">BTC</option>
+                            <option value="">LTC</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="input-group-2 mb-10">
+                      <label>To</label>
+
+                      <div class="select-style-1 mb-0">
+                        <div class="select-position">
+                          <select>
+                            <option value="">USD</option>
+                            <option value="">XMR</option>
+                            <option value="">BTC</option>
+                            <option value="">LTC</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="field-group field-group-2 mb-10">
+                  <label for="" class="text-gray block mb-10"> Amount </label>
+                  <div class="input-group">
+                    <input type="text" placeholder="10000" />
+                    <span> BTC </span>
+                  </div>
+                </div>
+                <div class="field-group field-group-2 mb-10">
+                  <label for="" class="text-gray block mb-10">
+                    Price For BTC
+                  </label>
+                  <div class="input-group">
+                    <input type="text" placeholder="0.253" />
+                    <span> USD </span>
+                  </div>
+                </div>
+                <div class="buy-sell-btn">
+                  <button class="main-btn btn-sm primary-btn">
+                    Transfer Now
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <!-- End Col -->
+        </div>
+        <!-- End Row -->
+      </div>
+      <!-- end container -->
+    </section>
+    <!-- ========== section end ========== -->
+
+    <!-- ========== footer start =========== -->
+    <footer class="footer">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-6 order-last order-md-first">
+            <div class="copyright text-center text-md-start">
+              <p class="text-sm">
+                Designed and Developed by
+                <a href="https://plainadmin.com" rel="nofollow" target="_blank">
+                  PlainAdmin
+                </a>
+              </p>
+            </div>
+          </div>
+          <!-- end col-->
+          <div class="col-md-6">
+            <div class="terms d-flex justify-content-center justify-content-md-end">
+              <a href="#0" class="text-sm">Term & Conditions</a>
+              <a href="#0" class="text-sm ml-15">Privacy & Policy</a>
+            </div>
+          </div>
+        </div>
+        <!-- end row -->
+      </div>
+      <!-- end container -->
+    </footer>
+    <!-- ========== footer end =========== -->
+  </main>
+  <!-- ======== main-wrapper end =========== -->
+
+  <!-- ============ Theme Option Start ============= -->
+  <button class="option-btn">
+    <i class="lni lni-cog"></i>
+  </button>
+  <div class="option-overlay"></div>
+  <div class="option-box">
+    <div class="option-header">
+      <h5>Settings</h5>
+      <button class="option-btn-close text-gray">
+        <i class="lni lni-close"></i>
+      </button>
+    </div>
+    <h6 class="mb-10">Layout</h6>
+    <ul class="mb-30">
+      <li><button class="leftSidebarButton active">Left Sidebar</button></li>
+      <li><button class="rightSidebarButton">Right Sidebar</button></li>
+    </ul>
+
+    <h6 class="mb-10">Theme</h6>
+    <ul class="d-flex flex-wrap align-items-center">
+      <li>
+        <button class="lightThemeButton active">
+          Light Theme + Sidebar 1
+        </button>
+      </li>
+      <li><button class="darkThemeButton">Dark Theme + Sidebar 1</button></li>
+    </ul>
+
+    <div class="promo-box">
+      <div class="promo-icon">
+        <img class="mx-auto" src="./assets/images/logo/logo-icon-big.svg" alt="Logo">
+      </div>
+      <h3>Upgrade to PRO</h3>
+      <p>Improve your development process and start doing more with PlainAdmin PRO!</p>
+      <a href="https://plainadmin.com/pro" target="_blank" rel="nofollow" class="main-btn primary-btn btn-hover">
+        Upgrade to PRO
+      </a>
+    </div>
+  </div>
+  <!-- ============ Theme Option End ============= -->
+
+  <!-- ========= All Javascript files linkup ======== -->
+  <script src="assets/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/Chart.min.js"></script>
+  <script src="assets/js/apexcharts.min.js"></script>
+  <script src="assets/js/dynamic-pie-chart.js"></script>
+  <script src="assets/js/moment.min.js"></script>
+  <script src="assets/js/fullcalendar.js"></script>
+  <script src="assets/js/jvectormap.min.js"></script>
+  <script src="assets/js/world-merc.js"></script>
+  <script src="assets/js/polyfill.js"></script>
+  <script src="assets/js/quill.min.js"></script>
+  <script src="assets/js/datatable.js"></script>
+  <script src="assets/js/Sortable.min.js"></script>
+  <script src="assets/js/main.js"></script>
+
+  <script>
+    // ================== chart one start
+    const ctx1 = document.getElementById("myChart1").getContext("2d");
+    let gradient1 = ctx1.createLinearGradient(0, 0, 0, 180);
+    gradient1.addColorStop(0, "rgba(250, 157, 42, 0.2)");
+    gradient1.addColorStop(0.25, "rgba(250, 157, 42, 0.1)");
+    gradient1.addColorStop(1, "rgba(250, 157, 42, 0)");
+
+    const chart1 = new Chart(ctx1, {
+      type: "line",
+      data: {
+        labels: [
+          "Jan 2020",
+          "Fab 2020",
+          "Mar 2020",
+          "Apr 2020",
+          "May 2020",
+          "Jun 2020",
+          "Jul 2020",
+          "Aug 2020",
+          "Sep 2020",
+          "Oct 2020",
+          "Nov 2020",
+          "Dec 2020",
+        ],
+        datasets: [
+          {
+            label: "",
+            backgroundColor: gradient1,
+            borderColor: "#FA9D2A",
+            borderWidth: 3,
+            data: [23, 70, 31, 78, 49, 70, 30, 50, 80, 20, 50, 99],
+            pointBackgroundColor: "transparent",
+            pointHoverBackgroundColor: "#FA9D2A",
+            pointBorderColor: "transparent",
+            pointHoverBorderColor: "#fff",
+            pointHoverBorderWidth: 3,
+            borderWidth: 3,
+            pointRadius: 7,
+            pointHoverRadius: 7,
+            cubicInterpolationMode: "monotone",
+            fill: true,
+          },
+        ],
+      },
+      options: {
+        plugins: {
+          tooltip: {
+            intersect: false,
+            backgroundColor: "#fff9f4",
+            bodyColor: "rgba(250, 157, 42, 1)",
+            bodyFont: {
+              weight: "bold",
+              size: 16,
+              family: "Plus Jakarta Sans",
+            },
+            titleFont: {
+              size: 0,
+            },
+            multiKeyBackground: "transparent",
+            padding: 15,
+            displayColors: false,
+            cornerRadius: 15,
+            position: "average",
+          },
+          legend: {
+            display: false,
+          },
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+        layout: {
+          padding: {
+            top: 50,
+            bottom: 12,
+            left: 12,
+            right: 12,
+          },
+        },
+        scales: {
+          y: {
+            display: false,
+          },
+          x: {
+            display: false,
+          },
+        },
+      },
+    });
+    // =========== chart one end
+
+    // ================== chart two start
+    const ctx2 = document.getElementById("myChart2").getContext("2d");
+    const gradient2 = ctx2.createLinearGradient(0, 0, 0, 180);
+    gradient2.addColorStop(0, "rgba(155, 81, 224, 0.2)");
+    gradient2.addColorStop(0.25, "rgba(155, 81, 224, 0.1)");
+    gradient2.addColorStop(1, "rgba(155, 81, 224, 0)");
+
+    const chart2 = new Chart(ctx2, {
+      // The type of chart we want to create
+      type: "line", // also try bar or other graph types
+
+      // The data for our dataset
+      data: {
+        labels: [
+          "Jan 2020",
+          "Fab 2020",
+          "Mar 2020",
+          "Apr 2020",
+          "May 2020",
+          "Jun 2020",
+          "Jul 2020",
+          "Aug 2020",
+          "Sep 2020",
+          "Oct 2020",
+          "Nov 2020",
+          "Dec 2020",
+        ],
+        // Information about the dataset
+        datasets: [
+          {
+            label: "",
+            backgroundColor: gradient2,
+            borderColor: "#9B51E0",
+            data: [20, 80, 15, 78, 41, 85, 26, 90, 60, 80, 48, 99],
+            pointBackgroundColor: "transparent",
+            pointHoverBackgroundColor: "#9B51E0",
+            pointBorderColor: "transparent",
+            pointHoverBorderColor: "#fff",
+            pointHoverBorderWidth: 3,
+            pointBorderWidth: 3,
+            pointRadius: 7,
+            pointHoverRadius: 7,
+            cubicInterpolationMode: "monotone",
+            fill: true,
+          },
+        ],
+      },
+
+      // Configuration options
+      options: {
+        plugins: {
+          tooltip: {
+            intersect: false,
+            backgroundColor: "#f2e4ff",
+            bodyColor: "rgba(155, 81, 224, 1)",
+            bodyFont: {
+              weight: "bold",
+              size: 16,
+              family: "Plus Jakarta Sans",
+            },
+            titleFont: {
+              size: 0,
+            },
+            multiKeyBackground: "transparent",
+            padding: 15,
+            displayColors: false,
+            cornerRadius: 15,
+            position: "average",
+          },
+          legend: {
+            display: false,
+          },
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+        layout: {
+          padding: {
+            top: 50,
+            bottom: 12,
+            left: 12,
+            right: 12,
+          },
+        },
+        scales: {
+          y: {
+            display: false,
+          },
+          x: {
+            display: false,
+          },
+        },
+      },
+    });
+    // =========== chart two end
+    // ================== chart three start
+    const ctx3 = document.getElementById("myChart3").getContext("2d");
+    const gradient3 = ctx3.createLinearGradient(0, 0, 0, 180);
+    gradient3.addColorStop(0, "rgba(98, 126, 234, 0.2)");
+    gradient3.addColorStop(0.25, "rgba(98, 126, 234, 0.1)");
+    gradient3.addColorStop(1, "rgba(98, 126, 234, 0)");
+
+    const chart3 = new Chart(ctx3, {
+      // The type of chart we want to create
+      type: "line", // also try bar or other graph types
+
+      // The data for our dataset
+      data: {
+        labels: [
+          "Jan 2020",
+          "Fab 2020",
+          "Mar 2020",
+          "Apr 2020",
+          "May 2020",
+          "Jun 2020",
+          "Jul 2020",
+          "Aug 2020",
+          "Sep 2020",
+          "Oct 2020",
+          "Nov 2020",
+          "Dec 2020",
+        ],
+        // Information about the dataset
+        datasets: [
+          {
+            label: "",
+            backgroundColor: gradient3,
+            borderColor: "#627EEA",
+            data: [56, 20, 61, 38, 90, 61, 99, 60, 30, 80, 40, 99],
+            pointBackgroundColor: "transparent",
+            pointHoverBackgroundColor: "#627EEA",
+            pointBorderColor: "transparent",
+            pointHoverBorderColor: "#fff",
+            pointHoverBorderWidth: 3,
+            pointBorderWidth: 3,
+            pointRadius: 7,
+            pointHoverRadius: 7,
+            cubicInterpolationMode: "monotone",
+            fill: true,
+          },
+        ],
+      },
+
+      // Configuration options
+      options: {
+        plugins: {
+          tooltip: {
+            intersect: false,
+            backgroundColor: "#ebf3fd",
+            bodyColor: "rgba(98, 126, 234, 1)",
+            bodyFont: {
+              weight: "bold",
+              size: 16,
+              family: "Plus Jakarta Sans",
+            },
+            titleFont: {
+              size: 0,
+            },
+            multiKeyBackground: "transparent",
+            padding: 15,
+            displayColors: false,
+            cornerRadius: 15,
+            position: "average",
+          },
+          legend: {
+            display: false,
+          },
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+        layout: {
+          padding: {
+            top: 50,
+            bottom: 12,
+            left: 12,
+            right: 12,
+          },
+        },
+        scales: {
+          y: {
+            display: false,
+          },
+          x: {
+            display: false,
+          },
+        },
+      },
+    });
+    // =========== chart three end
+    // ================== chart four start
+    const ctx4 = document.getElementById("myChart4").getContext("2d");
+    const gradient4 = ctx4.createLinearGradient(0, 0, 0, 180);
+    gradient4.addColorStop(0, "rgba(52, 93, 157, 0.2)");
+    gradient4.addColorStop(0.25, "rgba(52, 93, 157, 0.1)");
+    gradient4.addColorStop(1, "rgba(52, 93, 157, 0)");
+
+    const chart4 = new Chart(ctx4, {
+      // The type of chart we want to create
+      type: "line", // also try bar or other graph types
+
+      // The data for our dataset
+      data: {
+        labels: [
+          "Jan 2020",
+          "Fab 2020",
+          "Mar 2020",
+          "Apr 2020",
+          "May 2020",
+          "Jun 2020",
+          "Jul 2020",
+          "Aug 2020",
+          "Sep 2020",
+          "Oct 2020",
+          "Nov 2020",
+          "Dec 2020",
+        ],
+        // Information about the dataset
+        datasets: [
+          {
+            label: "",
+            backgroundColor: gradient4,
+            borderColor: "#345D9D",
+            data: [90, 40, 80, 30, 65, 50, 79, 20, 90, 40, 70, 99],
+            pointBackgroundColor: "transparent",
+            pointHoverBackgroundColor: "#345D9D",
+            pointBorderColor: "transparent",
+            pointHoverBorderColor: "#fff",
+            pointHoverBorderWidth: 3,
+            pointBorderWidth: 3,
+            pointRadius: 7,
+            pointHoverRadius: 7,
+            cubicInterpolationMode: "monotone",
+            fill: true,
+          },
+        ],
+      },
+
+      // Configuration options
+      options: {
+        plugins: {
+          tooltip: {
+            intersect: false,
+            backgroundColor: "#e7f0ff",
+            bodyColor: "rgba(52, 93, 157, 1)",
+            bodyFont: {
+              weight: "bold",
+              size: 16,
+              family: "Plus Jakarta Sans",
+            },
+            titleFont: {
+              size: 0,
+            },
+            multiKeyBackground: "transparent",
+            padding: 15,
+            displayColors: false,
+            cornerRadius: 15,
+            position: "average",
+          },
+          legend: {
+            display: false,
+          },
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+        layout: {
+          padding: {
+            top: 50,
+            bottom: 12,
+            left: 12,
+            right: 12,
+          },
+        },
+        scales: {
+          y: {
+            display: false,
+          },
+          x: {
+            display: false,
+          },
+        },
+      },
+    });
+    // =========== chart four end
+
+    //============ doughnutChart1 start
+
+    const doughnutChart1 = new ApexCharts(
+      document.querySelector("#doughnutChart1"),
+      (options = {
+        series: [83, 67, 55, 44],
+        chart: {
+          height: 350,
+          type: "radialBar",
+        },
+
+        plotOptions: {
+          radialBar: {
+            dataLabels: {
+              name: {
+                fontSize: "22px",
+              },
+              value: {
+                fontSize: "16px",
+              },
+            },
+            hollow: {
+              size: "40%",
+            },
+            track: {
+              strokeWidth: "100%",
+              margin: 10,
+            },
+          },
+        },
+        stroke: {
+          lineCap: "round",
+        },
+        labels: ["Income", "Installment", "Spends", "Invest"],
+        colors: ["#4a6cf7", "#f2994a", "#d50100", "#f7c800"],
+      })
+    );
+    doughnutChart1.render();
+    //============ doughnutChart1 end
+
+    // =========== chart three start
+    const ctx5 = document.getElementById("Chart5").getContext("2d");
+    const chart5 = new Chart(ctx5, {
+      type: "line",
+      data: {
+        labels: ["Week 01", "Week 02", "Week 03", "Week 04", "Week 05", "Week 06"],
+        datasets: [
+          {
+            label: "Series 1",
+            backgroundColor: "transparent",
+            borderColor: "#4A6CF7",
+            data: [80, 120, 110, 100, 130, 150, 115],
+            pointBackgroundColor: "transparent",
+            pointHoverBackgroundColor: "#4A6CF7",
+            pointBorderColor: "transparent",
+            pointHoverBorderColor: "#fff",
+            pointHoverBorderWidth: 3,
+            borderWidth: 4,
+            pointRadius: 4,
+            pointHoverRadius: 8,
+            tension: 0.4,
+            fill: false,
+          },
+          {
+            label: "Series 2",
+            backgroundColor: "transparent",
+            borderColor: "#97ca31",
+            data: [250, 160, 150, 140, 165, 210],
+            pointBackgroundColor: "transparent",
+            pointHoverBackgroundColor: "#97ca31",
+            pointBorderColor: "transparent",
+            pointHoverBorderColor: "#fff",
+            pointHoverBorderWidth: 3,
+            borderWidth: 4,
+            pointRadius: 4,
+            pointHoverRadius: 8,
+            tension: 0.4,
+            fill: false,
+          },
+          {
+            label: "Series 3",
+            backgroundColor: "transparent",
+            borderColor: "#9b51e0",
+            data: [210, 165, 140, 150, 160, 120],
+            pointBackgroundColor: "transparent",
+            pointHoverBackgroundColor: "#9b51e0",
+            pointBorderColor: "transparent",
+            pointHoverBorderColor: "#fff",
+            pointHoverBorderWidth: 3,
+            borderWidth: 4,
+            pointRadius: 4,
+            pointHoverRadius: 8,
+            tension: 0.4,
+            fill: false,
+          },
+          {
+            label: "Series 4",
+            backgroundColor: "transparent",
+            borderColor: "#219653",
+            data: [115, 150, 130, 100, 110, 120, 80],
+            pointBackgroundColor: "transparent",
+            pointHoverBackgroundColor: "#219653",
+            pointBorderColor: "transparent",
+            pointHoverBorderColor: "#fff",
+            pointHoverBorderWidth: 3,
+            borderWidth: 4,
+            pointRadius: 4,
+            pointHoverRadius: 8,
+            tension: 0.4,
+            fill: false,
+          },
+        ],
+      },
+      options: {
+        plugins: {
+          tooltip: {
+            callbacks: {
+              labelColor: function (context) {
+                return {
+                  backgroundColor: "#ffffff",
+                  color: "#171717"
+                };
+              },
+            },
+            intersect: false,
+            backgroundColor: "#f9f9f9",
+            title: {
+              fontFamily: "Plus Jakarta Sans",
+              color: "#8F92A1",
+              fontSize: 12,
+            },
+            body: {
+              fontFamily: "Plus Jakarta Sans",
+              color: "#171717",
+              fontStyle: "normal",
+              fontSize: 16,
+            },
+            multiKeyBackground: "transparent",
+            displayColors: false,
+            padding: {
+              x: 30,
+              y: 10,
+            },
+            bodyAlign: "left",
+            titleAlign: "left",
+            titleColor: "#8F92A1",
+            bodyColor: "#171717",
+            bodyFont: {
+              family: "Plus Jakarta Sans",
+              size: "16",
+              weight: "bold",
+            },
+          },
+          legend: {
+            display: false,
+          },
+        },
+        responsive: true,
+        // maintainAspectRatio: false,
+        layout: {
+          padding: {
+            top: 0,
+          },
+        },
+        title: {
+          display: false,
+        },
+        scales: {
+          y: {
+            grid: {
+              drawBorder: false,
+              color: "rgba(143, 146, 161, .1)",
+              zeroLineColor: "rgba(143, 146, 161, .1)",
+            },
+            ticks: {
+              padding: 35,
+              max: 300,
+              min: 50,
+            },
+          },
+          x: {
+            grid: {
+              display: false,
+              drawTicks: false,
+              drawBorder: false,
+            },
+            ticks: {
+              padding: 20,
+            },
+          },
+        },
+      },
+    });
+      // =========== chart three end
+
+    // =========== theme change
+    const lightThemeColors = {
+      darkBorder: "rgba(143, 146, 161, .1)",
+      darkColor: "#5A6A85",
+    };
+
+    const darkThemeColors = {
+      darkBorder: "#2b2b42",
+      darkColor: "#838C9A",
+    };
+
+    // Function to apply theme colors to the chart
+    function applyThemeColors(themeColors) {
+
+      chart5.options.scales.y.grid.color = themeColors.darkBorder;
+      chart5.options.scales.y.grid.borderColor = themeColors.darkBorder;
+      chart5.options.scales.x.ticks.color = themeColors.darkColor;
+      chart5.options.scales.y.ticks.color = themeColors.darkColor;
+
+      chart5.update();
+    }
+
+    const darkThemeButton = document.querySelector('.darkThemeButton')
+    const lightThemeButton = document.querySelector('.lightThemeButton')
+
+    // Check if the user has a saved theme preference
+    const savedTheme = localStorage.getItem('theme')
+
+    // Check the saved theme preference and apply appropriate colors
+    if (savedTheme === 'dark') {
+      applyThemeColors(darkThemeColors);
+    }  else {
+      applyThemeColors(lightThemeColors);
+    }
+
+    // Event listeners for theme buttons
+    darkThemeButton.addEventListener('click', () => {
+      applyThemeColors(darkThemeColors);
+    });  
+    
+    lightThemeButton.addEventListener('click', () => {
+      applyThemeColors(lightThemeColors);
+    });
+
+  </script>
+</body>
+
+</html>

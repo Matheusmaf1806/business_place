@@ -1,0 +1,325 @@
+/* =========== tabs css ============== */
+
+/* ==== tab style 1 ==== */
+.tab-style-1 {
+  nav {
+    border-bottom: 1px solid $light-2;
+    margin-bottom: 20px;
+
+    button {
+      border: none;
+      background: transparent;
+      margin-right: 40px;
+      padding-bottom: 15px;
+      position: relative;
+      font-weight: 500;
+      color: $gray;
+
+      &::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -1.5px;
+        width: 0;
+        height: 3px;
+        background: $primary;
+        border-radius: 5px;
+        @include transition(0.3s);
+      }
+
+      &:hover,
+      &.active {
+        color: $primary;
+
+        &::after {
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  .tab-content {
+    p {
+      font-size: 14px;
+    }
+  }
+}
+
+/* ==== tab style 2 ==== */
+.tab-style-2 {
+  nav {
+    border-bottom: 1px solid $light-2;
+    margin-bottom: 20px;
+
+    button {
+      border: none;
+      background: transparent;
+      margin-right: 20px;
+      padding: 10px 14px;
+      position: relative;
+      font-weight: 500;
+      color: $gray;
+
+      &::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0px;
+        width: 0;
+        height: 1px;
+        background: $primary;
+        border-radius: 5px;
+        @include transition(0.3s);
+      }
+
+      &:hover,
+      &.active {
+        color: $primary;
+        background: rgba($primary, 0.1);
+
+        &::after {
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  .tab-content {
+    p {
+      font-size: 14px;
+    }
+  }
+}
+
+/* ==== tab style 3 ==== */
+.tab-style-3 {
+  nav {
+    margin-bottom: 20px;
+
+    button {
+      margin-right: 20px;
+      padding: 10px 16px;
+      position: relative;
+      font-weight: 500;
+      font-size: 16px;
+
+      &:hover,
+      &.active {
+        color: $white;
+        background: $primary;
+      }
+
+      @media #{$laptop} {
+        margin-right: 10px;
+      }
+
+      @media #{$xs} {
+        margin-right: 5px;
+        font-size: 14px;
+        padding: 8px 14px;
+      }
+
+      i {
+        @media #{$laptop, $xs} {
+          margin-right: 2px;
+        }
+      }
+    }
+  }
+
+  .tab-content {
+    p {
+      font-size: 14px;
+    }
+  }
+}
+
+/* ==== tab style 4 ==== */
+.tab-style-4 {
+  nav {
+    margin-bottom: 10px;
+    display: inline-flex;
+    background: $light;
+    padding: 6px;
+    border-radius: 4px;
+
+    button {
+      margin-right: 20px;
+      padding: 10px 14px;
+      position: relative;
+      font-weight: 500;
+      border: none;
+      background: transparent;
+      border-radius: 4px;
+      color: $gray;
+
+      &:hover,
+      &.active {
+        color: $white;
+        background: $primary;
+      }
+
+      @media #{$xs} {
+        margin-right: 12px;
+      }
+    }
+  }
+
+  .tab-content {
+    p {
+      font-size: 14px;
+    }
+  }
+}
+
+/* ==== tab style 5 ==== */
+.tab-style-5 {
+  display: flex;
+
+  nav {
+    background: $white;
+    border: 1px solid $light;
+    border-radius: 4px;
+    padding: 4px;
+    margin-right: 30px;
+    height: 100%;
+
+    button {
+      width: 50px;
+      height: 50px;
+      position: relative;
+      font-weight: 700;
+      border: none;
+      background: transparent;
+      border-radius: 4px;
+      color: $gray;
+      @include flex-center;
+      font-size: 25px;
+
+      &::after {
+        content: "";
+        position: absolute;
+        right: -54px;
+        top: 50%;
+        @include transform(translateY(-50%) rotate(45deg));
+        width: 35px;
+        height: 35px;
+        background: $white;
+        border: 1px solid $light;
+        border-right: 0px;
+        border-top: 0px;
+        display: none;
+      }
+
+      &:hover,
+      &.active {
+        color: $white;
+        background: $primary;
+      }
+
+      &.active {
+        &::after {
+          display: block;
+        }
+      }
+    }
+  }
+
+  .tab-content {
+    p {
+      font-size: 14px;
+    }
+  }
+}
+
+/* ==== tab style 6 ==== */
+.tab-style-6 {
+  nav {
+    border-bottom: 1px solid $light-2;
+    margin-bottom: 20px;
+
+    button {
+      border: none;
+      background: transparent;
+      margin-right: 40px;
+      padding-bottom: 15px;
+      position: relative;
+      font-weight: 500;
+      color: $gray;
+
+      &:hover,
+      &.active {
+        color: $primary;
+      }
+    }
+  }
+
+  .tab-content {
+    p {
+      font-size: 14px;
+    }
+  }
+}
+
+/* ========= Theme Change Css ============= */
+.darkTheme {
+  .tab-style-1,
+  .tab-style-2,
+  .tab-style-6 {
+    nav {
+      border-color: rgba($light, 0.2);
+
+      button {
+        color: $white;
+
+        &:hover,
+        &.active {
+          color: $primary;
+        }
+      }
+    }
+  }
+
+  .tab-style-3 {
+    nav {
+      button {
+        background: rgba($dark-2, 0.8);
+
+        &:hover,
+        &.active {
+          color: $white;
+          background: $primary;
+        }
+      }
+    }
+  }
+
+  .tab-style-4 {
+    nav {
+      background: $dark-2;
+
+      button {
+        color: rgba($white, 0.5);
+
+        &.active,
+        &:hover {
+          color: $white;
+        }
+      }
+    }
+  }
+
+  .tab-style-5 {
+    nav {
+      background: $dark;
+      border-color: $dark-2;
+
+      button {
+        &::after {
+          background: $dark;
+          border-color: $dark-2;
+        }
+      }
+    }
+  }
+}

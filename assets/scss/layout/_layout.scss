@@ -1,0 +1,133 @@
+/* ========== Layout Change ============ */
+.rightSidebar {
+  .sidebar-nav-wrapper {
+    left: auto;
+    right: 0;
+
+    @include transform(translateX(0));
+
+    @media #{$lg, $md, $xs} {
+      @include transform(translateX(260px));
+    }
+
+    &.active {
+      @include transform(translateX(260px));
+
+      @media #{$lg, $md, $xs} {
+        @include transform(translateX(0px));
+      }
+    }
+  }
+
+  .overlay {
+    left: auto;
+    right: 0;
+    @include transform(translateX(100%));
+
+    &.active {
+      @include transform(translateX(0));
+    }
+  }
+
+  .main-wrapper {
+    margin-left: auto;
+    margin-right: 250px;
+
+    @media #{$lg, $md, $xs} {
+      margin-right: 0;
+    }
+
+    &.active {
+      margin-right: 0;
+    }
+
+    .header {
+      .row {
+        flex-direction: row-reverse;
+      }
+
+      .header-left {
+        flex-direction: row-reverse;
+
+        .menu-toggle-btn {
+          margin-right: 0px;
+          margin-left: 20px;
+        }
+      }
+
+      .header-right {
+        flex-direction: row-reverse;
+
+        .profile-box {
+          .info {
+            flex-direction: row-reverse;
+
+            .image {
+              margin-right: 16px;
+              margin-left: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/* ========== Theme Change ==========  */
+
+.darkTheme {
+  background: $dark-2;
+
+  .option-box {
+    background: $dark-4;
+
+    ul {
+      li {
+        button {
+          color: $white;
+
+          &.active {
+            color: $primary;
+          }
+        }
+      }
+    }
+  }
+
+  .card-style {
+    background: $dark-4;
+    border-color: $dark-2;
+
+    .title {
+      button {
+        color: $white;
+      }
+
+      .dropdown-menu {
+        background: $dark-2;
+
+        li {
+          &:hover {
+            background: $dark-2;
+          }
+        }
+      }
+    }
+  }
+
+  .dropdown-toggle {
+    color: rgba($white, 0.7);
+  }
+
+  .main-wrapper {
+    .footer {
+      a {
+        color: $gray-2;
+
+        &:hover {
+          color: $primary;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,184 @@
+/* ========== Badges css ========== */
+
+/* badges base styles */
+.main-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+  vertical-align: middle;
+  @include user-select(none);
+  padding: 4px 10px;
+  font-weight: 600;
+  font-size: 10px;
+  line-height: 14px;
+  border-radius: 3px;
+  z-index: 5;
+  transition: all 0.4s ease-in-out;
+  overflow: hidden;
+
+  &:hover {
+    color: inherit;
+  }
+}
+
+.badge-xl {
+  padding: 10px 10px 10px 15px;
+  font-weight: 500;
+  font-size: 14px;
+  justify-content: space-between;
+  max-width: 150px;
+  width: 100%;
+
+  span {
+    padding: 4px 8px;
+  }
+}
+
+/* primary buttons */
+.primary-badge {
+  background: $primary;
+  color: $white;
+
+  &:hover {
+    color: $white;
+  }
+}
+.primary-badge-light {
+  background: rgba($primary, 0.08);
+  color: $primary;
+
+  &:hover {
+    color: $primary;
+  }
+}
+
+/* secondary buttons */
+.secondary-badge {
+  background: $secondary;
+  color: $white;
+
+  &:hover {
+    color: $white;
+  }
+}
+.secondary-badge-light {
+  background: rgba($secondary, 0.08);
+  color: $secondary;
+
+  &:hover {
+    color: $secondary;
+  }
+}
+
+/* success buttons */
+.success-badge {
+  background: $success;
+  color: $white;
+
+  &:hover {
+    color: $white;
+  }
+}
+.success-badge-light {
+  background: rgba($success, 0.08);
+  color: $success;
+
+  &:hover {
+    color: $success;
+  }
+}
+
+/* danger buttons */
+.danger-badge {
+  background: $danger;
+  color: $white;
+
+  &:hover {
+    color: $white;
+  }
+}
+.danger-badge-light {
+  background: rgba($danger, 0.08);
+  color: $danger;
+
+  &:hover {
+    color: $danger;
+  }
+}
+
+/* warning buttons */
+.warning-badge {
+  background: $warning;
+  color: $white;
+
+  &:hover {
+    color: $white;
+  }
+}
+.warning-badge-light {
+  background: rgba($warning, 0.08);
+  color: $warning;
+
+  &:hover {
+    color: $warning;
+  }
+}
+
+/* info buttons */
+.info-badge {
+  background: $info;
+  color: $white;
+
+  &:hover {
+    color: $white;
+  }
+}
+.info-badge-light {
+  background: rgba($info, 0.08);
+  color: $info;
+
+  &:hover {
+    color: $info;
+  }
+}
+
+/* dark buttons */
+.dark-badge {
+  background: $dark;
+  color: $white;
+
+  &:hover {
+    color: $white;
+  }
+}
+.dark-badge-light {
+  background: rgba($dark, 0.08);
+  color: $dark;
+
+  &:hover {
+    color: $dark;
+  }
+}
+
+/* ========== buttons group css ========= */
+.badges-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* ======= Theme Change Css =========== */
+.darkTheme {
+  .dark-badge {
+    background: $dark-2;
+  }
+  .dark-badge-outline {
+    border-color: rgba($white, 0.5);
+    color: rgba($white, 0.5);
+  }
+
+  .light-badge-outline {
+    color: $light;
+  }
+}

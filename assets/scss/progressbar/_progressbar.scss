@@ -1,0 +1,94 @@
+/* ========== Progress Bar css ========== */
+
+/* progress base styles */
+.progress-wrapper {
+  --orange: 245, 128, 97;
+  --blue-light: 79, 144, 255;
+  --green-light: 46, 216, 175;
+  --blue: 86, 123, 255;
+  --yellow: 252, 166, 27;
+  --green: 151, 202, 49;
+
+  .orange-bg {
+      background-color: rgba(var(--orange), 1);
+      &-light {
+      background-color: rgba(var(--orange), 0.10);
+    }
+  }
+  
+  .blue-bg {
+    background-color: rgba(var(--blue), 1);
+    &-light {
+      background-color: rgba(var(--blue), 0.10);
+    }
+  }
+  
+  .yellow-bg {
+    background-color: rgba(var(--yellow), 1);
+    &-light {
+      background-color: rgba(var(--yellow), 0.10);
+    }
+  }
+  
+  .green-bg {
+    background-color: rgba(var(--green), 1);
+    &-light {
+      background-color: rgba(var(--green), 0.10);
+    }
+  }
+  
+  .blue-light-bg {
+    background-color: rgba(var(--blue-light), 1);
+    &-light {
+      background-color: rgba(var(--blue-light), 0.10);
+    }
+  }
+  
+  .green-light-bg {
+    background-color: rgba(var(--green-light), 1);
+    &-light {
+      background-color: rgba(var(--green-light), 0.10);
+    }
+  }
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.progress-item {
+
+  width: 100%;
+  height: 8px;
+  background-color: transparent;
+  border-radius: 30px;
+  overflow: hidden;
+
+  &-lg {
+    height: 16px;
+  }
+
+  .progress-item-bar {
+    height: 100%;
+    text-align: center;
+    font-weight: 600;
+    font-size: 10px;
+    color: $white;
+  }
+
+}
+
+.progress-bar-striped {
+    background-image: linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
+    background-size: 8px;
+}
+
+.progress-bar-animated {
+    animation: 1s linear infinite progress-bar-stripes;
+}
+
+@keyframes progress-bar-stripes {
+    0% {
+        background-position-x: 7px
+    }
+}

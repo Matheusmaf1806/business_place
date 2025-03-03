@@ -1,0 +1,17 @@
+{
+  "name": "plainadmin-pro",
+  "version": "2.0.1",
+  "main": "index.html",
+  "repository": "https://github.com/PlainAdmin/plainadmin-pro.git",
+  "author": "plainadmin team",
+  "license": "MIT",
+  "devDependencies": {
+    "browser-sync": "^2.27.10",
+    "gulp": "^4.0.2",
+    "gulp-sass": "^5.1.0",
+    "sass": "^1.63.6"
+  },
+  "dependencies": {
+    "gulp-cli": "^2.3.0"
+  }
+}

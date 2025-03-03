@@ -1,0 +1,376 @@
+/* ============ chat css =========== */
+.chat-list-card {
+  padding: 30px 0;
+
+  & > .title {
+    padding: 0 30px;
+  }
+
+  form {
+    padding: 0 30px;
+
+    @media #{$xs} {
+      padding: 0px 20px;
+    }
+  }
+}
+.chat-list-wrapper {
+  .chat-list {
+    padding: 0 30px;
+
+    @media #{$xs} {
+      padding: 0px 20px;
+    }
+
+    &:hover {
+      background: rgba($primary, 0.1);
+    }
+
+    &:last-child {
+      border-bottom: 0px;
+
+      .chat-list-item {
+        border-bottom: 0px solid $light;
+      }
+    }
+  }
+}
+.chat-list-item {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid $light;
+  padding: 20px 0;
+
+  .image {
+    max-width: 35px;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    position: relative;
+    margin-right: 10px;
+
+    img {
+      width: 100%;
+      border-radius: 50%;
+    }
+
+    .status {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 1.5px solid $white;
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      background: $gray;
+
+      &.active {
+        background: $primary;
+      }
+    }
+  }
+
+  p {
+    color: $gray;
+    line-height: 1.4;
+  }
+
+  .content {
+    width: 100%;
+
+    .title {
+      display: flex;
+      justify-content: space-between;
+
+      span {
+        font-size: 14px;
+        color: $gray;
+      }
+    }
+
+    button {
+      border: none;
+      background: transparent;
+      margin-left: 15px;
+      font-size: 14px;
+    }
+  }
+}
+
+/* === === === Message box css === === === */
+.message-box-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.message-box {
+  display: flex;
+  margin-bottom: 20px;
+
+  .image {
+    max-width: 35px;
+    width: 100%;
+    height: 35px;
+    border-radius: 50%;
+    margin-right: 20px;
+
+    @media #{$xs} {
+      margin-right: 10px;
+    }
+
+    img {
+      width: 100%;
+      border-radius: 50%;
+    }
+  }
+
+  .content-box {
+    border: 1px solid $light;
+    padding: 12px 30px;
+    border-radius: 4px;
+    max-width: 550px;
+    width: 100%;
+
+    @media #{$xs} {
+      padding: 12px;
+    }
+    @media #{$sm} {
+      padding: 12px 18px;
+    }
+
+    .content {
+      p {
+        font-size: 14px;
+        line-height: 22px;
+      }
+    }
+  }
+
+  &.right {
+    flex-direction: row-reverse;
+
+    .image {
+      margin-right: 0px;
+      margin-left: 20px;
+
+      @media #{$xs} {
+        margin-left: 10px;
+      }
+    }
+  }
+}
+
+/* ============ Message Form ============ */
+.message-form {
+  form {
+    display: flex;
+    .message-field {
+      width: 100%;
+      position: relative;
+
+      .file-emoji {
+        position: absolute;
+        right: 15px;
+        top: 0;
+        display: flex;
+
+        .file-upload {
+          width: 40px;
+          height: 56px;
+          @include flex-center;
+          position: relative;
+          z-index: 1;
+
+          input {
+            opacity: 0;
+          }
+          span {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            color: $black;
+            @include flex-center;
+            z-index: -1;
+          }
+        }
+        button {
+          border: 1px solid transparent;
+          background: transparent;
+          width: 40px;
+          height: 56px;
+          @include flex-center;
+        }
+      }
+    }
+
+    button.send-btn {
+      max-width: 56px;
+      width: 100%;
+      height: 56px;
+      background: $primary;
+      @include flex-center;
+      color: $white;
+      border-radius: 4px;
+      border: 1px solid transparent;
+      font-size: 18px;
+      margin-left: 10px;
+
+      @media #{$xs} {
+        display: none;
+      }
+      @media #{$sm} {
+        display: flex;
+      }
+    }
+  }
+}
+
+/* ============= Chat about css ============= */
+.chat-about {
+  .chat-about-profile {
+    padding: 20px 0;
+    border-bottom: 1px solid $light;
+
+    .image {
+      width: 75px;
+      height: 75px;
+      border-radius: 50%;
+      margin-bottom: 20px;
+
+      img {
+        width: 100%;
+      }
+    }
+  }
+  .activity-meta {
+    padding-top: 30px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid $light;
+
+    ul {
+      li {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 14px;
+        margin-bottom: 12px;
+      }
+    }
+  }
+  .profile-info {
+    padding-top: 20px;
+
+    ul {
+      li {
+        font-size: 14px;
+        margin-bottom: 12px;
+      }
+    }
+  }
+}
+
+.doughnutChart-legend {
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    li {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 50%;
+      font-size: 14px;
+
+      &.orange {
+        .left {
+          &::before {
+            background: $orange;
+          }
+        }
+      }
+      &.danger {
+        .left {
+          &::before {
+            background: $danger;
+          }
+        }
+      }
+      &.warning {
+        .left {
+          &::before {
+            background: $warning;
+          }
+        }
+      }
+
+      .left {
+        position: relative;
+        padding-left: 20px;
+
+        &::before {
+          content: "";
+          position: absolute;
+          width: 12px;
+          height: 12px;
+          border-radius: 50%;
+          background: $primary;
+          left: 0;
+          top: 50%;
+          @include transform(translateY(-50%));
+        }
+      }
+      .right {
+        text-align: left;
+        padding: 0 10px;
+      }
+    }
+  }
+}
+
+/* ========== Theme Change Css ============= */
+
+.darkTheme {
+  .chat-list-item {
+    border-bottom-color: $dark-stock;
+  }
+
+  .message-box {
+    .content-box {
+      border-color: $dark-stock;
+    }
+  }
+
+  .message-form {
+    form {
+      .message-field {
+        .file-emoji {
+          button {
+            color: $white;
+          }
+          .file-upload {
+            span {
+              color: $white;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .chat-about {
+    .chat-about-profile {
+      border-bottom-color: $dark-stock;
+
+      .content {
+        h5 {
+          color: $white;
+        }
+      }
+    }
+    .activity-meta {
+      border-bottom-color: $dark-stock;
+    }
+  }
+}

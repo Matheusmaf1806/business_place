@@ -1,0 +1,54 @@
+/* ========== Pagination css ========== */
+
+/* pagination base styles */
+.base-pagination {
+  .page-link {
+    color: $gray;
+    border-color: $light-3;
+    padding: 8px 16px;
+
+    i {
+      vertical-align: middle;
+      margin-bottom: 3px;
+    }
+
+    &:hover {
+      color: $primary;
+      background: #F5F8FC;
+    }
+
+    &:focus {
+      color: none;
+      background-color: none;
+      box-shadow: none;
+    }
+  }
+
+  &.pagination-lg {
+    .page-link {
+      padding: 14px 22px;
+      font-size: 16px;
+      font-weight: 500;
+    }
+  }
+
+  &.pagination-sm {
+    .page-link {
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+  }
+}
+
+/* ========== Theme Change ==========  */
+.darkTheme {
+  .base-pagination {
+    .page-link {
+      color: $gray-2;
+      border-color: $dark-stock;
+      background: $dark;
+    }
+  }
+
+}

@@ -1,0 +1,51 @@
+/* ========== Carousel Bar css ========== */
+
+/* carousel base styles */
+.base-carousel {
+  .swiper-button-prev,
+  .swiper-button-next {
+    max-width: 38px;
+    width: 100%;
+    height: 38px;
+    border-radius: 50%;
+    background-color: $white;
+    color: $dark;
+
+    i {
+      font-weight: 600;
+      font-size: 18px;
+    }
+
+    &.swiper-button-disabled {
+      background-color: rgba(255, 255, 255, 0.20);
+      color: $white;
+      opacity: 1;
+    }
+
+    &:after {
+      display: none;
+    }
+  }
+
+  .swiper-button-prev {
+    left: 18px;
+  }
+  .swiper-button-next {
+    right: 18px;
+  }
+
+  .swiper-pagination-bullet {
+    margin: 0 3px;
+    width: 18px;
+    height: 4px;
+    border-radius: 20px;
+    background: $white;
+    opacity: 0.5;
+
+    &-active {
+      width: 26px;
+      opacity: 1;
+    }
+  }
+  
+}
