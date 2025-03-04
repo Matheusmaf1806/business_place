@@ -1038,92 +1038,143 @@
         </div>
         <!-- ========== title-wrapper end ========== -->
 
-        <!-- ========== form-layout-wrapper start ========== -->
+        <!-- ========== Conteúdo principal start ========== -->
+    <section class="tab-components">
+      <div class="container-fluid">
+        
+        <!-- Título da página -->
+        <div class="title-wrapper pt-30">
+          <div class="row align-items-center">
+            <div class="col-md-6">
+              <div class="title">
+                <h2>Form Layout (Estilo “Foto 1”)</h2>
+              </div>
+            </div>
+            <!-- end col -->
+            <div class="col-md-6">
+              <div class="breadcrumb-wrapper">
+                <nav aria-label="breadcrumb">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="#">Forms</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                      Form Layout
+                    </li>
+                  </ol>
+                </nav>
+              </div>
+            </div>
+            <!-- end col -->
+          </div>
+          <!-- end row -->
+        </div>
+        
+        <!-- Card contendo o formulário no estilo “Shipping Address” (Foto 1) -->
         <div class="form-layout-wrapper">
           <div class="row">
-            <!-- Substituímos o conteúdo antigo pela nova seção de cadastro de vendas -->
-            <div class="col-lg-12">
+            <div class="col-lg-6">
               <div class="card-style mb-30">
-                <h6 class="mb-25">Cadastro de Vendas</h6>
+                <!-- Título do card -->
+                <h6 class="mb-25">Cadastro de Vendas (com layout simples em coluna)</h6>
 
-                <!-- Novo Formulário -->
-                <div class="form-container">
-                  <form id="salesForm">
-                    <!-- Seção: Informações Gerais -->
-                    <section>
-                      <h2>Informações Gerais</h2>
-                      <div class="row">
-                        <div class="form-group col-50">
-                          <label for="data_venda">Data da Venda:</label>
-                          <input type="date" id="data_venda" name="data_venda" required>
-                        </div>
-                        <div class="form-group col-50">
-                          <label for="nome">Nome do Passageiro:</label>
-                          <input type="text" id="nome" name="nome" placeholder="Nome do Passageiro" required>
-                        </div>
+                <!-- Formulário em estilo vertical, igual ao Shipping Address -->
+                <form id="salesForm">
+                  <!-- Seção: Informações Gerais (todos em linha vertical) -->
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="input-style-1">
+                        <label for="data_venda">Data da Venda</label>
+                        <input type="date" id="data_venda" name="data_venda" required />
                       </div>
-                      <div class="row">
-                        <div class="form-group col-50">
-                          <label for="email">E-mail:</label>
-                          <input type="email" id="email" name="email" placeholder="E-mail" required>
-                        </div>
-                        <div class="form-group col-50">
-                          <label for="telefone">Telefone:</label>
-                          <input type="tel" id="telefone" name="telefone" placeholder="Telefone" required>
-                        </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="input-style-1">
+                        <label for="nome">Nome do Passageiro</label>
+                        <input type="text" id="nome" name="nome" placeholder="Nome do Passageiro" required />
                       </div>
-                      <div class="row">
-                        <div class="form-group col-50">
-                          <label for="data_nascimento">Data de Nascimento:</label>
-                          <input type="date" id="data_nascimento" name="data_nascimento" required>
-                        </div>
-                        <div class="form-group col-50">
-                          <label for="cpf">CPF:</label>
-                          <input type="text" id="cpf" name="cpf" placeholder="CPF" required>
-                        </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="input-style-1">
+                        <label for="email">E-mail</label>
+                        <input type="email" id="email" name="email" placeholder="E-mail" required />
                       </div>
-                    </section>
-                    <hr>
+                    </div>
+                    <div class="col-12">
+                      <div class="input-style-1">
+                        <label for="telefone">Telefone</label>
+                        <input type="tel" id="telefone" name="telefone" placeholder="Telefone" required />
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="input-style-1">
+                        <label for="data_nascimento">Data de Nascimento</label>
+                        <input type="date" id="data_nascimento" name="data_nascimento" required />
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="input-style-1">
+                        <label for="cpf">CPF</label>
+                        <input type="text" id="cpf" name="cpf" placeholder="CPF" required />
+                      </div>
+                    </div>
+                  </div>
+                  <!-- end row -->
 
-                    <!-- Seção: Emissão -->
-                    <section>
-                      <h2>Emissão</h2>
-                      <div class="row">
-                        <div class="form-group col-50">
-                          <label for="data_utilizacao">Data de Utilização:</label>
-                          <input type="date" id="data_utilizacao" name="data_utilizacao" required>
-                        </div>
-                        <div class="form-group col-50">
-                          <label for="destino">Destino:</label>
-                          <input type="text" id="destino" name="destino" required>
-                        </div>
-                      </div>
-                      <div class="form-group col-100">
-                        <label for="item">Categoria:</label>
-                        <select id="item" name="item" required>
-                          <option value="">Selecione</option>
-                          <option value="Ingressos">Ingressos</option>
-                          <option value="Hospedagem">Hospedagem</option>
-                          <option value="Aluguel de Carro">Aluguel de Carro</option>
-                          <option value="Passagem Aérea">Passagem Aérea</option>
-                          <option value="Cruzeiro">Cruzeiro</option>
-                          <option value="Guiamento Remoto">Guiamento Remoto</option>
-                          <option value="Seguro Viagem">Seguro Viagem</option>
-                        </select>
-                      </div>
-                    </section>
-                    <hr>
+                  <hr />
 
-                    <!-- Seção: Financeiro -->
-                    <section>
-                      <h2>Financeiro</h2>
-                      <div class="row">
-                        <div class="form-group col-33">
-                          <label for="nome_comprador">Nome do Pagador:</label>
-                          <input type="text" id="nome_comprador" name="nome_comprador" required>
+                  <!-- Seção: Emissão -->
+                  <div class="row">
+                    <div class="col-12">
+                      <h5 class="mb-10">Emissão</h5>
+                    </div>
+                    <div class="col-12">
+                      <div class="input-style-1">
+                        <label for="data_utilizacao">Data de Utilização</label>
+                        <input type="date" id="data_utilizacao" name="data_utilizacao" required />
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="input-style-1">
+                        <label for="destino">Destino</label>
+                        <input type="text" id="destino" name="destino" required />
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="select-style-1">
+                        <label for="item">Categoria</label>
+                        <div class="select-position">
+                          <select id="item" name="item" required>
+                            <option value="">Selecione</option>
+                            <option value="Ingressos">Ingressos</option>
+                            <option value="Hospedagem">Hospedagem</option>
+                            <option value="Aluguel de Carro">Aluguel de Carro</option>
+                            <option value="Passagem Aérea">Passagem Aérea</option>
+                            <option value="Cruzeiro">Cruzeiro</option>
+                            <option value="Guiamento Remoto">Guiamento Remoto</option>
+                            <option value="Seguro Viagem">Seguro Viagem</option>
+                          </select>
                         </div>
-                        <div class="form-group col-33">
-                          <label for="gateway">Gateway:</label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr />
+
+                  <!-- Seção: Financeiro -->
+                  <div class="row">
+                    <div class="col-12">
+                      <h5 class="mb-10">Financeiro</h5>
+                    </div>
+                    <div class="col-12">
+                      <div class="input-style-1">
+                        <label for="nome_comprador">Nome do Pagador</label>
+                        <input type="text" id="nome_comprador" name="nome_comprador" required />
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="select-style-1">
+                        <label for="gateway">Gateway</label>
+                        <div class="select-position">
                           <select id="gateway" name="gateway" required>
                             <option value="ValePay">ValePay</option>
                             <option value="PagBank">PagBank</option>
@@ -1131,8 +1182,12 @@
                             <option value="Pix Direto">Pix Direto</option>
                           </select>
                         </div>
-                        <div class="form-group col-33">
-                          <label for="meio_pgto">Meio de Pagamento:</label>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="select-style-1">
+                        <label for="meio_pgto">Meio de Pagamento</label>
+                        <div class="select-position">
                           <select id="meio_pgto" name="meio_pgto" required>
                             <option value="Pix">Pix</option>
                             <option value="Cartão">Cartão</option>
@@ -1141,33 +1196,44 @@
                           </select>
                         </div>
                       </div>
-                      <div class="row">
-                        <div class="form-group col-25">
-                          <label for="bandeira_cartao">Bandeira do Cartão:</label>
-                          <input type="text" id="bandeira_cartao" name="bandeira_cartao">
-                        </div>
-                        <div class="form-group col-25">
-                          <label for="parcelas">Parcelas:</label>
-                          <input type="number" id="parcelas" name="parcelas" min="1" max="12">
-                        </div>
-                        <div class="form-group col-25">
-                          <label for="valor_venda">Valor da Venda:</label>
-                          <input type="number" id="valor_venda" name="valor_venda" step="0.01" required>
-                        </div>
-                        <div class="form-group col-25">
-                          <label for="valor_repassado">Valor Repassado:</label>
-                          <input type="number" id="valor_repassado" name="valor_repassado" step="0.01" required>
-                        </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="input-style-1">
+                        <label for="bandeira_cartao">Bandeira do Cartão</label>
+                        <input type="text" id="bandeira_cartao" name="bandeira_cartao" />
                       </div>
-                    </section>
-                    <hr>
+                    </div>
+                    <div class="col-12">
+                      <div class="input-style-1">
+                        <label for="parcelas">Parcelas</label>
+                        <input type="number" id="parcelas" name="parcelas" min="1" max="12" />
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="input-style-1">
+                        <label for="valor_venda">Valor da Venda</label>
+                        <input type="number" id="valor_venda" name="valor_venda" step="0.01" required />
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="input-style-1">
+                        <label for="valor_repassado">Valor Repassado</label>
+                        <input type="number" id="valor_repassado" name="valor_repassado" step="0.01" required />
+                      </div>
+                    </div>
+                  </div>
 
-                    <!-- Seção: Comercial -->
-                    <section>
-                      <h2>Comercial</h2>
-                      <div class="row">
-                        <div class="form-group col-50">
-                          <label for="origem_cliente">Origem do Cliente:</label>
+                  <hr />
+
+                  <!-- Seção: Comercial -->
+                  <div class="row">
+                    <div class="col-12">
+                      <h5 class="mb-10">Comercial</h5>
+                    </div>
+                    <div class="col-12">
+                      <div class="select-style-1">
+                        <label for="origem_cliente">Origem do Cliente</label>
+                        <div class="select-position">
                           <select id="origem_cliente" name="origem_cliente">
                             <option value="Indicação">Indicação</option>
                             <option value="Blog">Blog</option>
@@ -1176,8 +1242,12 @@
                             <option value="Direct do Instagram">Direct do Instagram</option>
                           </select>
                         </div>
-                        <div class="form-group col-50">
-                          <label for="cliente_de">Cliente Atendido Por:</label>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="select-style-1">
+                        <label for="cliente_de">Cliente Atendido Por</label>
+                        <div class="select-position">
                           <select id="cliente_de" name="cliente_de" required>
                             <option value="">Selecione</option>
                             <option value="Matheus Alvarenga">Matheus Alvarenga</option>
@@ -1189,9 +1259,11 @@
                           </select>
                         </div>
                       </div>
-                      <div class="row">
-                        <div class="form-group col-50">
-                          <label for="efetivado_por">Venda Finalizada Por:</label>
+                    </div>
+                    <div class="col-12">
+                      <div class="select-style-1">
+                        <label for="efetivado_por">Venda Finalizada Por</label>
+                        <div class="select-position">
                           <select id="efetivado_por" name="efetivado_por" required>
                             <option value="">Selecione</option>
                             <option value="Matheus Alvarenga">Matheus Alvarenga</option>
@@ -1203,46 +1275,52 @@
                           </select>
                         </div>
                       </div>
-                      <div class="row">
-                        <div class="form-group col-100">
-                          <label for="observacoes_operacionais">Observações Operacionais:</label>
-                          <textarea
-                            id="observacoes_operacionais"
-                            name="observacoes_operacionais"
-                            rows="3"
-                            placeholder="Digite suas observações operacionais"
-                          ></textarea>
-                        </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="input-style-1">
+                        <label for="observacoes_operacionais">Observações Operacionais</label>
+                        <textarea
+                          id="observacoes_operacionais"
+                          name="observacoes_operacionais"
+                          rows="3"
+                          placeholder="Digite suas observações operacionais"
+                        ></textarea>
                       </div>
-                      <div class="row">
-                        <div class="form-group col-100">
-                          <label for="observacoes_financeiras">Observações Financeiras:</label>
-                          <textarea
-                            id="observacoes_financeiras"
-                            name="observacoes_financeiras"
-                            rows="3"
-                            placeholder="Digite suas observações financeiras"
-                          ></textarea>
-                        </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="input-style-1">
+                        <label for="observacoes_financeiras">Observações Financeiras</label>
+                        <textarea
+                          id="observacoes_financeiras"
+                          name="observacoes_financeiras"
+                          rows="3"
+                          placeholder="Digite suas observações financeiras"
+                        ></textarea>
                       </div>
-                    </section>
-                    <hr>
+                    </div>
+                  </div>
 
-                    <!-- Campos Ocultos -->
-                    <input type="hidden" id="id" name="id">
-                    <input type="hidden" id="mes_venda" name="mes_venda">
-                    <input type="hidden" id="uf" name="uf">
-                    <input type="hidden" id="valor_comissao" name="valor_comissao">
-                    <input type="hidden" id="markup" name="markup">
-                    <input type="hidden" id="comissao_do_agente" name="comissao_do_agente">
-                    <input type="hidden" id="data_pgto" name="data_pgto">
-                    <input type="hidden" id="recebido" name="recebido">
-                    <input type="hidden" id="data_repasse" name="data_repasse">
+                  <!-- Campos Ocultos -->
+                  <input type="hidden" id="id" name="id">
+                  <input type="hidden" id="mes_venda" name="mes_venda">
+                  <input type="hidden" id="uf" name="uf">
+                  <input type="hidden" id="valor_comissao" name="valor_comissao">
+                  <input type="hidden" id="markup" name="markup">
+                  <input type="hidden" id="comissao_do_agente" name="comissao_do_agente">
+                  <input type="hidden" id="data_pgto" name="data_pgto">
+                  <input type="hidden" id="recebido" name="recebido">
+                  <input type="hidden" id="data_repasse" name="data_repasse">
 
-                    <button id="submitButton" type="button" class="btn btn-primary mt-3">Salvar</button>
-                  </form>
-                </div>
-                <!-- Fim do Novo Formulário -->
+                  <!-- Botões ao final, estilo “Save Address” e “Cancel” -->
+                  <div class="button-group d-flex justify-content-center flex-wrap mt-3">
+                    <button type="button" id="submitButton" class="main-btn primary-btn btn-hover m-2">
+                      Salvar
+                    </button>
+                    <button type="reset" class="main-btn danger-btn-outline m-2">
+                      Cancelar
+                    </button>
+                  </div>
+                </form>
               </div>
               <!-- end card-style -->
             </div>
@@ -1254,12 +1332,13 @@
       </div>
       <!-- end container -->
     </section>
-    <!-- ========== tab components end ========== -->
+    <!-- ========== Conteúdo principal end ========== -->
 
     <!-- ========== footer start =========== -->
     <footer class="footer">
       <div class="container-fluid">
         <div class="row">
+          <!-- rodapé do PlainAdmin -->
           <div class="col-md-6 order-last order-md-first">
             <div class="copyright text-center text-md-start">
               <p class="text-sm">
@@ -1276,53 +1355,17 @@
   </main>
   <!-- ======== main-wrapper end =========== -->
 
-  <!-- ============ Theme Option Start ============= -->
+  <!-- ============ Theme Option Start (opcional) ============= -->
   <button class="option-btn">
     <i class="lni lni-cog"></i>
   </button>
   <div class="option-overlay"></div>
   <div class="option-box">
-    <div class="option-header">
-      <h5>Settings</h5>
-      <button class="option-btn-close text-gray">
-        <i class="lni lni-close"></i>
-      </button>
-    </div>
-    <h6 class="mb-10">Layout</h6>
-    <ul class="mb-30">
-      <li><button class="leftSidebarButton active">Left Sidebar</button></li>
-      <li><button class="rightSidebarButton">Right Sidebar</button></li>
-    </ul>
-
-    <h6 class="mb-10">Theme</h6>
-    <ul class="d-flex flex-wrap align-items-center">
-      <li>
-        <button class="lightThemeButton active">
-          Light Theme + Sidebar 1
-        </button>
-      </li>
-      <li><button class="darkThemeButton">Dark Theme + Sidebar 1</button></li>
-    </ul>
-
-    <div class="promo-box">
-      <div class="promo-icon">
-        <img class="mx-auto" src="./assets/images/logo/logo-icon-big.svg" alt="Logo">
-      </div>
-      <h3>Upgrade to PRO</h3>
-      <p>Improve your development process and start doing more with PlainAdmin PRO!</p>
-      <a
-        href="https://plainadmin.com/pro"
-        target="_blank"
-        rel="nofollow"
-        class="main-btn primary-btn btn-hover"
-      >
-        Upgrade to PRO
-      </a>
-    </div>
+    <!-- ... Conteúdo das opções de tema ... -->
   </div>
   <!-- ============ Theme Option End ============= -->
 
-  <!-- ========= All Javascript files linkup ======== -->
+  <!-- ========= Scripts do layout e do form ========== -->
   <script src="assets/js/bootstrap.bundle.min.js"></script>
   <script src="assets/js/Chart.min.js"></script>
   <script src="assets/js/apexcharts.min.js"></script>
@@ -1337,23 +1380,20 @@
   <script src="assets/js/Sortable.min.js"></script>
   <script src="assets/js/main.js"></script>
 
-  <!-- ========= Script do formulário ========== -->
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      // Gerar ID automaticamente
+      // Exemplo: buscar ID automático
       const idField = document.getElementById('id');
       if (idField) {
         fetch('https://magictraveltur.com/get_next_id.php')
           .then(response => response.json())
           .then(data => {
-            idField.value = data.next_id || 2501; // Valor padrão caso falhe
+            idField.value = data.next_id || 2501;
           })
           .catch(console.error);
-      } else {
-        console.error("Campo 'id' não encontrado.");
       }
 
-      // Preencher Mês da Venda e Data de Pagamento com base na Data da Venda
+      // Exemplo: Preencher mes_venda e data_pgto
       const dataVendaField = document.getElementById('data_venda');
       const mesVendaField = document.getElementById('mes_venda');
       const dataPgtoField = document.getElementById('data_pgto');
@@ -1364,16 +1404,13 @@
           mesVendaField.value = mesVenda;
           dataPgtoField.value = this.value;
         });
-      } else {
-        console.error("Campo(s) relacionado(s) à 'data_venda' não encontrado(s).");
       }
 
-      // Preencher UF automaticamente com base no DDD do Telefone
+      // Exemplo: Preencher UF automático pelo DDD do telefone
       const telefoneField = document.getElementById('telefone');
       const ufField = document.getElementById('uf');
       if (telefoneField && ufField) {
         telefoneField.addEventListener('blur', function () {
-          // Captura apenas os 2 primeiros dígitos (DDD)
           const ddd = this.value.replace(/\D/g, '').slice(0, 2);
           const estados = {
             '91': 'PA', '92': 'AM', '93': 'PA', '94': 'PA', '95': 'RR', '96': 'AP', '97': 'AM',
@@ -1389,89 +1426,40 @@
           };
           ufField.value = estados[ddd] || '';
         });
-      } else {
-        console.error("Campo(s) relacionado(s) ao 'telefone' não encontrado(s).");
       }
 
-      // Lógica de cálculo e envio do formulário
+      // Lógica de envio final
       const submitButton = document.getElementById('submitButton');
       if (submitButton) {
         submitButton.addEventListener('click', function () {
+          const form = document.getElementById('salesForm');
+          if (!form) return;
+
+          // Exemplo de cálculo de comissões (caso queira):
           const valorVenda = parseFloat(document.getElementById('valor_venda')?.value) || 0;
           const valorRepassado = parseFloat(document.getElementById('valor_repassado')?.value) || 0;
-          
-          // Consideramos custo = 0 => receitaAgencia = valorRepassado
-          const receitaAgencia = valorRepassado;
-          document.getElementById('valor_comissao')?.setAttribute('value', receitaAgencia.toFixed(2));
-          
-          // Markup (supondo 100% se valorRepassado > 0)
-          const markup = valorRepassado > 0 ? (receitaAgencia / valorRepassado) * 100 : 0;
-          document.getElementById('markup')?.setAttribute('value', markup.toFixed(2));
-          
-          // Comissão do agente baseada na categoria
-          const categoria = document.getElementById('item')?.value || "";
-          const comissoes = {
-            "Ingressos": 0.003,
-            "Hospedagem": 0.003,
-            "Passagem Aérea": 0.01,
-            "Seguro Viagem": 0.1,
-            "Guiamento Remoto": 0.12,
-            "Aluguel de Carro": 0.01,
-            "Cruzeiro": 0.01
-          };
-          const comissaoDoAgente = valorRepassado * (comissoes[categoria] || 0);
-          document.getElementById('comissao_do_agente')?.setAttribute('value', comissaoDoAgente.toFixed(2));
-          
-          // Data de Repasse (exemplo Pix=mesmo dia, Cartão=+2 dias)
-          const dataVenda = new Date(document.getElementById('data_venda')?.value + 'T00:00:00');
-          const meioPagamento = document.getElementById('meio_pgto')?.value;
-          const dataRepasse = new Date(dataVenda);
 
-          if (meioPagamento === 'Pix') {
-            // mesmo dia
-            dataRepasse.setDate(dataRepasse.getDate());
-          } else if (meioPagamento === 'Cartão') {
-            // +2 dias
-            dataRepasse.setDate(dataRepasse.getDate() + 2);
-          }
-          document.getElementById('data_repasse')?.setAttribute('value', dataRepasse.toISOString().split('T')[0]);
-          
-          // Preparar e enviar os dados
-          const form = document.getElementById('salesForm');
-          if (form) {
-            const formData = new FormData(form);
-            const data = Object.fromEntries(formData.entries());
-            
-            fetch('https://magictraveltur.com/process_form.php', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(data)
+          // etc...
+          // Enviar fetch para o backend
+          const formData = new FormData(form);
+          const dataObj = Object.fromEntries(formData.entries());
+
+          fetch('https://magictraveltur.com/process_form.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dataObj)
+          })
+            .then(resp => resp.json())
+            .then(result => {
+              if (result.success) {
+                alert("Dados salvos com sucesso!");
+                window.location.reload(true);
+              } else {
+                alert(result.error || "Erro ao salvar.");
+              }
             })
-              .then(response => {
-                if (!response.ok) {
-                  return response.json().then(err => {
-                    console.error('Erro no servidor:', err);
-                    alert(`Erro no servidor: ${err.error || 'Erro desconhecido'}`);
-                    throw new Error(err.error || 'Erro desconhecido');
-                  });
-                }
-                return response.json();
-              })
-              .then(result => {
-                if (result.success) {
-                  alert('Dados salvos com sucesso!');
-                  window.location.reload(true); // recarregar a página
-                } else {
-                  alert(result.error || 'Erro ao salvar os dados.');
-                }
-              })
-              .catch(error => alert('Erro ao processar os dados: ' + error.message));
-          } else {
-            console.error("Formulário 'salesForm' não encontrado.");
-          }
+            .catch(error => alert("Erro ao processar: " + error.message));
         });
-      } else {
-        console.error("Botão 'submitButton' não encontrado.");
       }
     });
   </script>
