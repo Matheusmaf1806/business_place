@@ -1024,69 +1024,70 @@
 
   // 5) Carrega a tabela...
   async function carregarTabela() {
-    try {
-      const resp = await fetch('https://airland.com.br/supplier/get_bdnet_margin.php', { credentials: 'include' });
-      if (!resp.ok) {
-        throw new Error(`HTTP error! status: ${resp.status}`);
-      }
-      const data = await resp.json(); 
-
-      const tbody = document.querySelector('#tabelaCategorias tbody');
-      tbody.innerHTML = '';
-
-      data.forEach(item => {
-        const tr = document.createElement('tr');
-
-        // (A) Foto
-        const tdFoto = document.createElement('td');
-        const img = document.createElement('img');
-        img.src = getCategoryImage(item.category);
-        img.alt = item.category || 'Foto';
-        img.style.width = "120px"; // Ajuste se quiser
-        tdFoto.appendChild(img);
-        tr.appendChild(tdFoto);
-
-        // (B) Categoria
-        const tdCat = document.createElement('td');
-        tdCat.textContent = item.category || '';
-        tr.appendChild(tdCat);
-
-        // (C) Destino
-        const tdDest = document.createElement('td');
-        tdDest.textContent = item.destination || '';
-        tr.appendChild(tdDest);
-
-        // (D) Tipo
-        const tdType = document.createElement('td');
-        tdType.textContent = item.type || '';
-        tr.appendChild(tdType);
-
-        // (E) Status
-        const tdStatus = document.createElement('td');
-        const statusInfo = getStatusInfo(item.media_margem);
-        const spanStatus = document.createElement('span');
-        spanStatus.classList.add('status-btn', statusInfo.className);
-        spanStatus.textContent = statusInfo.label;
-        tdStatus.appendChild(spanStatus);
-        tr.appendChild(tdStatus);
-
-        // (F) Última Alteração
-        const tdUlt = document.createElement('td');
-        tdUlt.textContent = item.ultima_alteracao || '';
-        tr.appendChild(tdUlt);
-
-        // (G) Média de Margem
-        const tdMedia = document.createElement('td');
-        const margemNum = parseFloat(item.media_margem) || 0;
-        tdMedia.textContent = margemNum.toFixed(2) + '%';
-        tr.appendChild(tdMedia);
-
-        tbody.appendChild(tr);
-      });
-    } catch (error) {
-      console.error('Erro ao carregar os dados:', error);
+  try {
+    const resp = await fetch('https://airland.com.br/supplier/get_bdnet_margin.php', {
+      credentials: 'include'
+    });
+    if (!resp.ok) {
+      throw new Error(`HTTP error! status: ${resp.status}`);
     }
+    const data = await resp.json(); 
+    // data deve conter [{category, destination, type, ultima_alteracao, media_margem}, ...]
+
+    const tbody = document.querySelector('#tabelaCategorias tbody');
+    tbody.innerHTML = '';
+
+    data.forEach(item => {
+      const tr = document.createElement('tr');
+
+      // (A) Coluna "Categoria" com imagem + texto na mesma célula
+      const tdCat = document.createElement('td');
+      tdCat.innerHTML = `
+        <img 
+          src="${getCategoryImage(item.category)}" 
+          alt="${item.category || 'Foto'}" 
+          style="width:50px; vertical-align:middle; margin-right:8px;"
+        />
+        <span>${item.category || ''}</span>
+      `;
+      tr.appendChild(tdCat);
+
+      // (B) Destino
+      const tdDest = document.createElement('td');
+      tdDest.textContent = item.destination || '';
+      tr.appendChild(tdDest);
+
+      // (C) Tipo
+      const tdType = document.createElement('td');
+      tdType.textContent = item.type || '';
+      tr.appendChild(tdType);
+
+      // (D) Status
+      const tdStatus = document.createElement('td');
+      const statusInfo = getStatusInfo(item.media_margem);
+      const spanStatus = document.createElement('span');
+      spanStatus.classList.add('status-btn', statusInfo.className);
+      spanStatus.textContent = statusInfo.label;
+      tdStatus.appendChild(spanStatus);
+      tr.appendChild(tdStatus);
+
+      // (E) Última Alteração
+      const tdUlt = document.createElement('td');
+      tdUlt.textContent = item.ultima_alteracao || '';
+      tr.appendChild(tdUlt);
+
+      // (F) Média de Margem
+      const tdMedia = document.createElement('td');
+      const margemNum = parseFloat(item.media_margem) || 0;
+      tdMedia.textContent = margemNum.toFixed(2) + '%';
+      tr.appendChild(tdMedia);
+
+      tbody.appendChild(tr);
+    });
+  } catch (error) {
+    console.error('Erro ao carregar os dados:', error);
   }
+}
 
     // Ao carregar a página
     document.addEventListener('DOMContentLoaded', async () => {
