@@ -1351,6 +1351,9 @@
           <input type="hidden" id="valor_comissao" name="valor_comissao">
           <input type="hidden" id="markup" name="markup">
           <input type="hidden" id="comissao_do_agente" name="comissao_do_agente">
+          <!-- Novo campo para a comissão do orçador -->
+          <input type="hidden" id="comissao_do_orcador" name="comissao_do_orcador">
+          
           <input type="hidden" id="data_pgto" name="data_pgto">
           <input type="hidden" id="recebido" name="recebido">
           <input type="hidden" id="data_repasse" name="data_repasse">
@@ -1366,13 +1369,12 @@
           </div>
         </form>
         <!-- Fim do form -->
-
       </div>
       <!-- end container -->
     </section>
     <!-- ========== Conteúdo principal end ========== -->
 
-      <!-- ========== footer start (layout padrão do PlainAdmin) ========== -->
+    <!-- ========== footer start ========== -->
     <footer class="footer">
       <div class="container-fluid">
         <div class="row">
@@ -1403,7 +1405,7 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      // Exemplo: buscar ID automático
+      // Buscar ID automático no campo 'id'
       const idField = document.getElementById('id');
       if (idField) {
         fetch('https://airland.com.br/Sales/get_next_id.php')
@@ -1414,7 +1416,7 @@
           .catch(console.error);
       }
 
-      // Exemplo: Preencher mes_venda e data_pgto
+      // Preencher mes_venda e data_pgto ao mudar data_venda
       const dataVendaField = document.getElementById('data_venda');
       const mesVendaField = document.getElementById('mes_venda');
       const dataPgtoField = document.getElementById('data_pgto');
@@ -1422,12 +1424,12 @@
         dataVendaField.addEventListener('change', function () {
           const dataVenda = new Date(this.value + 'T00:00:00');
           const mesVenda = dataVenda.toLocaleString('default', { month: 'long' });
-          mesVendaField.value = mesVenda;
+          mesVendaField.value = mesVenda; // ex: "janeiro"
           dataPgtoField.value = this.value;
         });
       }
 
-      // Exemplo: Preencher UF automático pelo DDD do telefone
+      // Preencher UF automaticamente pelo DDD
       const telefoneField = document.getElementById('telefone');
       const ufField = document.getElementById('uf');
       if (telefoneField && ufField) {
@@ -1449,28 +1451,86 @@
         });
       }
 
-      // Lógica de envio final
+      // Ao clicar no botão Salvar
       const submitButton = document.getElementById('submitButton');
       if (submitButton) {
         submitButton.addEventListener('click', function () {
           const form = document.getElementById('salesForm');
           if (!form) return;
 
-          // Exemplo de cálculo de comissões (caso queira):
+          // --- Exemplo de cálculos automáticos antes de enviar ---
           const valorVenda = parseFloat(document.getElementById('valor_venda')?.value) || 0;
           const valorRepassado = parseFloat(document.getElementById('valor_repassado')?.value) || 0;
 
-          // etc...
-          // Enviar fetch para o backend
+          // Exemplo: valor_comissao = "receita da agência" (aqui assumindo ser igual ao valorRepassado)
+          const receitaAgencia = valorRepassado;
+          document.getElementById('valor_comissao').value = receitaAgencia.toFixed(2);
+
+          // Calcular markup (exemplo simples: se repassado > 0, markup = 100%, etc.)
+          const markup = (valorRepassado > 0)
+            ? (receitaAgencia / valorRepassado) * 100
+            : 0;
+          document.getElementById('markup').value = markup.toFixed(2);
+
+          // Calcular comissão total com base na categoria
+          const categoria = document.getElementById('item')?.value || "";
+          const comissoes = {
+            "Ingressos": 0.003,
+            "Hospedagem": 0.003,
+            "Passagem Aérea": 0.01,
+            "Seguro Viagem": 0.10,
+            "Guiamento Remoto": 0.12,
+            "Aluguel de Carro": 0.01,
+            "Cruzeiro": 0.01
+          };
+          // comissaoTotal = valorRepassado * (percentual)
+          const comissaoTotal = valorRepassado * (comissoes[categoria] || 0);
+
+          // 70% para o agente
+          const comissaoAgente = comissaoTotal * 0.70;
+          document.getElementById('comissao_do_agente').value = comissaoAgente.toFixed(2);
+
+          // 30% para o orçador
+          const comissaoOrcador = comissaoTotal * 0.30;
+          document.getElementById('comissao_do_orcador').value = comissaoOrcador.toFixed(2);
+
+          // Exemplo de lógica para data de repasse
+          const dataVendaString = document.getElementById('data_venda')?.value;
+          const meioPagamento = document.getElementById('meio_pgto')?.value;
+          if (dataVendaString && meioPagamento) {
+            const dataVenda = new Date(dataVendaString);
+            const dataRepasse = new Date(dataVenda);
+
+            if (meioPagamento === 'Pix') {
+              // repasse imediato (ex: mesma data)
+              dataRepasse.setDate(dataRepasse.getDate());
+            } else if (meioPagamento === 'Cartão') {
+              // Exemplo: repasse 2 dias depois
+              dataRepasse.setDate(dataRepasse.getDate() + 2);
+            }
+            // Formatar em yyyy-mm-dd
+            const repasseStr = dataRepasse.toISOString().split('T')[0];
+            document.getElementById('data_repasse').value = repasseStr;
+          }
+
+          // Agora que ajustamos os campos hidden, enviamos via FormData
           const formData = new FormData(form);
-          const dataObj = Object.fromEntries(formData.entries());
 
           fetch('https://airland.com.br/Sales/process_form.php', {
             method: 'POST',
-            // Remova o Content-Type! O browser vai definir corretamente quando usar FormData.
-            body: formData,
+            // Importante: Não setar "Content-Type" manualmente.
+            body: formData
           })
-          .then(resp => resp.json())
+          .then(response => {
+            if (!response.ok) {
+              // Se o servidor retornar status de erro (ex: 400,500), tentar ler JSON
+              return response.json().then(err => {
+                alert(`Erro ao salvar: ${err.error || 'erro desconhecido'}`);
+                throw new Error(err.error || 'Erro desconhecido');
+              });
+            }
+            return response.json();
+          })
           .then(result => {
             if (result.success) {
               alert("Dados salvos com sucesso!");
