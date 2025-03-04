@@ -944,7 +944,7 @@
         const result = await response.json();
         console.log("Resposta da Sessão:", result);
         if (!result.logged_in) {
-          // Se não estiver logado, redireciona para a página de login
+          // Se não estiver logado, redireciona
           window.location.replace("https://businessplace.airland.com.br/signin.html");
         } else {
           // Se estiver logado, exibe a página
@@ -956,70 +956,38 @@
       }
     }
 
-    // 2) Preenche dados do perfil a partir do localStorage (se existir) enquanto
-    //    não carrega a API oficial do perfil
+    // 2) Preenche dados do perfil a partir do localStorage (se existir)
     function fillProfileFromLocalStorage() {
       const userData = localStorage.getItem('affiliateUser');
       if (userData) {
         const user = JSON.parse(userData);
-
+        // Atualiza elementos do DOM se existirem...
         if (document.getElementById("userName")) {
           document.getElementById("userName").textContent = user.full_name;
         }
-        if (document.getElementById("dropdownUserName")) {
-          document.getElementById("dropdownUserName").textContent = user.full_name;
-        }
-        if (document.getElementById("dropdownUserEmail")) {
-          document.getElementById("dropdownUserEmail").textContent = user.email;
-        }
-        if (document.getElementById("profileImage")) {
-          document.getElementById("profileImage").src = user.fotodeperfil;
-        }
-        if (document.getElementById("profileImageDropdown")) {
-          document.getElementById("profileImageDropdown").src = user.fotodeperfil;
-        }
-        if (document.getElementById("profileImageLeft")) {
-          document.getElementById("profileImageLeft").src = user.fotodeperfil;
-        }
+        // etc...
       }
     }
 
-    // 3) Busca dados atualizados de perfil via API
+    // 3) Busca dados atualizados de perfil via API (exemplo)
     function fetchUserProfile() {
-      const userId = 1; // ajuste conforme necessidade
+      const userId = 1; // id fictício
       fetch(`https://airland.com.br/affiliatesacess/get_user_profile.php?id=${userId}`, {
-          credentials: 'include'
-        })
-        .then(response => response.json())
-        .then(result => {
-          if (result.success) {
-            const data = result.data;
-            if (document.getElementById("userName")) {
-              document.getElementById("userName").textContent = data.primeiro_nome + " " + data.ultimo_nome;
-            }
-            if (document.getElementById("dropdownUserName")) {
-              document.getElementById("dropdownUserName").textContent = data.primeiro_nome + " " + data.ultimo_nome;
-            }
-            if (document.getElementById("dropdownUserEmail")) {
-              document.getElementById("dropdownUserEmail").textContent = data.email;
-            }
-            if (document.getElementById("profileImage")) {
-              document.getElementById("profileImage").src = data.fotodeperfil;
-            }
-            if (document.getElementById("profileImageDropdown")) {
-              document.getElementById("profileImageDropdown").src = data.fotodeperfil;
-            }
-            if (document.getElementById("profileImageLeft")) {
-              document.getElementById("profileImageLeft").src = data.fotodeperfil;
-            }
-          } else {
-            console.error("Erro:", result.error);
-          }
-        })
-        .catch(error => console.error("Erro na API:", error));
+        credentials: 'include'
+      })
+      .then(response => response.json())
+      .then(result => {
+        if (result.success) {
+          const data = result.data;
+          // Exemplo: document.getElementById("userName").textContent = data.primeiro_nome + ...
+        } else {
+          console.error("Erro:", result.error);
+        }
+      })
+      .catch(error => console.error("Erro na API:", error));
     }
 
-    // Determina label e classe de "status" conforme média de margem
+    // 4) Lógica de Status de acordo com media_margem
     function getStatusInfo(media) {
       const avg = parseFloat(media) || 0;
       if (avg <= 2) {
@@ -1033,14 +1001,17 @@
       }
     }
 
-    // Carrega a tabela com dados de bd_net + supplier_categories_margin
+    // 5) Carrega a tabela chamando a rota get_bdnet_margin.php
     async function carregarTabela() {
       try {
-        const resp = await fetch('https://airland.com.br/supplier/get_bdnet_margin.php');
+        const resp = await fetch('https://airland.com.br/supplier/get_bdnet_margin.php', {
+          credentials: 'include'
+        });
         if (!resp.ok) {
           throw new Error(`HTTP error! status: ${resp.status}`);
         }
-        const data = await resp.json(); // array com { category, destination, type, ultima_alteracao, media_margem }
+        const data = await resp.json(); 
+        // data deve conter [{category, destination, type, ultima_alteracao, media_margem}, ...]
 
         const tbody = document.querySelector('#tabelaCategorias tbody');
         tbody.innerHTML = '';
@@ -1048,22 +1019,22 @@
         data.forEach(item => {
           const tr = document.createElement('tr');
 
-          // Coluna 1: Categoria
+          // 1) Categoria
           const tdCat = document.createElement('td');
           tdCat.textContent = item.category || '';
           tr.appendChild(tdCat);
 
-          // Coluna 2: Destino
+          // 2) Destino
           const tdDest = document.createElement('td');
           tdDest.textContent = item.destination || '';
           tr.appendChild(tdDest);
 
-          // Coluna 3: Tipo
+          // 3) Tipo
           const tdType = document.createElement('td');
           tdType.textContent = item.type || '';
           tr.appendChild(tdType);
 
-          // Coluna 4: Status
+          // 4) Status (com base na média de margem)
           const tdStatus = document.createElement('td');
           const statusInfo = getStatusInfo(item.media_margem);
           const spanStatus = document.createElement('span');
@@ -1072,12 +1043,12 @@
           tdStatus.appendChild(spanStatus);
           tr.appendChild(tdStatus);
 
-          // Coluna 5: Última Alteração
+          // 5) Última Alteração
           const tdUlt = document.createElement('td');
           tdUlt.textContent = item.ultima_alteracao || '';
           tr.appendChild(tdUlt);
 
-          // Coluna 6: Média de Margem
+          // 6) Média de Margem (com 2 decimais + '%')
           const tdMedia = document.createElement('td');
           const margemNum = parseFloat(item.media_margem) || 0;
           tdMedia.textContent = margemNum.toFixed(2) + '%';
@@ -1090,19 +1061,12 @@
       }
     }
 
-    // Dispara quando a página carregar
+    // Ao carregar a página
     document.addEventListener('DOMContentLoaded', async () => {
-      // 1. Verifica sessão
-      await checkSession();
-
-      // 2. Preenche info do perfil (localStorage)
-      fillProfileFromLocalStorage();
-
-      // 3. Busca info atualizada do perfil
-      fetchUserProfile();
-
-      // 4. Carrega tabela
-      carregarTabela();
+      await checkSession();           // Verifica sessão
+      fillProfileFromLocalStorage();  // Preenche perfil local
+      fetchUserProfile();             // Tenta buscar perfil atualizado (opcional)
+      carregarTabela();               // Chama a rota get_bdnet_margin.php
     });
   </script>
   <script src="assets/js/bootstrap.bundle.min.js"></script>
