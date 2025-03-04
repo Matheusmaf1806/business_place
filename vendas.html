@@ -1467,19 +1467,19 @@
 
           fetch('https://airland.com.br/Sales/process_form.php', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(dataObj)
+            // Remova o Content-Type! O browser vai definir corretamente quando usar FormData.
+            body: formData,
           })
-            .then(resp => resp.json())
-            .then(result => {
-              if (result.success) {
-                alert("Dados salvos com sucesso!");
-                window.location.reload(true);
-              } else {
-                alert(result.error || "Erro ao salvar.");
-              }
-            })
-            .catch(error => alert("Erro ao processar: " + error.message));
+          .then(resp => resp.json())
+          .then(result => {
+            if (result.success) {
+              alert("Dados salvos com sucesso!");
+              window.location.reload(true);
+            } else {
+              alert(result.error || "Erro ao salvar.");
+            }
+          })
+          .catch(error => alert("Erro ao processar: " + error.message));
         });
       }
     });
