@@ -933,196 +933,177 @@
   </div>
   <!-- ============ Theme Option End ============= -->
 
-  <!-- ========= All Javascript files linkup ======== -->
-
+   <!-- ========== Scripts ========== -->
   <script>
-    /*******************************************************
-     * 1) Checar sessão via api_log.php/check
-     *******************************************************/
-     // Função para verificar se a sessão está ativa
-      async function checkSession() {
-        try {
-          const response = await fetch("https://airland.com.br/affiliatesacess/login_api.php/check", {
-            credentials: 'include'
-          });
-          const result = await response.json();
-          console.log("Resposta da Sessão:", result);
-          if (!result.logged_in) {
-            // Se não estiver logado, redireciona para a página de login
-            window.location.replace("https://businessplace.airland.com.br/signin.html");
-          } else {
-            // Se estiver logado, exibe a página
-            document.body.style.display = "block";
-          }
-        } catch (error) {
-          console.error("Erro ao verificar a sessão:", error);
+    // 1) Verifica a sessão antes de exibir o body
+    async function checkSession() {
+      try {
+        const response = await fetch("https://airland.com.br/affiliatesacess/login_api.php/check", {
+          credentials: 'include'
+        });
+        const result = await response.json();
+        console.log("Resposta da Sessão:", result);
+        if (!result.logged_in) {
+          // Se não estiver logado, redireciona para a página de login
           window.location.replace("https://businessplace.airland.com.br/signin.html");
+        } else {
+          // Se estiver logado, exibe a página
+          document.body.style.display = "block";
+        }
+      } catch (error) {
+        console.error("Erro ao verificar a sessão:", error);
+        window.location.replace("https://businessplace.airland.com.br/signin.html");
+      }
+    }
+
+    // 2) Preenche dados do perfil a partir do localStorage (se existir) enquanto
+    //    não carrega a API oficial do perfil
+    function fillProfileFromLocalStorage() {
+      const userData = localStorage.getItem('affiliateUser');
+      if (userData) {
+        const user = JSON.parse(userData);
+
+        if (document.getElementById("userName")) {
+          document.getElementById("userName").textContent = user.full_name;
+        }
+        if (document.getElementById("dropdownUserName")) {
+          document.getElementById("dropdownUserName").textContent = user.full_name;
+        }
+        if (document.getElementById("dropdownUserEmail")) {
+          document.getElementById("dropdownUserEmail").textContent = user.email;
+        }
+        if (document.getElementById("profileImage")) {
+          document.getElementById("profileImage").src = user.fotodeperfil;
+        }
+        if (document.getElementById("profileImageDropdown")) {
+          document.getElementById("profileImageDropdown").src = user.fotodeperfil;
+        }
+        if (document.getElementById("profileImageLeft")) {
+          document.getElementById("profileImageLeft").src = user.fotodeperfil;
         }
       }
+    }
 
-      // Função para preencher o perfil a partir do localStorage (se disponível)
-      function fillProfileFromLocalStorage() {
-        const userData = localStorage.getItem('affiliateUser');
-        if (userData) {
-          const user = JSON.parse(userData);
-          
-          if (document.getElementById("userName")) {
-            document.getElementById("userName").textContent = user.full_name;
-          }
-          if (document.getElementById("dropdownUserName")) {
-            document.getElementById("dropdownUserName").textContent = user.full_name;
-          }
-          if (document.getElementById("dropdownUserEmail")) {
-            document.getElementById("dropdownUserEmail").textContent = user.email;
-          }
-          if (document.getElementById("profileImage")) {
-            document.getElementById("profileImage").src = user.fotodeperfil;
-          }
-          if (document.getElementById("profileImageDropdown")) {
-            document.getElementById("profileImageDropdown").src = user.fotodeperfil;
-          }
-          if (document.getElementById("profileImageLeft")) {
-            document.getElementById("profileImageLeft").src = user.fotodeperfil;
-          }
-        }
-      }
-
-      // Função para buscar os dados atualizados do perfil via API
-      function fetchUserProfile() {
-        // Aqui você pode obter o ID do usuário de outra forma, se necessário.
-        const userId = 1; // Substitua pelo método real para obter o ID do usuário logado
-
-        fetch(`https://airland.com.br/affiliatesacess/get_user_profile.php?id=${userId}`, {
-            credentials: 'include'
-          })
-          .then(response => response.json())
-          .then(result => {
-            if (result.success) {
-              const data = result.data;
-              // Atualiza os elementos do DOM com os dados retornados
-              if (document.getElementById("userName")) {
-                document.getElementById("userName").textContent = data.primeiro_nome + " " + data.ultimo_nome;
-              }
-              if (document.getElementById("dropdownUserName")) {
-                document.getElementById("dropdownUserName").textContent = data.primeiro_nome + " " + data.ultimo_nome;
-              }
-              if (document.getElementById("dropdownUserEmail")) {
-                document.getElementById("dropdownUserEmail").textContent = data.email;
-              }
-              if (document.getElementById("profileImage")) {
-                document.getElementById("profileImage").src = data.fotodeperfil;
-              }
-              if (document.getElementById("profileImageDropdown")) {
-                document.getElementById("profileImageDropdown").src = data.fotodeperfil;
-              }
-              if (document.getElementById("profileImageLeft")) {
-                document.getElementById("profileImageLeft").src = data.fotodeperfil;
-              }
-            } else {
-              console.error("Erro:", result.error);
+    // 3) Busca dados atualizados de perfil via API
+    function fetchUserProfile() {
+      const userId = 1; // ajuste conforme necessidade
+      fetch(`https://airland.com.br/affiliatesacess/get_user_profile.php?id=${userId}`, {
+          credentials: 'include'
+        })
+        .then(response => response.json())
+        .then(result => {
+          if (result.success) {
+            const data = result.data;
+            if (document.getElementById("userName")) {
+              document.getElementById("userName").textContent = data.primeiro_nome + " " + data.ultimo_nome;
             }
-          })
-          .catch(error => console.error("Erro na API:", error));
-      }
+            if (document.getElementById("dropdownUserName")) {
+              document.getElementById("dropdownUserName").textContent = data.primeiro_nome + " " + data.ultimo_nome;
+            }
+            if (document.getElementById("dropdownUserEmail")) {
+              document.getElementById("dropdownUserEmail").textContent = data.email;
+            }
+            if (document.getElementById("profileImage")) {
+              document.getElementById("profileImage").src = data.fotodeperfil;
+            }
+            if (document.getElementById("profileImageDropdown")) {
+              document.getElementById("profileImageDropdown").src = data.fotodeperfil;
+            }
+            if (document.getElementById("profileImageLeft")) {
+              document.getElementById("profileImageLeft").src = data.fotodeperfil;
+            }
+          } else {
+            console.error("Erro:", result.error);
+          }
+        })
+        .catch(error => console.error("Erro na API:", error));
+    }
 
-      // Evento que aguarda o carregamento completo do DOM
-      document.addEventListener("DOMContentLoaded", async function() {
-        // 1. Verifica a sessão
-        await checkSession();
-
-        // 2. Preenche a página com os dados armazenados localmente (se houver)
-        fillProfileFromLocalStorage();
-
-        // 3. Busca os dados atualizados do perfil via API e atualiza o DOM
-        fetchUserProfile();
-      });
-
-    // Função para determinar o label e a classe do status de acordo com a media de margem
+    // Determina label e classe de "status" conforme média de margem
     function getStatusInfo(media) {
       const avg = parseFloat(media) || 0;
       if (avg <= 2) {
-        return { label: "Grave", className: "close-btn" };   // Era "Close"
-      } else if (avg === 3 || avg === 4) {
-        return { label: "Atenção", className: "warning-btn" }; // Era "Pending"
-      } else if (avg === 5 || avg === 6) {
-        return { label: "Média", className: "active-btn" };  // Era "Active"
+        return { label: "Grave", className: "close-btn" };
+      } else if (avg <= 4) {
+        return { label: "Atenção", className: "warning-btn" };
+      } else if (avg <= 6) {
+        return { label: "Média", className: "active-btn" };
       } else {
-        return { label: "Boa", className: "success-btn" };   // Era "Done"
+        return { label: "Boa", className: "success-btn" };
       }
     }
 
+    // Carrega a tabela com dados de bd_net + supplier_categories_margin
     async function carregarTabela() {
-    try {
-      // Chama o arquivo PHP que criamos para juntar bd_net + supplier_categories_margin
-      const resp = await fetch('https://airland.com.br/supplier/get_bdnet_margin.php');
-      if (!resp.ok) {
-        throw new Error(`HTTP error! status: ${resp.status}`);
+      try {
+        const resp = await fetch('https://airland.com.br/supplier/get_bdnet_margin.php');
+        if (!resp.ok) {
+          throw new Error(`HTTP error! status: ${resp.status}`);
+        }
+        const data = await resp.json(); // array com { category, destination, type, ultima_alteracao, media_margem }
+
+        const tbody = document.querySelector('#tabelaCategorias tbody');
+        tbody.innerHTML = '';
+
+        data.forEach(item => {
+          const tr = document.createElement('tr');
+
+          // Coluna 1: Categoria
+          const tdCat = document.createElement('td');
+          tdCat.textContent = item.category || '';
+          tr.appendChild(tdCat);
+
+          // Coluna 2: Destino
+          const tdDest = document.createElement('td');
+          tdDest.textContent = item.destination || '';
+          tr.appendChild(tdDest);
+
+          // Coluna 3: Tipo
+          const tdType = document.createElement('td');
+          tdType.textContent = item.type || '';
+          tr.appendChild(tdType);
+
+          // Coluna 4: Status
+          const tdStatus = document.createElement('td');
+          const statusInfo = getStatusInfo(item.media_margem);
+          const spanStatus = document.createElement('span');
+          spanStatus.classList.add('status-btn', statusInfo.className);
+          spanStatus.textContent = statusInfo.label;
+          tdStatus.appendChild(spanStatus);
+          tr.appendChild(tdStatus);
+
+          // Coluna 5: Última Alteração
+          const tdUlt = document.createElement('td');
+          tdUlt.textContent = item.ultima_alteracao || '';
+          tr.appendChild(tdUlt);
+
+          // Coluna 6: Média de Margem
+          const tdMedia = document.createElement('td');
+          const margemNum = parseFloat(item.media_margem) || 0;
+          tdMedia.textContent = margemNum.toFixed(2) + '%';
+          tr.appendChild(tdMedia);
+
+          tbody.appendChild(tr);
+        });
+      } catch (error) {
+        console.error('Erro ao carregar os dados:', error);
       }
-      const data = await resp.json(); // {category, destination, type, ultima_alteracao, media_margem}
-
-      const tbody = document.querySelector('#tabelaCategorias tbody');
-      tbody.innerHTML = ''; // limpa o corpo da tabela
-
-      data.forEach(item => {
-        const tr = document.createElement('tr');
-
-        // 1) Categoria
-        const tdCat = document.createElement('td');
-        tdCat.textContent = item.category || '';
-        tr.appendChild(tdCat);
-
-        // 2) Destino
-        const tdDest = document.createElement('td');
-        tdDest.textContent = item.destination || '';
-        tr.appendChild(tdDest);
-
-        // 3) Tipo
-        const tdType = document.createElement('td');
-        tdType.textContent = item.type || '';
-        tr.appendChild(tdType);
-
-        // 4) Status (status-btn + label) => logic getStatusInfo
-        const tdStatus = document.createElement('td');
-        const statusInfo = getStatusInfo(item.media_margem);
-        const spanStatus = document.createElement('span');
-        spanStatus.classList.add('status-btn', statusInfo.className);
-        spanStatus.textContent = statusInfo.label;
-        tdStatus.appendChild(spanStatus);
-        tr.appendChild(tdStatus);
-
-        // 5) Última Alteração
-        const tdUlt = document.createElement('td');
-        tdUlt.textContent = item.ultima_alteracao || '';
-        tr.appendChild(tdUlt);
-
-        // 6) Média de Margem
-        const tdMedia = document.createElement('td');
-        const margemNum = parseFloat(item.media_margem) || 0;
-        tdMedia.textContent = margemNum.toFixed(2) + '%';
-        tr.appendChild(tdMedia);
-
-        tbody.appendChild(tr);
-      });
-    } catch (error) {
-      console.error('Erro ao carregar os dados:', error);
     }
-  }
 
     // Dispara quando a página carregar
-    document.addEventListener('DOMContentLoaded', carregarTabela);
-    
-    fetch('https://airland.com.br/supplier/update_margin.php', {
-      method: 'GET',
-      credentials: 'include'
-    })
-      .then(resp => resp.json())
-      .then(data => {
-        console.log('Resultado do GET:', data); 
-        // data => array de objetos [ {category, destination, type, ultima_alteracao, media_margem}, ...]
-      })
-      .catch(err => console.error(err));
+    document.addEventListener('DOMContentLoaded', async () => {
+      // 1. Verifica sessão
+      await checkSession();
 
+      // 2. Preenche info do perfil (localStorage)
+      fillProfileFromLocalStorage();
 
+      // 3. Busca info atualizada do perfil
+      fetchUserProfile();
+
+      // 4. Carrega tabela
+      carregarTabela();
+    });
   </script>
   <script src="assets/js/bootstrap.bundle.min.js"></script>
   <script src="assets/js/Chart.min.js"></script>
