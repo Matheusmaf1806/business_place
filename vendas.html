@@ -1006,375 +1006,371 @@
     <!-- ========== header end ========== -->
 
     <!-- ========== Conteúdo principal do formulário ========== -->
-<section class="tab-components">
-  <div class="container-fluid">
-    <!-- Título da página -->
-    <div class="title-wrapper pt-30">
-      <div class="row align-items-center">
-        <div class="col-md-6">
-          <div class="title">
-            <h2>Cadastro de Vendas</h2>
+<!-- ========== Conteúdo principal do formulário ========== -->
+    <section class="tab-components">
+      <div class="container-fluid">
+        <!-- Título -->
+        <div class="title-wrapper pt-30">
+          <div class="row align-items-center">
+            <div class="col-md-6">
+              <div class="title">
+                <h2>Cadastro de Vendas</h2>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="breadcrumb-wrapper">
+                <nav aria-label="breadcrumb">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="#">Forms</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                      Cadastro de Vendas
+                    </li>
+                  </ol>
+                </nav>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="col-md-6">
-          <div class="breadcrumb-wrapper">
-            <nav aria-label="breadcrumb">
-              <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-                <li class="breadcrumb-item"><a href="#">Forms</a></li>
-                <li class="breadcrumb-item active" aria-current="page">
-                  Cadastro de Vendas
-                </li>
-              </ol>
-            </nav>
+        
+        <!-- Formulário em blocos separados (sem <hr>) -->
+        <form id="salesForm">
+          <div class="row">
+            <!-- Bloco 1: Informações Gerais -->
+            <div class="col-12">
+              <div class="card-style mb-30">
+                <h4 class="mb-20">Informações Gerais</h4>
+                <div class="row">
+                  <div class="col-6">
+                    <div class="input-style-1">
+                      <label for="data_venda">Data da Venda</label>
+                      <input type="date" id="data_venda" name="data_venda" required />
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="input-style-1">
+                      <label for="nome">Nome do Passageiro</label>
+                      <input
+                        type="text"
+                        id="nome"
+                        name="nome"
+                        placeholder="Nome do Passageiro"
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <div class="input-style-1">
+                      <label for="email">E-mail</label>
+                      <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="E-mail"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="input-style-1">
+                      <label for="telefone">Telefone</label>
+                      <input
+                        type="tel"
+                        id="telefone"
+                        name="telefone"
+                        placeholder="Telefone"
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <div class="input-style-1">
+                      <label for="data_nascimento">Data de Nascimento</label>
+                      <input
+                        type="date"
+                        id="data_nascimento"
+                        name="data_nascimento"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="input-style-1">
+                      <label for="cpf">CPF</label>
+                      <input
+                        type="text"
+                        id="cpf"
+                        name="cpf"
+                        placeholder="CPF"
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Bloco 2: Emissão -->
+            <div class="col-12">
+              <div class="card-style mb-30">
+                <h4 class="mb-20">Emissão</h4>
+                <div class="row">
+                  <div class="col-6">
+                    <div class="input-style-1">
+                      <label for="data_utilizacao">Data de Utilização</label>
+                      <input
+                        type="date"
+                        id="data_utilizacao"
+                        name="data_utilizacao"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="input-style-1">
+                      <label for="destino">Destino</label>
+                      <input
+                        type="text"
+                        id="destino"
+                        name="destino"
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12">
+                    <div class="select-style-1">
+                      <label for="item">Categoria</label>
+                      <div class="select-position">
+                        <select id="item" name="item" required>
+                          <option value="">Selecione</option>
+                          <option value="Ingressos">Ingressos</option>
+                          <option value="Hospedagem">Hospedagem</option>
+                          <option value="Aluguel de Carro">Aluguel de Carro</option>
+                          <option value="Passagem Aérea">Passagem Aérea</option>
+                          <option value="Cruzeiro">Cruzeiro</option>
+                          <option value="Guiamento Remoto">Guiamento Remoto</option>
+                          <option value="Seguro Viagem">Seguro Viagem</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Bloco 3: Financeiro -->
+            <div class="col-12">
+              <div class="card-style mb-30">
+                <h4 class="mb-20">Financeiro</h4>
+                <div class="row">
+                  <div class="col-4">
+                    <div class="input-style-1">
+                      <label for="nome_comprador">Nome do Pagador</label>
+                      <input
+                        type="text"
+                        id="nome_comprador"
+                        name="nome_comprador"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="select-style-1">
+                      <label for="gateway">Gateway</label>
+                      <div class="select-position">
+                        <select id="gateway" name="gateway" required>
+                          <option value="ValePay">ValePay</option>
+                          <option value="PagBank">PagBank</option>
+                          <option value="PayPal">PayPal</option>
+                          <option value="Pix Direto">Pix Direto</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="select-style-1">
+                      <label for="meio_pgto">Meio de Pagamento</label>
+                      <div class="select-position">
+                        <select id="meio_pgto" name="meio_pgto" required>
+                          <option value="Pix">Pix</option>
+                          <option value="Cartão">Cartão</option>
+                          <option value="Boleto">Boleto</option>
+                          <option value="Split">Split</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="row">
+                  <div class="col-3">
+                    <div class="input-style-1">
+                      <label for="bandeira_cartao">Bandeira do Cartão</label>
+                      <input type="text" id="bandeira_cartao" name="bandeira_cartao" />
+                    </div>
+                  </div>
+                  <div class="col-3">
+                    <div class="input-style-1">
+                      <label for="parcelas">Parcelas</label>
+                      <input
+                        type="number"
+                        id="parcelas"
+                        name="parcelas"
+                        min="1"
+                        max="12"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-3">
+                    <div class="input-style-1">
+                      <label for="valor_venda">Valor da Venda</label>
+                      <input
+                        type="number"
+                        id="valor_venda"
+                        name="valor_venda"
+                        step="0.01"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="col-3">
+                    <div class="input-style-1">
+                      <label for="valor_repassado">Valor Repassado</label>
+                      <input
+                        type="number"
+                        id="valor_repassado"
+                        name="valor_repassado"
+                        step="0.01"
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Bloco 4: Comercial -->
+            <div class="col-12">
+              <div class="card-style mb-30">
+                <h4 class="mb-20">Comercial</h4>
+                <div class="row">
+                  <div class="col-6">
+                    <div class="select-style-1">
+                      <label for="origem_cliente">Origem do Cliente</label>
+                      <div class="select-position">
+                        <select id="origem_cliente" name="origem_cliente">
+                          <option value="Indicação">Indicação</option>
+                          <option value="Blog">Blog</option>
+                          <option value="Site">Site</option>
+                          <option value="Anúncio">Anúncio</option>
+                          <option value="Direct do Instagram">Direct do Instagram</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="select-style-1">
+                      <label for="cliente_de">Cliente Atendido Por</label>
+                      <div class="select-position">
+                        <select id="cliente_de" name="cliente_de" required>
+                          <option value="">Selecione</option>
+                          <option value="Matheus Alvarenga">Matheus Alvarenga</option>
+                          <option value="Raphaela Raposo">Raphaela Raposo</option>
+                          <option value="Vanessa Barreto">Vanessa Barreto</option>
+                          <option value="Breno Severiano">Breno Severiano</option>
+                          <option value="Mariane Nunes">Mariane Nunes</option>
+                          <option value="Guilherme Raimundi">Guilherme Raimundi</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <div class="select-style-1">
+                      <label for="efetivado_por">Venda Finalizada Por</label>
+                      <div class="select-position">
+                        <select id="efetivado_por" name="efetivado_por" required>
+                          <option value="">Selecione</option>
+                          <option value="Matheus Alvarenga">Matheus Alvarenga</option>
+                          <option value="Raphaela Raposo">Raphaela Raposo</option>
+                          <option value="Vanessa Barreto">Vanessa Barreto</option>
+                          <option value="Breno Severiano">Breno Severiano</option>
+                          <option value="Mariane Nunes">Mariane Nunes</option>
+                          <option value="Guilherme Raimundi">Guilherme Raimundi</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- BLOCO FINAL (Foto 5): Observações (2 colunas lado a lado) -->
+            <div class="col-12">
+              <div class="card-style mb-30">
+                <div class="row">
+                  <div class="col-6">
+                    <h4 class="mb-10">Observações Operacionais</h4>
+                    <div class="input-style-1">
+                      <textarea
+                        id="observacoes_operacionais"
+                        name="observacoes_operacionais"
+                        rows="8"
+                        placeholder="Digite suas observações operacionais"
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <h4 class="mb-10">Observações Financeiras</h4>
+                    <div class="input-style-1">
+                      <textarea
+                        id="observacoes_financeiras"
+                        name="observacoes_financeiras"
+                        rows="8"
+                        placeholder="Digite suas observações financeiras"
+                      ></textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
+          <!-- end row de todos os blocos -->
+
+          <!-- Campos Ocultos -->
+          <input type="hidden" id="id" name="id">
+          <input type="hidden" id="mes_venda" name="mes_venda">
+          <input type="hidden" id="uf" name="uf">
+          <input type="hidden" id="valor_comissao" name="valor_comissao">
+          <input type="hidden" id="markup" name="markup">
+          <input type="hidden" id="comissao_do_agente" name="comissao_do_agente">
+          <input type="hidden" id="data_pgto" name="data_pgto">
+          <input type="hidden" id="recebido" name="recebido">
+          <input type="hidden" id="data_repasse" name="data_repasse">
+
+          <!-- Botões ao final -->
+          <div class="button-group d-flex justify-content-center flex-wrap mt-4">
+            <button type="button" id="submitButton" class="main-btn primary-btn btn-hover m-2">
+              Salvar
+            </button>
+            <button type="reset" class="main-btn danger-btn-outline m-2">
+              Cancelar
+            </button>
+          </div>
+        </form>
+        <!-- Fim do form -->
+
       </div>
-    </div>
-    <!-- Card do Formulário -->
-    <div class="form-layout-wrapper">
-      <div class="row">
-        <div class="col-lg-12">
-          <div class="card-style mb-30">
-
-            <!-- Formulário principal -->
-            <form id="salesForm">
-
-              <!-- BLOCO 1: Informações Gerais (vertical) -->
-              <h4 class="mb-20">Informações Gerais</h4>
-              <div class="row">
-                <div class="col-6">
-                  <div class="input-style-1">
-                    <label for="data_venda">Data da Venda</label>
-                    <input type="date" id="data_venda" name="data_venda" required />
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div class="input-style-1">
-                    <label for="nome">Nome do Passageiro</label>
-                    <input
-                      type="text"
-                      id="nome"
-                      name="nome"
-                      placeholder="Nome do Passageiro"
-                      required
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-6">
-                  <div class="input-style-1">
-                    <label for="email">E-mail</label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      placeholder="E-mail"
-                      required
-                    />
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div class="input-style-1">
-                    <label for="telefone">Telefone</label>
-                    <input
-                      type="tel"
-                      id="telefone"
-                      name="telefone"
-                      placeholder="Telefone"
-                      required
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-6">
-                  <div class="input-style-1">
-                    <label for="data_nascimento">Data de Nascimento</label>
-                    <input
-                      type="date"
-                      id="data_nascimento"
-                      name="data_nascimento"
-                      required
-                    />
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div class="input-style-1">
-                    <label for="cpf">CPF</label>
-                    <input
-                      type="text"
-                      id="cpf"
-                      name="cpf"
-                      placeholder="CPF"
-                      required
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <hr />
-
-              <!-- BLOCO 2: Emissão (vertical) -->
-              <h4 class="mb-20">Emissão</h4>
-              <div class="row">
-                <div class="col-6">
-                  <div class="input-style-1">
-                    <label for="data_utilizacao">Data de Utilização</label>
-                    <input
-                      type="date"
-                      id="data_utilizacao"
-                      name="data_utilizacao"
-                      required
-                    />
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div class="input-style-1">
-                    <label for="destino">Destino</label>
-                    <input
-                      type="text"
-                      id="destino"
-                      name="destino"
-                      required
-                    />
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-12">
-                  <div class="select-style-1">
-                    <label for="item">Categoria</label>
-                    <div class="select-position">
-                      <select id="item" name="item" required>
-                        <option value="">Selecione</option>
-                        <option value="Ingressos">Ingressos</option>
-                        <option value="Hospedagem">Hospedagem</option>
-                        <option value="Aluguel de Carro">Aluguel de Carro</option>
-                        <option value="Passagem Aérea">Passagem Aérea</option>
-                        <option value="Cruzeiro">Cruzeiro</option>
-                        <option value="Guiamento Remoto">Guiamento Remoto</option>
-                        <option value="Seguro Viagem">Seguro Viagem</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <hr />
-
-              <!-- BLOCO 3: Financeiro (vertical) -->
-              <h4 class="mb-20">Financeiro</h4>
-              <div class="row">
-                <div class="col-4">
-                  <div class="input-style-1">
-                    <label for="nome_comprador">Nome do Pagador</label>
-                    <input
-                      type="text"
-                      id="nome_comprador"
-                      name="nome_comprador"
-                      required
-                    />
-                  </div>
-                </div>
-                <div class="col-4">
-                  <div class="select-style-1">
-                    <label for="gateway">Gateway</label>
-                    <div class="select-position">
-                      <select id="gateway" name="gateway" required>
-                        <option value="ValePay">ValePay</option>
-                        <option value="PagBank">PagBank</option>
-                        <option value="PayPal">PayPal</option>
-                        <option value="Pix Direto">Pix Direto</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-4">
-                  <div class="select-style-1">
-                    <label for="meio_pgto">Meio de Pagamento</label>
-                    <div class="select-position">
-                      <select id="meio_pgto" name="meio_pgto" required>
-                        <option value="Pix">Pix</option>
-                        <option value="Cartão">Cartão</option>
-                        <option value="Boleto">Boleto</option>
-                        <option value="Split">Split</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-3">
-                  <div class="input-style-1">
-                    <label for="bandeira_cartao">Bandeira do Cartão</label>
-                    <input type="text" id="bandeira_cartao" name="bandeira_cartao" />
-                  </div>
-                </div>
-                <div class="col-3">
-                  <div class="input-style-1">
-                    <label for="parcelas">Parcelas</label>
-                    <input
-                      type="number"
-                      id="parcelas"
-                      name="parcelas"
-                      min="1"
-                      max="12"
-                    />
-                  </div>
-                </div>
-                <div class="col-3">
-                  <div class="input-style-1">
-                    <label for="valor_venda">Valor da Venda</label>
-                    <input
-                      type="number"
-                      id="valor_venda"
-                      name="valor_venda"
-                      step="0.01"
-                      required
-                    />
-                  </div>
-                </div>
-                <div class="col-3">
-                  <div class="input-style-1">
-                    <label for="valor_repassado">Valor Repassado</label>
-                    <input
-                      type="number"
-                      id="valor_repassado"
-                      name="valor_repassado"
-                      step="0.01"
-                      required
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <hr />
-
-              <!-- BLOCO 4: Comercial (vertical) -->
-              <h4 class="mb-20">Comercial</h4>
-              <div class="row">
-                <div class="col-6">
-                  <div class="select-style-1">
-                    <label for="origem_cliente">Origem do Cliente</label>
-                    <div class="select-position">
-                      <select id="origem_cliente" name="origem_cliente">
-                        <option value="Indicação">Indicação</option>
-                        <option value="Blog">Blog</option>
-                        <option value="Site">Site</option>
-                        <option value="Anúncio">Anúncio</option>
-                        <option value="Direct do Instagram">Direct do Instagram</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div class="select-style-1">
-                    <label for="cliente_de">Cliente Atendido Por</label>
-                    <div class="select-position">
-                      <select id="cliente_de" name="cliente_de" required>
-                        <option value="">Selecione</option>
-                        <option value="Matheus Alvarenga">Matheus Alvarenga</option>
-                        <option value="Raphaela Raposo">Raphaela Raposo</option>
-                        <option value="Vanessa Barreto">Vanessa Barreto</option>
-                        <option value="Breno Severiano">Breno Severiano</option>
-                        <option value="Mariane Nunes">Mariane Nunes</option>
-                        <option value="Guilherme Raimundi">Guilherme Raimundi</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-6">
-                  <div class="select-style-1">
-                    <label for="efetivado_por">Venda Finalizada Por</label>
-                    <div class="select-position">
-                      <select id="efetivado_por" name="efetivado_por" required>
-                        <option value="">Selecione</option>
-                        <option value="Matheus Alvarenga">Matheus Alvarenga</option>
-                        <option value="Raphaela Raposo">Raphaela Raposo</option>
-                        <option value="Vanessa Barreto">Vanessa Barreto</option>
-                        <option value="Breno Severiano">Breno Severiano</option>
-                        <option value="Mariane Nunes">Mariane Nunes</option>
-                        <option value="Guilherme Raimundi">Guilherme Raimundi</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <hr />
-
-              <!-- FOTO 5 (Observações) => 2 BLOCOS NA MESMA LINHA (horizontal) -->
-              <div class="row">
-                <!-- Observações Operacionais (col-6) -->
-                <div class="col-6">
-                  <h4 class="mb-10">Observações Operacionais</h4>
-                  <div class="input-style-1">
-                    <textarea
-                      id="observacoes_operacionais"
-                      name="observacoes_operacionais"
-                      rows="8"
-                      placeholder="Digite suas observações operacionais"
-                    ></textarea>
-                  </div>
-                </div>
-
-                <!-- Observações Financeiras (col-6) -->
-                <div class="col-6">
-                  <h4 class="mb-10">Observações Financeiras</h4>
-                  <div class="input-style-1">
-                    <textarea
-                      id="observacoes_financeiras"
-                      name="observacoes_financeiras"
-                      rows="8"
-                      placeholder="Digite suas observações financeiras"
-                    ></textarea>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Campos Ocultos -->
-              <input type="hidden" id="id" name="id">
-              <input type="hidden" id="mes_venda" name="mes_venda">
-              <input type="hidden" id="uf" name="uf">
-              <input type="hidden" id="valor_comissao" name="valor_comissao">
-              <input type="hidden" id="markup" name="markup">
-              <input type="hidden" id="comissao_do_agente" name="comissao_do_agente">
-              <input type="hidden" id="data_pgto" name="data_pgto">
-              <input type="hidden" id="recebido" name="recebido">
-              <input type="hidden" id="data_repasse" name="data_repasse">
-
-              <!-- Botões ao final -->
-              <div class="button-group d-flex justify-content-center flex-wrap mt-4">
-                <button type="button" id="submitButton" class="main-btn primary-btn btn-hover m-2">
-                  Salvar
-                </button>
-                <button type="reset" class="main-btn danger-btn-outline m-2">
-                  Cancelar
-                </button>
-              </div>
-
-            </form>
-            <!-- Fim do Formulário -->
-
-          </div>
-          <!-- end card-style -->
-        </div>
-        <!-- end col -->
-      </div>
-      <!-- end row -->
-    </div>
-    <!-- ========== form-layout-wrapper end ========== -->
-  </div>
-  <!-- end container -->
-</section>
-<!-- ========== Conteúdo principal end ========== -->
+      <!-- end container -->
+    </section>
+    <!-- ========== Conteúdo principal end ========== -->
 
       <!-- ========== footer start (layout padrão do PlainAdmin) ========== -->
     <footer class="footer">
