@@ -1357,6 +1357,7 @@
           <input type="hidden" id="data_pgto" name="data_pgto">
           <input type="hidden" id="recebido" name="recebido">
           <input type="hidden" id="data_repasse" name="data_repasse">
+          <input type="hidden" id="affiliate_id" name="affiliate_id" value="2">
 
           <!-- Botões ao final -->
           <div class="button-group d-flex justify-content-center flex-wrap mt-4">
@@ -1414,6 +1415,24 @@
             idField.value = data.next_id || 2501;
           })
           .catch(console.error);
+      }
+
+        // 2) Aqui você insere a parte de buscar o usuário logado
+      //    e preencher o "affiliate_id" dinamicamente:
+      const affiliateIdInput = document.getElementById('affiliate_id');
+      if (affiliateIdInput) {
+        fetch('https://airland.com.br/affiliatesacess/login_api.php/check')
+          .then(response => response.json())
+          .then(userInfo => {
+            if (userInfo.logged_in) {
+              // Se sua FK precisar do "id" do usuário
+              const userId = userInfo.user_data.affiliate_id;
+              affiliateIdInput.value = userId;
+            }
+          })
+          .catch(err => {
+            console.error('Não foi possível buscar dados do usuário:', err);
+          });
       }
 
       // Preencher mes_venda e data_pgto ao mudar data_venda
