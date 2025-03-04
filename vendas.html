@@ -768,8 +768,8 @@
 
   <!-- ======== main-wrapper start =========== -->
   <main class="main-wrapper">
-    <!-- ========== header start ========== -->
-    <header class="header">
+     <!-- ========== header start ========== -->
+     <header class="header">
       <div class="container-fluid">
         <div class="row">
           <div class="col-lg-5 col-md-5 col-6">
@@ -846,6 +846,7 @@
                 </ul>
               </div>
               <!-- notification end -->
+
               <!-- message start -->
               <div class="header-message-box ml-15 d-none d-md-flex">
                 <button class="dropdown-toggle" type="button" id="message" data-bs-toggle="dropdown"
@@ -881,7 +882,7 @@
                         <img src="assets/images/lead/lead-3.png" alt="" />
                       </div>
                       <div class="content">
-                        <!-- CORREÇÃO AQUI: Trocamos o `<<h6` para <h6 -->
+                        <!-- corrigido: era <<h6 -->
                         <h6 class="user-name">Usuário 2</h6>
                         <p>Would you mind please checking out</p>
                         <span>12 mins ago</span>
@@ -903,6 +904,7 @@
                 </ul>
               </div>
               <!-- message end -->
+
               <!-- profile start -->
               <div class="profile-box ml-15">
                 <button class="dropdown-toggle bg-transparent border-0" type="button" id="profile"
@@ -913,8 +915,8 @@
                         <img id="profileImage" src="" alt="Profile Image" />
                       </div>
                       <div>
-                        <!-- CORREÇÃO AQUI: Trocamos <h6 class="fw-500" <h6 class="user-name"></h6></h6> para algo correto -->
-                        <h6 class="fw-500 user-name">Nome do Usuário</h6>
+                        <!-- Aqui adicionamos o id="headerUserName" que o JS procura -->
+                        <h6 class="fw-500 user-name" id="headerUserName">Nome do Usuário</h6>
                         <p>Admin</p>
                       </div>
                     </div>
@@ -927,8 +929,7 @@
                         <img id="profileImageDropdown" src="" alt="Profile Image" />
                       </div>
                       <div class="content">
-                        <!-- CORREÇÃO: Ajustamos para <h4 e <a id="dropdownUserEmail" -->
-                        <h4 class="text-sm user-name">Usuário Logado</h4>
+                        <h4 class="text-sm user-name" id="dropdownUserName">Usuário Logado</h4>
                         <a
                           class="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white text-xs"
                           href="#"
@@ -967,7 +968,6 @@
       </div>
     </header>
     <!-- ========== header end ========== -->
-
     <!-- ========== Conteúdo principal do formulário ========== -->
     <section class="tab-components">
       <div class="container-fluid">
@@ -1411,7 +1411,7 @@
         .then(result => {
           if (result.success) {
             const data = result.data;
-            // Preenche o header
+            // Preenche o header (corrigido: agora existe id="headerUserName")
             if (document.getElementById("headerUserName")) {
               document.getElementById("headerUserName").textContent = data.primeiro_nome;
             }
@@ -1429,7 +1429,7 @@
               document.getElementById("profileImageDropdown").src = data.fotodeperfil;
             }
 
-            // Caso queira preencher todas as classes .user-name com o nome
+            // Caso queira preencher todas as classes .user-name
             const userName = data.primeiro_nome + " " + data.ultimo_nome;
             const userNameElements = document.querySelectorAll(".user-name");
             userNameElements.forEach(el => {
