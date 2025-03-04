@@ -834,12 +834,11 @@
                         <img src="assets/images/lead/lead-6.png" alt="" />
                       </div>
                       <div class="content">
-                        <h6>
-                          <id="dropdownUserName">
+                        <h6 id="dropdownUserComment">
                           <span class="text-regular">
                             comment on a product.
                           </span>
-                        </h6>
+                        </h6>                        
                         <p>
                           Lorem ipsum dolor sit amet, consect etur adipiscing
                           elit Vivamus tortor.
@@ -904,7 +903,7 @@
                         <img src="assets/images/lead/lead-3.png" alt="" />
                       </div>
                       <div class="content">
-                        <h6><id="dropdownUserName"></h6>
+                        <h6><<h6 class="user-name"></h6></h6>
                         <p>Would you mind please checking out</p>
                         <span>12 mins ago</span>
                       </div>
@@ -935,7 +934,7 @@
                         <img id="profileImage" src="" alt="Profile Image" />
                       </div>
                       <div>
-                        <h6 class="fw-500" id="headerUserName"></h6>
+                        <h6 class="fw-500" <h6 class="user-name"></h6></h6>
                         <p>Admin</p>
                       </div>
                     </div>
@@ -945,38 +944,39 @@
                   <li>
                     <div class="author-info flex items-center !p-1">
                       <div class="image">
+                        <!-- O id "profileImage" será atualizado com a URL do fotodeperfil -->
                         <img id="profileImageDropdown" src="" alt="Profile Image" />
                       </div>
                       <div class="content">
-                        <h4 class="text-sm" id="dropdownUserName"></h4>
-                        <a href="#" id="dropdownUserEmail" class="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white text-xs"></a>
+                        <h4 class="text-sm" <h6 class="user-name"></h6></h4>
+                        <a class="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white text-xs"
+                           href="#" id="dropdownUserEmail"></a>
                       </div>
-                    </div>
+                    </div>                    
                   </li>
                   <li class="divider"></li>
+                  <li>
+                    <a href="#0">
+                      <i class="lni lni-user"></i> View Profile
+                    </a>
+                  </li>
                   <li>
                     <a href="#0">
                       <i class="lni lni-alarm"></i> Notifications
                     </a>
                   </li>
                   <li>
-                    <a href="#0">
-                      <i class="lni lni-inbox"></i> Messages
-                    </a>
+                    <a href="#0"> <i class="lni lni-inbox"></i> Messages </a>
                   </li>
                   <li>
-                    <a href="#0">
-                      <i class="lni lni-cog"></i> Perfil
-                    </a>
+                    <a href="#0"> <i class="lni lni-cog"></i> Perfil </a>
                   </li>
                   <li class="divider"></li>
                   <li>
-                    <a href="#0">
-                      <i class="lni lni-exit"></i> Logout
-                    </a>
+                    <a href="#0"> <i class="lni lni-exit"></i> Logout </a>
                   </li>
                 </ul>
-              </div>              
+              </div>
               <!-- profile end -->
             </div>
           </div>
@@ -1443,9 +1443,15 @@
             if (document.getElementById("profileImageDropdown")) {
               document.getElementById("profileImageDropdown").src = data.fotodeperfil;
             }
-            if (document.getElementById("profileImageLeft")) {
-              document.getElementById("profileImageLeft").src = data.fotodeperfil;
-            }
+          
+            // ======= AQUI COMEÇA o código para todas as .user-name =======
+            const userName = data.primeiro_nome + " " + data.ultimo_nome;
+            const userNameElements = document.querySelectorAll(".user-name");
+            userNameElements.forEach(el => {
+              el.textContent = userName;
+            });
+            // ======= AQUI TERMINA o código para todas as .user-name =======
+
           } else {
             console.error("Erro:", result.error);
           }
