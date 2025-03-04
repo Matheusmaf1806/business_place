@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -1051,64 +1052,77 @@
     }
 
     async function carregarTabela() {
-      try {
-        // Chama o arquivo PHP que criamos
-        const resp = await fetch('https://airland.com.br/supplier/get_fase1.php'); 
-        if (!resp.ok) {
-          throw new Error(`HTTP error! status: ${resp.status}`);
-        }
-        const data = await resp.json(); // Array de {category, destination, type, ultima_alteracao, media_margem}
-
-        const tbody = document.querySelector('#tabelaCategorias tbody');
-        tbody.innerHTML = ''; // limpa o corpo da tabela
-
-        data.forEach(item => {
-          const tr = document.createElement('tr');
-
-          // 1) Categoria
-          const tdCat = document.createElement('td');
-          tdCat.textContent = item.category || '';
-          tr.appendChild(tdCat);
-
-          // 2) Destino
-          const tdDest = document.createElement('td');
-          tdDest.textContent = item.destination || '';
-          tr.appendChild(tdDest);
-
-          // 3) Tipo
-          const tdType = document.createElement('td');
-          tdType.textContent = item.type || '';
-          tr.appendChild(tdType);
-
-          // 4) Status (status-btn + label)
-          const tdStatus = document.createElement('td');
-          const statusInfo = getStatusInfo(item.media_margem);
-          const spanStatus = document.createElement('span');
-          spanStatus.classList.add('status-btn', statusInfo.className);
-          spanStatus.textContent = statusInfo.label;
-          tdStatus.appendChild(spanStatus);
-          tr.appendChild(tdStatus);
-
-          // 5) Última Alteração
-          const tdUlt = document.createElement('td');
-          tdUlt.textContent = item.ultima_alteracao || '';
-          tr.appendChild(tdUlt);
-
-          // 6) Média de Margem
-          const tdMedia = document.createElement('td');
-          const margemNum = parseFloat(item.media_margem) || 0;
-          tdMedia.textContent = margemNum.toFixed(2) + '%';
-          tr.appendChild(tdMedia);
-
-          tbody.appendChild(tr);
-        });
-      } catch (error) {
-        console.error('Erro ao carregar os dados:', error);
+    try {
+      // Chama o arquivo PHP que criamos para juntar bd_net + supplier_categories_margin
+      const resp = await fetch('https://airland.com.br/supplier/get_bdnet_margin.php');
+      if (!resp.ok) {
+        throw new Error(`HTTP error! status: ${resp.status}`);
       }
+      const data = await resp.json(); // {category, destination, type, ultima_alteracao, media_margem}
+
+      const tbody = document.querySelector('#tabelaCategorias tbody');
+      tbody.innerHTML = ''; // limpa o corpo da tabela
+
+      data.forEach(item => {
+        const tr = document.createElement('tr');
+
+        // 1) Categoria
+        const tdCat = document.createElement('td');
+        tdCat.textContent = item.category || '';
+        tr.appendChild(tdCat);
+
+        // 2) Destino
+        const tdDest = document.createElement('td');
+        tdDest.textContent = item.destination || '';
+        tr.appendChild(tdDest);
+
+        // 3) Tipo
+        const tdType = document.createElement('td');
+        tdType.textContent = item.type || '';
+        tr.appendChild(tdType);
+
+        // 4) Status (status-btn + label) => logic getStatusInfo
+        const tdStatus = document.createElement('td');
+        const statusInfo = getStatusInfo(item.media_margem);
+        const spanStatus = document.createElement('span');
+        spanStatus.classList.add('status-btn', statusInfo.className);
+        spanStatus.textContent = statusInfo.label;
+        tdStatus.appendChild(spanStatus);
+        tr.appendChild(tdStatus);
+
+        // 5) Última Alteração
+        const tdUlt = document.createElement('td');
+        tdUlt.textContent = item.ultima_alteracao || '';
+        tr.appendChild(tdUlt);
+
+        // 6) Média de Margem
+        const tdMedia = document.createElement('td');
+        const margemNum = parseFloat(item.media_margem) || 0;
+        tdMedia.textContent = margemNum.toFixed(2) + '%';
+        tr.appendChild(tdMedia);
+
+        tbody.appendChild(tr);
+      });
+    } catch (error) {
+      console.error('Erro ao carregar os dados:', error);
     }
+  }
 
     // Dispara quando a página carregar
     document.addEventListener('DOMContentLoaded', carregarTabela);
+    
+    fetch('https://airland.com.br/supplier/update_margin.php', {
+      method: 'GET',
+      credentials: 'include'
+    })
+      .then(resp => resp.json())
+      .then(data => {
+        console.log('Resultado do GET:', data); 
+        // data => array de objetos [ {category, destination, type, ultima_alteracao, media_margem}, ...]
+      })
+      .catch(err => console.error(err));
+
+
   </script>
   <script src="assets/js/bootstrap.bundle.min.js"></script>
   <script src="assets/js/Chart.min.js"></script>
