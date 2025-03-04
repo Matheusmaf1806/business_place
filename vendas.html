@@ -1406,7 +1406,7 @@
       // Exemplo: buscar ID automático
       const idField = document.getElementById('id');
       if (idField) {
-        fetch('https://magictraveltur.com/get_next_id.php')
+        fetch('https://airland.com.br/Sales/get_next_id.php')
           .then(response => response.json())
           .then(data => {
             idField.value = data.next_id || 2501;
@@ -1465,7 +1465,7 @@
           const formData = new FormData(form);
           const dataObj = Object.fromEntries(formData.entries());
 
-          fetch('https://magictraveltur.com/process_form.php', {
+          fetch('https://airland.com.br/Sales/process_form.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(dataObj)
