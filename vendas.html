@@ -958,11 +958,6 @@
                   <li class="divider"></li>
                   <li>
                     <a href="#0">
-                      <i class="lni lni-user"></i> View Profile
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#0">
                       <i class="lni lni-alarm"></i> Notifications
                     </a>
                   </li>
@@ -974,7 +969,7 @@
                   </li>
                   <li class="divider"></li>
                   <li>
-                    <a href="#0"> <i class="lni lni-exit"></i> Sign Out </a>
+                    <a href="#0"> <i class="lni lni-exit"></i> Logout </a>
                   </li>
                 </ul>
               </div>
@@ -1497,6 +1492,30 @@
 
         // 3. Busca os dados atualizados do perfil via API e atualiza o DOM
         fetchUserProfile();
+      });
+      
+      document.addEventListener("DOMContentLoaded", function() {
+        // Supondo que você tenha o ID do usuário atual (por exemplo, armazenado em uma variável ou obtido via sessão)
+        const userId = 1; // Substitua por como você obtém o ID do usuário logado
+
+        fetch(`https://airland.com.br/affiliatesacess/get_user_profile.php?id=${userId}`)
+          .then(response => response.json())
+          .then(result => {
+            if(result.success) {
+              const data = result.data;
+              // Atualiza o nome no header
+              document.getElementById("userName").textContent = data.primeiro_nome + " " + data.ultimo_nome;
+              // Atualiza o dropdown
+              document.getElementById("dropdownUserName").textContent = data.primeiro_nome + " " + data.ultimo_nome;
+              document.getElementById("dropdownUserEmail").textContent = data.email;
+              // Atualiza as imagens de perfil
+              document.getElementById("profileImage").src = data.fotodeperfil;
+              // Se houver outros locais onde a imagem é usada, atualize-os também
+            } else {
+              console.error("Erro:", result.error);
+            }
+          })
+          .catch(error => console.error("Erro na API:", error));
       });
 
       // Preencher mes_venda e data_pgto ao mudar data_venda
