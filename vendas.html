@@ -1,3 +1,4 @@
+VENDA
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -935,7 +936,7 @@
                         <img id="profileImage" src="" alt="Profile Image" />
                       </div>
                       <div>
-                        <h6 class="fw-500" id="dropdownUserName"></h6>
+                        <h6 class="fw-500" id="headerUserName"></h6>
                         <p>Admin</p>
                       </div>
                     </div>
@@ -945,7 +946,6 @@
                   <li>
                     <div class="author-info flex items-center !p-1">
                       <div class="image">
-                        <!-- O id "profileImage" será atualizado com a URL do fotodeperfil -->
                         <img id="profileImageDropdown" src="" alt="Profile Image" />
                       </div>
                       <div class="content">
@@ -962,17 +962,23 @@
                     </a>
                   </li>
                   <li>
-                    <a href="#0"> <i class="lni lni-inbox"></i> Messages </a>
+                    <a href="#0">
+                      <i class="lni lni-inbox"></i> Messages
+                    </a>
                   </li>
                   <li>
-                    <a href="#0"> <i class="lni lni-cog"></i> Perfil </a>
+                    <a href="#0">
+                      <i class="lni lni-cog"></i> Perfil
+                    </a>
                   </li>
                   <li class="divider"></li>
                   <li>
-                    <a href="#0"> <i class="lni lni-exit"></i> Logout </a>
+                    <a href="#0">
+                      <i class="lni lni-exit"></i> Logout
+                    </a>
                   </li>
                 </ul>
-              </div>
+              </div>              
               <!-- profile end -->
             </div>
           </div>
@@ -1363,6 +1369,37 @@
       </div>
     </footer>
     <!-- ========== footer end =========== -->
+     <!-- ======== main-wrapper end =========== -->
+
+  <!-- ============ Theme Option Start ============= -->
+  <button class="option-btn">
+    <i class="lni lni-cog"></i>
+  </button>
+  <div class="option-overlay"></div>
+  <div class="option-box">
+    <div class="option-header">
+      <h5>Settings</h5>
+      <button class="option-btn-close text-gray">
+        <i class="lni lni-close"></i>
+      </button>
+    </div>
+    <h6 class="mb-10">Layout</h6>
+    <ul class="mb-30">
+      <li><button class="leftSidebarButton active">Left Sidebar</button></li>
+      <li><button class="rightSidebarButton">Right Sidebar</button></li>
+    </ul>
+
+    <h6 class="mb-10">Theme</h6>
+    <ul class="d-flex flex-wrap align-items-center">
+      <li>
+        <button class="lightThemeButton active">
+          Light Theme + Sidebar 1
+        </button>
+      </li>
+      <li><button class="darkThemeButton">Dark Theme + Sidebar 1</button></li>
+    </ul>
+  </div>
+  <!-- ============ Theme Option End ============= -->
   <script>
       async function checkSession() {
         try {
@@ -1494,23 +1531,24 @@
         fetchUserProfile();
       });
       
-      document.addEventListener("DOMContentLoaded", function() {
-        // Supondo que você tenha o ID do usuário atual (por exemplo, armazenado em uma variável ou obtido via sessão)
-        const userId = 1; // Substitua por como você obtém o ID do usuário logado
-
-        fetch(`https://airland.com.br/affiliatesacess/get_user_profile.php?id=${userId}`)
+      document.addEventListener("DOMContentLoaded", function () {
+        const userId = 1; // ou obtenha esse ID dinamicamente
+        
+        fetch(`https://airland.com.br/affiliatesacess/get_user_profile.php?id=${userId}`, {
+          credentials: 'include'
+        })
           .then(response => response.json())
           .then(result => {
-            if(result.success) {
+            if (result.success) {
               const data = result.data;
-              // Atualiza o nome no header
-              document.getElementById("userName").textContent = data.primeiro_nome + " " + data.ultimo_nome;
-              // Atualiza o dropdown
+              // Atualiza o nome do header e do dropdown com IDs únicos
+              document.getElementById("headerUserName").textContent = data.primeiro_nome;
               document.getElementById("dropdownUserName").textContent = data.primeiro_nome + " " + data.ultimo_nome;
               document.getElementById("dropdownUserEmail").textContent = data.email;
+              
               // Atualiza as imagens de perfil
               document.getElementById("profileImage").src = data.fotodeperfil;
-              // Se houver outros locais onde a imagem é usada, atualize-os também
+              document.getElementById("profileImageDropdown").src = data.fotodeperfil;
             } else {
               console.error("Erro:", result.error);
             }
