@@ -1362,7 +1362,7 @@
           <input type="hidden" id="data_pgto" name="data_pgto">
           <input type="hidden" id="recebido" name="recebido">
           <input type="hidden" id="data_repasse" name="data_repasse">
-          <input type="hidden" id="affiliate_id" name="affiliate_id" value="2">
+          <input type="hidden" id="affiliate_id" name="affiliate_id">
 
           <!-- Botões ao final -->
           <div class="button-group d-flex justify-content-center flex-wrap mt-4">
@@ -1436,7 +1436,7 @@
             if (userInfo.logged_in) {
               // Se sua FK precisar do "id" do usuário
               const userId = userInfo.user_data.affiliate_id;
-              affiliateIdInput.value = affiliate_id;
+              affiliateIdInput.value = userId;
             }
           })
           .catch(err => {
