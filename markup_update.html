@@ -915,15 +915,13 @@
   </div>
   <!-- ============ Theme Option End ============= -->
   <script>
-    /*******************************************************
-     * Função para ler o parâmetro "categoria" da URL
-     *******************************************************/
+    // Lê o parâmetro "categoria" da URL
     function getCategoriaFromURL() {
       const params = new URLSearchParams(window.location.search);
       return params.get('categoria');
     }
   
-    // Atualiza o título da categoria, se presente (certifique-se de ter um elemento com id "categoriaTitulo")
+    // Atualiza o título da categoria, se o elemento com id "categoriaTitulo" existir
     function exibirCategoriaNoTitulo() {
       const categoria = getCategoriaFromURL();
       const tituloEl = document.getElementById('categoriaTitulo');
@@ -932,9 +930,7 @@
       }
     }
   
-    /*******************************************************
-     * 1) Verificação de sessão via login_api.php/check
-     *******************************************************/
+    // Verifica se o usuário está logado
     async function checkSession() {
       try {
         const response = await fetch("https://airland.com.br/affiliatesacess/login_api.php/check", {
@@ -943,10 +939,8 @@
         const result = await response.json();
         console.log("Resposta da Sessão:", result);
         if (!result.logged_in) {
-          // Se não estiver logado, redireciona para a página de login
           window.location.replace("https://businessplace.airland.com.br/signin.html");
         } else {
-          // Se estiver logado, exibe a página
           document.body.style.display = "block";
         }
       } catch (error) {
@@ -955,18 +949,14 @@
       }
     }
   
-    /*******************************************************
-     * 2) Buscar e exibir os dados de markup
-     *******************************************************/
-    async function fetchMarkupData() {
+    // Busca os dados de markup (utilizando o parâmetro "categoria", se existir) e evita cache
+    async function fetchMarkupData(customUrl) {
+      const finalUrl = customUrl || 'https://airland.com.br/supplier/get_markup_data.php';
       try {
-        // Obtém o parâmetro "categoria" (se existir)
-        const categoria = getCategoriaFromURL();
-        let url = 'https://airland.com.br/supplier/get_markup_data.php';
-        if (categoria) {
-          url += '?categoria=' + encodeURIComponent(categoria);
-        }
-        const response = await fetch(url, { credentials: 'include' });
+        const response = await fetch(finalUrl, {
+          credentials: 'include',
+          cache: 'no-store'
+        });
         const data = await response.json();
         populateTable(data);
       } catch (error) {
@@ -974,29 +964,29 @@
       }
     }
   
-    // Popula a tabela com os dados recebidos
+    // Popula a tabela com os dados retornados
     function populateTable(data) {
       const tbody = document.querySelector('#markupTable tbody');
       tbody.innerHTML = '';
       data.forEach(item => {
         const tr = document.createElement('tr');
   
-        // Coluna 1: Nome (puxado de bd_net -> name_site)
+        // Nome
         const tdName = document.createElement('td');
         tdName.textContent = item.name_site;
         tr.appendChild(tdName);
   
-        // Coluna 2: ID (usando id_site)
+        // ID
         const tdId = document.createElement('td');
         tdId.textContent = item.id_site;
         tr.appendChild(tdId);
   
-        // Coluna 3: Última Alteração (puxado de supplier_categories_margin -> updated_at)
+        // Última Alteração
         const tdUpdated = document.createElement('td');
         tdUpdated.textContent = item.updated_at ? item.updated_at : '-';
         tr.appendChild(tdUpdated);
   
-        // Coluna 4: Margem (editável; valor de supplier_categories_margin -> margin)
+        // Margem (campo editável)
         const tdMargin = document.createElement('td');
         const inputMargin = document.createElement('input');
         inputMargin.type = 'text';
@@ -1005,7 +995,7 @@
         tdMargin.appendChild(inputMargin);
         tr.appendChild(tdMargin);
   
-        // Coluna 5: Ação (botão para atualizar)
+        // Ação: botão para atualizar
         const tdAction = document.createElement('td');
         const btnUpdate = document.createElement('button');
         btnUpdate.textContent = 'Atualizar';
@@ -1020,27 +1010,21 @@
       });
     }
   
-    /*******************************************************
-     * 3) Atualizar a margem via update_margin.php
-     *******************************************************/
+    // Atualiza a margem no back-end e força a atualização sem cache
     async function updateMargin(id_site, newMargin) {
       try {
         const response = await fetch('https://airland.com.br/supplier/update_margin.php', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
+          headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
-          body: JSON.stringify({
-            id_site: id_site,
-            margin: newMargin
-          })
+          body: JSON.stringify({ id_site, margin: newMargin })
         });
         const result = await response.json();
         if (result.success) {
           alert('Margem atualizada com sucesso!');
-          // Recarrega os dados para atualizar a tabela
-          fetchMarkupData();
+          // Força nova requisição sem cache para exibir os dados atualizados imediatamente
+          const url = 'https://airland.com.br/supplier/get_markup_data.php?' + Date.now();
+          fetchMarkupData(url);
         } else {
           alert('Erro ao atualizar: ' + result.message);
         }
@@ -1050,18 +1034,16 @@
       }
     }
   
-    /*******************************************************
-     * Inicialização
-     *******************************************************/
+    // Inicialização: verifica sessão, atualiza título, carrega dados e remove o preloader
     document.addEventListener('DOMContentLoaded', async () => {
-      await checkSession();           // Verifica sessão
-      exibirCategoriaNoTitulo();      // Atualiza o título com a categoria (se houver)
-      fetchMarkupData();              // Carrega os dados na tabela
-      // Remove o preloader
+      await checkSession();
+      exibirCategoriaNoTitulo();
+      fetchMarkupData();
       document.getElementById('preloader').style.display = 'none';
     });
-  </script>  
-  <!-- ========= All Javascript files linkup ======== -->
+  </script>
+  
+  <!-- ========= Scripts externos ========= -->
   <script src="assets/js/bootstrap.bundle.min.js"></script>
   <script src="assets/js/Chart.min.js"></script>
   <script src="assets/js/apexcharts.min.js"></script>
