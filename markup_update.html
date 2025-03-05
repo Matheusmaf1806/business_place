@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="shortcut icon" href="assets/images/favicon.svg" type="image/x-icon" />
-  <title>Basic Table | PlainAdmin Demo</title>
+  <title>Markup Update</title>
 
   <!-- ========== All CSS files linkup ========= -->
   <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
@@ -973,6 +973,17 @@
       // etc...
     }
   }
+
+  // Função para ler o parâmetro "categoria" da URL
+  function getCategoriaFromURL() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('categoria');
+    }
+
+    // Exibe a categoria no título da página
+    function exibirCategoriaNoTitulo(categoria) {
+      document.getElementById('categoriaTitulo').textContent = categoria ? categoria : "Todas";
+    }
 
   // 3) Busca dados atualizados de perfil via API (exemplo)
   function fetchUserProfile() {
