@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -925,7 +924,7 @@
       return params.get('categoria');
     }
   
-    // Atualiza o título da categoria, se presente (certifique-se de ter um elemento com id "categoriaTitulo")
+    // Atualiza o título da categoria, se presente
     function exibirCategoriaNoTitulo() {
       const categoria = getCategoriaFromURL();
       const tituloEl = document.getElementById('categoriaTitulo');
@@ -961,18 +960,20 @@
      * 2) Buscar e exibir os dados de markup
      *******************************************************/
     async function fetchMarkupData(customUrl) {
-      // Usa a URL passada ou a padrão, forçando a não utilização de cache
+      // Monta a URL final (pode incluir categoria e evitar cache)
       const finalUrl = customUrl || 'https://airland.com.br/supplier/get_markup_data.php';
+      const categoria = getCategoriaFromURL();
+      let url = finalUrl;
+      if (categoria) {
+        // Se já existe um "?" em finalUrl, concatena com &; caso contrário, com ?
+        const separador = url.includes('?') ? '&' : '?';
+        url += separador + 'categoria=' + encodeURIComponent(categoria);
+      }
+  
       try {
-        // Se houver parâmetro "categoria", adiciona-o à URL
-        const categoria = getCategoriaFromURL();
-        let url = finalUrl;
-        if (categoria) {
-          url += '?categoria=' + encodeURIComponent(categoria);
-        }
         const response = await fetch(url, {
           credentials: 'include',
-          cache: 'no-store'
+          cache: 'no-store' // Garante que não use cache
         });
         const data = await response.json();
         populateTable(data);
@@ -985,44 +986,50 @@
     function populateTable(data) {
       const tbody = document.querySelector('#markupTable tbody');
       tbody.innerHTML = '';
+  
       data.forEach(item => {
         const tr = document.createElement('tr');
   
-        // Coluna 1: Nome (puxado de bd_net -> name_site)
+        // Nome
         const tdName = document.createElement('td');
-        tdName.textContent = item.name_site;
+        tdName.textContent = item.name_site || '-';
         tr.appendChild(tdName);
   
-        // Coluna 2: ID (usando id_site)
+        // ID
         const tdId = document.createElement('td');
-        tdId.textContent = item.id_site;
+        tdId.textContent = item.id_site || '-';
         tr.appendChild(tdId);
   
-        // Coluna 3: Dias (campo "day" do banco)
+        // Dias (campo day)
         const tdDays = document.createElement('td');
-        tdDays.textContent = item.day ? item.day : '-';
+        tdDays.textContent = item.day || '-';
         tr.appendChild(tdDays);
   
-        // Coluna 4: Última Alteração (puxado de supplier_categories_margin -> updated_at)
+        // Última Alteração
         const tdUpdated = document.createElement('td');
-        tdUpdated.textContent = item.updated_at ? item.updated_at : '-';
+        tdUpdated.textContent = item.updated_at || '-';
         tr.appendChild(tdUpdated);
   
-        // Coluna 5: Margem (editável; valor de supplier_categories_margin -> margin)
+        // Margem (editável)
         const tdMargin = document.createElement('td');
         const inputMargin = document.createElement('input');
         inputMargin.type = 'text';
-        inputMargin.value = item.margin ? item.margin : '';
+        inputMargin.value = item.margin || '';
         inputMargin.className = 'form-control';
         tdMargin.appendChild(inputMargin);
         tr.appendChild(tdMargin);
   
-        // Coluna 6: Ação (botão para atualizar)
+        // Botão Atualizar
         const tdAction = document.createElement('td');
         const btnUpdate = document.createElement('button');
+        btnUpdate.type = 'button'; // <=== Impede comportamento de submit
         btnUpdate.textContent = 'Atualizar';
         btnUpdate.className = 'btn btn-primary';
-        btnUpdate.addEventListener('click', () => {
+        btnUpdate.addEventListener('click', (e) => {
+          // Previne comportamento de submit se estiver dentro de form
+          e.preventDefault();
+  
+          // Chama a função de atualização
           updateMargin(item.id_site, inputMargin.value);
         });
         tdAction.appendChild(btnUpdate);
@@ -1039,19 +1046,14 @@
       try {
         const response = await fetch('https://airland.com.br/supplier/update_margin.php', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
+          headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
-          body: JSON.stringify({
-            id_site: id_site,
-            margin: newMargin
-          })
+          body: JSON.stringify({ id_site, margin: newMargin })
         });
         const result = await response.json();
         if (result.success) {
           alert('Margem atualizada com sucesso!');
-          // Força nova requisição sem cache, adicionando um parâmetro único à URL
+          // Força nova requisição sem cache para exibir dados atualizados
           const forcedUrl = 'https://airland.com.br/supplier/get_markup_data.php?_=' + Date.now();
           fetchMarkupData(forcedUrl);
         } else {
@@ -1067,12 +1069,13 @@
      * Inicialização
      *******************************************************/
     document.addEventListener('DOMContentLoaded', async () => {
-      await checkSession();           // Verifica a sessão
-      exibirCategoriaNoTitulo();      // Atualiza o título com a categoria (se houver)
-      fetchMarkupData();              // Carrega os dados na tabela
+      await checkSession();        // Verifica a sessão
+      exibirCategoriaNoTitulo();   // Atualiza o título com a categoria (se houver)
+      fetchMarkupData();           // Carrega os dados na tabela
       // Remove o preloader
       document.getElementById('preloader').style.display = 'none';
     });
+  </script>  
   </script>    
   <!-- ========= All Javascript files linkup ======== -->
   <script src="assets/js/bootstrap.bundle.min.js"></script>
