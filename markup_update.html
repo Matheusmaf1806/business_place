@@ -943,8 +943,10 @@
         const result = await response.json();
         console.log("Resposta da Sessão:", result);
         if (!result.logged_in) {
+          // Se não estiver logado, redireciona para a página de login
           window.location.replace("https://businessplace.airland.com.br/signin.html");
         } else {
+          // Se estiver logado, exibe a página
           document.body.style.display = "block";
         }
       } catch (error) {
@@ -956,13 +958,15 @@
     /*******************************************************
      * 2) Buscar e exibir os dados de markup
      *******************************************************/
-    async function fetchMarkupData(customUrl) {
-      const finalUrl = customUrl || 'https://airland.com.br/supplier/get_markup_data.php';
+    async function fetchMarkupData() {
       try {
-        const response = await fetch(finalUrl, {
-          credentials: 'include',
-          cache: 'no-store' // Evita uso de cache
-        });
+        // Obtém o parâmetro "categoria" (se existir)
+        const categoria = getCategoriaFromURL();
+        let url = 'https://airland.com.br/supplier/get_markup_data.php';
+        if (categoria) {
+          url += '?categoria=' + encodeURIComponent(categoria);
+        }
+        const response = await fetch(url, { credentials: 'include' });
         const data = await response.json();
         populateTable(data);
       } catch (error) {
@@ -977,7 +981,7 @@
       data.forEach(item => {
         const tr = document.createElement('tr');
   
-        // Coluna 1: Nome (do bd_net -> name_site)
+        // Coluna 1: Nome (puxado de bd_net -> name_site)
         const tdName = document.createElement('td');
         tdName.textContent = item.name_site;
         tr.appendChild(tdName);
@@ -987,12 +991,12 @@
         tdId.textContent = item.id_site;
         tr.appendChild(tdId);
   
-        // Coluna 3: Última Alteração (de supplier_categories_margin -> updated_at)
+        // Coluna 3: Última Alteração (puxado de supplier_categories_margin -> updated_at)
         const tdUpdated = document.createElement('td');
         tdUpdated.textContent = item.updated_at ? item.updated_at : '-';
         tr.appendChild(tdUpdated);
   
-        // Coluna 4: Margem (editável)
+        // Coluna 4: Margem (editável; valor de supplier_categories_margin -> margin)
         const tdMargin = document.createElement('td');
         const inputMargin = document.createElement('input');
         inputMargin.type = 'text';
@@ -1023,16 +1027,20 @@
       try {
         const response = await fetch('https://airland.com.br/supplier/update_margin.php', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json'
+          },
           credentials: 'include',
-          body: JSON.stringify({ id_site, margin: newMargin })
+          body: JSON.stringify({
+            id_site: id_site,
+            margin: newMargin
+          })
         });
         const result = await response.json();
         if (result.success) {
           alert('Margem atualizada com sucesso!');
-          // Força nova requisição sem cache para mostrar os dados atualizados
-          const url = 'https://airland.com.br/supplier/get_markup_data.php?' + Date.now();
-          fetchMarkupData(url);
+          // Recarrega os dados para atualizar a tabela
+          fetchMarkupData();
         } else {
           alert('Erro ao atualizar: ' + result.message);
         }
@@ -1046,13 +1054,13 @@
      * Inicialização
      *******************************************************/
     document.addEventListener('DOMContentLoaded', async () => {
-      await checkSession();           // Verifica a sessão
-      exibirCategoriaNoTitulo();      // Atualiza o título com a categoria, se houver
+      await checkSession();           // Verifica sessão
+      exibirCategoriaNoTitulo();      // Atualiza o título com a categoria (se houver)
       fetchMarkupData();              // Carrega os dados na tabela
       // Remove o preloader
       document.getElementById('preloader').style.display = 'none';
     });
-  </script>
+  </script>  
   <!-- ========= All Javascript files linkup ======== -->
   <script src="assets/js/bootstrap.bundle.min.js"></script>
   <script src="assets/js/Chart.min.js"></script>
