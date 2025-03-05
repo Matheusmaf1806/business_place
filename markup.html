@@ -1106,12 +1106,23 @@
         tdMedia.textContent = margemNum.toFixed(2) + '%';
         tr.appendChild(tdMedia);
 
-        tbody.appendChild(tr);
-      });
-    } catch (error) {
-      console.error('Erro ao carregar os dados:', error);
+        // Coluna 8: Ação (botão para redirecionar com o parâmetro categoria)
+        const tdAcao = document.createElement('td');
+          const btnAcao = document.createElement('button');
+          btnAcao.textContent = "Ver Detalhes";
+          btnAcao.className = "btn btn-primary";
+          btnAcao.addEventListener('click', () => {
+            redirectToMarkup(item.category);
+          });
+          tdAcao.appendChild(btnAcao);
+          tr.appendChild(tdAcao);
+
+          tbody.appendChild(tr);
+        });
+      } catch (error) {
+        console.error('Erro ao carregar os dados:', error);
+      }
     }
-  }
 
   // Ao carregar a página
   document.addEventListener('DOMContentLoaded', async () => {
