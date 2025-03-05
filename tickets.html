@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -111,6 +110,12 @@
     .proximos-table td {
       padding: 10px 12px;
     }
+
+    #inputDollarRate::placeholder {
+      color: #fff;    /* Cor do placeholder */
+      opacity: 0.8;   /* Ajuste conforme desejado */
+    }
+
   </style>
   <!-- ======== Preloader =========== -->
   <div id="preloader">
@@ -708,6 +713,13 @@
               </div>
             </div>
           </div>
+          <!-- QUARTO AJUSTE: Substituir breadcrumb pelo filtro de datas -->
+          <div class="col-md-6">
+            <div id="calendarFilter" style="text-align: right;">
+              <button id="open-calendar-btn" class="btn btn-outline-light">Select Date Range</button>
+              <span id="datas-selecionadas" class="text-white"></span>
+            </div>
+          </div>
           <div class="col-lg-7 col-md-7 col-6">
             <div class="header-right">
               <!-- notification start -->
@@ -1015,7 +1027,7 @@
                         </p>
                       </div>
                       <div>
-                        <span>Aplicar</span>
+                        <span>Clique abaixo</span>
                         <p style="margin: 0;">
                           <!-- Link/“botão” do mesmo tamanho visual do texto -->
                           <a
@@ -1118,18 +1130,39 @@
         ================================================== -->
         <div class="row">
           <div class="col-lg-12 col-xl-12 col-xxl-12">
-            <div class="card-style mb-30">
-              <!-- Cabeçalho do card -->
+            <!-- Alteramos a classe para "activity-card" -->
+            <div class="card-style activity-card mb-30">
               <div class="title d-flex flex-wrap align-items-center justify-content-between mb-10">
                 <div class="left mb-2">
-                  <h6 class="text-medium mb-2">Financeiro | Pedidos</h6>
-                  <p class="text-gray text-sm">Tabela com ordenação e paginação</p>
+                  <h6 class="text-medium mb-2">Recent Activities</h6>
+                  <p class="text-gray text-sm">Lorem ipsum dolor sit amet.</p>
                 </div>
                 <div class="right mb-2">
-                  <button class="main-btn primary-btn btn-hover" onclick="addNewOrder()">Adicionar Pedido</button>
+                  <div class="button-group">
+                    <a href="javascript:void(0)" class="active">Monthly</a>
+                    <a href="javascript:void(0)">Weekly</a>
+                    <a href="javascript:void(0)">Today</a>
+                  </div>
                 </div>
               </div>
-              <!-- Tabela “finance-table” -->
+              <!-- Terceiro ajuste: Cabeçalho dos canais (opcional, exemplo) -->
+              <div class="d-flex flex-column card-top-chanels mt-30">
+                <div class="top-chanels-item">
+                  <div>
+                    <h5 class="text-sm fw-medium text-gray">Source</h5>
+                  </div>
+                  <div class="text-center">
+                    <h5 class="text-sm fw-medium text-gray">Visitors</h5>
+                  </div>
+                  <div class="text-center">
+                    <h5 class="text-sm fw-medium text-gray">Revenues</h5>
+                  </div>
+                  <div class="text-end d-none d-xl-block">
+                    <h5 class="text-sm fw-medium text-gray">Conversion</h5>
+                  </div>
+                </div>
+              </div>
+              <!-- Tabela com ordenação e paginação -->
               <div class="table-responsive">
                 <table class="table finance-table">
                   <thead>
@@ -1154,7 +1187,7 @@
               <div class="pagination-finance" id="pagination-controls"></div>
             </div>
           </div>
-        </div><!-- row do segundo bloco -->
+        </div>
 
         <!-- ===============================================
              (3) Terceiro Bloco: “Próximos Pagamentos”
