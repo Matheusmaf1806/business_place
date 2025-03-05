@@ -713,13 +713,6 @@
               </div>
             </div>
           </div>
-          <!-- QUARTO AJUSTE: Substituir breadcrumb pelo filtro de datas -->
-          <div class="col-md-6">
-            <div id="calendarFilter" style="text-align: right;">
-              <button id="open-calendar-btn" class="btn btn-outline-light">Select Date Range</button>
-              <span id="datas-selecionadas" class="text-white"></span>
-            </div>
-          </div>
           <div class="col-lg-7 col-md-7 col-6">
             <div class="header-right">
               <!-- notification start -->
@@ -907,19 +900,63 @@
             </div>
             <!-- end col -->
             <div class="col-md-6">
-              <div class="breadcrumb-wrapper">
-                <nav aria-label="breadcrumb">
-                  <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                      <a href="#0">Dashboard</a>
-                    </li>
-                    <li class="breadcrumb-item active" aria-current="page">
-                      Crypto
-                    </li>
-                  </ol>
-                </nav>
+              <!-- Seletor de Datas: Calendário -->
+              <div class="date-selector-container" style="text-align: right;">
+                <span id="datas-selecionadas" class="selected-date-display"></span>
+                <button id="open-calendar-btn" class="btn btn-primary">Selecionar Data</button>
               </div>
             </div>
+            <div class="modal fade" id="calendarModal" tabindex="-1" aria-labelledby="calendarModalLabel">
+              <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                  <div class="modal-body">
+                    <div class="calendar">
+                      <div class="calendar__opts">
+                        <select name="calendar__month" id="calendar__month">
+                          <option value="0">Janeiro</option>
+                          <option value="1">Fevereiro</option>
+                          <option value="2">Março</option>
+                          <option value="3">Abril</option>
+                          <option value="4">Maio</option>
+                          <option value="5">Junho</option>
+                          <option value="6">Julho</option>
+                          <option value="7">Agosto</option>
+                          <option value="8">Setembro</option>
+                          <option value="9">Outubro</option>
+                          <option value="10">Novembro</option>
+                          <option value="11">Dezembro</option>
+                        </select>
+                        <select name="calendar__year" id="calendar__year">
+                          <option value="2024">2024</option>
+                          <option value="2025">2025</option>
+                          <option value="2026">2026</option>
+                          <option value="2027">2027</option>
+                          <option value="2028">2028</option>
+                        </select>
+                      </div>
+                      <div class="calendar__body">
+                        <div class="calendar__days">
+                          <div>Dom</div>
+                          <div>Seg</div>
+                          <div>Ter</div>
+                          <div>Qua</div>
+                          <div>Qui</div>
+                          <div>Sex</div>
+                          <div>Sab</div>
+                        </div>
+                        <div class="calendar__dates">
+                          <!-- As datas serão geradas dinamicamente via JavaScript -->
+                        </div>
+                      </div>
+                      <div class="calendar__buttons">
+                        <button class="calendar__button calendar__button--grey" id="back-btn">Back</button>
+                        <button class="calendar__button calendar__button--primary" id="apply-btn">Apply</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>                        
             <!-- end col -->
           </div>
           <!-- end row -->
@@ -1145,38 +1182,25 @@
                   </div>
                 </div>
               </div>
-              <!-- Terceiro ajuste: Cabeçalho dos canais (opcional, exemplo) -->
-              <div class="d-flex flex-column card-top-chanels mt-30">
-                <div class="top-chanels-item">
-                  <div>
-                    <h5 class="text-sm fw-medium text-gray">Source</h5>
-                  </div>
-                  <div class="text-center">
-                    <h5 class="text-sm fw-medium text-gray">Visitors</h5>
-                  </div>
-                  <div class="text-center">
-                    <h5 class="text-sm fw-medium text-gray">Revenues</h5>
-                  </div>
-                  <div class="text-end d-none d-xl-block">
-                    <h5 class="text-sm fw-medium text-gray">Conversion</h5>
-                  </div>
-                </div>
-              </div>
               <!-- Tabela com ordenação e paginação -->
               <div class="table-responsive">
                 <table class="table finance-table">
                   <thead>
                     <tr>
-                      <th data-sort-key="nome">Nome <span class="sort-indicator"></span></th>
-                      <th data-sort-key="id_pedido">ID <span class="sort-indicator"></span></th>
-                      <th data-sort-key="produto">Itens <span class="sort-indicator"></span></th>
-                      <th data-sort-key="valor_calculado">Valor (U$) <span class="sort-indicator"></span></th>
-                      <th data-sort-key="data_uso">Data de Uso <span class="sort-indicator"></span></th>
-                      <th data-sort-key="data_pagamento">Data Pagamento <span class="sort-indicator"></span></th>
-                      <th data-sort-key="identificador">Identificador <span class="sort-indicator"></span></th>
-                      <th data-sort-key="fornecedor">Fornecedor <span class="sort-indicator"></span></th>
-                      <th data-sort-key="status">Status <span class="sort-indicator"></span></th>
-                      <th style="width:50px; text-align:center;">Ação</th>
+                      <thead>
+                        <tr>
+                          <th data-sort-key="nome">Nome <span class="sort-indicator"></span></th>
+                          <th data-sort-key="id_pedido">ID <span class="sort-indicator"></span></th>
+                          <th data-sort-key="produto">Itens <span class="sort-indicator"></span></th>
+                          <th data-sort-key="valor_calculado">Valor (U$) <span class="sort-indicator"></span></th>
+                          <th data-sort-key="data_uso">Data de Uso <span class="sort-indicator"></span></th>
+                          <th data-sort-key="data_pagamento">Data Pagamento <span class="sort-indicator"></span></th>
+                          <th data-sort-key="identificador">Identificador <span class="sort-indicator"></span></th>
+                          <th data-sort-key="fornecedor">Fornecedor <span class="sort-indicator"></span></th>
+                          <th data-sort-key="status">Status <span class="sort-indicator"></span></th>
+                          <th style="width:50px; text-align:center;">Ação</th>
+                        </tr>
+                      </thead>                      
                     </tr>
                   </thead>
                   <tbody id="orders-table">
@@ -1188,50 +1212,6 @@
             </div>
           </div>
         </div>
-
-        <!-- ===============================================
-             (3) Terceiro Bloco: “Próximos Pagamentos”
-                 Substituindo “Sell Order”
-        ================================================== -->
-        <div class="row">
-          <div class="col-md-6 col-lg-3 col-xl-6 col-xxl-3">
-            <div class="card-style mb-30">
-              <div class="title d-flex flex-wrap align-items-center justify-content-between mb-10">
-                <div class="left">
-                  <h6 class="text-medium mb-2">Próximos Pagamentos</h6>
-                </div>
-                <div class="right mb-2">
-                  <div class="more-btn-wrapper mb-10">
-                    <button class="more-btn dropdown-toggle" id="moreAction" data-bs-toggle="dropdown"
-                      aria-expanded="false">
-                      <i class="lni lni-more-alt"></i>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="moreAction">
-                      <li class="dropdown-item"><a href="#0" class="text-gray">Opção 1</a></li>
-                      <li class="dropdown-item"><a href="#0" class="text-gray">Opção 2</a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <!-- Tabela com Data / USD / Reais -->
-              <div class="table-responsive">
-                <table class="table proximos-table">
-                  <thead>
-                    <tr>
-                      <th>Data</th>
-                      <th>Dólar</th>
-                      <th class="text-end">Reais</th>
-                    </tr>
-                  </thead>
-                  <tbody id="proximos-body">
-                    <!-- Preenchido via JS -->
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div><!-- row do terceiro bloco -->
-
       </div><!-- container -->
     </section>
     <!-- ========== section end ========== -->
@@ -2030,8 +2010,8 @@
     try {
       const startDateStr = selectedStartDate ? selectedStartDate.toISOString().split("T")[0] : "";
       const endDateStr = selectedEndDate ? selectedEndDate.toISOString().split("T")[0] : "";
-      const apiUrlPlanilhas = `https://www.magictraveltur.com/api_planilhas.php?start_date=${startDateStr}&end_date=${endDateStr}`;
-      const apiUrlPedidos = "https://www.magictraveltur.com/api_pedidos.php";
+      const apiUrlPlanilhas = `https://www.airland.com.br/supplier/api_planilhas.php?start_date=${startDateStr}&end_date=${endDateStr}`;
+      const apiUrlPedidos = "https://airland.com.br/supplier/api_pedidos.php";
 
       const [respPlan, respPed] = await Promise.all([
         fetch(apiUrlPlanilhas, { credentials: "include" }),
