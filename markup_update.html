@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -837,6 +838,7 @@
                     <tr>
                       <th>Nome</th>
                       <th>ID</th>
+                      <th>Dias</th>
                       <th>Última Alteração</th>
                       <th>Margem (%)</th>
                       <th>Ação</th>
@@ -958,15 +960,20 @@
     /*******************************************************
      * 2) Buscar e exibir os dados de markup
      *******************************************************/
-    async function fetchMarkupData() {
+    async function fetchMarkupData(customUrl) {
+      // Usa a URL passada ou a padrão, forçando a não utilização de cache
+      const finalUrl = customUrl || 'https://airland.com.br/supplier/get_markup_data.php';
       try {
-        // Obtém o parâmetro "categoria" (se existir)
+        // Se houver parâmetro "categoria", adiciona-o à URL
         const categoria = getCategoriaFromURL();
-        let url = 'https://airland.com.br/supplier/get_markup_data.php';
+        let url = finalUrl;
         if (categoria) {
           url += '?categoria=' + encodeURIComponent(categoria);
         }
-        const response = await fetch(url, { credentials: 'include' });
+        const response = await fetch(url, {
+          credentials: 'include',
+          cache: 'no-store'
+        });
         const data = await response.json();
         populateTable(data);
       } catch (error) {
@@ -974,7 +981,7 @@
       }
     }
   
-    // Popula a tabela com os dados recebidos
+    // Popula a tabela com os dados retornados
     function populateTable(data) {
       const tbody = document.querySelector('#markupTable tbody');
       tbody.innerHTML = '';
@@ -991,12 +998,17 @@
         tdId.textContent = item.id_site;
         tr.appendChild(tdId);
   
-        // Coluna 3: Última Alteração (puxado de supplier_categories_margin -> updated_at)
+        // Coluna 3: Dias (campo "day" do banco)
+        const tdDays = document.createElement('td');
+        tdDays.textContent = item.day ? item.day : '-';
+        tr.appendChild(tdDays);
+  
+        // Coluna 4: Última Alteração (puxado de supplier_categories_margin -> updated_at)
         const tdUpdated = document.createElement('td');
         tdUpdated.textContent = item.updated_at ? item.updated_at : '-';
         tr.appendChild(tdUpdated);
   
-        // Coluna 4: Margem (editável; valor de supplier_categories_margin -> margin)
+        // Coluna 5: Margem (editável; valor de supplier_categories_margin -> margin)
         const tdMargin = document.createElement('td');
         const inputMargin = document.createElement('input');
         inputMargin.type = 'text';
@@ -1005,7 +1017,7 @@
         tdMargin.appendChild(inputMargin);
         tr.appendChild(tdMargin);
   
-        // Coluna 5: Ação (botão para atualizar)
+        // Coluna 6: Ação (botão para atualizar)
         const tdAction = document.createElement('td');
         const btnUpdate = document.createElement('button');
         btnUpdate.textContent = 'Atualizar';
@@ -1039,8 +1051,9 @@
         const result = await response.json();
         if (result.success) {
           alert('Margem atualizada com sucesso!');
-          // Recarrega os dados para atualizar a tabela
-          fetchMarkupData();
+          // Força nova requisição sem cache, adicionando um parâmetro único à URL
+          const forcedUrl = 'https://airland.com.br/supplier/get_markup_data.php?_=' + Date.now();
+          fetchMarkupData(forcedUrl);
         } else {
           alert('Erro ao atualizar: ' + result.message);
         }
@@ -1054,13 +1067,13 @@
      * Inicialização
      *******************************************************/
     document.addEventListener('DOMContentLoaded', async () => {
-      await checkSession();           // Verifica sessão
+      await checkSession();           // Verifica a sessão
       exibirCategoriaNoTitulo();      // Atualiza o título com a categoria (se houver)
       fetchMarkupData();              // Carrega os dados na tabela
       // Remove o preloader
       document.getElementById('preloader').style.display = 'none';
     });
-  </script>  
+  </script>    
   <!-- ========= All Javascript files linkup ======== -->
   <script src="assets/js/bootstrap.bundle.min.js"></script>
   <script src="assets/js/Chart.min.js"></script>
