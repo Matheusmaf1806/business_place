@@ -1130,6 +1130,8 @@
     fillProfileFromLocalStorage();  // Preenche perfil local
     fetchUserProfile();             // (opcional) busca perfil atualizado
     carregarTabela();               // Carrega os dados na tabela
+  // Remove o preloader
+    document.getElementById('preloader').style.display = 'none';
   });
 </script>
   <script src="assets/js/bootstrap.bundle.min.js"></script>
