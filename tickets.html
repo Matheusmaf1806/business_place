@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="shortcut icon" href="assets/images/favicon.svg" type="image/x-icon" />
-  <title>Crypto Dashboard | PlainAdmin Demo</title>
 
-  <!-- ========== All CSS files linkup ========= -->
+  <title>Pedidos - Magic Travel</title>
+
+  <!-- ========== CSS do PlainAdmin / Bootstrap / etc. ========== -->
+  <link rel="shortcut icon" href="assets/images/favicon.svg" type="image/x-icon" />
   <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
   <link rel="stylesheet" href="assets/css/lineicons.css" />
   <link rel="stylesheet" href="assets/css/quill/bubble.css" />
@@ -18,34 +19,59 @@
   <link rel="stylesheet" href="assets/css/datatable.css" />
   <link rel="stylesheet" href="assets/css/main.css" />
 
+  <!-- Se quiser ícones do Bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+
   <style>
-    /* Pequeno ajuste para tabela do Financeiro | Pedidos */
+    /* ============= Ajustes adicionais de estilo ============= */
+    /* Tabela "Financeiro | Pedidos" */
     .finance-table thead th {
       background-color: #f5f6fa;
       font-weight: 600;
+      cursor: pointer;
+      user-select: none;
+      position: relative; /* p/ setas */
+    }
+    .finance-table tbody tr:nth-child(even) {
+      background-color: #f9fafc;
     }
     .finance-table tbody tr:hover {
       background-color: #eef4ff;
       cursor: pointer;
     }
-    .status-badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 100px;
-      padding: 6px 10px;
-      border-radius: 4px;
-      color: #fff;
-      font-size: 12px;
-      font-weight: 600;
-      border: none;
+    .sort-indicator {
+      margin-left: 6px;
+      font-size: 0.75rem;
+      opacity: 0.7;
     }
-    .status-concluido { background-color: #1cbb8c; }
-    .status-naopago   { background-color: #dc3545; }
-    .status-tif       { background-color: #fcb92c; }
-    .status-aguardando{ background-color: #3b7ddd; }
-    .status-bloqueada { background-color: #dc3545; }
-    .status-sem       { background-color: #6c757d; }
+    .sort-indicator.asc::before {
+      content: "\\2191"; /* seta para cima */
+    }
+    .sort-indicator.desc::before {
+      content: "\\2193"; /* seta para baixo */
+    }
+    /* Botões de paginação */
+    .pagination-finance {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .pagination-finance button {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 4px;
+      background: #4a6cf7;
+      color: #fff;
+      cursor: pointer;
+    }
+    .pagination-finance button:disabled {
+      background: #cccccc;
+      cursor: not-allowed;
+    }
+    /* Caso queira usar as classes do PlainAdmin para status 
+       (exemplo: success-btn, danger-btn, warning-btn, etc.)
+       Aqui iremos criar uma conversão no JS. */
   </style>
 </head>
 
@@ -64,37 +90,30 @@
       </a>
     </div>
     <nav class="sidebar-nav">
-      <!-- (Conteúdo padrão do sidebar) -->
-      <!-- Mantendo do código novo, truncado aqui apenas para exemplo -->
+      <!-- Conteúdo original do tema PlainAdmin (links do menu) -->
       <ul>
         <li class="nav-item nav-item-has-children">
           <a href="#0" data-bs-toggle="collapse" data-bs-target="#ddmenu_1" aria-controls="ddmenu_1"
             aria-expanded="false" aria-label="Toggle navigation">
             <span class="icon">
-              <!-- Ícone -->
-              <svg width="20" height="20" ...>...</svg>
+              <!-- Exemplo de ícone -->
+              <svg width="20" height="20" ...> ... </svg>
             </span>
             <span class="text">Dashboard</span>
           </a>
           <ul id="ddmenu_1" class="collapse show dropdown-nav">
-            <li>
-              <a href="index.html"> eCommerce </a>
-            </li>
-            <li>
-              <a href="analytics-dashboard.html">Analytics</a>
-            </li>
-            <li>
-              <a href="crypto.html" class="active">Crypto</a>
-            </li>
-            <!-- etc... -->
+            <li><a href="index.html"> eCommerce </a></li>
+            <li><a href="analytics-dashboard.html"> Analytics </a></li>
+            <li><a href="crypto.html" class="active"> Crypto </a></li>
+            <!-- etc. -->
           </ul>
         </li>
-        <!-- Outras entradas do menu... -->
+        <!-- ... demais menus ... -->
       </ul>
     </nav>
     <div class="promo-box">
       <div class="promo-icon">
-        <img class="mx-auto" src="./assets/images/logo/logo-icon-big.svg" alt="Logo">
+        <img class="mx-auto" src="assets/images/logo/logo-icon-big.svg" alt="Logo">
       </div>
       <h3>Upgrade to PRO</h3>
       <p>Improve your development process and start doing more with PlainAdmin PRO!</p>
@@ -111,13 +130,28 @@
     <!-- ========== header start ========== -->
     <header class="header">
       <div class="container-fluid">
-        <!-- Conteúdo padrão do header (botão de menu, notificações, perfil etc.) -->
+        <!-- Conteúdo padrão do cabeçalho (logo, busca, perfil, etc.) -->
         <div class="row">
           <div class="col-lg-5 col-md-5 col-6">
-            <!-- ... -->
+            <div class="header-left d-flex align-items-center">
+              <div class="menu-toggle-btn mr-15">
+                <button id="menu-toggle" class="main-btn primary-btn btn-hover">
+                  <i class="lni lni-chevron-left me-2"></i> Menu
+                </button>
+              </div>
+              <div class="header-search d-none d-md-flex">
+                <form action="#">
+                  <input type="text" placeholder="Search..." />
+                  <button><i class="lni lni-search-alt"></i></button>
+                </form>
+              </div>
+            </div>
           </div>
           <div class="col-lg-7 col-md-7 col-6">
-            <!-- ... -->
+            <div class="header-right">
+              <!-- Notificações, Mensagens, Perfil etc... (padrão do template) -->
+              <!-- ... -->
+            </div>
           </div>
         </div>
       </div>
@@ -149,56 +183,51 @@
         </div>
         <!-- ========== title-wrapper end ========== -->
 
-        <!-- =====================================
-             1) PRIMEIRO AJUSTE: 3 cartões
+        <!-- ======================================
+             (1) Primeiro Bloco: 3 single-cards 
+             usando cores e textos solicitados
         ====================================== -->
         <div class="row">
-          <!-- Cartão 1: rgb(54, 92, 245) -->
-          <div class="col-xl-4 col-lg-4 col-sm-6">
+          <div class="col-lg-12">
             <div class="card-style card-wrapper mb-30">
+              <!-- 1) Total a Pagar (U$) [rgb(54, 92, 245)] -->
               <div class="single-card-wrapper">
                 <div class="single-card" style="background-color: rgb(54, 92, 245);">
                   <span class="text-sm text-white fw-500">Total a Pagar (U$)</span>
-                  <h3 id="cardTotalUsd">$ 1,000.00</h3>
+                  <h3 id="cardTotalUsd" style="color: #fff;">$0.00</h3>
+                  <!-- Espaço se quiser subtítulo/comparativo -->
                   <div class="card-info">
                     <div class="mr-15">
-                      <span>Comparativo</span>
-                      <p id="comparativoUsd">+10% vs anterior</p>
+                      <span style="color:#fff;">Comparativo</span>
+                      <p id="comparativoUsd" style="color:#fff;">...</p>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-          <!-- Cartão 2: rgb(52, 93, 157) -->
-          <div class="col-xl-4 col-lg-4 col-sm-6">
-            <div class="card-style card-wrapper mb-30">
+              <!-- 2) Total de Itens [rgb(52, 93, 157)] -->
               <div class="single-card-wrapper">
                 <div class="single-card" style="background-color: rgb(52, 93, 157);">
                   <span class="text-sm text-white fw-500">Total de Itens</span>
-                  <h3 id="cardTotalItens">15 Pedidos</h3>
+                  <h3 id="cardTotalItens" style="color: #fff;">0</h3>
                   <div class="card-info">
                     <div class="mr-15">
-                      <span>Comparativo</span>
-                      <p id="comparativoItens">+5% vs anterior</p>
+                      <span style="color:#fff;">Comparativo</span>
+                      <p id="comparativoItens" style="color:#fff;">...</p>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-          <!-- Cartão 3: #219653 -->
-          <div class="col-xl-4 col-lg-4 col-sm-6">
-            <div class="card-style card-wrapper mb-30">
+              <!-- 3) Valor a Pagar (R$) [#219653] -->
               <div class="single-card-wrapper">
                 <div class="single-card" style="background-color: #219653;">
                   <span class="text-sm text-white fw-500">Valor a Pagar (R$)</span>
-                  <h3 id="cardTotalReais">R$ 5.57</h3>
+                  <h3 id="cardTotalReais" style="color: #fff;">R$ 5.57</h3>
                   <div class="card-info">
                     <div class="mr-15">
-                      <span>Cotação usada</span>
-                      <p>Exemplo: R$ 5.57/USD</p>
+                      <span style="color:#fff;">Cotação Exemplo</span>
+                      <p style="color:#fff;">(Editável JS)</p>
                     </div>
+                    <!-- Se quiser input manual, pode replicar do old code -->
                   </div>
                 </div>
               </div>
@@ -206,53 +235,53 @@
           </div>
         </div><!-- row -->
 
-
-        <!-- =====================================
-             2) SEGUNDO AJUSTE: Financeiro | Pedidos
+        <!-- ======================================
+             (2) Segundo Bloco: Financeiro | Pedidos 
+             substituindo "Recent Activities"
         ====================================== -->
         <div class="row">
           <div class="col-lg-12 col-xl-12 col-xxl-12">
             <div class="card-style mb-30">
-              <!-- Cabeçalho -->
+              <!-- Cabeçalho do Card -->
               <div class="title d-flex flex-wrap align-items-center justify-content-between mb-10">
                 <div class="left mb-2">
                   <h6 class="text-medium mb-2">Financeiro | Pedidos</h6>
-                  <p class="text-gray text-sm">Tabela de pedidos (código antigo + layout novo)</p>
+                  <p class="text-gray text-sm">Tabela unindo código antigo + layout novo</p>
                 </div>
                 <div class="right mb-2">
-                  <button class="main-btn primary-btn btn-hover" id="add-order-btn">Adicionar Pedido</button>
+                  <button class="main-btn primary-btn btn-hover" onclick="addNewOrder()">Adicionar Pedido</button>
                 </div>
               </div>
-              <!-- Tabela (estrutura do antigo) -->
+              <!-- Tabela -->
               <div class="table-responsive">
                 <table class="table finance-table">
                   <thead>
                     <tr>
-                      <th data-sort-key="nome">Nome</th>
-                      <th data-sort-key="id_pedido">ID do Pedido</th>
-                      <th data-sort-key="produto">Itens</th>
-                      <th data-sort-key="valor_calculado">Valor (U$)</th>
-                      <th data-sort-key="data_uso">Data de Uso</th>
-                      <th data-sort-key="data_pagamento">Data de Pagamento</th>
-                      <th data-sort-key="identificador">Identificador</th>
-                      <th data-sort-key="fornecedor">Fornecedor</th>
-                      <th data-sort-key="status">Status</th>
+                      <th data-sort-key="nome">Nome <span class="sort-indicator"></span></th>
+                      <th data-sort-key="id_pedido">ID do Pedido <span class="sort-indicator"></span></th>
+                      <th data-sort-key="produto">Itens <span class="sort-indicator"></span></th>
+                      <th data-sort-key="valor_calculado">Valor (U$) <span class="sort-indicator"></span></th>
+                      <th data-sort-key="data_uso">Data de Uso <span class="sort-indicator"></span></th>
+                      <th data-sort-key="data_pagamento">Data de Pagamento <span class="sort-indicator"></span></th>
+                      <th data-sort-key="identificador">Identificador <span class="sort-indicator"></span></th>
+                      <th data-sort-key="fornecedor">Fornecedor <span class="sort-indicator"></span></th>
+                      <th data-sort-key="status">Status <span class="sort-indicator"></span></th>
                       <th style="width:50px; text-align:center;">Ação</th>
                     </tr>
                   </thead>
-                  <tbody id="orders-table"></tbody>
+                  <tbody id="orders-table">
+                    <!-- Preenchido via JS -->
+                  </tbody>
                 </table>
               </div>
               <!-- Paginação -->
-              <div class="d-flex justify-content-center" id="pagination-controls" style="gap:5px;"></div>
+              <div class="pagination-finance" id="pagination-controls"></div>
             </div>
           </div>
         </div><!-- row -->
 
-
-        <!-- =====================================
-             3) TERCEIRO AJUSTE: Sell Order -> 
-                Data / Dolar / Reais
+        <!-- ======================================
+             (3) Terceiro Bloco: "Sell Order" -> "Próximos Pagamentos"
         ====================================== -->
         <div class="row">
           <div class="col-md-6 col-lg-3 col-xl-6 col-xxl-3">
@@ -268,24 +297,24 @@
                       <i class="lni lni-more-alt"></i>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="moreAction">
-                      <li class="dropdown-item"><a href="#0" class="text-gray">Opção A</a></li>
-                      <li class="dropdown-item"><a href="#0" class="text-gray">Opção B</a></li>
+                      <li class="dropdown-item"><a href="#0" class="text-gray">Opção 1</a></li>
+                      <li class="dropdown-item"><a href="#0" class="text-gray">Opção 2</a></li>
                     </ul>
                   </div>
                 </div>
               </div>
-              <!-- Tabela com Data / Dolar / Reais -->
+              <!-- Tabela Data / Dólar / Reais -->
               <div class="table-responsive">
-                <table class="table sell-order-table">
+                <table class="table">
                   <thead>
                     <tr>
-                      <th><h6 class="text-sm fw-500">Data</h6></th>
-                      <th><h6 class="text-sm fw-500">Dólar</h6></th>
-                      <th class="text-end"><h6 class="text-sm fw-500">Reais</h6></th>
+                      <th>Data</th>
+                      <th>Dólar</th>
+                      <th class="text-end">Reais</th>
                     </tr>
                   </thead>
-                  <tbody id="proximos-dias-body">
-                    <!-- Preenchido dinamicamente pelo JS -->
+                  <tbody id="proximos-body">
+                    <!-- Preenchido dinamicamente em fillProximosDias() -->
                   </tbody>
                 </table>
               </div>
@@ -293,8 +322,7 @@
           </div>
         </div><!-- row -->
 
-      </div>
-      <!-- end container -->
+      </div> <!-- end container -->
     </section>
     <!-- ========== section end ========== -->
 
@@ -319,11 +347,11 @@
         </div>
       </div>
     </footer>
-    <!-- ========== footer end =========== -->
+    <!-- ========== footer end ========== -->
   </main>
   <!-- ======== main-wrapper end =========== -->
 
-  <!-- ============ Theme Option Start ============= -->
+  <!-- ============ Theme Option (padrão do PlainAdmin) ============= -->
   <button class="option-btn">
     <i class="lni lni-cog"></i>
   </button>
@@ -331,9 +359,7 @@
   <div class="option-box">
     <div class="option-header">
       <h5>Settings</h5>
-      <button class="option-btn-close text-gray">
-        <i class="lni lni-close"></i>
-      </button>
+      <button class="option-btn-close text-gray"><i class="lni lni-close"></i></button>
     </div>
     <h6 class="mb-10">Layout</h6>
     <ul class="mb-30">
@@ -342,14 +368,12 @@
     </ul>
     <h6 class="mb-10">Theme</h6>
     <ul class="d-flex flex-wrap align-items-center">
-      <li>
-        <button class="lightThemeButton active"> Light Theme + Sidebar 1 </button>
-      </li>
+      <li><button class="lightThemeButton active">Light Theme + Sidebar 1</button></li>
       <li><button class="darkThemeButton">Dark Theme + Sidebar 1</button></li>
     </ul>
     <div class="promo-box">
       <div class="promo-icon">
-        <img class="mx-auto" src="./assets/images/logo/logo-icon-big.svg" alt="Logo">
+        <img class="mx-auto" src="assets/images/logo/logo-icon-big.svg" alt="Logo">
       </div>
       <h3>Upgrade to PRO</h3>
       <p>Improve your development process and start doing more with PlainAdmin PRO!</p>
@@ -360,7 +384,7 @@
   </div>
   <!-- ============ Theme Option End ============= -->
 
-  <!-- ========= All Javascript files linkup ======== -->
+  <!-- ========= Scripts do Template (Bootstrap, Chart, etc.) ======== -->
   <script src="assets/js/bootstrap.bundle.min.js"></script>
   <script src="assets/js/Chart.min.js"></script>
   <script src="assets/js/apexcharts.min.js"></script>
@@ -375,116 +399,75 @@
   <script src="assets/js/Sortable.min.js"></script>
   <script src="assets/js/main.js"></script>
 
-  <!-- ========== Nosso JavaScript unindo as lógicas ========== -->
+  <!-- ========== Nosso JavaScript Unindo Lógicas do Código Antigo + Novo ========== -->
   <script>
-    /****************************************
-     * Exemplo: Variáveis para Tabela Financeiro
-     ****************************************/
+    /* -------------------------------
+       Variáveis Globais (ex do código antigo)
+    --------------------------------*/
+    let combinedOrders = [];     // Receberá dados das APIs
+    let displayedOrders = [];    // Subconjunto filtrado
     let currentPage = 1;
-    const rowsPerPage = 5;
+    const rowsPerPage = 10;
     const sortDirections = {};
 
-    // Exemplo de "combinedOrders" fictícios (no real, poderia vir de fetch API)
-    let combinedOrders = [
-      {
-        nome: "Ana Silva",
-        id_pedido: "1001",
-        produto: "Ingresso + Hotel",
-        valor_calculado: "250.00",
-        data_uso: "2025-03-10",
-        data_pagamento: "2025-03-15",
-        identificador: "#MT-001",
-        fornecedor: "Disney",
-        status: "emitido – não pago"
-      },
-      {
-        nome: "João Pereira",
-        id_pedido: "1002",
-        produto: "Hotel",
-        valor_calculado: "420.00",
-        data_uso: "2025-03-20",
-        data_pagamento: "2025-03-21",
-        identificador: "#MT-002",
-        fornecedor: "Booking.com",
-        status: "concluído"
-      },
-      {
-        nome: "Maria Souza",
-        id_pedido: "1003",
-        produto: "Ingressos",
-        valor_calculado: "180.00",
-        data_uso: "2025-03-20",
-        data_pagamento: "2025-03-25",
-        identificador: "#MT-003",
-        fornecedor: "Universal",
-        status: "emitido tif"
-      },
-      {
-        nome: "Paulo Lima",
-        id_pedido: "1004",
-        produto: "Hotel + Ingresso",
-        valor_calculado: "320.00",
-        data_uso: "2025-04-01",
-        data_pagamento: "",
-        identificador: "#MT-004",
-        fornecedor: "Disney",
-        status: "aguardando emissão"
-      },
-      {
-        nome: "Carlos Santos",
-        id_pedido: "1005",
-        produto: "Transfer",
-        valor_calculado: "90.00",
-        data_uso: "2025-05-10",
-        data_pagamento: "2025-05-09",
-        identificador: "#MT-005",
-        fornecedor: "Traslados Inc",
-        status: "emissão bloqueada"
-      },
-      // ... pode ter mais
-    ];
-    let displayedOrders = [...combinedOrders];
+    // Exemplo de datas para filtrar (se desejar)
+    let selectedStartDate = null;
+    let selectedEndDate = null;
 
-    /*************************************
-     * Exemplo de Funções do código antigo
-     *************************************/
+    // Exemplo de cotações do código antigo
+    const ultimaCotacaoFechamento   = 5.79;
+    const penultimaCotacaoFechamento= 5.75;
+    // + 0.98% spread
+    let cotacaoEmUso     = parseFloat((ultimaCotacaoFechamento * (1 + 0.0098)).toFixed(2));
+    let cotacaoPenultima = parseFloat((penultimaCotacaoFechamento * (1 + 0.0098)).toFixed(2));
+
+    /* -------------------------------
+       1) Funções p/ Financeiro | Pedidos
+    --------------------------------*/
+    function addNewOrder() {
+      alert("Ir para Adicionar Pedido? Exemplo...");
+      // ou window.location.href = "https://business.magictraveltur.com/loti.html";
+    }
+    function openDetailsPage(orderId) {
+      alert("Abrir detalhes do pedido " + orderId + " (exemplo).");
+      // ou window.open(`detalhes.html?pedido=${orderId}`, '_blank');
+    }
     function normalizeStatus(st) {
       if (!st) return "";
       return st.toLowerCase().trim();
     }
-    function formatDate(yyyy_mm_dd) {
-      if (!yyyy_mm_dd) return "";
-      const [y,m,d] = yyyy_mm_dd.split("-").map(Number);
-      return `${String(d).padStart(2,"0")}/${String(m).padStart(2,"0")}/${y}`;
-    }
-    function getStatusBadge(st) {
-      const status = normalizeStatus(st);
-      switch(status) {
-        case "concluído":
-          return `<span class="status-badge status-concluido">Concluído</span>`;
-        case "emitido – não pago":
-          return `<span class="status-badge status-naopago">Emitido – Não Pago</span>`;
-        case "emitido tif":
-          return `<span class="status-badge status-tif">Emitido TIF</span>`;
-        case "aguardando emissão":
-          return `<span class="status-badge status-aguardando">Aguardando Emissão</span>`;
-        case "emissão bloqueada":
-          return `<span class="status-badge status-bloqueada">Emissão Bloqueada</span>`;
-        default:
-          return `<span class="status-badge status-sem">${st || 'Sem Status'}</span>`;
+    // Exemplo: converter status p/ classes de btn do PlainAdmin
+    function getStatusClass(st) {
+      switch(st) {
+        case "concluído":          return "success-btn";
+        case "aguardando emissão": return "danger-btn"; // ou outro
+        case "emitido tif":        return "warning-btn";
+        case "emissão bloqueada":  return "dark-btn";
+        case "emitido – não pago": return "active-btn";
+        default: return "secondary-btn";
       }
     }
-    function openDetailsPage(orderId) {
-      alert("Abrir detalhes do pedido " + orderId + " (exemplo).");
+    function formatDate(str){
+      if(!str) return "";
+      const [yyyy,mm,dd] = str.split("-").map(Number);
+      return `${String(dd).padStart(2,"0")}/${String(mm).padStart(2,"0")}/${yyyy}`;
     }
     function renderTable(data) {
-      const ordersTable = document.getElementById('orders-table');
-      const start = (currentPage - 1) * rowsPerPage;
-      const end   = start + rowsPerPage;
-      const slice = data.slice(start, end);
+      const tbody = document.getElementById("orders-table");
+      // Paginação
+      const start = (currentPage - 1)*rowsPerPage;
+      const end = start + rowsPerPage;
+      const slice = data.slice(start,end);
 
       let html = "";
       slice.forEach(o => {
+        const stNorm = normalizeStatus(o.status);
+        const stClass = getStatusClass(stNorm);
+        // Exemplo: botões do PlainAdmin = <a class="main-btn success-btn">
+        // Ajustamos o label do status
+        const statusHtml = `<a class="main-btn ${stClass} btn-hover" style="padding:4px 10px; font-size:12px;">
+          ${o.status || 'Sem Status'}</a>`;
+
         html += `
           <tr>
             <td>${o.nome}</td>
@@ -495,424 +478,267 @@
             <td>${formatDate(o.data_pagamento)}</td>
             <td>${o.identificador}</td>
             <td>${o.fornecedor}</td>
-            <td>${getStatusBadge(o.status)}</td>
+            <td>${statusHtml}</td>
             <td style="width:50px; text-align:center;">
-              <i class="lni lni-eye" style="cursor:pointer;"
+              <i class="bi bi-eye" style="cursor:pointer;" 
                  onclick="openDetailsPage('${o.id_pedido}')"></i>
             </td>
           </tr>
         `;
       });
-      ordersTable.innerHTML = html;
+      tbody.innerHTML = html;
     }
     function renderPagination(data) {
-      const pagination = document.getElementById('pagination-controls');
+      const pagination = document.getElementById("pagination-controls");
       pagination.innerHTML = "";
-      const totalPages = Math.ceil(data.length / rowsPerPage);
-      for (let i = 1; i <= totalPages; i++) {
-        const btn = document.createElement('button');
+      const totalPages = Math.ceil(data.length/rowsPerPage);
+      for (let i=1; i<= totalPages; i++){
+        const btn = document.createElement("button");
         btn.textContent = i;
-        btn.disabled = (i === currentPage);
-        btn.addEventListener('click', () => {
+        btn.disabled = (i=== currentPage);
+        btn.onclick = ()=> {
           currentPage = i;
           renderTable(displayedOrders);
           renderPagination(displayedOrders);
-        });
+        };
         pagination.appendChild(btn);
       }
     }
-    function compareValues(a, b, key, dir) {
+    function compareValues(a,b,key,dir){
       let valA = a[key], valB = b[key];
       // Se for data
-      if(key==="data_uso" || key==="data_pagamento"){
+      if(key==="data_uso"||key==="data_pagamento"){
         if(!valA) valA="0000-00-00";
         if(!valB) valB="0000-00-00";
         valA = new Date(valA).getTime();
         valB = new Date(valB).getTime();
       }
-      // Se for valor
       else if(key==="valor_calculado"){
-        valA = parseFloat(valA) || 0;
-        valB = parseFloat(valB) || 0;
-      }
-      // Caso string
-      else {
+        valA = parseFloat(valA)||0;
+        valB = parseFloat(valB)||0;
+      } else {
         valA = String(valA).toLowerCase();
         valB = String(valB).toLowerCase();
       }
-      if(valA < valB) return (dir==="asc") ? -1 : 1;
-      if(valA> valB)  return (dir==="asc") ?  1 : -1;
+      if(valA<valB) return (dir==="asc")? -1:1;
+      if(valA>valB) return (dir==="asc")? 1:-1;
       return 0;
     }
     function sortColumn(key) {
       const currentDir = sortDirections[key] || null;
       let newDir = "asc";
-      if(currentDir==="asc") {
-        newDir = "desc";
-      } else if(currentDir==="desc") {
-        newDir = "asc";
-      }
+      if(currentDir==="asc") newDir="desc";
+      else if(currentDir==="desc") newDir="asc";
       // reset
-      for(let k in sortDirections) sortDirections[k] = null;
-      sortDirections[key] = newDir;
+      for (let k in sortDirections) sortDirections[k]= null;
+      sortDirections[key]= newDir;
       displayedOrders.sort((a,b)=>compareValues(a,b,key,newDir));
-      currentPage = 1;
+      updateSortIndicators(key,newDir);
+      currentPage =1;
       renderTable(displayedOrders);
       renderPagination(displayedOrders);
     }
-    function initSortingEvents() {
+    function updateSortIndicators(activeKey,direction) {
       const ths = document.querySelectorAll('.finance-table thead th');
       ths.forEach(th => {
+        const span = th.querySelector('.sort-indicator');
+        if(span) span.classList.remove("asc","desc");
+      });
+      const activeTh = document.querySelector(`th[data-sort-key="${activeKey}"]`);
+      if(activeTh){
+        const sp = activeTh.querySelector('.sort-indicator');
+        if(sp){
+          if(direction==="asc") sp.classList.add("asc");
+          if(direction==="desc")sp.classList.add("desc");
+        }
+      }
+    }
+    function initSortingEvents(){
+      const ths = document.querySelectorAll('.finance-table thead th');
+      ths.forEach(th=>{
         const sortKey = th.getAttribute('data-sort-key');
         if(sortKey){
-          th.addEventListener('click', ()=>sortColumn(sortKey));
+          th.addEventListener('click', ()=> sortColumn(sortKey));
         }
       });
     }
 
-    /****************************************************
-     * Bloco 3: Preencher “Próximos Pagamentos” (Sell Order)
-     ****************************************************/
-    function fillProximosDias() {
-      const tBody = document.getElementById("proximos-dias-body");
-      tBody.innerHTML = "";
-      // Pegamos a data de hoje
-      const today = new Date();
-      // Exemplo: Lemos a “cotação” do 3º cartão
-      const cardReaisText = document.getElementById("cardTotalReais").textContent;
-      // Ex.: “R$ 5.57” => extrair 5.57
-      let exchangeRate = 5.57; // fallback
-      const match = cardReaisText.match(/([\d.,]+)/);
-      if(match) {
-        exchangeRate = parseFloat(match[1].replace(",","."));
-        if(isNaN(exchangeRate)) exchangeRate = 5.57;
+    /* -------------------------------
+       2) Calcular Totais e Comparativos
+          (exemplo do old code)
+    --------------------------------*/
+    function calcPercentChange(newVal, oldVal){
+      if(oldVal===0){
+        if(newVal===0) return 0;
+        return 100;
       }
+      return ((newVal - oldVal)/ oldVal)*100;
+    }
+    function calculateIntervalData(orders){
+      // Exemplo: soma do valor_calculado se status = emitido – não pago, etc...
+      // (Você pode customizar conforme a lógica do antigo)
+      let totalUsd=0;
+      let pedidosSet= new Set();
+      orders.forEach(o=>{
+        const st = normalizeStatus(o.status);
+        if(["emitido – não pago","emitido tif","emissão bloqueada"].includes(st)){
+          const v= parseFloat(o.valor_calculado)||0;
+          totalUsd+= v;
+        }
+        pedidosSet.add(o.id_pedido);
+      });
+      return {
+        totalUsd,
+        totalPedidos: pedidosSet.size
+      };
+    }
+    function atualizarResumo() {
+      const dataCalc = calculateIntervalData(displayedOrders);
+      const totalUsd= dataCalc.totalUsd;
+      const totPedidos= dataCalc.totalPedidos;
+      // Mostramos nos cartões
+      document.getElementById("cardTotalUsd").textContent = `U$ ${totalUsd.toFixed(2)}`;
+      // Exemplo comparativo
+      const oldValue=100; // Fictício
+      const pct= calcPercentChange(totalUsd, oldValue);
+      document.getElementById("comparativoUsd").textContent=
+        (pct>=0)? `+${pct.toFixed(1)}% vs ant.` : `${pct.toFixed(1)}% vs ant.`;
 
-      // Vamos supor que cada dia aumenta 100 US$ para exemplo
-      // Dia 1 => US$100, Dia 2 => US$200 etc.
-      let baseUsd = 100;
+      document.getElementById("cardTotalItens").textContent= `${totPedidos}`;
+      // Idem comparativo
+      document.getElementById("comparativoItens").textContent= `...`;
 
-      for(let i=1; i<=5; i++) {
-        const prox = new Date(today.getFullYear(), today.getMonth(), today.getDate()+i);
-        const d = String(prox.getDate()).padStart(2,"0");
-        const m = String(prox.getMonth()+1).padStart(2,"0");
-        const y = prox.getFullYear();
+      // Em Reais
+      // Pegamos do 3º cartão (Valor a Pagar (R$)), ex: "R$ 5.57"
+      let exchange=5.57;
+      const txt = document.getElementById("cardTotalReais").textContent;
+      const match= txt.match(/([\d.,]+)/);
+      if(match) {
+        exchange= parseFloat(match[1].replace(",","."))||5.57;
+      }
+      const totReais= totalUsd * exchange;
+      // Se quiser atualizar o 3º card:
+      document.getElementById("cardTotalReais").textContent= `R$ ${exchange.toFixed(2)}`;
+    }
 
-        const usd = baseUsd*i;  // ex: 100, 200, 300 ...
-        const brl = (usd * exchangeRate).toFixed(2);
+    /* -------------------------------
+       3) Carregar as APIs (old code)
+    --------------------------------*/
+    async function loadOrders(){
+      try {
+        // Se quiser filtrar por data (selectedStartDate, selectedEndDate), ex:
+        const startDate= selectedStartDate ? selectedStartDate.toISOString().split('T')[0] : "";
+        const endDate= selectedEndDate ? selectedEndDate.toISOString().split('T')[0] : "";
 
-        const tr = `
-          <tr>
-            <td><p class="text-sm fw-500 text-gray">${d}/${m}/${y}</p></td>
-            <td><p class="text-sm fw-500 text-gray">U$ ${usd.toFixed(2)}</p></td>
-            <td class="text-end"><p class="text-sm fw-500 text-gray">R$ ${brl}</p></td>
-          </tr>
-        `;
-        tBody.insertAdjacentHTML("beforeend", tr);
+        // Ajuste as URLs:
+        const apiUrlPlanilhas = `https://www.magictraveltur.com/api_planilhas.php?start_date=${startDate}&end_date=${endDate}`;
+        const apiUrlPedidos   = `https://www.magictraveltur.com/api_pedidos.php`;
+
+        // fetch duplo
+        const [respPlanilhas, respPedidos] = await Promise.all([
+          fetch(apiUrlPlanilhas, {credentials:'include'}),
+          fetch(apiUrlPedidos,   {credentials:'include'}),
+        ]);
+        if(!respPlanilhas.ok) throw new Error(`Erro planilhas: ${respPlanilhas.status}`);
+        if(!respPedidos.ok)   throw new Error(`Erro pedidos: ${respPedidos.status}`);
+
+        const planilhasData = await respPlanilhas.json();
+        const pedidosData   = await respPedidos.json();
+        if(!Array.isArray(planilhasData) || !Array.isArray(pedidosData)){
+          console.error("Erro de dados, arrays esperados");
+          return;
+        }
+        // Mapeamos pedidos id -> nome
+        const pedidosMap = {};
+        pedidosData.forEach(p => { pedidosMap[p.id] = p.nome; });
+
+        // Montamos combinedOrders
+        combinedOrders= planilhasData.map(pl=>{
+          const totalUsd= parseFloat(pl.total_usd)||0;
+          const lobista= parseFloat(pl.lobista)||0;
+          const valorCalc= (totalUsd - lobista).toFixed(2);
+          return {
+            nome: (pedidosMap[pl.id_pedido]||"N/A"),
+            id_pedido: pl.id_pedido,
+            produto: pl.produto||"",
+            valor_calculado: valorCalc,
+            data_uso: pl.data||"",
+            data_pagamento: pl.data_pagamento||"",
+            identificador: pl.identificador||"",
+            fornecedor: pl.fornecedor||"",
+            status: pl.status||"",
+          };
+        });
+        // Por padrão exibimos todos
+        displayedOrders= combinedOrders.slice();
+        // Renderizamos
+        currentPage=1;
+        renderTable(displayedOrders);
+        renderPagination(displayedOrders);
+        atualizarResumo();
+
+      } catch(err){
+        console.error("Erro ao carregar APIs:", err);
+        document.getElementById("orders-table").innerHTML=`
+        <tr><td colspan="10" style="color:red;">Erro ao carregar pedidos</td></tr>`;
       }
     }
 
-    /******************************************
-     * Iniciar
-     ******************************************/
-    document.addEventListener("DOMContentLoaded", () => {
-      // Tabela Financeiro
-      initSortingEvents();
-      renderTable(displayedOrders);
-      renderPagination(displayedOrders);
+    /* -------------------------------
+       4) Terceiro bloco: fillProximosDias
+    --------------------------------*/
+    function fillProximosDias(){
+      const tBody= document.getElementById("proximos-body");
+      tBody.innerHTML="";
+      const hoje= new Date();
 
-      document.getElementById("add-order-btn").addEventListener("click", () => {
-        alert("Ir para página de adicionar pedido? Exemplo...");
-      });
-
-      // Preencher blocos de datas
-      fillProximosDias();
-
-      // (Podemos fazer algo para atualizar primeiros cartões, se quiser,
-      //  por enquanto deixamos fixos.)
-    });
-  </script>
-
-  <!-- Scripts de gráficos do template (SEM alterações) -->
-  <script>
-    // ================== chart one start
-    const ctx1 = document.getElementById("myChart1").getContext("2d");
-    let gradient1 = ctx1.createLinearGradient(0, 0, 0, 180);
-    gradient1.addColorStop(0, "rgba(250, 157, 42, 0.2)");
-    gradient1.addColorStop(0.25, "rgba(250, 157, 42, 0.1)");
-    gradient1.addColorStop(1, "rgba(250, 157, 42, 0)");
-
-    const chart1 = new Chart(ctx1, {
-      type: "line",
-      data: {
-        labels: [
-          "Jan 2020",
-          "Fab 2020",
-          "Mar 2020",
-          "Apr 2020",
-          "May 2020",
-          "Jun 2020",
-          "Jul 2020",
-          "Aug 2020",
-          "Sep 2020",
-          "Oct 2020",
-          "Nov 2020",
-          "Dec 2020",
-        ],
-        datasets: [
-          {
-            label: "",
-            backgroundColor: gradient1,
-            borderColor: "#FA9D2A",
-            borderWidth: 3,
-            data: [23, 70, 31, 78, 49, 70, 30, 50, 80, 20, 50, 99],
-            pointBackgroundColor: "transparent",
-            pointHoverBackgroundColor: "#FA9D2A",
-            pointBorderColor: "transparent",
-            pointHoverBorderColor: "#fff",
-            pointHoverBorderWidth: 3,
-            borderWidth: 3,
-            pointRadius: 7,
-            pointHoverRadius: 7,
-            cubicInterpolationMode: "monotone",
-            fill: true,
-          },
-        ],
-      },
-      options: {
-        plugins: {
-          tooltip: {
-            intersect: false,
-            backgroundColor: "#fff9f4",
-            bodyColor: "rgba(250, 157, 42, 1)",
-            bodyFont: {
-              weight: "bold",
-              size: 16,
-              family: "Plus Jakarta Sans",
-            },
-            titleFont: {
-              size: 0,
-            },
-            multiKeyBackground: "transparent",
-            padding: 15,
-            displayColors: false,
-            cornerRadius: 15,
-            position: "average",
-          },
-          legend: {
-            display: false,
-          },
-        },
-        responsive: true,
-        maintainAspectRatio: false,
-        layout: {
-          padding: { top: 50, bottom: 12, left: 12, right: 12 },
-        },
-        scales: {
-          y: { display: false },
-          x: { display: false },
-        },
-      },
-    });
-    // ================== chart one end
-
-    // ================== chart two start
-    const ctx2 = document.getElementById("myChart2").getContext("2d");
-    const gradient2 = ctx2.createLinearGradient(0, 0, 0, 180);
-    gradient2.addColorStop(0, "rgba(155, 81, 224, 0.2)");
-    gradient2.addColorStop(0.25, "rgba(155, 81, 224, 0.1)");
-    gradient2.addColorStop(1, "rgba(155, 81, 224, 0)");
-
-    const chart2 = new Chart(ctx2, {
-      type: "line",
-      data: {
-        labels: [ "Jan 2020","Fab 2020","Mar 2020","Apr 2020","May 2020","Jun 2020","Jul 2020","Aug 2020","Sep 2020","Oct 2020","Nov 2020","Dec 2020"],
-        datasets: [
-          {
-            label: "",
-            backgroundColor: gradient2,
-            borderColor: "#9B51E0",
-            data: [20, 80, 15, 78, 41, 85, 26, 90, 60, 80, 48, 99],
-            pointBackgroundColor: "transparent",
-            pointHoverBackgroundColor: "#9B51E0",
-            pointBorderColor: "transparent",
-            pointHoverBorderColor: "#fff",
-            pointHoverBorderWidth: 3,
-            pointBorderWidth: 3,
-            pointRadius: 7,
-            pointHoverRadius: 7,
-            cubicInterpolationMode: "monotone",
-            fill: true,
-          },
-        ],
-      },
-      options: {
-        plugins: {
-          tooltip: {
-            intersect: false,
-            backgroundColor: "#f2e4ff",
-            bodyColor: "rgba(155, 81, 224, 1)",
-            bodyFont: { weight: "bold", size: 16, family: "Plus Jakarta Sans" },
-            titleFont: { size: 0 },
-            multiKeyBackground: "transparent",
-            padding: 15,
-            displayColors: false,
-            cornerRadius: 15,
-            position: "average",
-          },
-          legend: { display: false },
-        },
-        responsive: true,
-        maintainAspectRatio: false,
-        layout: { padding: { top: 50, bottom: 12, left: 12, right: 12 } },
-        scales: {
-          y: { display: false },
-          x: { display: false },
-        },
-      },
-    });
-    // =========== chart two end
-
-    // ================== chart three start
-    const ctx3 = document.getElementById("myChart3").getContext("2d");
-    const gradient3 = ctx3.createLinearGradient(0, 0, 0, 180);
-    gradient3.addColorStop(0, "rgba(98, 126, 234, 0.2)");
-    gradient3.addColorStop(0.25, "rgba(98, 126, 234, 0.1)");
-    gradient3.addColorStop(1, "rgba(98, 126, 234, 0)");
-
-    const chart3 = new Chart(ctx3, {
-      type: "line",
-      data: {
-        labels: [ "Jan 2020","Fab 2020","Mar 2020","Apr 2020","May 2020","Jun 2020","Jul 2020","Aug 2020","Sep 2020","Oct 2020","Nov 2020","Dec 2020"],
-        datasets: [
-          {
-            label: "",
-            backgroundColor: gradient3,
-            borderColor: "#627EEA",
-            data: [56, 20, 61, 38, 90, 61, 99, 60, 30, 80, 40, 99],
-            pointBackgroundColor: "transparent",
-            pointHoverBackgroundColor: "#627EEA",
-            pointBorderColor: "transparent",
-            pointHoverBorderColor: "#fff",
-            pointHoverBorderWidth: 3,
-            borderWidth: 3,
-            pointRadius: 7,
-            pointHoverRadius: 7,
-            cubicInterpolationMode: "monotone",
-            fill: true,
-          },
-        ],
-      },
-      options: {
-        plugins: {
-          tooltip: {
-            intersect: false,
-            backgroundColor: "#ebf3fd",
-            bodyColor: "rgba(98, 126, 234, 1)",
-            bodyFont: { weight: "bold", size: 16, family: "Plus Jakarta Sans" },
-            titleFont: { size: 0 },
-            multiKeyBackground: "transparent",
-            padding: 15,
-            displayColors: false,
-            cornerRadius: 15,
-            position: "average",
-          },
-          legend: { display: false },
-        },
-        responsive: true,
-        maintainAspectRatio: false,
-        layout: { padding: { top: 50, bottom: 12, left: 12, right: 12 } },
-        scales: {
-          y: { display: false },
-          x: { display: false },
-        },
-      },
-    });
-    // =========== chart three end
-
-    // ================== chart four start
-    const ctx4 = document.getElementById("myChart4").getContext("2d");
-    const gradient4 = ctx4.createLinearGradient(0, 0, 0, 180);
-    gradient4.addColorStop(0, "rgba(52, 93, 157, 0.2)");
-    gradient4.addColorStop(0.25, "rgba(52, 93, 157, 0.1)");
-    gradient4.addColorStop(1, "rgba(52, 93, 157, 0)");
-
-    const chart4 = new Chart(ctx4, {
-      type: "line",
-      data: {
-        labels: [ "Jan 2020","Fab 2020","Mar 2020","Apr 2020","May 2020","Jun 2020","Jul 2020","Aug 2020","Sep 2020","Oct 2020","Nov 2020","Dec 2020"],
-        datasets: [
-          {
-            label: "",
-            backgroundColor: gradient4,
-            borderColor: "#345D9D",
-            data: [90, 40, 80, 30, 65, 50, 79, 20, 90, 40, 70, 99],
-            pointBackgroundColor: "transparent",
-            pointHoverBackgroundColor: "#345D9D",
-            pointBorderColor: "transparent",
-            pointHoverBorderColor: "#fff",
-            pointHoverBorderWidth: 3,
-            borderWidth: 3,
-            pointRadius: 7,
-            pointHoverRadius: 7,
-            cubicInterpolationMode: "monotone",
-            fill: true,
-          },
-        ],
-      },
-      options: {
-        plugins: {
-          tooltip: {
-            intersect: false,
-            backgroundColor: "#e7f0ff",
-            bodyColor: "rgba(52, 93, 157, 1)",
-            bodyFont: { weight: "bold", size: 16, family: "Plus Jakarta Sans" },
-            titleFont: { size: 0 },
-            multiKeyBackground: "transparent",
-            padding: 15,
-            displayColors: false,
-            cornerRadius: 15,
-            position: "average",
-          },
-          legend: { display: false },
-        },
-        responsive: true,
-        maintainAspectRatio: false,
-        layout: { padding: { top: 50, bottom: 12, left: 12, right: 12 } },
-        scales: {
-          y: { display: false },
-          x: { display: false },
-        },
-      },
-    });
-    // =========== chart four end
-
-    // =========== Theme toggles (padrão do template) ==========
-    const doughnutChart1 = new ApexCharts(
-      document.querySelector("#doughnutChart1"), {
-        series: [83, 67, 55, 44],
-        chart: { height: 350, type: "radialBar" },
-        plotOptions: {
-          radialBar: {
-            dataLabels: {
-              name: { fontSize: "22px" },
-              value: { fontSize: "16px" },
-            },
-            hollow: { size: "40%" },
-            track: { strokeWidth: "100%", margin: 10 },
-          },
-        },
-        stroke: { lineCap: "round" },
-        labels: ["Income", "Installment", "Spends", "Invest"],
-        colors: ["#4a6cf7", "#f2994a", "#d50100", "#f7c800"],
+      // Lemos a suposta "cotação" do 3º card
+      let exchange=5.57;
+      const txt = document.getElementById("cardTotalReais").textContent;
+      const match= txt.match(/([\d.,]+)/);
+      if(match){
+        exchange= parseFloat(match[1].replace(",","."))||5.57;
       }
-    );
-    // doughnutChart1.render(); // Se quiser habilitar
 
-    // Exemplo de chart 5 (caso use)
-    // ...
-    // (omiti para não poluir ainda mais)
+      let baseUsd=100; // Exemplo: cada dia incrementamos baseUsd*i
+
+      for(let i=1; i<=5; i++){
+        const prox = new Date(hoje.getFullYear(),hoje.getMonth(),hoje.getDate()+i);
+        const d= String(prox.getDate()).padStart(2,"0");
+        const m= String(prox.getMonth()+1).padStart(2,"0");
+        const y= prox.getFullYear();
+
+        const usd= baseUsd*i; 
+        const brl= (usd*exchange).toFixed(2);
+
+        const row= `
+          <tr>
+            <td>${d}/${m}/${y}</td>
+            <td>U$ ${usd.toFixed(2)}</td>
+            <td class="text-end">R$ ${brl}</td>
+          </tr>
+        `;
+        tBody.insertAdjacentHTML("beforeend",row);
+      }
+    }
+
+    /* -------------------------------
+       Inicialização
+    --------------------------------*/
+    document.addEventListener("DOMContentLoaded", ()=>{
+      initSortingEvents();
+      fillProximosDias(); // Gera as linhas de "Próximos Pagamentos"
+      loadOrders();       // Chama as APIs e renderiza a tabela
+      // Se tivesse sidebar: loadSidebar() ...
+    });
   </script>
 
+  <!-- Scripts de Charts do Template (SEM alterações) -->
+  <script>
+    /* Exemplo de scripts de chart1, chart2, chart3, chart4 do PlainAdmin.
+       Coloquei um “...” para não poluir mais. 
+       Se quiser, mantenha-os. 
+    */
+  </script>
 </body>
 </html>
