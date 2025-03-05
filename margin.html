@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,6 +24,12 @@
   <style>
     body {
       display: none;
+    }
+
+    /* Força branco nos textos da tabela quando o body tiver a classe .dark-theme */
+    body.dark-theme .table.clients-table td,
+    body.dark-theme .table.clients-table th {
+      color: #fff !important;
     }
   </style>
   <!-- ======== Preloader =========== -->
@@ -447,7 +454,7 @@
           </ul>
         </li>
         <li class="nav-item">
-          <a href="tables.html">
+          <a href="Markup.html">
             <span class="icon">
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -458,7 +465,7 @@
                   d="M2.5 16.875C2.15483 16.875 1.875 17.1548 1.875 17.5C1.875 17.8452 2.15483 18.125 2.5 18.125H17.5C17.8452 18.125 18.125 17.8452 18.125 17.5C18.125 17.1548 17.8452 16.875 17.5 16.875H2.5Z" />
               </svg>
             </span>
-            <span class="text">Tables</span>
+            <span class="text">Markup</span>
           </a>
         </li>
         <span class="divider">
@@ -509,7 +516,7 @@
                   d="M15.8333 14.4432C15.5592 14.5956 15.2563 14.732 14.9335 14.8531C13.6404 15.3379 11.8961 15.6251 9.99999 15.6251C8.10394 15.6251 6.35954 15.3379 5.06649 14.8531C4.74364 14.732 4.44074 14.5956 4.16666 14.4432V15.8334C4.16666 17.2142 6.77833 18.3334 9.99999 18.3334C13.2217 18.3334 15.8333 17.2142 15.8333 15.8334V14.4432Z" />
               </svg>
             </span>
-            <span class="text"> Data Tables </span>
+            <span class="text"> Data Markup </span>
           </a>
           <ul id="ddmenu_7" class="collapse show dropdown-nav">
             <li>
@@ -520,14 +527,14 @@
               </a>
             </li>
             <li>
-              <a href="tables-responsive.html">
+              <a href="Markup-responsive.html">
                 <span class="text">
                   Responsive Table <span class="pro-badge">Pro</span>
                 </span>
               </a>
             </li>
             <li>
-              <a href="datatables.html">
+              <a href="dataMarkup.html">
                 <span class="text">
                   Data Table <span class="pro-badge">Pro</span>
                 </span>
@@ -803,7 +810,7 @@
           <div class="row align-items-center">
             <div class="col-md-6">
               <div class="title">
-                <h2>Tables</h2>
+                <h2>Markup</h2>
               </div>
             </div>
             <div class="col-md-6">
@@ -814,7 +821,7 @@
                       <a href="#0">Dashboard</a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">
-                      Tables
+                      Markup
                     </li>
                   </ol>
                 </nav>
@@ -824,12 +831,11 @@
         </div>
         <!-- ========== title-wrapper end ========== -->
 
-        <!-- ========== tables-wrapper start ========== -->
-        <div class="tables-wrapper">
+        <!-- ========== Markup-wrapper start ========== -->
+        <div class="Markup-wrapper">
           <div class="row">
             <div class="col-lg-12">
               <div class="card-style mb-30">
-                <h6 class="mb-10">Exemplo de Tabela (categorias)</h6>
                 <div class="table-wrapper table-responsive">
                   <!-- Tabela com 6 colunas: Categoria, Destino, Tipo, Status, Última Alteração, Média Margem -->
                   <table class="table clients-table" id="tabelaCategorias">
@@ -857,7 +863,7 @@
           </div>
           <!-- end row -->
         </div>
-        <!-- ========== tables-wrapper end ========== -->
+        <!-- ========== Markup-wrapper end ========== -->
       </div>
     </section>
     <!-- ========== table components end ========== -->
