@@ -923,10 +923,7 @@
       return params.get('categoria');
     }
   
-    /*******************************************************
-     * Atualiza o título da categoria, se o elemento com id
-     * "categoriaTitulo" existir na página.
-     *******************************************************/
+    // Atualiza o título da categoria, se presente (certifique-se de ter um elemento com id "categoriaTitulo")
     function exibirCategoriaNoTitulo() {
       const categoria = getCategoriaFromURL();
       const tituloEl = document.getElementById('categoriaTitulo');
@@ -936,8 +933,7 @@
     }
   
     /*******************************************************
-     * Verifica se o usuário está logado chamando a API de sessão.
-     * Caso não esteja, redireciona para a página de login.
+     * 1) Verificação de sessão via login_api.php/check
      *******************************************************/
     async function checkSession() {
       try {
@@ -947,10 +943,8 @@
         const result = await response.json();
         console.log("Resposta da Sessão:", result);
         if (!result.logged_in) {
-          // Redireciona para a página de login se o usuário não estiver logado
           window.location.replace("https://businessplace.airland.com.br/signin.html");
         } else {
-          // Exibe o conteúdo da página se a sessão estiver ativa
           document.body.style.display = "block";
         }
       } catch (error) {
@@ -960,18 +954,14 @@
     }
   
     /*******************************************************
-     * Busca os dados de markup no back-end.
-     * Se um parâmetro "categoria" estiver presente na URL,
-     * ele é enviado para filtrar os resultados.
-     * A opção cache: 'no-store' é utilizada para evitar
-     * que o navegador use dados em cache.
+     * 2) Buscar e exibir os dados de markup
      *******************************************************/
     async function fetchMarkupData(customUrl) {
       const finalUrl = customUrl || 'https://airland.com.br/supplier/get_markup_data.php';
       try {
         const response = await fetch(finalUrl, {
           credentials: 'include',
-          cache: 'no-store'
+          cache: 'no-store' // Evita uso de cache
         });
         const data = await response.json();
         populateTable(data);
@@ -980,33 +970,29 @@
       }
     }
   
-    /*******************************************************
-     * Popula a tabela com os dados retornados pela API.
-     * Para cada registro (único para cada id_site) são
-     * criadas as colunas: Nome, ID, Última Alteração, Margem e Ação.
-     *******************************************************/
+    // Popula a tabela com os dados recebidos
     function populateTable(data) {
       const tbody = document.querySelector('#markupTable tbody');
       tbody.innerHTML = '';
       data.forEach(item => {
         const tr = document.createElement('tr');
   
-        // Coluna 1: Nome (puxado de bd_net -> name_site)
+        // Coluna 1: Nome (do bd_net -> name_site)
         const tdName = document.createElement('td');
         tdName.textContent = item.name_site;
         tr.appendChild(tdName);
   
-        // Coluna 2: ID (utilizando id_site; se houver duplicidade, o back-end já os agrupou)
+        // Coluna 2: ID (usando id_site)
         const tdId = document.createElement('td');
         tdId.textContent = item.id_site;
         tr.appendChild(tdId);
   
-        // Coluna 3: Última Alteração (puxado de supplier_categories_margin -> updated_at)
+        // Coluna 3: Última Alteração (de supplier_categories_margin -> updated_at)
         const tdUpdated = document.createElement('td');
         tdUpdated.textContent = item.updated_at ? item.updated_at : '-';
         tr.appendChild(tdUpdated);
   
-        // Coluna 4: Margem (campo editável; valor de supplier_categories_margin -> margin)
+        // Coluna 4: Margem (editável)
         const tdMargin = document.createElement('td');
         const inputMargin = document.createElement('input');
         inputMargin.type = 'text';
@@ -1020,7 +1006,6 @@
         const btnUpdate = document.createElement('button');
         btnUpdate.textContent = 'Atualizar';
         btnUpdate.className = 'btn btn-primary';
-        // Ao clicar, chama a função updateMargin passando o id_site e o novo valor da margem
         btnUpdate.addEventListener('click', () => {
           updateMargin(item.id_site, inputMargin.value);
         });
@@ -1032,9 +1017,7 @@
     }
   
     /*******************************************************
-     * Atualiza a margem no back-end utilizando a API update_margin.php.
-     * Após a atualização, força uma nova requisição sem cache para
-     * refletir imediatamente os dados atualizados na tabela.
+     * 3) Atualizar a margem via update_margin.php
      *******************************************************/
     async function updateMargin(id_site, newMargin) {
       try {
@@ -1047,7 +1030,7 @@
         const result = await response.json();
         if (result.success) {
           alert('Margem atualizada com sucesso!');
-          // Força uma nova requisição com um parâmetro único (timestamp) para evitar cache
+          // Força nova requisição sem cache para mostrar os dados atualizados
           const url = 'https://airland.com.br/supplier/get_markup_data.php?' + Date.now();
           fetchMarkupData(url);
         } else {
@@ -1060,21 +1043,17 @@
     }
   
     /*******************************************************
-     * Inicialização: Quando o DOM estiver carregado,
-     * - Verifica a sessão,
-     * - Atualiza o título com a categoria (se houver),
-     * - Carrega os dados da tabela,
-     * - Remove o preloader.
+     * Inicialização
      *******************************************************/
     document.addEventListener('DOMContentLoaded', async () => {
-      await checkSession();
-      exibirCategoriaNoTitulo();
-      fetchMarkupData();
+      await checkSession();           // Verifica a sessão
+      exibirCategoriaNoTitulo();      // Atualiza o título com a categoria, se houver
+      fetchMarkupData();              // Carrega os dados na tabela
+      // Remove o preloader
       document.getElementById('preloader').style.display = 'none';
     });
-  </script>  
-  
-  <!-- ========= Scripts externos ========= -->
+  </script>
+  <!-- ========= All Javascript files linkup ======== -->
   <script src="assets/js/bootstrap.bundle.min.js"></script>
   <script src="assets/js/Chart.min.js"></script>
   <script src="assets/js/apexcharts.min.js"></script>
