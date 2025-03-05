@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -988,47 +989,125 @@
                   <div class="single-card" style="background-color: #219653; position: relative; overflow: hidden;">
                     <span class="text-sm text-white fw-500">Valor a Pagar (R$)</span>
                     <h3 id="cardTotalReais">R$ 5.79</h3>
+                    <!-- Aqui está o "card-info" com dois blocos:
+                        (1) “Cotação Manual”
+                        (2) “Aplicar” -->
                     <div class="card-info">
-                      <!-- Substituindo "VALID THRU" e "CARD HOLDER" por cotação manual e botão -->
                       <div class="mr-15">
                         <span>Cotação Manual</span>
-                        <p>
-                          <input 
-                            type="number" 
-                            id="inputDollarRate" 
-                            placeholder="Ex: 5.79" 
-                            step="0.0001" 
-                            style="width:80px; padding:2px;"
+                        <p style="margin: 0;">
+                          <!-- Input estilo “linha” (sem borda retangular) -->
+                          <input
+                            type="text"
+                            id="inputDollarRate"
+                            placeholder="Ex: 5.79"
+                            style="
+                              border: none;
+                              background: transparent;
+                              border-bottom: 1px solid rgba(255, 255, 255, 0.7);
+                              color: #fff;
+                              width: 50px;
+                              text-align: center;
+                              font-size: 14px;
+                              padding: 2px 0;
+                            "
                           />
                         </p>
                       </div>
                       <div>
                         <span>Aplicar</span>
-                        <p>
-                          <button class="btn btn-sm btn-light" onclick="applyUserDollar()">Aplicar</button>
+                        <p style="margin: 0;">
+                          <!-- Link/“botão” do mesmo tamanho visual do texto -->
+                          <a
+                            href="javascript:void(0)"
+                            onclick="applyUserDollar()"
+                            style="
+                              display: inline-block;
+                              text-decoration: none;
+                              border-bottom: 1px solid rgba(255, 255, 255, 0.7);
+                              color: #fff;
+                              font-size: 14px;
+                              padding: 2px 0;
+                            "
+                          >
+                            Aplicar
+                          </a>
                         </p>
                       </div>
                     </div>
-                    <!-- Shape de fundo -->
+                    <!-- Shape de fundo (opcional) -->
                     <span class="bg-shape">
-                      <svg width="330" height="200" viewBox="0 0 330 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <mask id="mask2" style="mask-type: alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="330" height="200">
+                      <svg
+                        width="330"
+                        height="200"
+                        viewBox="0 0 330 200"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <mask
+                          id="mask2"
+                          style="mask-type: alpha"
+                          maskUnits="userSpaceOnUse"
+                          x="0"
+                          y="0"
+                          width="330"
+                          height="200"
+                        >
                           <rect width="330" height="200" rx="10" fill="#6647BF" />
                         </mask>
                         <g mask="url(#mask2)">
-                          <path opacity="0.3" d="M274 200C274 184.536 286.536 172 302 172V200H274Z" fill="white" />
-                          <path opacity="0.1" d="M246 172H274V200H246V172Z" fill="white" />
-                          <path opacity="0.3" d="M302 172C302 156.536 314.536 144 330 144V172H302Z" fill="white" />
-                          <path opacity="0.3" d="M246 172C246 156.536 258.536 144 274 144V172H246Z" fill="white" />
-                          <path opacity="0.6" d="M274 144C289.464 144 302 156.536 302 172H274V144Z" fill="white" />
-                          <circle opacity="0.05" cx="11.5" cy="9.5" r="99.5" fill="white" />
-                          <circle opacity="0.05" cx="11.5" cy="9.5" r="68.5" fill="white" />
-                          <circle opacity="0.08" cx="11.5" cy="9.5" r="35.5" fill="white" />
+                          <path
+                            opacity="0.3"
+                            d="M274 200C274 184.536 286.536 172 302 172V200H274Z"
+                            fill="white"
+                          />
+                          <path
+                            opacity="0.1"
+                            d="M246 172H274V200H246V172Z"
+                            fill="white"
+                          />
+                          <path
+                            opacity="0.3"
+                            d="M302 172C302 156.536 314.536 144 330 144V172H302Z"
+                            fill="white"
+                          />
+                          <path
+                            opacity="0.3"
+                            d="M246 172C246 156.536 258.536 144 274 144V172H246Z"
+                            fill="white"
+                          />
+                          <path
+                            opacity="0.6"
+                            d="M274 144C289.464 144 302 156.536 302 172H274V144Z"
+                            fill="white"
+                          />
+                          <circle
+                            opacity="0.05"
+                            cx="11.5"
+                            cy="9.5"
+                            r="99.5"
+                            fill="white"
+                          />
+                          <circle
+                            opacity="0.05"
+                            cx="11.5"
+                            cy="9.5"
+                            r="68.5"
+                            fill="white"
+                          />
+                          <circle
+                            opacity="0.08"
+                            cx="11.5"
+                            cy="9.5"
+                            r="35.5"
+                            fill="white"
+                          />
                         </g>
                       </svg>
                     </span>
                   </div>
                 </div>
+
             </div>
           </div>
         </div><!-- row do primeiro bloco -->
