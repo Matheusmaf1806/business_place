@@ -1041,10 +1041,6 @@
           alert('Margem atualizada com sucesso!');
           // Recarrega os dados para atualizar a tabela
           fetchMarkupData();
-        
-        const url = 'https://airland.com.br/supplier/get_markup_data.php?' + Date.now();
-        fetchMarkupData(url);
-        
         } else {
           alert('Erro ao atualizar: ' + result.message);
         }
@@ -1052,17 +1048,6 @@
         console.error('Erro na atualização:', error);
         alert('Erro na atualização.');
       }
-    }
-
-    // E no fetchMarkupData:
-    async function fetchMarkupData(customUrl) {
-        const finalUrl = customUrl || 'https://airland.com.br/supplier/get_markup_data.php';
-        const response = await fetch(finalUrl, {
-            credentials: 'include',
-            cache: 'no-store' // Evita reuso de cache
-        });
-        const data = await response.json();
-        populateTable(data);
     }
   
     /*******************************************************
