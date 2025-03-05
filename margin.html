@@ -988,7 +988,7 @@
       .catch(error => console.error("Erro na API:", error));
     }
 
-    // 4) Lógica de Status de acordo com media_margem
+    // 4) Função que define o status baseado na média de margem
     function getStatusInfo(media) {
       const avg = parseFloat(media) || 0;
       if (avg <= 2) {
@@ -1002,7 +1002,28 @@
       }
     }
 
-    // 5) Carrega a tabela chamando a rota get_bdnet_margin.php
+    // 5) Função que mapeia a categoria para a imagem correspondente
+    function getCategoryImage(category) {
+      if (category === "Walt Disney World") {
+        return "assets/images/utilidades/WDW - Photography - LGBTQ Family - Mickey Mouse - Magic Kingdom 5.jpg";
+      } else if (category === "Busch Gardens") {
+        return "assets/images/utilidades/Busch Gardens.webp";
+      } else if (category === "Kennedy/NASA") {
+        return "assets/images/utilidades/NASA.jpg";
+      } else if (category === "SeaWorld") {
+        return "assets/images/utilidades/PIPELINE-SeaWorld.webp";
+      } else if (category === "Legoland") {
+        return "assets/images/utilidades/legoland.jpg";
+      } else if (category === "Universal Hollywood") {
+        return "assets/images/utilidades/universal hollywood.webp";
+      } else if (category === "Universal Studios Orlando") {
+        return "assets/images/utilidades/f0.jpg";
+      }
+      // Imagem padrão caso não haja correspondência
+      return "assets/images/utilidades/a";
+    }
+
+    // 6) Função que carrega a tabela com as 8 colunas
     async function carregarTabela() {
       try {
         const resp = await fetch('https://airland.com.br/supplier/get_bdnet_margin.php', {
@@ -1011,8 +1032,8 @@
         if (!resp.ok) {
           throw new Error(`HTTP error! status: ${resp.status}`);
         }
-        const data = await resp.json(); 
-        // data deve conter [{category, destination, type, ultima_alteracao, media_margem}, ...]
+        const data = await resp.json();
+        // Exemplo de objeto retornado: [{ name, category, destination, type, ultima_alteracao, media_margem }, ...]
 
         const tbody = document.querySelector('#tabelaCategorias tbody');
         tbody.innerHTML = '';
@@ -1020,7 +1041,7 @@
         data.forEach(item => {
           const tr = document.createElement('tr');
 
-          // (A) Coluna "Foto"
+          // Coluna 1: Foto (imagem pequena)
           const tdFoto = document.createElement('td');
           const img = document.createElement('img');
           img.src = getCategoryImage(item.category);
@@ -1031,28 +1052,27 @@
           tdFoto.appendChild(img);
           tr.appendChild(tdFoto);
 
-          // (B) Coluna "Nome"
+          // Coluna 2: Nome
           const tdNome = document.createElement('td');
-          // Se houver um campo "name" na API, use-o; senão, ajuste conforme necessário.
-          tdNome.textContent = item.name || "";  
+          tdNome.textContent = item.name || "";
           tr.appendChild(tdNome);
 
-          // (C) Coluna "Categoria"
+          // Coluna 3: Categoria
           const tdCat = document.createElement('td');
           tdCat.textContent = item.category || '';
           tr.appendChild(tdCat);
 
-          // (D) Coluna "Destino"
+          // Coluna 4: Destino
           const tdDest = document.createElement('td');
           tdDest.textContent = item.destination || '';
           tr.appendChild(tdDest);
 
-          // (E) Coluna "Tipo"
+          // Coluna 5: Tipo
           const tdType = document.createElement('td');
           tdType.textContent = item.type || '';
           tr.appendChild(tdType);
 
-          // (F) Coluna "Status"
+          // Coluna 6: Status
           const tdStatus = document.createElement('td');
           const statusInfo = getStatusInfo(item.media_margem);
           const spanStatus = document.createElement('span');
@@ -1061,12 +1081,12 @@
           tdStatus.appendChild(spanStatus);
           tr.appendChild(tdStatus);
 
-          // (G) Coluna "Última Alteração"
+          // Coluna 7: Última Alteração
           const tdUlt = document.createElement('td');
           tdUlt.textContent = item.ultima_alteracao || '';
           tr.appendChild(tdUlt);
 
-          // (H) Coluna "Média de Margem"
+          // Coluna 8: Média de Margem
           const tdMedia = document.createElement('td');
           const margemNum = parseFloat(item.media_margem) || 0;
           tdMedia.textContent = margemNum.toFixed(2) + '%';
@@ -1079,12 +1099,12 @@
       }
     }
 
-    // Ao carregar a página
+    // Exemplo de uso: ao carregar a página
     document.addEventListener('DOMContentLoaded', async () => {
       await checkSession();           // Verifica sessão
       fillProfileFromLocalStorage();  // Preenche perfil local
-      fetchUserProfile();             // Tenta buscar perfil atualizado (opcional)
-      carregarTabela();               // Chama a rota get_bdnet_margin.php
+      fetchUserProfile();             // Busca perfil atualizado (opcional)
+      carregarTabela();               // Carrega os dados da tabela
     });
   </script>
   <script src="assets/js/bootstrap.bundle.min.js"></script>
