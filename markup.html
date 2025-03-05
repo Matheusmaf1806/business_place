@@ -940,177 +940,183 @@
   <!-- ============ Theme Option End ============= -->
 
   <!-- ========== Scripts ========== -->
+<!-- ========= Scripts ========== -->
 <script>
-  // 1) Verifica a sessão antes de exibir o body
-  async function checkSession() {
-    try {
-      const response = await fetch("https://airland.com.br/affiliatesacess/login_api.php/check", {
-        credentials: 'include'
-      });
-      const result = await response.json();
-      console.log("Resposta da Sessão:", result);
-      if (!result.logged_in) {
-        // Se não estiver logado, redireciona
+    // 1) Verifica a sessão antes de exibir o body
+    async function checkSession() {
+      try {
+        const response = await fetch("https://airland.com.br/affiliatesacess/login_api.php/check", {
+          credentials: 'include'
+        });
+        const result = await response.json();
+        console.log("Resposta da Sessão:", result);
+        if (!result.logged_in) {
+          window.location.replace("https://businessplace.airland.com.br/signin.html");
+        } else {
+          document.body.style.display = "block";
+        }
+      } catch (error) {
+        console.error("Erro ao verificar a sessão:", error);
         window.location.replace("https://businessplace.airland.com.br/signin.html");
+      }
+    }
+
+    // 2) Preenche dados do perfil a partir do localStorage (se existir)
+    function fillProfileFromLocalStorage() {
+      const userData = localStorage.getItem('affiliateUser');
+      if (userData) {
+        const user = JSON.parse(userData);
+        if (document.getElementById("userName")) {
+          document.getElementById("userName").textContent = user.full_name;
+        }
+      }
+    }
+
+    // 3) Busca dados atualizados de perfil via API (exemplo)
+    function fetchUserProfile() {
+      const userId = 1; // id fictício
+      fetch(`https://airland.com.br/affiliatesacess/get_user_profile.php?id=${userId}`, {
+        credentials: 'include'
+      })
+      .then(response => response.json())
+      .then(result => {
+        if (result.success) {
+          const data = result.data;
+          // Exemplo: atualizar elementos do DOM
+        } else {
+          console.error("Erro:", result.error);
+        }
+      })
+      .catch(error => console.error("Erro na API:", error));
+    }
+
+    // 4) Função que define o status baseado na Margem Média
+    function getStatusInfo(media) {
+      const avg = parseFloat(media) || 0;
+      if (avg <= 2) {
+        return { label: "Grave", className: "close-btn" };
+      } else if (avg <= 4) {
+        return { label: "Atenção", className: "warning-btn" };
+      } else if (avg <= 6) {
+        return { label: "Média", className: "active-btn" };
       } else {
-        // Se estiver logado, exibe a página
-        document.body.style.display = "block";
+        return { label: "Boa", className: "success-btn" };
       }
-    } catch (error) {
-      console.error("Erro ao verificar a sessão:", error);
-      window.location.replace("https://businessplace.airland.com.br/signin.html");
     }
-  }
 
-  // 2) Preenche dados do perfil a partir do localStorage (se existir)
-  function fillProfileFromLocalStorage() {
-    const userData = localStorage.getItem('affiliateUser');
-    if (userData) {
-      const user = JSON.parse(userData);
-      // Atualiza elementos do DOM se existirem...
-      if (document.getElementById("userName")) {
-        document.getElementById("userName").textContent = user.full_name;
+    // 5) Função que mapeia a categoria para a imagem correspondente
+    function getCategoryImage(category) {
+      if (category === "Walt Disney World") {
+        return "assets/images/utilidades/Magic-Kingdom-26.jpg";
+      } else if (category === "Busch Gardens") {
+        return "assets/images/utilidades/Busch Gardens.webp";
+      } else if (category === "Guiamento") {
+        return "assets/images/utilidades/03.jpeg";
+      } else if (category === "Kennedy/NASA") {
+        return "assets/images/utilidades/NASA.jpg";
+      } else if (category === "SeaWorld") {
+        return "assets/images/utilidades/PIPELINE-SeaWorld.webp";
+      } else if (category === "Legoland") {
+        return "assets/images/utilidades/legoland.jpg";
+      } else if (category === "Universal Hollywood") {
+        return "assets/images/utilidades/universal hollywood.webp";
+      } else if (category === "Universal Studios Orlando") {
+        return "assets/images/utilidades/f0.jpg";
       }
-      // etc...
+      return "assets/images/utilidades/a";
     }
-  }
 
-  // 3) Busca dados atualizados de perfil via API (exemplo)
-  function fetchUserProfile() {
-    const userId = 1; // id fictício
-    fetch(`https://airland.com.br/affiliatesacess/get_user_profile.php?id=${userId}`, {
-      credentials: 'include'
-    })
-    .then(response => response.json())
-    .then(result => {
-      if (result.success) {
-        const data = result.data;
-        // Exemplo: document.getElementById("userName").textContent = data.primeiro_nome + ...
-      } else {
-        console.error("Erro:", result.error);
-      }
-    })
-    .catch(error => console.error("Erro na API:", error));
-  }
-
-  // 4) Função que define o status baseado na Margem Média
-  function getStatusInfo(media) {
-    const avg = parseFloat(media) || 0;
-    if (avg <= 2) {
-      return { label: "Grave", className: "close-btn" };
-    } else if (avg <= 4) {
-      return { label: "Atenção", className: "warning-btn" };
-    } else if (avg <= 6) {
-      return { label: "Média", className: "active-btn" };
-    } else {
-      return { label: "Boa", className: "success-btn" };
-    }
-  }
-
-  // 5) Função que mapeia a categoria para a imagem correspondente
-  function getCategoryImage(category) {
-    if (category === "Walt Disney World") {
-      return "assets/images/utilidades/Magic-Kingdom-26.jpg";
-    } else if (category === "Busch Gardens") {
-      return "assets/images/utilidades/Busch Gardens.webp";
-    } else if (category === "Guiamento") {
-      return "assets/images/utilidades/03.jpeg";
-    } else if (category === "Kennedy/NASA") {
-      return "assets/images/utilidades/NASA.jpg";
-    } else if (category === "SeaWorld") {
-      return "assets/images/utilidades/PIPELINE-SeaWorld.webp";
-    } else if (category === "Legoland") {
-      return "assets/images/utilidades/legoland.jpg";
-    } else if (category === "Universal Hollywood") {
-      return "assets/images/utilidades/universal hollywood.webp";
-    } else if (category === "Universal Studios Orlando") {
-      return "assets/images/utilidades/f0.jpg";
-    }
-    // Imagem padrão caso não haja correspondência
-    return "assets/images/utilidades/a";
-  }
-
-    // 6) Função que redireciona para a Fase 2 com o parâmetro ?categoria=
+    // 6) Redireciona para a página de Markup Update com o parâmetro ?categoria=
     function redirectToMarkup(category) {
       window.location.href = "https://businessplace.airland.com.br/markup_update.html?categoria=" + encodeURIComponent(category);
     }
 
-  // 6) Função que carrega a tabela com as 8 colunas
-  async function carregarTabela() {
-    try {
-      const resp = await fetch('https://airland.com.br/supplier/get_bdnet_margin.php', {
-        credentials: 'include'
-      });
-      if (!resp.ok) {
-        throw new Error(`HTTP error! status: ${resp.status}`);
-      }
-      const data = await resp.json();
-      // data deve conter um array de objetos, ex:
-      // [{ name, category, destination, type, ultima_alteracao, media_margem }, ...]
+    // 7) Função que carrega a tabela com as 9 colunas (Foto, Categoria, Destino, Tipo, Status, Data, Hora, Margem Média, Ação)
+    async function carregarTabela() {
+      try {
+        const resp = await fetch('https://airland.com.br/supplier/get_bdnet_margin.php', {
+          credentials: 'include',
+          cache: 'no-store' // Garante que a busca não use cache
+        });
+        if (!resp.ok) {
+          throw new Error(`HTTP error! status: ${resp.status}`);
+        }
+        const data = await resp.json();
+        console.log("Dados recebidos:", data);
+        const tbody = document.querySelector('#tabelaCategorias tbody');
+        tbody.innerHTML = ''; // Limpa a tabela
 
-      const tbody = document.querySelector('#tabelaCategorias tbody');
-      tbody.innerHTML = '';
+        data.forEach(item => {
+          const tr = document.createElement('tr');
 
-      data.forEach(item => {
-        const tr = document.createElement('tr');
+          // Coluna 1: Foto
+          const tdFoto = document.createElement('td');
+          const img = document.createElement('img');
+          img.src = getCategoryImage(item.category);
+          img.alt = item.category || 'Foto';
+          img.style.width = "40px";
+          img.style.height = "40px";
+          img.style.objectFit = "cover";
+          img.style.borderRadius = "8px";
+          img.style.boxShadow = "0 2px 4px rgba(0,0,0,0.2)";
+          tdFoto.appendChild(img);
+          tr.appendChild(tdFoto);
 
-        // Coluna 1: Foto (imagem pequena)
-        const tdFoto = document.createElement('td');
-        const img = document.createElement('img');
-        img.src = getCategoryImage(item.category);
-        img.alt = item.category || 'Foto';
+          // Coluna 2: Categoria
+          const tdCat = document.createElement('td');
+          tdCat.textContent = item.category || '';
+          tr.appendChild(tdCat);
 
-        // Ajustes visuais na imagem
-        img.style.width = "40px";  
-        img.style.height = "40px";
-        img.style.objectFit = "cover";
-        // Borda arredondada e sombra leve
-        img.style.borderRadius = "8px";
-        img.style.boxShadow = "0 2px 4px rgba(0,0,0,0.2)";
+          // Coluna 3: Destino
+          const tdDest = document.createElement('td');
+          tdDest.textContent = item.destination || '';
+          tr.appendChild(tdDest);
 
-        tdFoto.appendChild(img);
-        tr.appendChild(tdFoto);
+          // Coluna 4: Tipo
+          const tdType = document.createElement('td');
+          tdType.textContent = item.type || '';
+          tr.appendChild(tdType);
 
-        // Coluna 3: Categoria
-        const tdCat = document.createElement('td');
-        tdCat.textContent = item.category || '';
-        tr.appendChild(tdCat);
+          // Coluna 5: Status
+          const tdStatus = document.createElement('td');
+          const statusInfo = getStatusInfo(item.media_margem);
+          const spanStatus = document.createElement('span');
+          spanStatus.classList.add('status-btn', statusInfo.className);
+          spanStatus.textContent = statusInfo.label;
+          tdStatus.appendChild(spanStatus);
+          tr.appendChild(tdStatus);
 
-        // Coluna 4: Destino
-        const tdDest = document.createElement('td');
-        tdDest.textContent = item.destination || '';
-        tr.appendChild(tdDest);
+          // Colunas 6 e 7: Última Alteração – Data e Hora
+          const tdData = document.createElement('td');
+          const tdHora = document.createElement('td');
+          if (item.ultima_alteracao) {
+            const dt = new Date(item.ultima_alteracao);
+            const day = dt.getDate().toString().padStart(2, '0');
+            const month = (dt.getMonth() + 1).toString().padStart(2, '0');
+            const year = dt.getFullYear();
+            const hours = dt.getHours().toString().padStart(2, '0');
+            const minutes = dt.getMinutes().toString().padStart(2, '0');
+            tdData.textContent = `${day}/${month}/${year}`;
+            tdHora.textContent = `${hours}:${minutes}`;
+          } else {
+            tdData.textContent = '-';
+            tdHora.textContent = '-';
+          }
+          tr.appendChild(tdData);
+          tr.appendChild(tdHora);
 
-        // Coluna 5: Tipo
-        const tdType = document.createElement('td');
-        tdType.textContent = item.type || '';
-        tr.appendChild(tdType);
+          // Coluna 8: Margem Média
+          const tdMedia = document.createElement('td');
+          const margemNum = parseFloat(item.media_margem) || 0;
+          tdMedia.textContent = margemNum.toFixed(2) + '%';
+          tr.appendChild(tdMedia);
 
-        // Coluna 6: Status
-        const tdStatus = document.createElement('td');
-        const statusInfo = getStatusInfo(item.media_margem);
-        const spanStatus = document.createElement('span');
-        spanStatus.classList.add('status-btn', statusInfo.className);
-        spanStatus.textContent = statusInfo.label;
-        tdStatus.appendChild(spanStatus);
-        tr.appendChild(tdStatus);
-
-        // Coluna 7: Última Alteração
-        const tdUlt = document.createElement('td');
-        tdUlt.textContent = item.ultima_alteracao || '';
-        tr.appendChild(tdUlt);
-
-        // Coluna 8: Margem Média (com 2 decimais + '%')
-        const tdMedia = document.createElement('td');
-        const margemNum = parseFloat(item.media_margem) || 0;
-        tdMedia.textContent = margemNum.toFixed(2) + '%';
-        tr.appendChild(tdMedia);
-
-        // Coluna 8: Ação (botão para redirecionar com o parâmetro categoria)
-        const tdAcao = document.createElement('td');
+          // Coluna 9: Ação (botão com SVG pequeno e azul)
+          const tdAcao = document.createElement('td');
           const btnAcao = document.createElement('button');
-          btnAcao.textContent = "Ver Detalhes";
-          btnAcao.className = "btn btn-primary";
+          btnAcao.type = 'button'; // Impede comportamento de submit
+          // Insere o SVG diretamente no innerHTML do botão
+          btnAcao.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width:24px; height:24px; fill:#0068ef;"><title>receipt-text-edit-outline</title><path d="M18 2L19.5 3.5L21 2V9.13L19 11.13V4.91H5V19.09H10.5V20.5L9 22L7.5 20.5L6 22L4.5 20.5L3 22V2L4.5 3.5L6 2L7.5 3.5L9 2L10.5 3.5L12 2L13.5 3.5L15 2L16.5 3.5L18 2M13 19.96L19.13 13.83L21.17 15.87L15.04 22H13V19.96M19.83 13.13L20.81 12.15L20.83 12.13C20.88 12.09 20.94 12.05 21 12.03C21.18 11.97 21.39 12 21.53 12.15L22.85 13.47C23.05 13.67 23.05 14 22.85 14.19L21.87 15.17L19.83 13.13M18 12.13L17.13 13H6V11H18V12.13M15.13 15L13.13 17H6V15H15.13M18 9V7H6V9H18Z"/></svg>';
           btnAcao.addEventListener('click', () => {
             redirectToMarkup(item.category);
           });
@@ -1124,16 +1130,15 @@
       }
     }
 
-  // Ao carregar a página
-  document.addEventListener('DOMContentLoaded', async () => {
-    await checkSession();           // Verifica sessão
-    fillProfileFromLocalStorage();  // Preenche perfil local
-    fetchUserProfile();             // (opcional) busca perfil atualizado
-    carregarTabela();               // Carrega os dados na tabela
-  // Remove o preloader
-    document.getElementById('preloader').style.display = 'none';
-  });
-</script>
+    // Ao carregar a página
+    document.addEventListener('DOMContentLoaded', async () => {
+      await checkSession();           // Verifica sessão
+      fillProfileFromLocalStorage();  // Preenche perfil local
+      fetchUserProfile();             // Busca perfil atualizado (opcional)
+      carregarTabela();               // Carrega os dados na tabela
+      document.getElementById('preloader').style.display = 'none';
+    });
+  </script>
   <script src="assets/js/bootstrap.bundle.min.js"></script>
   <script src="assets/js/Chart.min.js"></script>
   <script src="assets/js/apexcharts.min.js"></script>
