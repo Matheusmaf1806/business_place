@@ -915,13 +915,18 @@
   </div>
   <!-- ============ Theme Option End ============= -->
   <script>
-    // Lê o parâmetro "categoria" da URL
+    /*******************************************************
+     * Função para ler o parâmetro "categoria" da URL
+     *******************************************************/
     function getCategoriaFromURL() {
       const params = new URLSearchParams(window.location.search);
       return params.get('categoria');
     }
   
-    // Atualiza o título da categoria, se o elemento com id "categoriaTitulo" existir
+    /*******************************************************
+     * Atualiza o título da categoria, se o elemento com id
+     * "categoriaTitulo" existir na página.
+     *******************************************************/
     function exibirCategoriaNoTitulo() {
       const categoria = getCategoriaFromURL();
       const tituloEl = document.getElementById('categoriaTitulo');
@@ -930,7 +935,10 @@
       }
     }
   
-    // Verifica se o usuário está logado
+    /*******************************************************
+     * Verifica se o usuário está logado chamando a API de sessão.
+     * Caso não esteja, redireciona para a página de login.
+     *******************************************************/
     async function checkSession() {
       try {
         const response = await fetch("https://airland.com.br/affiliatesacess/login_api.php/check", {
@@ -939,8 +947,10 @@
         const result = await response.json();
         console.log("Resposta da Sessão:", result);
         if (!result.logged_in) {
+          // Redireciona para a página de login se o usuário não estiver logado
           window.location.replace("https://businessplace.airland.com.br/signin.html");
         } else {
+          // Exibe o conteúdo da página se a sessão estiver ativa
           document.body.style.display = "block";
         }
       } catch (error) {
@@ -949,7 +959,13 @@
       }
     }
   
-    // Busca os dados de markup (utilizando o parâmetro "categoria", se existir) e evita cache
+    /*******************************************************
+     * Busca os dados de markup no back-end.
+     * Se um parâmetro "categoria" estiver presente na URL,
+     * ele é enviado para filtrar os resultados.
+     * A opção cache: 'no-store' é utilizada para evitar
+     * que o navegador use dados em cache.
+     *******************************************************/
     async function fetchMarkupData(customUrl) {
       const finalUrl = customUrl || 'https://airland.com.br/supplier/get_markup_data.php';
       try {
@@ -964,29 +980,33 @@
       }
     }
   
-    // Popula a tabela com os dados retornados
+    /*******************************************************
+     * Popula a tabela com os dados retornados pela API.
+     * Para cada registro (único para cada id_site) são
+     * criadas as colunas: Nome, ID, Última Alteração, Margem e Ação.
+     *******************************************************/
     function populateTable(data) {
       const tbody = document.querySelector('#markupTable tbody');
       tbody.innerHTML = '';
       data.forEach(item => {
         const tr = document.createElement('tr');
   
-        // Nome
+        // Coluna 1: Nome (puxado de bd_net -> name_site)
         const tdName = document.createElement('td');
         tdName.textContent = item.name_site;
         tr.appendChild(tdName);
   
-        // ID
+        // Coluna 2: ID (utilizando id_site; se houver duplicidade, o back-end já os agrupou)
         const tdId = document.createElement('td');
         tdId.textContent = item.id_site;
         tr.appendChild(tdId);
   
-        // Última Alteração
+        // Coluna 3: Última Alteração (puxado de supplier_categories_margin -> updated_at)
         const tdUpdated = document.createElement('td');
         tdUpdated.textContent = item.updated_at ? item.updated_at : '-';
         tr.appendChild(tdUpdated);
   
-        // Margem (campo editável)
+        // Coluna 4: Margem (campo editável; valor de supplier_categories_margin -> margin)
         const tdMargin = document.createElement('td');
         const inputMargin = document.createElement('input');
         inputMargin.type = 'text';
@@ -995,11 +1015,12 @@
         tdMargin.appendChild(inputMargin);
         tr.appendChild(tdMargin);
   
-        // Ação: botão para atualizar
+        // Coluna 5: Ação (botão para atualizar)
         const tdAction = document.createElement('td');
         const btnUpdate = document.createElement('button');
         btnUpdate.textContent = 'Atualizar';
         btnUpdate.className = 'btn btn-primary';
+        // Ao clicar, chama a função updateMargin passando o id_site e o novo valor da margem
         btnUpdate.addEventListener('click', () => {
           updateMargin(item.id_site, inputMargin.value);
         });
@@ -1010,7 +1031,11 @@
       });
     }
   
-    // Atualiza a margem no back-end e força a atualização sem cache
+    /*******************************************************
+     * Atualiza a margem no back-end utilizando a API update_margin.php.
+     * Após a atualização, força uma nova requisição sem cache para
+     * refletir imediatamente os dados atualizados na tabela.
+     *******************************************************/
     async function updateMargin(id_site, newMargin) {
       try {
         const response = await fetch('https://airland.com.br/supplier/update_margin.php', {
@@ -1022,7 +1047,7 @@
         const result = await response.json();
         if (result.success) {
           alert('Margem atualizada com sucesso!');
-          // Força nova requisição sem cache para exibir os dados atualizados imediatamente
+          // Força uma nova requisição com um parâmetro único (timestamp) para evitar cache
           const url = 'https://airland.com.br/supplier/get_markup_data.php?' + Date.now();
           fetchMarkupData(url);
         } else {
@@ -1034,14 +1059,20 @@
       }
     }
   
-    // Inicialização: verifica sessão, atualiza título, carrega dados e remove o preloader
+    /*******************************************************
+     * Inicialização: Quando o DOM estiver carregado,
+     * - Verifica a sessão,
+     * - Atualiza o título com a categoria (se houver),
+     * - Carrega os dados da tabela,
+     * - Remove o preloader.
+     *******************************************************/
     document.addEventListener('DOMContentLoaded', async () => {
       await checkSession();
       exibirCategoriaNoTitulo();
       fetchMarkupData();
       document.getElementById('preloader').style.display = 'none';
     });
-  </script>
+  </script>  
   
   <!-- ========= Scripts externos ========= -->
   <script src="assets/js/bootstrap.bundle.min.js"></script>
