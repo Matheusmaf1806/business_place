@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -1171,8 +1172,8 @@
             <div class="card-style activity-card mb-30">
               <div class="title d-flex flex-wrap align-items-center justify-content-between mb-10">
                 <div class="left mb-2">
-                  <h6 class="text-medium mb-2">Lista de Itens</h6>
-                  <p class="text-gray text-sm">Itens que deverão ser pagos no período selecionado.</p>
+                  <h6 class="text-medium mb-2">Recent Activities</h6>
+                  <p class="text-gray text-sm">Lorem ipsum dolor sit amet.</p>
                 </div>
                 <div class="right mb-2">
                   <div class="button-group">
@@ -1184,57 +1185,31 @@
                 </div>
               </div>
               <!-- Tabela com ordenação e paginação -->
-                <div class="table-responsive">
-                  <table class="table finance-table">
-                    <thead>
-                      <tr>
-                        <!-- Coluna 1 -->
-                        <th data-sort-key="nome">
-                          <h6>Nome <span class="sort-indicator"></span></h6>
-                        </th>
-                        <!-- Coluna 2 -->
-                        <th data-sort-key="id_pedido">
-                          <h6>ID <span class="sort-indicator"></span></h6>
-                        </th>
-                        <!-- Coluna 3 -->
-                        <th data-sort-key="produto">
-                          <h6>Itens <span class="sort-indicator"></span></h6>
-                        </th>
-                        <!-- Coluna 4 -->
-                        <th data-sort-key="valor_calculado">
-                          <h6>Valor (U$) <span class="sort-indicator"></span></h6>
-                        </th>
-                        <!-- Coluna 5 -->
-                        <th data-sort-key="data_uso">
-                          <h6>Data de Uso <span class="sort-indicator"></span></h6>
-                        </th>
-                        <!-- Coluna 6 -->
-                        <th data-sort-key="data_pagamento">
-                          <h6>Data Pagamento <span class="sort-indicator"></span></h6>
-                        </th>
-                        <!-- Coluna 7 -->
-                        <th data-sort-key="identificador">
-                          <h6>Identificador <span class="sort-indicator"></span></h6>
-                        </th>
-                        <!-- Coluna 8 -->
-                        <th data-sort-key="fornecedor">
-                          <h6>Fornecedor <span class="sort-indicator"></span></h6>
-                        </th>
-                        <!-- Coluna 9 -->
-                        <th data-sort-key="status">
-                          <h6>Status <span class="sort-indicator"></span></h6>
-                        </th>
-                        <!-- Coluna 10 (Ação) -->
-                        <th style="width:50px; text-align:center;">
-                          <h6>Ação</h6>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody id="orders-table">
-                      <!-- Preenchido via JS -->
-                    </tbody>
-                  </table>
-                </div>              
+              <div class="table-responsive">
+                <table class="table finance-table">
+                  <thead>
+                    <tr>
+                      <thead>
+                        <tr>
+                          <th data-sort-key="nome">Nome <span class="sort-indicator"></span></th>
+                          <th data-sort-key="id_pedido">ID <span class="sort-indicator"></span></th>
+                          <th data-sort-key="produto">Itens <span class="sort-indicator"></span></th>
+                          <th data-sort-key="valor_calculado">Valor (U$) <span class="sort-indicator"></span></th>
+                          <th data-sort-key="data_uso">Data de Uso <span class="sort-indicator"></span></th>
+                          <th data-sort-key="data_pagamento">Data Pagamento <span class="sort-indicator"></span></th>
+                          <th data-sort-key="identificador">Identificador <span class="sort-indicator"></span></th>
+                          <th data-sort-key="fornecedor">Fornecedor <span class="sort-indicator"></span></th>
+                          <th data-sort-key="status">Status <span class="sort-indicator"></span></th>
+                          <th style="width:50px; text-align:center;">Ação</th>
+                        </tr>
+                      </thead>                      
+                    </tr>
+                  </thead>
+                  <tbody id="orders-table">
+                    <!-- Preenchido via JS -->
+                  </tbody>
+                </table>
+              </div>
               <div class="pagination-finance" id="pagination-controls"></div>
             </div>
           </div>
@@ -1559,9 +1534,6 @@
       if (aVal > bVal) return dir === "asc" ? 1 : -1;
       return 0;
     });
-
-    updateSortIndicators(key, dir);
-
     currentPage = 1;
     renderOrdersTable(displayedOrders);
     renderPagination(displayedOrders);
@@ -2037,115 +2009,207 @@
   // (5) Carregamento dos Dados via API e Inicialização Geral
   // ============================================================
   async function loadOrders() {
-    try {
-      const startDateStr = selectedStartDate ? selectedStartDate.toISOString().split("T")[0] : "";
-      const endDateStr = selectedEndDate ? selectedEndDate.toISOString().split("T")[0] : "";
-      const apiUrlPlanilhas = `https://airland.com.br/supplier/api_planilhas.php?start_date=${startDateStr}&end_date=${endDateStr}`;
-      const apiUrlPedidos = "https://airland.com.br/supplier/api_pedidos.php";
+      try {
+        const startDate = selectedStartDate ? selectedStartDate.toISOString().split('T')[0] : null;
+        const endDate   = selectedEndDate ? selectedEndDate.toISOString().split('T')[0] : null;
 
-      const [respPlan, respPed] = await Promise.all([
-        fetch(apiUrlPlanilhas, { credentials: "include" }),
-        fetch(apiUrlPedidos, { credentials: "include" })
-      ]);
-      if (!respPlan.ok) throw new Error("Erro ao carregar planilhas");
-      if (!respPed.ok) throw new Error("Erro ao carregar pedidos");
+        const apiUrlPlanilhas = `https://www.airland.com.br/supplier/api_planilhas.php?start_date=${startDate}&end_date=${endDate}`;
+        const apiUrlPedidos   = `https://www.airland.com.br/supplier/api_pedidos.php`;
 
-      const planilhasData = await respPlan.json();
-      const pedidosData = await respPed.json();
-      if (!Array.isArray(planilhasData) || !Array.isArray(pedidosData)) {
-        console.error("Erro nos dados da API", planilhasData, pedidosData);
-        return;
+        // Importante: credentials: 'include' para enviar cookie de sessão
+        const [responsePlanilhas, responsePedidos] = await Promise.all([
+          fetch(apiUrlPlanilhas, { credentials: 'include' }),
+          fetch(apiUrlPedidos,   { credentials: 'include' }),
+        ]);
+
+        if (!responsePlanilhas.ok) {
+          throw new Error(`Erro ao carregar dados da planilha: ${responsePlanilhas.status}`);
+        }
+        if (!responsePedidos.ok) {
+          throw new Error(`Erro ao carregar dados dos pedidos: ${responsePedidos.status}`);
+        }
+
+        const planilhasData = await responsePlanilhas.json();
+        const pedidosData   = await responsePedidos.json();
+
+        // Se a API retornar objeto de erro em vez de array
+        if (!Array.isArray(planilhasData)) {
+          console.error('Planilhas retornou erro:', planilhasData);
+          document.getElementById('orders-table').innerHTML = `
+            <tr><td colspan="10" style="text-align: center; color:red;">
+              ${planilhasData.message || 'Erro ao carregar planilhas'}
+            </td></tr>
+          `;
+          return;
+        }
+        if (!Array.isArray(pedidosData)) {
+          console.error('Pedidos retornou erro:', pedidosData);
+          document.getElementById('orders-table').innerHTML = `
+            <tr><td colspan="10" style="text-align: center; color:red;">
+              ${pedidosData.message || 'Erro ao carregar pedidos'}
+            </td></tr>
+          `;
+          return;
+        }
+
+        // id -> nome do pedido
+        const pedidosMap = {};
+        pedidosData.forEach(pedido => {
+          pedidosMap[pedido.id] = pedido.nome;
+        });
+
+        combinedOrders = planilhasData.map(planilha => {
+          const totalUsd = parseFloat(planilha.total_usd) || 0;
+          const lobista  = parseFloat(planilha.lobista)   || 0;
+
+          return {
+            nome:           pedidosMap[planilha.id_pedido] || 'N/A',
+            id_pedido:      planilha.id_pedido,
+            produto:        planilha.produto || '',
+            valor_calculado:(totalUsd - lobista).toFixed(2),
+            raw_total_usd:  totalUsd.toFixed(2),
+            data_uso:       planilha.data || '',
+            data_pagamento: planilha.data_pagamento || '',
+            identificador:  planilha.identificador || '',
+            fornecedor:     planilha.fornecedor || '',
+            status:         planilha.status || ''
+          };
+        });
+
+        filterOrders();
+      } catch (error) {
+        console.error('Erro ao carregar os dados:', error);
+        document.getElementById('orders-table').innerHTML = `
+          <tr>
+            <td colspan="10" style="text-align: center; color: red;">
+              Erro ao carregar os pedidos.
+            </td>
+          </tr>`;
       }
-      const pedidoMap = {};
-      pedidosData.forEach(p => {
-        pedidoMap[p.id] = p.nome;
-      });
-      combinedOrders = planilhasData.map(pl => {
-        const tot = parseFloat(pl.total_usd) || 0;
-        const lob = parseFloat(pl.lobista) || 0;
-        return {
-          nome: pedidoMap[pl.id_pedido] || "N/A",
-          id_pedido: pl.id_pedido,
-          produto: pl.produto || "",
-          valor_calculado: (tot - lob).toFixed(2),
-          data_uso: pl.data || "",
-          data_pagamento: pl.data_pagamento || "",
-          identificador: pl.identificador || "",
-          fornecedor: pl.fornecedor || "",
-          status: pl.status || ""
-        };
-      });
-      displayedOrders = combinedOrders.slice();
-      currentPage = 1;
-      renderOrdersTable(displayedOrders);
-      renderPagination(displayedOrders);
-      updateFirstBlock();
-      fillProximosDias();
-    } catch (error) {
-      console.error("Erro ao carregar os dados:", error);
-      document.getElementById("orders-table").innerHTML = `<tr><td colspan="10" style="text-align:center;color:red;">Erro ao carregar os pedidos.</td></tr>`;
-    }
-  }
-
-  // ============================================================
-  // Inicialização Geral (DOM Ready)
-  // ============================================================
-  document.addEventListener("DOMContentLoaded", () => {
-    initOrdersSorting();
-    initializeCalendar();
-    loadOrders();
-  });
-
-  function filterOrders() {
-  // Filtra por data de pagamento no intervalo selectedStartDate / selectedEndDate
-    let filtered = combinedOrders;
-    if (selectedStartDate && selectedEndDate) {
-      filtered = combinedOrders.filter(order => {
-        if (!order.data_pagamento) return false;
-        const [year, month, day] = order.data_pagamento.split('-').map(Number);
-        const paymentDate = new Date(year, month - 1, day);
-        return paymentDate >= selectedStartDate && paymentDate <= selectedEndDate;
-      });
     }
 
-    // Se há uma coluna em modo de ordenação, aplica a ordenação
-    const activeColumn = Object.keys(sortDirections).find(col => sortDirections[col] !== null);
-    if (activeColumn) {
-      sortOrdersBy(activeColumn); 
-    } else {
-      // Se não há coluna “ativa” p/ sort, apenas atualiza listagem/paginação
-      displayedOrders = filtered;
-      currentPage = 1;
-      renderOrdersTable(displayedOrders);
-      renderPagination(displayedOrders);
-      updateFirstBlock(); // se quiser recalcular os cards
-    }
-  }
+    function initializeCalendar() {
+      const openCalendarBtn        = document.getElementById("open-calendar-btn");
+      const backBtn                = document.getElementById("back-btn");
+      const applyBtn               = document.getElementById("apply-btn");
+      const calendarModal          = document.getElementById("calendarModal");
+      const bootstrapModal         = new bootstrap.Modal(calendarModal);
+      const calendarDatesContainer = document.querySelector(".calendar__dates");
+      const monthSelect            = document.getElementById("calendar__month");
+      const yearSelect             = document.getElementById("calendar__year");
+      const selectedDateDisplay    = document.getElementById("datas-selecionadas");
 
-  function updateSortIndicators(activeKey, direction) {
-    const thElements = document.querySelectorAll('table thead th');
+      openCalendarBtn.addEventListener("click", () => {
+        bootstrapModal.show();
+      });
+      backBtn.addEventListener("click", () => {
+        bootstrapModal.hide();
+      });
+      applyBtn.addEventListener("click", () => {
+        if (selectedStartDate && !selectedEndDate) {
+          selectedEndDate = selectedStartDate;
+        }
+        if (!selectedStartDate || !selectedEndDate) {
+          alert("Por favor, selecione um intervalo completo de datas.");
+          return;
+        }
+        updateSelectedDateDisplay();
+        bootstrapModal.hide();
+        loadOrders();
+      });
 
-    // Remove classes de todas as colunas
-    thElements.forEach(th => {
-      const span = th.querySelector('.sort-indicator');
-      if (span) {
-        span.classList.remove('asc', 'desc');
-      }
-    });
+      monthSelect.addEventListener("change", renderCalendar);
+      yearSelect.addEventListener("change", renderCalendar);
 
-    // Adiciona classe na coluna “ativa”
-    const activeTh = document.querySelector(`th[data-sort-key="${activeKey}"]`);
-    if (activeTh) {
-      const span = activeTh.querySelector('.sort-indicator');
-      if (span) {
-        if (direction === 'asc') {
-          span.classList.add('asc');
-        } else if (direction === 'desc') {
-          span.classList.add('desc');
+      function renderCalendar() {
+        const month = parseInt(monthSelect.value);
+        const year  = parseInt(yearSelect.value);
+        const firstDayOfMonth = new Date(year, month, 1).getDay();
+        const daysInMonth     = new Date(year, month + 1, 0).getDate();
+
+        calendarDatesContainer.innerHTML = '';
+        for (let i = 0; i < firstDayOfMonth; i++) {
+          const emptyDate = document.createElement('div');
+          emptyDate.classList.add('calendar__date','calendar__date--grey');
+          calendarDatesContainer.appendChild(emptyDate);
+        }
+
+        for (let i = 1; i <= daysInMonth; i++) {
+          const dateElement = document.createElement('div');
+          dateElement.classList.add('calendar__date');
+          dateElement.textContent = i;
+
+          dateElement.addEventListener("click", () => {
+            const clickedDate = new Date(year, month, i);
+
+            if (!selectedStartDate || (selectedStartDate && selectedEndDate)) {
+              selectedStartDate = clickedDate;
+              selectedEndDate   = null;
+              clearSelection();
+              dateElement.classList.add('calendar__date--selected','calendar__date--range-start');
+            } else if (clickedDate < selectedStartDate) {
+              selectedStartDate = clickedDate;
+              selectedEndDate   = null;
+              clearSelection();
+              dateElement.classList.add('calendar__date--selected','calendar__date--range-start');
+            } else {
+              selectedEndDate = clickedDate;
+              highlightRange(selectedStartDate, selectedEndDate);
+            }
+            updateSelectedDateDisplay();
+          });
+
+          calendarDatesContainer.appendChild(dateElement);
         }
       }
+
+      function clearSelection() {
+        document.querySelectorAll('.calendar__date--selected, .calendar__date--range-start, .calendar__date--range-end')
+          .forEach(el => {
+            el.classList.remove('calendar__date--selected','calendar__date--range-start','calendar__date--range-end');
+          });
+      }
+
+      function highlightRange(start, end) {
+        const allDates = document.querySelectorAll('.calendar__date');
+        const startTimestamp = start.getTime();
+        const endTimestamp   = end.getTime();
+
+        allDates.forEach(el => {
+          const day = parseInt(el.textContent);
+          if (isNaN(day)) return;
+          const elDate = new Date(yearSelect.value, monthSelect.value, day).getTime();
+          if (elDate >= startTimestamp && elDate <= endTimestamp) {
+            el.classList.add('calendar__date--selected');
+            if (elDate === startTimestamp) el.classList.add('calendar__date--range-start');
+            if (elDate === endTimestamp)   el.classList.add('calendar__date--range-end');
+          }
+        });
+      }
+
+      function updateSelectedDateDisplay() {
+        if (selectedStartDate && selectedEndDate) {
+          const startDateStr = formatDisplayDate(selectedStartDate);
+          const endDateStr   = formatDisplayDate(selectedEndDate);
+          selectedDateDisplay.textContent = `Datas selecionadas: ${startDateStr} - ${endDateStr}`;
+        } else if (selectedStartDate) {
+          selectedDateDisplay.textContent = `Data selecionada: ${formatDisplayDate(selectedStartDate)}`;
+        } else {
+          selectedDateDisplay.textContent = '';
+        }
+      }
+
+      monthSelect.value = selectedStartDate.getMonth();
+      yearSelect.value  = selectedStartDate.getFullYear();
+      renderCalendar();
+      updateSelectedDateDisplay();
     }
-  }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initializeCalendar();
+      loadOrders();
+      initSortingEvents();
+    });
 
   </script>
   <!-- ========= All Javascript files linkup ======== -->
@@ -2164,4 +2228,5 @@
   <script src="assets/js/main.js"></script>
 
 </body>
+
 </html>
