@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -1329,692 +1328,329 @@
   const rowsPerPage = 10;
   const sortDirections = {};
 
-  // Datas para filtro (usadas no calendário)
-  let selectedStartDate = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
-  let selectedEndDate = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
+  <script>
+    /* ======================================
+       VARIÁVEIS GLOBAIS
+    ====================================== */
+    let currentPage = 1;
+    const rowsPerPage = 10;
+    let combinedOrders = [];
 
-  // Configurações de cotação do dólar (aplicando spread de +0,98%)
-  const ultimaCotacaoFechamento = 5.79;
-  const penultimaCotacaoFechamento = 5.75;
-  let cotacaoEmUso = parseFloat((ultimaCotacaoFechamento * (1 + 0.0098)).toFixed(2));
-  let cotacaoPenultima = parseFloat((penultimaCotacaoFechamento * (1 + 0.0098)).toFixed(2));
-  let userCotacaoManual = null;
+    let displayedOrders = [];
 
-  // ============================================================
-  // Funções Utilitárias
-  // ============================================================
-  function calcPercentChange(newVal, oldVal) {
-    if (oldVal === 0) return newVal === 0 ? 0 : 100;
-    return ((newVal - oldVal) / oldVal) * 100;
-  }
+    let selectedStartDate = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+    let selectedEndDate   = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
 
-  function normalizeStatus(status) {
-    if (!status) return "";
-    return status.toLowerCase().normalize("NFKC").trim().replace(/[\u00A0\u200B\uFEFF\u2060]/g, "").replace(/[\u2013\u2014-]/g, "–");
-  }
+    const ultimaCotacaoFechamento   = 5.79;
+    const penultimaCotacaoFechamento= 5.75;
 
-  function formatDate(dateStr) {
-    if (!dateStr) return "";
-    const [year, month, day] = dateStr.split("-").map(Number);
-    return `${String(day).padStart(2, "0")}/${String(month).padStart(2, "0")}/${year}`;
-  }
+    let cotacaoEmUso     = parseFloat((ultimaCotacaoFechamento * (1 + 0.0098)).toFixed(2));
+    let cotacaoPenultima = parseFloat((penultimaCotacaoFechamento * (1 + 0.0098)).toFixed(2));
+    let userCotacaoManual= null;
 
-  function formatDisplayDate(dateObj) {
-    const d = String(dateObj.getDate()).padStart(2, "0");
-    const m = String(dateObj.getMonth() + 1).padStart(2, "0");
-    const y = dateObj.getFullYear();
-    return `${d}/${m}/${y}`;
-  }
+    const sortDirections = {};
 
-  // ============================================================
-  // (1) Bloco – Cartões de Resumo
-  //    - Card 1: Total a Pagar (U$) – cor rgb(54, 92, 245)
-  //    - Card 2: Total de Itens – cor rgb(52, 93, 157)
-  //    - Card 3: Valor a Pagar (R$) – cor #219653
-  // ============================================================
-  function calculateTotalsForPeriod(orders, startDate, endDate) {
-    let totalUsd = 0;
-    let orderIds = new Set();
-    orders.forEach(order => {
-      if (!order.data_pagamento) return;
-      const [year, month, day] = order.data_pagamento.split("-").map(Number);
-      const paymentDate = new Date(year, month - 1, day);
-      if (paymentDate >= startDate && paymentDate <= endDate) {
-        const st = normalizeStatus(order.status);
-        // Somente para os status: emissão bloqueada, emitido – não pago e emitido tif
-        if (["emissão bloqueada", "emitido – não pago", "emitido tif"].includes(st)) {
-          totalUsd += parseFloat(order.valor_calculado) || 0;
-        }
-        orderIds.add(order.id_pedido);
-      }
-    });
-    return { totalUsd, totalItens: orderIds.size };
-  }
-
-  function updateFirstBlock() {
-    // Calcula os totais para o período selecionado
-    const totals = calculateTotalsForPeriod(displayedOrders, selectedStartDate, selectedEndDate);
-
-    // Valores de comparação do período anterior (estes valores devem ser calculados conforme sua lógica; aqui são exemplificados)
-    const previousTotals = { totalUsd: 100, totalItens: 10 };
-    const pctUsd = calcPercentChange(totals.totalUsd, previousTotals.totalUsd);
-    const pctItens = calcPercentChange(totals.totalItens, previousTotals.totalItens);
-
-    // Atualiza o Card 1 – "Total a Pagar (U$)"
-    const cardUsdEl = document.getElementById("cardTotalUsd");
-    if (cardUsdEl) {
-      cardUsdEl.innerText = `U$ ${totals.totalUsd.toFixed(2)}`;
-    }
-    const compUsdEl = document.getElementById("cardComparativoUsd");
-    if (compUsdEl) {
-      compUsdEl.innerText = pctUsd >= 0 ? `+${pctUsd.toFixed(1)}% vs ant.` : `${pctUsd.toFixed(1)}% vs ant.`;
-    }
-
-    // Atualiza o Card 2 – "Total de Itens"
-    const cardItensEl = document.getElementById("cardTotalItens");
-    if (cardItensEl) {
-      cardItensEl.innerText = totals.totalItens;
-    }
-    const compItensEl = document.getElementById("cardComparativoItens");
-    if (compItensEl) {
-      compItensEl.innerText = pctItens >= 0 ? `+${pctItens.toFixed(1)}% vs ant.` : `${pctItens.toFixed(1)}% vs ant.`;
-    }
-
-    // Atualiza o Card 3 – "Valor a Pagar (R$)"
-    const finalCot = userCotacaoManual !== null ? userCotacaoManual : cotacaoEmUso;
-    const totalReais = totals.totalUsd * finalCot;
-    const cardReaisEl = document.getElementById("cardTotalReais");
-    if (cardReaisEl) {
-      cardReaisEl.innerText = `R$ ${totalReais.toFixed(2)}`;
-    }
-  }
-
-  function applyUserDollar() {
-    const input = document.getElementById("inputDollarRate");
-    const val = parseFloat(input.value);
-    if (!isNaN(val) && val > 0) {
-      userCotacaoManual = val;
-      updateFirstBlock();
-      fillProximosDias();
-    } else {
-      alert("Por favor, informe um valor válido para a cotação.");
-    }
-  }
-
-  // ============================================================
-  // (2) Bloco – Tabela "Financeiro | Pedidos" (Recent Activities)
-  // ============================================================
-  function getStatusButton(status) {
-    const st = normalizeStatus(status);
-    let btnClass = "main-btn ";
-    switch (st) {
-      case "concluído":
-        btnClass += "success-btn";
-        break;
-      case "emitido – não pago":
-        btnClass += "active-btn";
-        break;
-      case "emitido tif":
-        btnClass += "warning-btn";
-        break;
-      case "aguardando emissão":
-        btnClass += "danger-btn";
-        break;
-      case "emissão bloqueada":
-        btnClass += "dark-btn";
-        break;
-      default:
-        btnClass += "secondary-btn";
-        break;
-    }
-    return `<a href="#0" class="${btnClass} btn-hover" style="padding:4px 10px; font-size:12px;">${status || "Sem Status"}</a>`;
-  }
-
-  function renderOrdersTable(data) {
-    const tbody = document.getElementById("orders-table");
-    const start = (currentPage - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-    const slice = data.slice(start, end);
-    let html = "";
-    slice.forEach(order => {
-      html += `<tr>
-        <td>${order.nome}</td>
-        <td>${order.id_pedido}</td>
-        <td>${order.produto}</td>
-        <td>U$ ${order.valor_calculado}</td>
-        <td>${formatDate(order.data_uso)}</td>
-        <td>${formatDate(order.data_pagamento)}</td>
-        <td>${order.identificador}</td>
-        <td>${order.fornecedor}</td>
-        <td>${getStatusButton(order.status)}</td>
-        <td style="text-align:center;">
-          <i class="bi bi-eye" style="cursor:pointer;" onclick="openDetailsPage('${order.id_pedido}')"></i>
-        </td>
-      </tr>`;
-    });
-    tbody.innerHTML = html;
-  }
-
-  function renderPagination(data) {
-    const pag = document.getElementById("pagination-controls");
-    pag.innerHTML = "";
-    const totalPages = Math.ceil(data.length / rowsPerPage);
-    for (let i = 1; i <= totalPages; i++) {
-      const btn = document.createElement("button");
-      btn.textContent = i;
-      btn.disabled = (i === currentPage);
-      btn.onclick = () => {
-        currentPage = i;
-        renderOrdersTable(displayedOrders);
-        renderPagination(displayedOrders);
-      };
-      pag.appendChild(btn);
-    }
-  }
-
-  function sortOrdersBy(key) {
-    let dir = sortDirections[key] === "asc" ? "desc" : "asc";
-    for (let k in sortDirections) {
-      sortDirections[k] = null;
-    }
-    sortDirections[key] = dir;
-    displayedOrders.sort((a, b) => {
-      let aVal = a[key], bVal = b[key];
-      if (key === "data_uso" || key === "data_pagamento") {
-        aVal = aVal ? new Date(aVal).getTime() : 0;
-        bVal = bVal ? new Date(bVal).getTime() : 0;
-      } else if (key === "valor_calculado") {
-        aVal = parseFloat(aVal) || 0;
-        bVal = parseFloat(bVal) || 0;
+    /* ======================================
+       FUNÇÕES PRINCIPAIS
+    ====================================== */
+    function applyUserDollar() {
+      const val = parseFloat(document.getElementById('inputDollarRate').value);
+      if (!isNaN(val) && val > 0) {
+        userCotacaoManual = parseFloat((val * (1 + 0.0098)).toFixed(2));
+        filterOrders();
       } else {
-        aVal = String(aVal).toLowerCase();
-        bVal = String(bVal).toLowerCase();
+        alert('Por favor, informe um valor válido para a cotação.');
       }
-      if (aVal < bVal) return dir === "asc" ? -1 : 1;
-      if (aVal > bVal) return dir === "asc" ? 1 : -1;
-      return 0;
-    });
-    currentPage = 1;
-    renderOrdersTable(displayedOrders);
-    renderPagination(displayedOrders);
-  }
+    }
 
-  function initOrdersSorting() {
-    const ths = document.querySelectorAll("table thead th[data-sort-key]");
-    ths.forEach(th => {
-      const key = th.getAttribute("data-sort-key");
-      th.addEventListener("click", () => sortOrdersBy(key));
-    });
-  }
+    function decodeHtmlEntities(str) {
+      const el = document.createElement('textarea');
+      el.innerHTML = str;
+      return el.value;
+    }
 
-  function openDetailsPage(orderId) {
-    window.open(`detalhes.html?pedido=${orderId}`, "_blank");
-  }
+    function normalizeStatus(status) {
+      let st = decodeHtmlEntities(status || '');
+      st = st.toLowerCase().normalize('NFKC');
+      st = st.replace(/[\u00A0\u200B\uFEFF\u2060]/g, '');
+      st = st.replace(/[\u2013\u2014-]/g, '–');
+      return st.trim();
+    }
 
-  // ============================================================
-  // (3) Bloco – Sell Order (Próximos Pagamentos)
-  //    - Price: Data, Amount: Dólar, Total: Reais (usando a cotação do Card 3)
-  // ============================================================
-  function fillProximosDias() {
-    const tBody = document.getElementById("proximos-body");
-    tBody.innerHTML = "";
-    const hoje = new Date();
-    const finalCot = userCotacaoManual !== null ? userCotacaoManual : cotacaoEmUso;
-    // Filtra pedidos com data de pagamento futura
-    const futureOrders = combinedOrders.filter(order => {
-      if (!order.data_pagamento) return false;
-      const [y, m, d] = order.data_pagamento.split("-").map(Number);
-      const orderDate = new Date(y, m - 1, d);
-      return orderDate > hoje;
-    });
-    // Agrupa os pedidos por data de pagamento
-    const grouped = {};
-    futureOrders.forEach(order => {
-      const dateKey = order.data_pagamento;
-      if (!grouped[dateKey]) grouped[dateKey] = [];
-      grouped[dateKey].push(order);
-    });
-    // Ordena as datas e preenche a tabela
-    const dates = Object.keys(grouped).sort((a, b) => new Date(a) - new Date(b));
-    dates.forEach(dateStr => {
-      const orders = grouped[dateStr];
+    function formatDate(dateString) {
+      if (!dateString) return '';
+      const [year, month, day] = dateString.split('-').map(Number);
+      return `${String(day).padStart(2, '0')}/${String(month).padStart(2, '0')}/${year}`;
+    }
+
+    function formatDisplayDate(dateObj) {
+      const d = String(dateObj.getDate()).padStart(2, '0');
+      const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const y = dateObj.getFullYear();
+      return `${d}/${m}/${y}`;
+    }
+
+    function openDetailsPage(orderId) {
+      window.open(`detalhes.html?pedido=${orderId}`, '_blank');
+    }
+
+    function getStatusBadge(status) {
+      const st = normalizeStatus(status);
+      switch (st) {
+        case 'concluído':
+          return `<button class="status-badge" style="background-color:#1cbb8c;">Concluído</button>`;
+        case 'emitido – não pago':
+          return `<button class="status-badge" style="background-color:#dc3545;">Emitido – Não Pago</button>`;
+        case 'emitido tif':
+          return `<button class="status-badge" style="background-color:#fcb92c;">Emitido TIF</button>`;
+        case 'aguardando emissão':
+          return `<button class="status-badge" style="background-color:#3b7ddd;">Aguardando Emissão</button>`;
+        case 'emissão bloqueada':
+          return `<button class="status-badge" style="background-color:#dc3545;">Emissão Bloqueada</button>`;
+        default:
+          return `<button class="status-badge" style="background-color:#6c757d;">${status || 'Sem Status'}</button>`;
+      }
+    }
+
+    function calcPercentChange(newValue, oldValue) {
+      if (oldValue === 0) {
+        if (newValue === 0) return 0;
+        return 100;
+      }
+      return ((newValue - oldValue) / oldValue) * 100;
+    }
+
+    function getPreviousInterval(startDate, endDate) {
+      const oneDayMs = 86400000;
+      const lengthMs = endDate - startDate + oneDayMs;
+      const endDateAnterior = new Date(startDate.getTime() - oneDayMs);
+      const startDateAnterior = new Date(endDateAnterior.getTime() - (lengthMs - oneDayMs));
+      return [startDateAnterior, endDateAnterior];
+    }
+
+    function calculateIntervalData(orders, rangeStart, rangeEnd) {
       let totalUsd = 0;
+      let pedidosSet = new Set();
+
       orders.forEach(order => {
-        totalUsd += parseFloat(order.valor_calculado) || 0;
-      });
-      const totalBrl = totalUsd * finalCot;
-      const formattedDate = formatDate(dateStr);
-      const row = `<tr>
-        <td>${formattedDate}</td>
-        <td>U$ ${totalUsd.toFixed(2)}</td>
-        <td class="text-end">R$ ${totalBrl.toFixed(2)}</td>
-      </tr>`;
-      tBody.insertAdjacentHTML("beforeend", row);
-    });
-  }
+        const status = normalizeStatus(order.status);
+        const valorPedido = parseFloat(order.raw_total_usd) || 0;
+        if (!order.data_pagamento) return;
+        const [yyyy, mm, dd] = order.data_pagamento.split('-').map(Number);
+        const dataPagamento = new Date(yyyy, mm - 1, dd);
 
-  // ============================================================
-  // (4) Charts e Tema (Integração completa com o template PlainAdmin)
-  // ============================================================
-
-  // Chart 1
-  const ctx1 = document.getElementById("myChart1").getContext("2d");
-  const gradient1 = ctx1.createLinearGradient(0, 0, 0, 180);
-  gradient1.addColorStop(0, "rgba(250, 157, 42, 0.2)");
-  gradient1.addColorStop(0.25, "rgba(250, 157, 42, 0.1)");
-  gradient1.addColorStop(1, "rgba(250, 157, 42, 0)");
-  const chart1 = new Chart(ctx1, {
-    type: "line",
-    data: {
-      labels: ["Jan 2020", "Feb 2020", "Mar 2020", "Apr 2020", "May 2020", "Jun 2020", "Jul 2020", "Aug 2020", "Sep 2020", "Oct 2020", "Nov 2020", "Dec 2020"],
-      datasets: [{
-        label: "",
-        backgroundColor: gradient1,
-        borderColor: "#FA9D2A",
-        borderWidth: 3,
-        data: [23, 70, 31, 78, 49, 70, 30, 50, 80, 20, 50, 99],
-        fill: true,
-        pointRadius: 7,
-        pointHoverRadius: 7
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      layout: { padding: { top: 50, bottom: 12, left: 12, right: 12 } },
-      scales: { y: { display: false }, x: { display: false } },
-      plugins: {
-        tooltip: {
-          intersect: false,
-          backgroundColor: "#fff9f4",
-          bodyColor: "rgba(250, 157, 42, 1)",
-          bodyFont: { weight: "bold", size: 16, family: "Plus Jakarta Sans" },
-          titleFont: { size: 0 },
-          padding: 15,
-          displayColors: false,
-          cornerRadius: 15,
-          position: "average"
-        },
-        legend: { display: false }
-      }
-    }
-  });
-
-  // Chart 2
-  const ctx2 = document.getElementById("myChart2").getContext("2d");
-  const gradient2 = ctx2.createLinearGradient(0, 0, 0, 180);
-  gradient2.addColorStop(0, "rgba(155, 81, 224, 0.2)");
-  gradient2.addColorStop(0.25, "rgba(155, 81, 224, 0.1)");
-  gradient2.addColorStop(1, "rgba(155, 81, 224, 0)");
-  const chart2 = new Chart(ctx2, {
-    type: "line",
-    data: {
-      labels: ["Jan 2020", "Feb 2020", "Mar 2020", "Apr 2020", "May 2020", "Jun 2020", "Jul 2020", "Aug 2020", "Sep 2020", "Oct 2020", "Nov 2020", "Dec 2020"],
-      datasets: [{
-        label: "",
-        backgroundColor: gradient2,
-        borderColor: "#9B51E0",
-        data: [20, 80, 15, 78, 41, 85, 26, 90, 60, 80, 48, 99],
-        fill: true,
-        pointRadius: 7,
-        pointHoverRadius: 7
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      layout: { padding: { top: 50, bottom: 12, left: 12, right: 12 } },
-      scales: { y: { display: false }, x: { display: false } },
-      plugins: {
-        tooltip: {
-          intersect: false,
-          backgroundColor: "#f2e4ff",
-          bodyColor: "rgba(155, 81, 224, 1)",
-          bodyFont: { weight: "bold", size: 16, family: "Plus Jakarta Sans" },
-          titleFont: { size: 0 },
-          padding: 15,
-          displayColors: false,
-          cornerRadius: 15,
-          position: "average"
-        },
-        legend: { display: false }
-      }
-    }
-  });
-
-  // Chart 3
-  const ctx3 = document.getElementById("myChart3").getContext("2d");
-  const gradient3 = ctx3.createLinearGradient(0, 0, 0, 180);
-  gradient3.addColorStop(0, "rgba(98, 126, 234, 0.2)");
-  gradient3.addColorStop(0.25, "rgba(98, 126, 234, 0.1)");
-  gradient3.addColorStop(1, "rgba(98, 126, 234, 0)");
-  const chart3 = new Chart(ctx3, {
-    type: "line",
-    data: {
-      labels: ["Jan 2020", "Feb 2020", "Mar 2020", "Apr 2020", "May 2020", "Jun 2020", "Jul 2020", "Aug 2020", "Sep 2020", "Oct 2020", "Nov 2020", "Dec 2020"],
-      datasets: [{
-        label: "",
-        backgroundColor: gradient3,
-        borderColor: "#627EEA",
-        data: [56, 20, 61, 38, 90, 61, 99, 60, 30, 80, 40, 99],
-        fill: true,
-        pointRadius: 7,
-        pointHoverRadius: 7
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      layout: { padding: { top: 50, bottom: 12, left: 12, right: 12 } },
-      scales: { y: { display: false }, x: { display: false } },
-      plugins: {
-        tooltip: {
-          intersect: false,
-          backgroundColor: "#ebf3fd",
-          bodyColor: "rgba(98, 126, 234, 1)",
-          bodyFont: { weight: "bold", size: 16, family: "Plus Jakarta Sans" },
-          titleFont: { size: 0 },
-          padding: 15,
-          displayColors: false,
-          cornerRadius: 15,
-          position: "average"
-        },
-        legend: { display: false }
-      }
-    }
-  });
-
-  // Chart 4
-  const ctx4 = document.getElementById("myChart4").getContext("2d");
-  const gradient4 = ctx4.createLinearGradient(0, 0, 0, 180);
-  gradient4.addColorStop(0, "rgba(52, 93, 157, 0.2)");
-  gradient4.addColorStop(0.25, "rgba(52, 93, 157, 0.1)");
-  gradient4.addColorStop(1, "rgba(52, 93, 157, 0)");
-  const chart4 = new Chart(ctx4, {
-    type: "line",
-    data: {
-      labels: ["Jan 2020", "Feb 2020", "Mar 2020", "Apr 2020", "May 2020", "Jun 2020", "Jul 2020", "Aug 2020", "Sep 2020", "Oct 2020", "Nov 2020", "Dec 2020"],
-      datasets: [{
-        label: "",
-        backgroundColor: gradient4,
-        borderColor: "#345D9D",
-        data: [90, 40, 80, 30, 65, 50, 79, 20, 90, 40, 70, 99],
-        fill: true,
-        pointRadius: 7,
-        pointHoverRadius: 7
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      layout: { padding: { top: 50, bottom: 12, left: 12, right: 12 } },
-      scales: { y: { display: false }, x: { display: false } },
-      plugins: {
-        tooltip: {
-          intersect: false,
-          backgroundColor: "#e7f0ff",
-          bodyColor: "rgba(52, 93, 157, 1)",
-          bodyFont: { weight: "bold", size: 16, family: "Plus Jakarta Sans" },
-          titleFont: { size: 0 },
-          padding: 15,
-          displayColors: false,
-          cornerRadius: 15,
-          position: "average"
-        },
-        legend: { display: false }
-      }
-    }
-  });
-
-  // Doughnut Chart 1 (usando ApexCharts)
-  const doughnutChart1 = new ApexCharts(document.querySelector("#doughnutChart1"), {
-    series: [83, 67, 55, 44],
-    chart: { height: 350, type: "radialBar" },
-    plotOptions: {
-      radialBar: {
-        dataLabels: { name: { fontSize: "22px" }, value: { fontSize: "16px" } },
-        hollow: { size: "40%" },
-        track: { strokeWidth: "100%", margin: 10 }
-      }
-    },
-    stroke: { lineCap: "round" },
-    labels: ["Income", "Installment", "Spends", "Invest"],
-    colors: ["#4a6cf7", "#f2994a", "#d50100", "#f7c800"]
-  });
-  doughnutChart1.render();
-
-  // Chart 5 – Multi-series
-  const ctx5 = document.getElementById("Chart5").getContext("2d");
-  const chart5 = new Chart(ctx5, {
-    type: "line",
-    data: {
-      labels: ["Week 01", "Week 02", "Week 03", "Week 04", "Week 05", "Week 06"],
-      datasets: [
-        {
-          label: "Series 1",
-          backgroundColor: "transparent",
-          borderColor: "#4A6CF7",
-          data: [80, 120, 110, 100, 130, 150],
-          pointRadius: 4,
-          pointHoverRadius: 8,
-          tension: 0.4,
-          fill: false,
-          borderWidth: 4
-        },
-        {
-          label: "Series 2",
-          backgroundColor: "transparent",
-          borderColor: "#97ca31",
-          data: [250, 160, 150, 140, 165, 210],
-          pointRadius: 4,
-          pointHoverRadius: 8,
-          tension: 0.4,
-          fill: false,
-          borderWidth: 4
-        },
-        {
-          label: "Series 3",
-          backgroundColor: "transparent",
-          borderColor: "#9b51e0",
-          data: [210, 165, 140, 150, 160, 120],
-          pointRadius: 4,
-          pointHoverRadius: 8,
-          tension: 0.4,
-          fill: false,
-          borderWidth: 4
-        },
-        {
-          label: "Series 4",
-          backgroundColor: "transparent",
-          borderColor: "#219653",
-          data: [115, 150, 130, 100, 110, 120],
-          pointRadius: 4,
-          pointHoverRadius: 8,
-          tension: 0.4,
-          fill: false,
-          borderWidth: 4
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      layout: { padding: { top: 0 } },
-      scales: {
-        y: { grid: { drawBorder: false, color: "rgba(143, 146, 161, .1)", zeroLineColor: "rgba(143, 146, 161, .1)" }, ticks: { padding: 35, max: 300, min: 50 } },
-        x: { grid: { display: false, drawTicks: false, drawBorder: false }, ticks: { padding: 20 } }
-      },
-      plugins: {
-        tooltip: {
-          callbacks: {
-            labelColor: (context) => ({ backgroundColor: "#ffffff", color: "#171717" })
-          },
-          intersect: false,
-          backgroundColor: "#f9f9f9",
-          title: { fontFamily: "Plus Jakarta Sans", color: "#8F92A1", fontSize: 12 },
-          body: { fontFamily: "Plus Jakarta Sans", color: "#171717", fontStyle: "normal", fontSize: 16 },
-          padding: { x: 30, y: 10 },
-          displayColors: false,
-          cornerRadius: 15,
-          position: "average"
-        },
-        legend: { display: false }
-      }
-    }
-  });
-
-  // Função para aplicar tema no Chart 5
-  const lightThemeColors = { darkBorder: "rgba(143, 146, 161, .1)", darkColor: "#5A6A85" };
-  const darkThemeColors = { darkBorder: "#2b2b42", darkColor: "#838C9A" };
-  function applyThemeColors(themeColors) {
-    chart5.options.scales.y.grid.color = themeColors.darkBorder;
-    chart5.options.scales.y.grid.borderColor = themeColors.darkBorder;
-    chart5.options.scales.x.ticks.color = themeColors.darkColor;
-    chart5.options.scales.y.ticks.color = themeColors.darkColor;
-    chart5.update();
-  }
-  const darkThemeButton = document.querySelector('.darkThemeButton');
-  const lightThemeButton = document.querySelector('.lightThemeButton');
-  const savedTheme = localStorage.getItem('theme');
-  if (savedTheme === 'dark') {
-    applyThemeColors(darkThemeColors);
-  } else {
-    applyThemeColors(lightThemeColors);
-  }
-  if (darkThemeButton) {
-    darkThemeButton.addEventListener('click', () => {
-      applyThemeColors(darkThemeColors);
-      localStorage.setItem('theme', 'dark');
-    });
-  }
-  if (lightThemeButton) {
-    lightThemeButton.addEventListener('click', () => {
-      applyThemeColors(lightThemeColors);
-      localStorage.setItem('theme', 'light');
-    });
-  }
-
-  // ============================================================
-  // (5) Calendar Modal Initialization
-  // ============================================================
-  function initializeCalendar() {
-    const openCalendarBtn = document.getElementById("open-calendar-btn");
-    const backBtn = document.getElementById("back-btn");
-    const applyBtn = document.getElementById("apply-btn");
-    const calendarModal = document.getElementById("calendarModal");
-    const bootstrapModal = new bootstrap.Modal(calendarModal);
-    const calendarDatesContainer = document.querySelector(".calendar__dates");
-    const monthSelect = document.getElementById("calendar__month");
-    const yearSelect = document.getElementById("calendar__year");
-    const selectedDateDisplay = document.getElementById("datas-selecionadas");
-
-    openCalendarBtn.addEventListener("click", () => {
-      bootstrapModal.show();
-    });
-    backBtn.addEventListener("click", () => {
-      bootstrapModal.hide();
-    });
-    applyBtn.addEventListener("click", () => {
-      if (selectedStartDate && !selectedEndDate) {
-        selectedEndDate = selectedStartDate;
-      }
-      if (!selectedStartDate || !selectedEndDate) {
-        alert("Por favor, selecione um intervalo completo de datas.");
-        return;
-      }
-      updateSelectedDateDisplay();
-      bootstrapModal.hide();
-      loadOrders();
-    });
-
-    monthSelect.addEventListener("change", renderCalendar);
-    yearSelect.addEventListener("change", renderCalendar);
-
-    function renderCalendar() {
-      const month = parseInt(monthSelect.value);
-      const year = parseInt(yearSelect.value);
-      const firstDayOfMonth = new Date(year, month, 1).getDay();
-      const daysInMonth = new Date(year, month + 1, 0).getDate();
-      calendarDatesContainer.innerHTML = "";
-      for (let i = 0; i < firstDayOfMonth; i++) {
-        const emptyDiv = document.createElement("div");
-        emptyDiv.classList.add("calendar__date", "calendar__date--grey");
-        calendarDatesContainer.appendChild(emptyDiv);
-      }
-      for (let i = 1; i <= daysInMonth; i++) {
-        const dateDiv = document.createElement("div");
-        dateDiv.classList.add("calendar__date");
-        dateDiv.textContent = i;
-        dateDiv.addEventListener("click", () => {
-          const clickedDate = new Date(year, month, i);
-          if (!selectedStartDate || (selectedStartDate && selectedEndDate)) {
-            selectedStartDate = clickedDate;
-            selectedEndDate = null;
-            clearSelection();
-            dateDiv.classList.add("calendar__date--selected", "calendar__date--range-start");
-          } else if (clickedDate < selectedStartDate) {
-            selectedStartDate = clickedDate;
-            selectedEndDate = null;
-            clearSelection();
-            dateDiv.classList.add("calendar__date--selected", "calendar__date--range-start");
-          } else {
-            selectedEndDate = clickedDate;
-            highlightRange(selectedStartDate, selectedEndDate);
+        if (dataPagamento >= rangeStart && dataPagamento <= rangeEnd) {
+          // Somente se estiver: "emissão bloqueada", "emitido – não pago", ou "emitido tif"
+          if (["emissão bloqueada", "emitido – não pago", "emitido tif"].includes(status)) {
+            totalUsd += valorPedido;
           }
-          updateSelectedDateDisplay();
-        });
-        calendarDatesContainer.appendChild(dateDiv);
+          pedidosSet.add(order.id_pedido);
+        }
+      });
+      return {
+        totalUsd,
+        pedidosDiferentes: pedidosSet.size
+      };
+    }
+
+    function calcularResumoEComparativo(dataToCalc) {
+      const intervaloAtual = calculateIntervalData(dataToCalc, selectedStartDate, selectedEndDate);
+      const totalHoje = intervaloAtual.totalUsd;
+      const pedidosDiferentes = intervaloAtual.pedidosDiferentes;
+
+      const [prevStart, prevEnd] = getPreviousInterval(selectedStartDate, selectedEndDate);
+      const intervaloAnterior = calculateIntervalData(combinedOrders, prevStart, prevEnd);
+      const totalHojeAnterior = intervaloAnterior.totalUsd;
+      const pedidosDiferentesAnterior = intervaloAnterior.pedidosDiferentes;
+
+      const pctHoje = calcPercentChange(totalHoje, totalHojeAnterior);
+      let comparativoHoje = '';
+      if (pctHoje > 0) {
+        comparativoHoje = `+${pctHoje.toFixed(1)}% em relação ao período anterior`;
+      } else if (pctHoje < 0) {
+        comparativoHoje = `${pctHoje.toFixed(1)}% em relação ao período anterior`;
+      } else {
+        comparativoHoje = 'Nenhuma variação em relação ao período anterior';
+      }
+
+      const pctPedidos = calcPercentChange(pedidosDiferentes, pedidosDiferentesAnterior);
+      let comparativoPedidos = '';
+      if (pctPedidos > 0) {
+        comparativoPedidos = `+${pctPedidos.toFixed(1)}% em relação ao período anterior`;
+      } else if (pctPedidos < 0) {
+        comparativoPedidos = `${pctPedidos.toFixed(1)}% em relação ao período anterior`;
+      } else {
+        comparativoPedidos = 'Nenhuma variação em relação ao período anterior';
+      }
+
+      // Determina cotação final (padrão ou digitada pelo usuário)
+      const cotacaoFinal = (userCotacaoManual !== null) ? userCotacaoManual : cotacaoEmUso;
+      const valorReais = totalHoje * cotacaoFinal;
+
+      document.getElementById("totalPagarHoje").innerText     = `U$ ${totalHoje.toFixed(2)}`;
+      document.getElementById("totalPagarHojeCompare").innerText = comparativoHoje;
+
+      document.getElementById("totalPedidos").innerText       = pedidosDiferentes;
+      document.getElementById("totalPedidosCompare").innerText= comparativoPedidos;
+
+      document.getElementById("valorEstimadoReais").innerText = `R$ ${valorReais.toFixed(2)}`;
+      document.getElementById("valorEstimadoCompare").innerText = '';
+    }
+
+    function renderTable(dataToDisplay) {
+      const ordersTable = document.getElementById('orders-table');
+      const start = (currentPage - 1) * rowsPerPage;
+      const end   = start + rowsPerPage;
+      const ordersSlice = dataToDisplay.slice(start, end);
+
+      ordersTable.innerHTML = ordersSlice.map(order => `
+        <tr>
+          <td>${order.nome}</td>
+          <td>${order.id_pedido}</td>
+          <td>${order.produto}</td>
+          <td>U$ ${order.valor_calculado}</td>
+          <td>${order.data_uso ? formatDate(order.data_uso) : ''}</td>
+          <td>${formatDate(order.data_pagamento)}</td>
+          <td>${order.identificador}</td>
+          <td>${order.fornecedor}</td>
+          <td>${getStatusBadge(order.status)}</td>
+          <td style="width:50px; text-align:center;">
+            <i class="bi bi-eye" style="cursor:pointer; font-size:1.2rem;"
+               onclick="openDetailsPage('${order.id_pedido}')"></i>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function renderPagination(dataToDisplay) {
+      const paginationControls = document.getElementById('pagination-controls');
+      const totalPages = Math.ceil(dataToDisplay.length / rowsPerPage);
+      paginationControls.innerHTML = '';
+
+      for (let i = 1; i <= totalPages; i++) {
+        const button = document.createElement('button');
+        button.textContent = i;
+        button.disabled = i === currentPage;
+        button.onclick = () => {
+          currentPage = i;
+          renderTable(dataToDisplay);
+          renderPagination(dataToDisplay);
+        };
+        paginationControls.appendChild(button);
       }
     }
 
-    function clearSelection() {
-      document.querySelectorAll(".calendar__date--selected, .calendar__date--range-start, .calendar__date--range-end")
-        .forEach(el => {
-          el.classList.remove("calendar__date--selected", "calendar__date--range-start", "calendar__date--range-end");
+    function filterOrders() {
+      // Filtra por data de pagamento
+      let filtered = combinedOrders;
+      if (selectedStartDate && selectedEndDate) {
+        filtered = combinedOrders.filter(order => {
+          if (!order.data_pagamento) return false;
+          const [year, month, day] = order.data_pagamento.split('-').map(Number);
+          const paymentDate = new Date(year, month - 1, day);
+          return paymentDate >= selectedStartDate && paymentDate <= selectedEndDate;
         });
+      }
+      displayedOrders = filtered;
+
+      // Se há uma coluna em modo de ordenação, aplica
+      const activeColumn = Object.keys(sortDirections).find(col => sortDirections[col] !== null);
+      if (activeColumn) {
+        sortColumn(activeColumn);
+      } else {
+        currentPage = 1;
+        renderTable(displayedOrders);
+        renderPagination(displayedOrders);
+        calcularResumoEComparativo(displayedOrders);
+      }
     }
 
-    function highlightRange(start, end) {
-      const allDates = document.querySelectorAll(".calendar__date");
-      const startTime = start.getTime();
-      const endTime = end.getTime();
-      allDates.forEach(el => {
-        const day = parseInt(el.textContent);
-        if (isNaN(day)) return;
-        const elDate = new Date(yearSelect.value, monthSelect.value, day).getTime();
-        if (elDate >= startTime && elDate <= endTime) {
-          el.classList.add("calendar__date--selected");
-          if (elDate === startTime) el.classList.add("calendar__date--range-start");
-          if (elDate === endTime) el.classList.add("calendar__date--range-end");
+    function initSortingEvents() {
+      const thElements = document.querySelectorAll('table thead th');
+      thElements.forEach(th => {
+        const sortKey = th.getAttribute('data-sort-key');
+        if (sortKey) {
+          th.addEventListener('click', () => {
+            sortColumn(sortKey);
+          });
         }
       });
     }
 
-    function updateSelectedDateDisplay() {
-      if (selectedStartDate && selectedEndDate) {
-        selectedDateDisplay.textContent = `Datas selecionadas: ${formatDisplayDate(selectedStartDate)} - ${formatDisplayDate(selectedEndDate)}`;
-      } else if (selectedStartDate) {
-        selectedDateDisplay.textContent = `Data selecionada: ${formatDisplayDate(selectedStartDate)}`;
-      } else {
-        selectedDateDisplay.textContent = "";
+    function sortColumn(columnKey) {
+      const currentDirection = sortDirections[columnKey] || null;
+      let newDirection = 'asc';
+      if (currentDirection === 'asc') {
+        newDirection = 'desc';
+      } else if (currentDirection === 'desc') {
+        newDirection = 'asc';
+      }
+      for (let key in sortDirections) {
+        sortDirections[key] = null;
+      }
+      sortDirections[columnKey] = newDirection;
+      displayedOrders.sort((a, b) => compareValues(a, b, columnKey, newDirection));
+      updateSortIndicators(columnKey, newDirection);
+      currentPage = 1;
+      renderTable(displayedOrders);
+      renderPagination(displayedOrders);
+      calcularResumoEComparativo(displayedOrders);
+    }
+
+    function compareValues(a, b, columnKey, direction) {
+      let valA = a[columnKey];
+      let valB = b[columnKey];
+
+      // Se for numérico
+      if (columnKey === 'valor_calculado' || columnKey === 'raw_total_usd') {
+        valA = parseFloat(valA) || 0;
+        valB = parseFloat(valB) || 0;
+      }
+      // Se for data
+      else if (columnKey === 'data_uso' || columnKey === 'data_pagamento') {
+        if (!valA) valA = '0000-00-00';
+        if (!valB) valB = '0000-00-00';
+        const dateA = new Date(valA).getTime();
+        const dateB = new Date(valB).getTime();
+        valA = dateA;
+        valB = dateB;
+      }
+      // Caso string
+      else {
+        valA = String(valA).toLowerCase();
+        valB = String(valB).toLowerCase();
+      }
+
+      if (valA < valB) return direction === 'asc' ? -1 : 1;
+      if (valA > valB) return direction === 'asc' ? 1 : -1;
+      return 0;
+    }
+
+    function updateSortIndicators(activeKey, direction) {
+      const thElements = document.querySelectorAll('table thead th');
+      thElements.forEach(th => {
+        const span = th.querySelector('.sort-indicator');
+        if (span) {
+          span.classList.remove('asc', 'desc');
+        }
+      });
+      const activeTh = document.querySelector(`th[data-sort-key="${activeKey}"]`);
+      if (activeTh) {
+        const span = activeTh.querySelector('.sort-indicator');
+        if (span) {
+          if (direction === 'asc')  span.classList.add('asc');
+          if (direction === 'desc') span.classList.add('desc');
+        }
       }
     }
 
-    monthSelect.value = selectedStartDate.getMonth();
-    yearSelect.value = selectedStartDate.getFullYear();
-    renderCalendar();
-    updateSelectedDateDisplay();
-  }
-
-  // ============================================================
-  // (5) Carregamento dos Dados via API e Inicialização Geral
-  // ============================================================
-  async function loadOrders() {
+    async function loadOrders() {
       try {
         const startDate = selectedStartDate ? selectedStartDate.toISOString().split('T')[0] : null;
         const endDate   = selectedEndDate ? selectedEndDate.toISOString().split('T')[0] : null;
 
-        const apiUrlPlanilhas = `https://www.airland.com.br/supplier/api_planilhas.php?start_date=${startDate}&end_date=${endDate}`;
-        const apiUrlPedidos   = `https://www.airland.com.br/supplier/api_pedidos.php`;
+        const apiUrlPlanilhas = `https://airland.com.br/supplier/api_planilhas.php?start_date=${startDate}&end_date=${endDate}`;
+        const apiUrlPedidos   = `https://airland.com.br/supplier/api_pedidos.php`;
 
         // Importante: credentials: 'include' para enviar cookie de sessão
         const [responsePlanilhas, responsePedidos] = await Promise.all([
@@ -2207,10 +1843,10 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       initializeCalendar();
+      loadSidebar();
       loadOrders();
       initSortingEvents();
     });
-
   </script>
   <!-- ========= All Javascript files linkup ======== -->
   <script src="assets/js/bootstrap.bundle.min.js"></script>
