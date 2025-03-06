@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="assets/css/morris.css" />
   <link rel="stylesheet" href="assets/css/datatable.css" />
   <link rel="stylesheet" href="assets/css/main.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
 
 <body>
@@ -1497,18 +1498,32 @@
 
       let html = "";
       slice.forEach((order) => {
+        // Ajuste 1: limitar Nome e Produto a 2 palavras
+        const limitedName = limitToTwoWords(order.nome);
+        const limitedProduct = limitToTwoWords(order.produto);
+
+        // Ajuste 2: exibir Data de Uso e Pagamento só dia/mes
+        const usoFormatado = formatDayMonth(order.data_uso);
+        const pagtoFormatado = formatDayMonth(order.data_pagamento); // renomeado para "Pagamento"
+
+        // Monta a linha:
         html += `<tr>
-          <td>${order.nome}</td>
+          <td>${limitedName}</td>
           <td>${order.id_pedido}</td>
-          <td>${order.produto}</td>
+          <td>${limitedProduct}</td>
           <td>U$ ${order.valor_calculado}</td>
-          <td>${formatDate(order.data_uso)}</td>
-          <td>${formatDate(order.data_pagamento)}</td>
+          <td>${usoFormatado}</td>
+          <!-- Título da coluna será "Pagamento" em vez de "Data Pagamento", mas aqui só trocamos o valor -->
+          <td>${pagtoFormatado}</td>
           <td>${order.identificador}</td>
           <td>${order.fornecedor}</td>
           <td>${getStatusButton(order.status)}</td>
           <td style="text-align:center;">
-            <i class="bi bi-eye" style="cursor:pointer;" onclick="openDetailsPage('${order.id_pedido}')"></i>
+            <!-- Ajuste 5: Coluna 'Ação' exibe um ícone (ou texto) que chama openDetailsPage. -->
+            <!-- Exemplo com ícone do Bootstrap Icons (necessário link no <head>): -->
+            <i class="bi bi-eye-fill" style="cursor:pointer; font-size:16px;"
+              onclick="openDetailsPage('${order.id_pedido}')"
+              title="Ver Detalhes"></i>
           </td>
         </tr>`;
       });
@@ -1897,23 +1912,75 @@
         updateFirstBlock();
       }
     }
+    
+    function applyQuickRange(rangeType) {
+      const now = new Date();
+
+      switch(rangeType) {
+        case "hoje":
+          selectedStartDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+          selectedEndDate   = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+          break;
+
+        case "semana":
+          // 7 dias atrás
+          const past7 = new Date(now.getTime() - (7 * 24 * 60 * 60 * 1000));
+          selectedStartDate = new Date(past7.getFullYear(), past7.getMonth(), past7.getDate());
+          selectedEndDate   = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+          break;
+
+        case "mes":
+          // Início do mês => dia 1
+          // Fim do mês => dia 0 do próximo mês
+          selectedStartDate = new Date(now.getFullYear(), now.getMonth(), 1);
+          selectedEndDate   = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+          break;
+
+        default:
+          // se cair aqui, não faz nada
+          return;
+      }
+
+      // Recarrega a listagem com o novo range
+      loadOrders();
+    }
+
 
     /***************************************************************
      * 9) Inicialização Geral
      ***************************************************************/
-    document.addEventListener("DOMContentLoaded", async () => {
-      // 1. Checa sessão
-      await checkSession();     // se falhar, redireciona. Se ok, exibe body
-
-      // 2. Inicializa sorting
+     document.addEventListener("DOMContentLoaded", async () => {
+      await checkSession();   // se falhar, redireciona
       initOrdersSorting();
-
-      // 3. Inicializa calendário
       initializeCalendar();
 
-      // 4. Carrega pedidos
-      loadOrders();
+      // Seletor do container .button-group
+      const btnGroup = document.querySelector(".button-group");
+      if (btnGroup) {
+        const [hojeLink, semanaLink, mesLink, personalizadoLink] = btnGroup.querySelectorAll("a");
+
+        hojeLink.addEventListener("click", () => {
+          applyQuickRange("hoje");
+        });
+        semanaLink.addEventListener("click", () => {
+          applyQuickRange("semana");
+        });
+        mesLink.addEventListener("click", () => {
+          applyQuickRange("mes");
+        });
+        personalizadoLink.addEventListener("click", () => {
+          // Abre o calendário
+          // (podemos chamar o mesmo que "openCalendarBtn.click()" ou
+          //  só chamar bootstrapModal.show().)
+          document.getElementById("open-calendar-btn").click();
+        });
+      }
+
+      loadOrders(); // carrega pedidos
     });
+
+
+
   </script>
   <!-- ========= All Javascript files linkup ======== -->
   <script src="assets/js/bootstrap.bundle.min.js"></script>
