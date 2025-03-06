@@ -2016,25 +2016,30 @@
 
     function applyQuickRange(rangeType) {
       const now = new Date();
+      let displayText = "";
       switch(rangeType) {
         case "hoje":
           selectedStartDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
           selectedEndDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+          displayText = `Data selecionada: ${formatDisplayDate(selectedStartDate)}`;
           break;
         case "semana":
           const past7 = new Date(now.getTime() - (7 * 24 * 60 * 60 * 1000));
           selectedStartDate = new Date(past7.getFullYear(), past7.getMonth(), past7.getDate());
           selectedEndDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+          displayText = `Datas selecionadas: ${formatDisplayDate(selectedStartDate)} - ${formatDisplayDate(selectedEndDate)}`;
           break;
         case "mes":
           selectedStartDate = new Date(now.getFullYear(), now.getMonth(), 1);
           selectedEndDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+          displayText = `Datas selecionadas: ${formatDisplayDate(selectedStartDate)} - ${formatDisplayDate(selectedEndDate)}`;
           break;
         default:
           return;
       }
+      document.getElementById("datas-selecionadas").textContent = displayText;
       filterOrders();
-    }
+    }    
 
     /***************************************************************
      * 9) Inicialização Geral
