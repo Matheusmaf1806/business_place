@@ -1836,7 +1836,6 @@
 
       openCalendarBtn.addEventListener("click", () => { bootstrapModal.show(); });
       backBtn.addEventListener("click", () => { bootstrapModal.hide(); });
-      // Dentro do initializeCalendar(), ou logo depois do applyBtn.addEventListener("click", ...)
       applyBtn.addEventListener("click", () => {
         if (selectedStartDate && !selectedEndDate) { 
           selectedEndDate = selectedStartDate;
@@ -1848,22 +1847,19 @@
         updateSelectedDateDisplay();
         bootstrapModal.hide();
         
-        // 1) Carrega novamente (ou filtra) os dados
-        loadOrders();
+        // Em vez de carregar os dados sem filtro, filtra os dados já carregados
+        filterOrders();
         
-        // 2) Força o botão "Personalizado" a ficar ativo
+        // Força o botão "Personalizado" a ficar ativo
         const btnGroup = document.querySelector(".button-group");
         if (btnGroup) {
           const links = btnGroup.querySelectorAll("a");
-          // remove active de todos
           links.forEach(l => l.classList.remove("active"));
-          // adiciona active somente no link "Personalizado"
-          // OBS: caso seja sempre o 4º link, você pode usar links[3]
-          // ou então localizar pelo texto ou outro seletor
           const personalizadoLink = links[3];
           personalizadoLink.classList.add("active");
         }
       });
+      
       monthSelect.addEventListener("change", renderCalendar);
       yearSelect.addEventListener("change", renderCalendar);
 
@@ -2007,15 +2003,21 @@
           if (!order.data_pagamento) return false;
           const [year, month, day] = order.data_pagamento.split("-").map(Number);
           const paymentDate = new Date(year, month - 1, day);
-          return paymentDate >= selectedStartDate && paymentDate <= selectedEndDate;
+          return (paymentDate >= selectedStartDate && paymentDate <= selectedEndDate);
         });
       }
-      displayedOrders = filtered; 
-      currentPage = 1;
-      renderOrdersTable(displayedOrders);
-      renderPagination(displayedOrders);
-      updateFirstBlock(); // se quiser recalcular os “cards”
-    }    
+      const activeColumn = Object.keys(sortDirections).find((col) => sortDirections[col] !== null);
+      if (activeColumn) {
+        displayedOrders = filtered;
+        sortOrdersBy(activeColumn);
+      } else {
+        displayedOrders = filtered;
+        currentPage = 1;
+        renderOrdersTable(displayedOrders);
+        renderPagination(displayedOrders);
+        updateFirstBlock();
+      }
+    }
 
     function applyQuickRange(rangeType) {
       const now = new Date();
