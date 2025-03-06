@@ -2040,7 +2040,7 @@
     try {
       const startDateStr = selectedStartDate ? selectedStartDate.toISOString().split("T")[0] : "";
       const endDateStr = selectedEndDate ? selectedEndDate.toISOString().split("T")[0] : "";
-      const apiUrlPlanilhas = `https://www.airland.com.br/supplier/api_planilhas.php?start_date=${startDateStr}&end_date=${endDateStr}`;
+      const apiUrlPlanilhas = `https://airland.com.br/supplier/api_planilhas.php?start_date=${startDateStr}&end_date=${endDateStr}`;
       const apiUrlPedidos = "https://airland.com.br/supplier/api_pedidos.php";
 
       const [respPlan, respPed] = await Promise.all([
