@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,13 +29,26 @@
 
     /* (1) Estilizar os 3 cards do bloco “Primeiro Bloco” */
     .card-style.card-wrapper .single-card-wrapper .single-card {
-      min-width: 230px; /* para não ficar muito estreito */
+      min-width: 230px;
+      min-height: 160px; /* ou outro valor que você desejar */
       margin: 0 10px 20px 0;
       position: relative;
       padding: 20px;
       border-radius: 12px;
       color: #fff;
+      
+      /* Para garantir que o conteúdo interno fique bem distribuído */
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
+
+    /* Cada wrapper de card */
+    .card-style.card-wrapper .single-card-wrapper {
+      flex: 1; /* faz cada wrapper ocupar o mesmo espaço horizontal */
+      display: flex;
+    }
+
     .card-style.card-wrapper {
       display: flex;
       flex-wrap: wrap;
@@ -71,6 +83,12 @@
       background-color: #eef4ff;
       cursor: pointer;
     }
+    .finance-table th,
+    .finance-table td {
+      text-align: center;
+      vertical-align: middle; /* se quiser que o conteúdo fique bem centralizado verticalmente */
+    }
+
     .sort-indicator {
       margin-left: 6px;
       font-size: 0.75rem;
@@ -243,13 +261,7 @@
     .modal-backdrop {
       z-index: 1050;
     }
-    .modal-dialog {
-      position: absolute;
-      top: auto !important;
-      left: 50%;
-      transform: translateX(-50%) translateY(0);
-      margin-top: 10px;
-    }
+
     .calendar select {
       background-color: #f3f4f6;
       padding: 15px 20px;
@@ -279,7 +291,6 @@
     .date-selector-container {
       display: flex;
       align-items: center;
-      position: fixed;
       top: 20px;
       right: 63px;
       z-index: 1050;
@@ -1659,7 +1670,21 @@
     function renderPagination(data) {
       const pag = document.getElementById("pagination-controls");
       pag.innerHTML = "";
+      
       const totalPages = Math.ceil(data.length / rowsPerPage);
+    
+      // Botão "Anterior"
+      const prevBtn = document.createElement("button");
+      prevBtn.textContent = "« Anterior";
+      prevBtn.disabled = (currentPage === 1);
+      prevBtn.onclick = () => {
+        currentPage--;
+        renderOrdersTable(displayedOrders);
+        renderPagination(displayedOrders);
+      };
+      pag.appendChild(prevBtn);
+    
+      // Números das páginas
       for (let i = 1; i <= totalPages; i++) {
         const btn = document.createElement("button");
         btn.textContent = i;
@@ -1671,7 +1696,18 @@
         };
         pag.appendChild(btn);
       }
-    }
+    
+      // Botão "Próximo"
+      const nextBtn = document.createElement("button");
+      nextBtn.textContent = "Próximo »";
+      nextBtn.disabled = (currentPage === totalPages);
+      nextBtn.onclick = () => {
+        currentPage++;
+        renderOrdersTable(displayedOrders);
+        renderPagination(displayedOrders);
+      };
+      pag.appendChild(nextBtn);
+    }    
 
     function sortOrdersBy(key) {
       let dir = (sortDirections[key] === "asc") ? "desc" : "asc";
@@ -1976,43 +2012,60 @@
      * 9) Inicialização Geral
      ***************************************************************/
      document.addEventListener("DOMContentLoaded", async () => {
+      // 1) Aguarda verificação de sessão, inicializa ordenação e calendário
       await checkSession();
       initOrdersSorting();
       initializeCalendar();
-
-      // Seleciona o container que tem os links "Hoje", "Semana" etc.
+    
+      // 2) Seleciona o container que tem os links "Hoje", "Semana", "Mês" e "Personalizado"
       const btnGroup = document.querySelector(".button-group");
       if (btnGroup) {
-        // Pega os quatro <a> dentro do .button-group
-        const [hojeLink, semanaLink, mesLink, personalizadoLink] = btnGroup.querySelectorAll("a");
-
+        // Pega todos os <a> dentro do .button-group
+        const links = btnGroup.querySelectorAll("a");
+    
+        // A) Lógica para ativar/desativar a classe .active em cada clique
+        links.forEach(link => {
+          link.addEventListener("click", (event) => {
+            event.preventDefault();
+            // remove .active de todos os links
+            links.forEach(l => l.classList.remove("active"));
+            // adiciona .active somente no link clicado
+            link.classList.add("active");
+          });
+        });
+    
+        // B) Lógica para chamar a função de range (applyQuickRange)
+        //    ou abrir o calendário, de acordo com o link
+        const [hojeLink, semanaLink, mesLink, personalizadoLink] = links;
+    
         // HOJE
         hojeLink.addEventListener("click", (event) => {
-          event.preventDefault();          // impede comportamento padrão do link (recarregar página)
-          applyQuickRange("hoje");         // chama sua função
+          event.preventDefault();
+          applyQuickRange("hoje");
         });
-
+    
         // SEMANA
         semanaLink.addEventListener("click", (event) => {
           event.preventDefault();
           applyQuickRange("semana");
         });
-
+    
         // MÊS
         mesLink.addEventListener("click", (event) => {
           event.preventDefault();
           applyQuickRange("mes");
         });
-
-        // PERSONALIZADO -> abre calendário
+    
+        // PERSONALIZADO -> abre o calendário
         personalizadoLink.addEventListener("click", (event) => {
           event.preventDefault();
           document.getElementById("open-calendar-btn").click();
         });
       }
-
-      loadOrders(); // carrega dados iniciais
-    });
+    
+      // 3) Carrega os dados iniciais da tabela
+      loadOrders();
+    });    
   </script>
   <!-- ========= All Javascript files linkup ======== -->
   <script src="assets/js/bootstrap.bundle.min.js"></script>
