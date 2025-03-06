@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -59,9 +60,9 @@
       cursor: pointer;
       user-select: none;
       position: relative; /* p/ setas */
-      height: 50px;            /* altura fixa desejada */
-      line-height: 50px;       /* para centralizar verticalmente */
+      min-height: 50px;
       vertical-align: middle;
+      padding: 10px; /* em vez de line-height fixa */
     }
     .finance-table tbody tr:nth-child(even) {
       background-color: #f9fafc;
@@ -1175,16 +1176,16 @@
             <div class="card-style activity-card mb-30">
               <div class="title d-flex flex-wrap align-items-center justify-content-between mb-10">
                 <div class="left mb-2">
-                  <h6 class="text-medium mb-2">Recent Activities</h6>
-                  <p class="text-gray text-sm">Lorem ipsum dolor sit amet.</p>
+                  <h6 class="text-medium mb-2">Tabela de Itens</h6>
+                  <p class="text-gray text-sm">Valor por item com prazo de pagamento.</p>
                 </div>
                 <div class="right mb-2">
                   <div class="button-group">
-                    <a href="javascript:void(0)" class="active">Hoje</a>
-                    <a href="javascript:void(0)">Semana</a>
-                    <a href="javascript:void(0)">Mês</a>
-                    <a href="javascript:void(0)">Personalizado</a>
-                  </div>
+                    <a href="#" class="active">Hoje</a>
+                    <a href="#">Semana</a>
+                    <a href="#">Mês</a>
+                    <a href="#">Personalizado</a>
+                  </div>                  
                 </div>
               </div>
               <!-- Tabela com ordenação e paginação -->
@@ -1344,10 +1345,10 @@
     }
 
     // Função para limitar a 2 palavras
-    function limitToFirstName(fullString) {
+    function limitToTwoWords(fullString) {
       if (!fullString) return "";
-      // Divide em palavras e retorna só a primeira
-      return fullString.trim().split(/\s+/)[0];
+      const parts = fullString.trim().split(/\s+/);
+      return parts.slice(0, 2).join(" ");
     }
 
     // Formata uma data ISO para exibir somente DD/MM
@@ -1459,7 +1460,7 @@
 
       let html = "";
       slice.forEach((order) => {
-        const firstName = limitToFirstName(order.nome);
+        const limitedName = limitToTwoWords(order.nome);
         const limitedProduct = limitToTwoWords(order.produto);
         const usoFormatado = formatDayMonth(order.data_uso);
         const pagtoFormatado = formatDayMonth(order.data_pagamento);
@@ -1801,19 +1802,43 @@
     /***************************************************************
      * 9) Inicialização Geral
      ***************************************************************/
-    document.addEventListener("DOMContentLoaded", async () => {
+     document.addEventListener("DOMContentLoaded", async () => {
       await checkSession();
       initOrdersSorting();
       initializeCalendar();
+
+      // Seleciona o container que tem os links "Hoje", "Semana" etc.
       const btnGroup = document.querySelector(".button-group");
       if (btnGroup) {
+        // Pega os quatro <a> dentro do .button-group
         const [hojeLink, semanaLink, mesLink, personalizadoLink] = btnGroup.querySelectorAll("a");
-        hojeLink.addEventListener("click", () => { applyQuickRange("hoje"); });
-        semanaLink.addEventListener("click", () => { applyQuickRange("semana"); });
-        mesLink.addEventListener("click", () => { applyQuickRange("mes"); });
-        personalizadoLink.addEventListener("click", () => { document.getElementById("open-calendar-btn").click(); });
+
+        // HOJE
+        hojeLink.addEventListener("click", (event) => {
+          event.preventDefault();          // impede comportamento padrão do link (recarregar página)
+          applyQuickRange("hoje");         // chama sua função
+        });
+
+        // SEMANA
+        semanaLink.addEventListener("click", (event) => {
+          event.preventDefault();
+          applyQuickRange("semana");
+        });
+
+        // MÊS
+        mesLink.addEventListener("click", (event) => {
+          event.preventDefault();
+          applyQuickRange("mes");
+        });
+
+        // PERSONALIZADO -> abre calendário
+        personalizadoLink.addEventListener("click", (event) => {
+          event.preventDefault();
+          document.getElementById("open-calendar-btn").click();
+        });
       }
-      loadOrders();
+
+      loadOrders(); // carrega dados iniciais
     });
   </script>
   <!-- ========= All Javascript files linkup ======== -->
