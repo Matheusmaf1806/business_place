@@ -1983,13 +1983,8 @@
           };
         });
 
-        displayedOrders = combinedOrders.slice();
-        currentPage = 1;
-
-        renderOrdersTable(displayedOrders);
-        renderPagination(displayedOrders);
-        updateFirstBlock();
-        fillProximosDias();
+        filterOrders();
+        
       } catch (error) {
         console.error("Erro ao carregar os dados:", error);
         document.getElementById("orders-table").innerHTML = `<tr><td colspan="10" style="text-align:center;color:red;">Erro ao carregar os pedidos.</td></tr>`;
