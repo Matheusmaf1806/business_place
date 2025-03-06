@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -60,6 +59,9 @@
       cursor: pointer;
       user-select: none;
       position: relative; /* p/ setas */
+      height: 50px;            /* altura fixa desejada */
+      line-height: 50px;       /* para centralizar verticalmente */
+      vertical-align: middle;
     }
     .finance-table tbody tr:nth-child(even) {
       background-color: #f9fafc;
@@ -1196,8 +1198,8 @@
                           <th data-sort-key="id_pedido">ID <span class="sort-indicator"></span></th>
                           <th data-sort-key="produto">Itens <span class="sort-indicator"></span></th>
                           <th data-sort-key="valor_calculado">Valor (U$) <span class="sort-indicator"></span></th>
-                          <th data-sort-key="data_uso">Data de Uso <span class="sort-indicator"></span></th>
-                          <th data-sort-key="data_pagamento">Data Pagamento <span class="sort-indicator"></span></th>
+                          <th data-sort-key="data_uso">Uso <span class="sort-indicator"></span></th>
+                          <th data-sort-key="data_pagamento">Pagamento <span class="sort-indicator"></span></th>
                           <th data-sort-key="identificador">Identificador <span class="sort-indicator"></span></th>
                           <th data-sort-key="fornecedor">Fornecedor <span class="sort-indicator"></span></th>
                           <th data-sort-key="status">Status <span class="sort-indicator"></span></th>
@@ -1342,10 +1344,10 @@
     }
 
     // Função para limitar a 2 palavras
-    function limitToTwoWords(fullString) {
+    function limitToFirstName(fullString) {
       if (!fullString) return "";
-      const parts = fullString.trim().split(/\s+/);
-      return parts.slice(0, 2).join(" ");
+      // Divide em palavras e retorna só a primeira
+      return fullString.trim().split(/\s+/)[0];
     }
 
     // Formata uma data ISO para exibir somente DD/MM
@@ -1457,7 +1459,7 @@
 
       let html = "";
       slice.forEach((order) => {
-        const limitedName = limitToTwoWords(order.nome);
+        const firstName = limitToFirstName(order.nome);
         const limitedProduct = limitToTwoWords(order.produto);
         const usoFormatado = formatDayMonth(order.data_uso);
         const pagtoFormatado = formatDayMonth(order.data_pagamento);
