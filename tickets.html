@@ -121,6 +121,181 @@
       opacity: 0.8;   /* Ajuste conforme desejado */
     }
 
+    /* INÍCIO: TODO SEU CSS ORIGINAL */
+    .calendar {
+      --side-padding: 5px;
+      --border-radius: 15px;
+      --accent-br: 10px;
+      width: 280px;
+      margin: auto;
+      transform: scale(1);
+      transform-origin: top;
+      background-color: white;
+      border-radius: 5px;
+      box-shadow: 0 0 .875rem 0 rgba(33, 37, 41, .05);
+    }
+    .calendar__body {
+      border-radius: var(--border-radius);
+      padding: 10px;
+    }
+    .calendar__opts {
+      background-color: #fff;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding: 10px;
+      border-top-left-radius: var(--border-radius);
+      border-top-right-radius: var(--border-radius);
+    }
+    .calendar__days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      font-weight: bold;
+      color: #999;
+      padding: 0 10px;
+      font-size: 0.85rem;
+    }
+    .calendar__dates {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+      padding: 10px;
+    }
+    .calendar__date {
+      --height: 30px;
+      text-align: center;
+      line-height: var(--height);
+      height: var(--height);
+      background-color: #fff;
+      color: #333;
+      border-radius: var(--accent-br);
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+      position: relative;
+    }
+    .calendar__date:hover {
+      background-color: #eaeaea;
+      transform: scale(1.05);
+    }
+    .calendar__date--selected {
+      background-color: #4b37ff;
+      color: #fff;
+      font-weight: bold;
+      box-shadow: 0 3px 6px rgba(75, 55, 255, 0.3);
+    }
+    .calendar__date--range-start {
+      border-top-left-radius: var(--accent-br);
+      border-bottom-left-radius: var(--accent-br);
+    }
+    .calendar__date--range-end {
+      border-top-right-radius: var(--accent-br);
+      border-bottom-right-radius: var(--accent-br);
+    }
+    .calendar__date--grey {
+      color: #ccc;
+      background-color: #f2f2f2;
+      cursor: not-allowed;
+    }
+    .calendar__buttons {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      border-bottom-left-radius: var(--border-radius);
+      border-bottom-right-radius: var(--border-radius);
+    }
+    .calendar__button {
+      padding: 8px 12px;
+      font-size: 0.9rem;
+      border: none;
+      border-radius: var(--accent-br);
+      cursor: pointer;
+    }
+    .calendar__button--grey {
+      background-color: #e0e0e0;
+      color: #333;
+    }
+    .calendar__button--primary {
+      background-color: #4b37ff;
+      color: #fff;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+    .calendar__button--primary:hover {
+      background-color: #3b27d9;
+      transform: scale(1.05);
+    }
+    @media (max-width: 768px) {
+      .calendar {
+        width: 240px;
+      }
+      .calendar__date {
+        --height: 35px;
+        font-size: 0.8rem;
+      }
+      .calendar__dates {
+        gap: 4px;
+      }
+    }
+    .modal {
+      z-index: 1055 !important;
+    }
+    .modal-backdrop {
+      z-index: 1050;
+    }
+    .modal-dialog {
+      position: absolute;
+      top: auto !important;
+      left: 50%;
+      transform: translateX(-50%) translateY(0);
+      margin-top: 10px;
+    }
+    .calendar select {
+      background-color: #f3f4f6;
+      padding: 15px 20px;
+    }
+    .calendar__button--primary:active {
+      box-shadow: 0 10px 10px -6px rgba(23, 82, 255, 0.45);
+      transform: translateY(-1px);
+    }
+    select,
+    button {
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 1.02rem;
+      border-radius: 20px;
+      outline: none;
+      border: 0;
+      padding: 15px 20px;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+    }
+    select {
+      background-size: 24px;
+      background-repeat: no-repeat;
+      background-position: calc(100% - var(--side-padding)) center;
+    }
+    .date-selector-container {
+      display: flex;
+      align-items: center;
+      position: fixed;
+      top: 20px;
+      right: 63px;
+      z-index: 1050;
+    }
+    .selected-date-display {
+      margin-right: 10px;
+      padding: 8px 12px;
+      background-color: #f3f4f6;
+      border-radius: 4px;
+      font-weight: 400;
+      color: #333;
+      display: flex;
+      align-items: center;
+      height: 95%;
+    }
+
   </style>
   <!-- ======== Preloader =========== -->
   <div id="preloader">
@@ -940,30 +1115,28 @@
                         </select>
                       </div>
                       <div class="calendar__body">
-                        <div class="calendar__days">
-                          <div>Dom</div>
-                          <div>Seg</div>
-                          <div>Ter</div>
-                          <div>Qua</div>
-                          <div>Qui</div>
-                          <div>Sex</div>
-                          <div>Sab</div>
-                        </div>
-                        <div class="calendar__dates">
-                          <!-- As datas serão geradas dinamicamente via JavaScript -->
-                        </div>
+                      <div class="calendar__days">
+                        <div>Dom</div>
+                        <div>Seg</div>
+                        <div>Ter</div>
+                        <div>Qua</div>
+                        <div>Qui</div>
+                        <div>Sex</div>
+                        <div>Sab</div>
                       </div>
-                      <div class="calendar__buttons">
-                        <button class="calendar__button calendar__button--grey" id="back-btn">Back</button>
-                        <button class="calendar__button calendar__button--primary" id="apply-btn">Apply</button>
+                      <div class="calendar__dates">
+                        <!-- datas geradas dinamicamente via JS -->
                       </div>
+                    </div>
+                    <div class="calendar__buttons">
+                      <button class="calendar__button calendar__button--grey" id="back-btn">Back</button>
+                      <button class="calendar__button calendar__button--primary" id="apply-btn">Apply</button>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>                        
-            <!-- end col -->
-          </div>
+            </div>
+          </div>                       
           <!-- end row -->
         </div>
         <!-- ===============================================
