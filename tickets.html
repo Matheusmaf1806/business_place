@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -1290,28 +1291,21 @@
   <!-- ============ Theme Option End ============= -->
 
   <script>
-
     /***************************************************************
      * 1) Função para verificar se a sessão está ativa
-     *    - Ajuste a URL se necessário.
      ***************************************************************/
     async function checkSession() {
       try {
-        const response = await fetch("https://airland.com.br/affiliatesacess/login_api.php/check", {
-          credentials: "include",
-        });
+        const response = await fetch("https://airland.com.br/affiliatesacess/login_api.php/check", { credentials: "include" });
         const result = await response.json();
         console.log("Resposta da Sessão:", result);
         if (!result.logged_in) {
-          // Se não estiver logado, redireciona para a página de login
           window.location.replace("https://businessplace.airland.com.br/signin.html");
         } else {
-          // Se estiver logado, exibe a página
           document.body.style.display = "block";
         }
       } catch (error) {
         console.error("Erro ao verificar a sessão:", error);
-        // Se der erro na API, trate conforme sua necessidade:
         window.location.replace("https://businessplace.airland.com.br/signin.html");
       }
     }
@@ -1325,46 +1319,48 @@
     const rowsPerPage = 10;
     const sortDirections = {};
 
-    // Intervalo de datas (padrão = início/fim do mês atual)
     let selectedStartDate = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
     let selectedEndDate   = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
 
-    // Configurações de cotação (com spread +0,98%)
     const ultimaCotacaoFechamento    = 5.79;
     const penultimaCotacaoFechamento = 5.75;
-    let cotacaoEmUso       = parseFloat((ultimaCotacaoFechamento    * (1 + 0.0098)).toFixed(2));
+    let cotacaoEmUso       = parseFloat((ultimaCotacaoFechamento * (1 + 0.0098)).toFixed(2));
     let cotacaoPenultima   = parseFloat((penultimaCotacaoFechamento * (1 + 0.0098)).toFixed(2));
     let userCotacaoManual  = null;
 
     /***************************************************************
      * 3) Funções Utilitárias
      ***************************************************************/
-
-    /** Calcula variação percentual */
     function calcPercentChange(newVal, oldVal) {
       if (oldVal === 0) return newVal === 0 ? 0 : 100;
       return ((newVal - oldVal) / oldVal) * 100;
     }
 
-    /** Normaliza status removendo caracteres invisíveis e trocando hífens */
     function normalizeStatus(status) {
       if (!status) return "";
-      return status
-        .toLowerCase()
-        .normalize("NFKC")
-        .trim()
-        .replace(/[\u00A0\u200B\uFEFF\u2060]/g, "")
-        .replace(/[\u2013\u2014-]/g, "–");
+      return status.toLowerCase().normalize("NFKC").trim().replace(/[\u00A0\u200B\uFEFF\u2060]/g, "").replace(/[\u2013\u2014-]/g, "–");
     }
 
-    /** Formata data (YYYY-MM-DD => DD/MM/YYYY) */
+    // Função para limitar a 2 palavras
+    function limitToTwoWords(fullString) {
+      if (!fullString) return "";
+      const parts = fullString.trim().split(/\s+/);
+      return parts.slice(0, 2).join(" ");
+    }
+
+    // Formata uma data ISO para exibir somente DD/MM
+    function formatDayMonth(isoDateStr) {
+      if (!isoDateStr) return "";
+      const [year, month, day] = isoDateStr.split("-").map(Number);
+      return `${String(day).padStart(2, "0")}/${String(month).padStart(2, "0")}`;
+    }
+
     function formatDate(dateStr) {
       if (!dateStr) return "";
       const [year, month, day] = dateStr.split("-").map(Number);
       return `${String(day).padStart(2, "0")}/${String(month).padStart(2, "0")}/${year}`;
     }
 
-    /** Formata Date em DD/MM/YYYY */
     function formatDisplayDate(dateObj) {
       const d = String(dateObj.getDate()).padStart(2, "0");
       const m = String(dateObj.getMonth() + 1).padStart(2, "0");
@@ -1375,7 +1371,6 @@
     /***************************************************************
      * 4) Cartões de Resumo (Primeiro Bloco)
      ***************************************************************/
-    /** Soma totals no intervalo e atualiza cards */
     function calculateTotalsForPeriod(orders, startDate, endDate) {
       let totalUsd = 0;
       let orderIds = new Set();
@@ -1384,11 +1379,8 @@
         if (!order.data_pagamento) return;
         const [year, month, day] = order.data_pagamento.split("-").map(Number);
         const paymentDate = new Date(year, month - 1, day);
-
-        // Confere se está dentro do range
         if (paymentDate >= startDate && paymentDate <= endDate) {
           const st = normalizeStatus(order.status);
-          // Somente para "emissão bloqueada", "emitido – não pago" e "emitido tif"
           if (["emissão bloqueada", "emitido – não pago", "emitido tif"].includes(st)) {
             totalUsd += parseFloat(order.valor_calculado) || 0;
           }
@@ -1402,57 +1394,39 @@
       };
     }
 
-    /** Atualiza os 3 cards do “Primeiro Bloco” */
     function updateFirstBlock() {
-      // Totais do período selecionado
       const totals = calculateTotalsForPeriod(displayedOrders, selectedStartDate, selectedEndDate);
-
-      // Exemplo de valores anteriores p/ “comparativo”
       const previousTotals = { totalUsd: 100, totalItens: 10 };
       const pctUsd   = calcPercentChange(totals.totalUsd, previousTotals.totalUsd);
       const pctItens = calcPercentChange(totals.totalItens, previousTotals.totalItens);
 
-      // Card 1: “Total a Pagar (U$)”
       const cardUsdEl = document.getElementById("cardTotalUsd");
-      if (cardUsdEl) {
-        cardUsdEl.innerText = `U$ ${totals.totalUsd.toFixed(2)}`;
-      }
+      if (cardUsdEl) { cardUsdEl.innerText = `U$ ${totals.totalUsd.toFixed(2)}`; }
       const compUsdEl = document.getElementById("cardComparativoUsd");
       if (compUsdEl) {
-        compUsdEl.innerText = (pctUsd >= 0)
-          ? `+${pctUsd.toFixed(1)}% vs ant.`
-          : `${pctUsd.toFixed(1)}% vs ant.`;
+        compUsdEl.innerText = (pctUsd >= 0) ? `+${pctUsd.toFixed(1)}% vs ant.` : `${pctUsd.toFixed(1)}% vs ant.`;
       }
 
-      // Card 2: “Total de Itens”
       const cardItensEl = document.getElementById("cardTotalItens");
-      if (cardItensEl) {
-        cardItensEl.innerText = totals.totalItens;
-      }
+      if (cardItensEl) { cardItensEl.innerText = totals.totalItens; }
       const compItensEl = document.getElementById("cardComparativoItens");
       if (compItensEl) {
-        compItensEl.innerText = (pctItens >= 0)
-          ? `+${pctItens.toFixed(1)}% vs ant.`
-          : `${pctItens.toFixed(1)}% vs ant.`;
+        compItensEl.innerText = (pctItens >= 0) ? `+${pctItens.toFixed(1)}% vs ant.` : `${pctItens.toFixed(1)}% vs ant.`;
       }
 
-      // Card 3: “Valor a Pagar (R$)”
       const finalCot = (userCotacaoManual !== null) ? userCotacaoManual : cotacaoEmUso;
       const totalReais = totals.totalUsd * finalCot;
       const cardReaisEl = document.getElementById("cardTotalReais");
-      if (cardReaisEl) {
-        cardReaisEl.innerText = `R$ ${totalReais.toFixed(2)}`;
-      }
+      if (cardReaisEl) { cardReaisEl.innerText = `R$ ${totalReais.toFixed(2)}`; }
     }
 
-    /** Aplicar cotação manual (chamado ao clicar em “Aplicar”) */
     function applyUserDollar() {
       const input = document.getElementById("inputDollarRate");
       const val   = parseFloat(input.value);
       if (!isNaN(val) && val > 0) {
         userCotacaoManual = val;
         updateFirstBlock();
-        fillProximosDias(); // caso você tenha um 3º bloco de “próximos pagamentos”
+        fillProximosDias();
       } else {
         alert("Por favor, informe um valor válido para a cotação.");
       }
@@ -1461,35 +1435,20 @@
     /***************************************************************
      * 5) Tabela “Financeiro | Pedidos”
      ***************************************************************/
-
-    /** Retorna HTML de um “botão” com classe base + cor dependendo do status */
     function getStatusButton(status) {
       const st = normalizeStatus(status);
-      let btnClass = "main-btn ";
+      let btnClass = "main-btn status-button ";
       switch (st) {
-        case "concluído":
-          btnClass += "success-btn";
-          break;
-        case "emitido – não pago":
-          btnClass += "active-btn";
-          break;
-        case "emitido tif":
-          btnClass += "warning-btn";
-          break;
-        case "aguardando emissão":
-          btnClass += "danger-btn";
-          break;
-        case "emissão bloqueada":
-          btnClass += "dark-btn";
-          break;
-        default:
-          btnClass += "secondary-btn";
-          break;
+        case "concluído": btnClass += "success-btn"; break;
+        case "emitido – não pago": btnClass += "active-btn"; break;
+        case "emitido tif": btnClass += "warning-btn"; break;
+        case "aguardando emissão": btnClass += "danger-btn"; break;
+        case "emissão bloqueada": btnClass += "dark-btn"; break;
+        default: btnClass += "secondary-btn"; break;
       }
       return `<a href="#0" class="${btnClass} btn-hover" style="padding:4px 10px; font-size:12px;">${status || "Sem Status"}</a>`;
     }
 
-    /** Renderiza a tabela de pedidos (paginada) */
     function renderOrdersTable(data) {
       const tbody = document.getElementById("orders-table");
       const start = (currentPage - 1) * rowsPerPage;
@@ -1498,44 +1457,33 @@
 
       let html = "";
       slice.forEach((order) => {
-        // Ajuste 1: limitar Nome e Produto a 2 palavras
         const limitedName = limitToTwoWords(order.nome);
         const limitedProduct = limitToTwoWords(order.produto);
-
-        // Ajuste 2: exibir Data de Uso e Pagamento só dia/mes
         const usoFormatado = formatDayMonth(order.data_uso);
-        const pagtoFormatado = formatDayMonth(order.data_pagamento); // renomeado para "Pagamento"
+        const pagtoFormatado = formatDayMonth(order.data_pagamento);
 
-        // Monta a linha:
         html += `<tr>
           <td>${limitedName}</td>
           <td>${order.id_pedido}</td>
           <td>${limitedProduct}</td>
           <td>U$ ${order.valor_calculado}</td>
           <td>${usoFormatado}</td>
-          <!-- Título da coluna será "Pagamento" em vez de "Data Pagamento", mas aqui só trocamos o valor -->
           <td>${pagtoFormatado}</td>
           <td>${order.identificador}</td>
           <td>${order.fornecedor}</td>
           <td>${getStatusButton(order.status)}</td>
           <td style="text-align:center;">
-            <!-- Ajuste 5: Coluna 'Ação' exibe um ícone (ou texto) que chama openDetailsPage. -->
-            <!-- Exemplo com ícone do Bootstrap Icons (necessário link no <head>): -->
-            <i class="bi bi-eye-fill" style="cursor:pointer; font-size:16px;"
-              onclick="openDetailsPage('${order.id_pedido}')"
-              title="Ver Detalhes"></i>
+            <i class="bi bi-eye-fill" style="cursor:pointer; font-size:16px;" onclick="openDetailsPage('${order.id_pedido}')" title="Ver Detalhes"></i>
           </td>
         </tr>`;
       });
       tbody.innerHTML = html;
     }
 
-    /** Renderiza os botões de paginação */
     function renderPagination(data) {
       const pag = document.getElementById("pagination-controls");
       pag.innerHTML = "";
       const totalPages = Math.ceil(data.length / rowsPerPage);
-
       for (let i = 1; i <= totalPages; i++) {
         const btn = document.createElement("button");
         btn.textContent = i;
@@ -1549,20 +1497,12 @@
       }
     }
 
-    /** Ordena a lista de pedidos por alguma coluna (ex: nome, data_uso, etc.) */
     function sortOrdersBy(key) {
       let dir = (sortDirections[key] === "asc") ? "desc" : "asc";
-
-      // Reseta a direção para as outras colunas
-      for (let k in sortDirections) {
-        sortDirections[k] = null;
-      }
+      for (let k in sortDirections) { sortDirections[k] = null; }
       sortDirections[key] = dir;
-
       displayedOrders.sort((a, b) => {
-        let aVal = a[key];
-        let bVal = b[key];
-
+        let aVal = a[key], bVal = b[key];
         if (key === "data_uso" || key === "data_pagamento") {
           aVal = aVal ? new Date(aVal).getTime() : 0;
           bVal = bVal ? new Date(bVal).getTime() : 0;
@@ -1573,22 +1513,16 @@
           aVal = String(aVal).toLowerCase();
           bVal = String(bVal).toLowerCase();
         }
-
         if (aVal < bVal) return dir === "asc" ? -1 : 1;
         if (aVal > bVal) return dir === "asc" ? 1 : -1;
         return 0;
       });
-
-      // Atualiza indicadores de ordenação (setinhas)
       updateSortIndicators(key, dir);
-
-      // Reinicia a paginação
       currentPage = 1;
       renderOrdersTable(displayedOrders);
       renderPagination(displayedOrders);
     }
 
-    /** Inicializa os listeners de clique nos <th> (colunas) */
     function initOrdersSorting() {
       const ths = document.querySelectorAll("table thead th[data-sort-key]");
       ths.forEach((th) => {
@@ -1597,73 +1531,54 @@
       });
     }
 
-    /** Abre detalhes do pedido em outra página/aba */
     function openDetailsPage(orderId) {
       window.open(`detalhes.html?pedido=${orderId}`, "_blank");
     }
 
-    /** Atualiza a setinha de ordenação (asc/desc) na coluna ativa */
     function updateSortIndicators(activeKey, direction) {
       const thElements = document.querySelectorAll("table thead th");
-
-      // Remove classes de todas as colunas
       thElements.forEach((th) => {
         const span = th.querySelector(".sort-indicator");
-        if (span) {
-          span.classList.remove("asc", "desc");
-        }
+        if (span) { span.classList.remove("asc", "desc"); }
       });
-
-      // Adiciona classe na coluna “ativa”
       const activeTh = document.querySelector(`th[data-sort-key="${activeKey}"]`);
       if (activeTh) {
         const span = activeTh.querySelector(".sort-indicator");
         if (span) {
-          if (direction === "asc")  span.classList.add("asc");
-          else                      span.classList.add("desc");
+          if (direction === "asc") span.classList.add("asc");
+          else span.classList.add("desc");
         }
       }
     }
 
     /***************************************************************
      * 6) Exemplo de “Próximos Pagamentos” (terceiro bloco)
-     *    Só funciona se você tiver uma <tbody> com id="proximos-body"
      ***************************************************************/
     function fillProximosDias() {
       const tBody = document.getElementById("proximos-body");
-      if (!tBody) return; // Se não existir, sai
-
+      if (!tBody) return;
       tBody.innerHTML = "";
-      const hoje     = new Date();
+      const hoje = new Date();
       const finalCot = (userCotacaoManual !== null) ? userCotacaoManual : cotacaoEmUso;
-
-      // Filtra pedidos com data de pagamento futura
       const futureOrders = combinedOrders.filter((order) => {
         if (!order.data_pagamento) return false;
         const [y, m, d] = order.data_pagamento.split("-").map(Number);
         const orderDate = new Date(y, m - 1, d);
         return orderDate > hoje;
       });
-
-      // Agrupa pedidos por data
       const grouped = {};
       futureOrders.forEach((order) => {
         const dateKey = order.data_pagamento;
         if (!grouped[dateKey]) grouped[dateKey] = [];
         grouped[dateKey].push(order);
       });
-
-      // Ordena as datas e monta as linhas
       const dateKeys = Object.keys(grouped).sort((a, b) => new Date(a) - new Date(b));
       dateKeys.forEach((dateStr) => {
         const ordersArr = grouped[dateStr];
         let totalUsd = 0;
-        ordersArr.forEach((o) => {
-          totalUsd += parseFloat(o.valor_calculado) || 0;
-        });
-        const totalBrl     = totalUsd * finalCot;
+        ordersArr.forEach((o) => { totalUsd += parseFloat(o.valor_calculado) || 0; });
+        const totalBrl = totalUsd * finalCot;
         const formattedDate = formatDate(dateStr);
-
         const row = `
           <tr>
             <td>${formattedDate}</td>
@@ -1678,125 +1593,89 @@
      * 7) Modal do Calendário
      ***************************************************************/
     function initializeCalendar() {
-      const openCalendarBtn        = document.getElementById("open-calendar-btn");
-      const backBtn                = document.getElementById("back-btn");
-      const applyBtn               = document.getElementById("apply-btn");
-      const calendarModal          = document.getElementById("calendarModal");
-      const bootstrapModal         = new window.bootstrap.Modal(calendarModal); // <== window.bootstrap
+      const openCalendarBtn = document.getElementById("open-calendar-btn");
+      const backBtn = document.getElementById("back-btn");
+      const applyBtn = document.getElementById("apply-btn");
+      const calendarModal = document.getElementById("calendarModal");
+      const bootstrapModal = new window.bootstrap.Modal(calendarModal);
       const calendarDatesContainer = document.querySelector(".calendar__dates");
-      const monthSelect            = document.getElementById("calendar__month");
-      const yearSelect             = document.getElementById("calendar__year");
-      const selectedDateDisplay    = document.getElementById("datas-selecionadas");
+      const monthSelect = document.getElementById("calendar__month");
+      const yearSelect = document.getElementById("calendar__year");
+      const selectedDateDisplay = document.getElementById("datas-selecionadas");
 
-      // Botão que abre o modal
-      openCalendarBtn.addEventListener("click", () => {
-        bootstrapModal.show();
-      });
-
-      // Botão “Back”
-      backBtn.addEventListener("click", () => {
-        bootstrapModal.hide();
-      });
-
-      // Botão “Apply”
+      openCalendarBtn.addEventListener("click", () => { bootstrapModal.show(); });
+      backBtn.addEventListener("click", () => { bootstrapModal.hide(); });
       applyBtn.addEventListener("click", () => {
-        if (selectedStartDate && !selectedEndDate) {
-          selectedEndDate = selectedStartDate;
-        }
+        if (selectedStartDate && !selectedEndDate) { selectedEndDate = selectedStartDate; }
         if (!selectedStartDate || !selectedEndDate) {
           alert("Por favor, selecione um intervalo completo de datas.");
           return;
         }
         updateSelectedDateDisplay();
         bootstrapModal.hide();
-        loadOrders(); // Recarrega pedidos com base no novo range
+        loadOrders();
       });
-
-      // Muda mês/ano no <select>
       monthSelect.addEventListener("change", renderCalendar);
-      yearSelect.addEventListener("change",  renderCalendar);
+      yearSelect.addEventListener("change", renderCalendar);
 
-      /** Renderiza o “corpo” do calendário */
       function renderCalendar() {
         const month = parseInt(monthSelect.value);
-        const year  = parseInt(yearSelect.value);
-
+        const year = parseInt(yearSelect.value);
         const firstDayOfMonth = new Date(year, month, 1).getDay();
-        const daysInMonth     = new Date(year, month + 1, 0).getDate();
-
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
         calendarDatesContainer.innerHTML = "";
-
-        // Preenche “cinzas” (dias do mês anterior) até iniciar
         for (let i = 0; i < firstDayOfMonth; i++) {
           const emptyDiv = document.createElement("div");
           emptyDiv.classList.add("calendar__date", "calendar__date--grey");
           calendarDatesContainer.appendChild(emptyDiv);
         }
-
-        // Preenche dias do mês
         for (let i = 1; i <= daysInMonth; i++) {
           const dateDiv = document.createElement("div");
           dateDiv.classList.add("calendar__date");
           dateDiv.textContent = i;
-
-          // Ao clicar em cada dia
           dateDiv.addEventListener("click", () => {
             const clickedDate = new Date(year, month, i);
-
-            // Se não há data inicial OU já existe data final => reset
             if (!selectedStartDate || (selectedStartDate && selectedEndDate)) {
               selectedStartDate = clickedDate;
-              selectedEndDate   = null;
+              selectedEndDate = null;
               clearSelection();
               dateDiv.classList.add("calendar__date--selected", "calendar__date--range-start");
-            }
-            // Se cliquei em data anterior à startDate => recomeça do zero
-            else if (clickedDate < selectedStartDate) {
+            } else if (clickedDate < selectedStartDate) {
               selectedStartDate = clickedDate;
-              selectedEndDate   = null;
+              selectedEndDate = null;
               clearSelection();
               dateDiv.classList.add("calendar__date--selected", "calendar__date--range-start");
-            }
-            else {
-              // Caso normal: define “endDate” e destaca intervalo
+            } else {
               selectedEndDate = clickedDate;
               highlightRange(selectedStartDate, selectedEndDate);
             }
             updateSelectedDateDisplay();
           });
-
           calendarDatesContainer.appendChild(dateDiv);
         }
       }
 
-      /** Remove seleção visual */
       function clearSelection() {
         document.querySelectorAll(".calendar__date--selected, .calendar__date--range-start, .calendar__date--range-end")
-          .forEach((el) => {
-            el.classList.remove("calendar__date--selected", "calendar__date--range-start", "calendar__date--range-end");
-          });
+          .forEach((el) => { el.classList.remove("calendar__date--selected", "calendar__date--range-start", "calendar__date--range-end"); });
       }
 
-      /** Destaca todo o range entre start e end */
       function highlightRange(start, end) {
-        const allDates  = document.querySelectorAll(".calendar__date");
+        const allDates = document.querySelectorAll(".calendar__date");
         const startTime = start.getTime();
-        const endTime   = end.getTime();
-
+        const endTime = end.getTime();
         allDates.forEach((el) => {
           const day = parseInt(el.textContent);
-          if (isNaN(day)) return; // células vazias
-
+          if (isNaN(day)) return;
           const testDate = new Date(yearSelect.value, monthSelect.value, day).getTime();
           if (testDate >= startTime && testDate <= endTime) {
             el.classList.add("calendar__date--selected");
             if (testDate === startTime) el.classList.add("calendar__date--range-start");
-            if (testDate === endTime)   el.classList.add("calendar__date--range-end");
+            if (testDate === endTime) el.classList.add("calendar__date--range-end");
           }
         });
       }
 
-      /** Atualiza <span> com as datas selecionadas */
       function updateSelectedDateDisplay() {
         if (selectedStartDate && selectedEndDate) {
           selectedDateDisplay.textContent = `Datas selecionadas: ${formatDisplayDate(selectedStartDate)} - ${formatDisplayDate(selectedEndDate)}`;
@@ -1807,9 +1686,8 @@
         }
       }
 
-      // Inicializa selects e carrega o calendário
       monthSelect.value = selectedStartDate.getMonth();
-      yearSelect.value  = selectedStartDate.getFullYear();
+      yearSelect.value = selectedStartDate.getFullYear();
       renderCalendar();
       updateSelectedDateDisplay();
     }
@@ -1820,86 +1698,69 @@
     async function loadOrders() {
       try {
         const startDateStr = selectedStartDate ? selectedStartDate.toISOString().split("T")[0] : "";
-        const endDateStr   = selectedEndDate   ? selectedEndDate.toISOString().split("T")[0]   : "";
-
-        // Ajuste URLs conforme seu backend
+        const endDateStr = selectedEndDate ? selectedEndDate.toISOString().split("T")[0] : "";
         const apiUrlPlanilhas = `https://airland.com.br/supplier/api_planilhas.php?start_date=${startDateStr}&end_date=${endDateStr}`;
-        const apiUrlPedidos   = "https://airland.com.br/supplier/api_pedidos.php";
+        const apiUrlPedidos = "https://airland.com.br/supplier/api_pedidos.php";
 
         const [respPlan, respPed] = await Promise.all([
           fetch(apiUrlPlanilhas, { credentials: "include" }),
-          fetch(apiUrlPedidos,   { credentials: "include" })
+          fetch(apiUrlPedidos, { credentials: "include" })
         ]);
 
         if (!respPlan.ok) throw new Error("Erro ao carregar planilhas");
-        if (!respPed.ok)  throw new Error("Erro ao carregar pedidos");
+        if (!respPed.ok) throw new Error("Erro ao carregar pedidos");
 
         const planilhasData = await respPlan.json();
-        const pedidosData   = await respPed.json();
+        const pedidosData = await respPed.json();
 
-        // Se não forem arrays, houve algum erro de API
         if (!Array.isArray(planilhasData) || !Array.isArray(pedidosData)) {
           console.error("Erro nos dados da API", planilhasData, pedidosData);
-          document.getElementById("orders-table").innerHTML = `
-            <tr><td colspan="10" style="text-align:center;color:red;">
-              Erro: API não retornou array
-            </td></tr>`;
+          document.getElementById("orders-table").innerHTML = `<tr><td colspan="10" style="text-align:center;color:red;">Erro: API não retornou array</td></tr>`;
           return;
         }
 
-        // Monta um map: id => nomeDoPedido
         const pedidoMap = {};
-        pedidosData.forEach((p) => {
-          pedidoMap[p.id] = p.nome;
-        });
+        pedidosData.forEach((p) => { pedidoMap[p.id] = p.nome; });
 
-        // Cria array unificado
         combinedOrders = planilhasData.map((pl) => {
           const tot = parseFloat(pl.total_usd) || 0;
-          const lob = parseFloat(pl.lobista)   || 0;
+          const lob = parseFloat(pl.lobista) || 0;
           return {
-            nome:           pedidoMap[pl.id_pedido] || "N/A",
-            id_pedido:      pl.id_pedido,
-            produto:        pl.produto        || "",
-            valor_calculado:(tot - lob).toFixed(2),
-            data_uso:       pl.data           || "",
+            nome: pedidoMap[pl.id_pedido] || "N/A",
+            id_pedido: pl.id_pedido,
+            produto: pl.produto || "",
+            valor_calculado: (tot - lob).toFixed(2),
+            data_uso: pl.data || "",
             data_pagamento: pl.data_pagamento || "",
-            identificador:  pl.identificador  || "",
-            fornecedor:     pl.fornecedor     || "",
-            status:         pl.status         || ""
+            identificador: pl.identificador || "",
+            fornecedor: pl.fornecedor || "",
+            status: pl.status || ""
           };
         });
 
-        // Exibe esses dados iniciais (filtrados ou não)
         displayedOrders = combinedOrders.slice();
-        currentPage     = 1;
+        currentPage = 1;
 
         renderOrdersTable(displayedOrders);
         renderPagination(displayedOrders);
         updateFirstBlock();
-        fillProximosDias(); // Se você tiver esse 3º bloco
+        fillProximosDias();
       } catch (error) {
         console.error("Erro ao carregar os dados:", error);
-        document.getElementById("orders-table").innerHTML = `
-          <tr><td colspan="10" style="text-align:center;color:red;">
-            Erro ao carregar os pedidos.
-          </td></tr>`;
+        document.getElementById("orders-table").innerHTML = `<tr><td colspan="10" style="text-align:center;color:red;">Erro ao carregar os pedidos.</td></tr>`;
       }
     }
 
-    /** Função para filtrar (não está sendo chamada automaticamente, mas você pode chamar se quiser) */
     function filterOrders() {
       let filtered = combinedOrders;
       if (selectedStartDate && selectedEndDate) {
         filtered = combinedOrders.filter((order) => {
           if (!order.data_pagamento) return false;
           const [year, month, day] = order.data_pagamento.split("-").map(Number);
-          const paymentDate        = new Date(year, month - 1, day);
+          const paymentDate = new Date(year, month - 1, day);
           return (paymentDate >= selectedStartDate && paymentDate <= selectedEndDate);
         });
       }
-
-      // Se há coluna ordenada, aplica
       const activeColumn = Object.keys(sortDirections).find((col) => sortDirections[col] !== null);
       if (activeColumn) {
         displayedOrders = filtered;
@@ -1912,75 +1773,46 @@
         updateFirstBlock();
       }
     }
-    
+
     function applyQuickRange(rangeType) {
       const now = new Date();
-
       switch(rangeType) {
         case "hoje":
           selectedStartDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-          selectedEndDate   = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+          selectedEndDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
           break;
-
         case "semana":
-          // 7 dias atrás
           const past7 = new Date(now.getTime() - (7 * 24 * 60 * 60 * 1000));
           selectedStartDate = new Date(past7.getFullYear(), past7.getMonth(), past7.getDate());
-          selectedEndDate   = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+          selectedEndDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
           break;
-
         case "mes":
-          // Início do mês => dia 1
-          // Fim do mês => dia 0 do próximo mês
           selectedStartDate = new Date(now.getFullYear(), now.getMonth(), 1);
-          selectedEndDate   = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+          selectedEndDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
           break;
-
         default:
-          // se cair aqui, não faz nada
           return;
       }
-
-      // Recarrega a listagem com o novo range
       loadOrders();
     }
-
 
     /***************************************************************
      * 9) Inicialização Geral
      ***************************************************************/
-     document.addEventListener("DOMContentLoaded", async () => {
-      await checkSession();   // se falhar, redireciona
+    document.addEventListener("DOMContentLoaded", async () => {
+      await checkSession();
       initOrdersSorting();
       initializeCalendar();
-
-      // Seletor do container .button-group
       const btnGroup = document.querySelector(".button-group");
       if (btnGroup) {
         const [hojeLink, semanaLink, mesLink, personalizadoLink] = btnGroup.querySelectorAll("a");
-
-        hojeLink.addEventListener("click", () => {
-          applyQuickRange("hoje");
-        });
-        semanaLink.addEventListener("click", () => {
-          applyQuickRange("semana");
-        });
-        mesLink.addEventListener("click", () => {
-          applyQuickRange("mes");
-        });
-        personalizadoLink.addEventListener("click", () => {
-          // Abre o calendário
-          // (podemos chamar o mesmo que "openCalendarBtn.click()" ou
-          //  só chamar bootstrapModal.show().)
-          document.getElementById("open-calendar-btn").click();
-        });
+        hojeLink.addEventListener("click", () => { applyQuickRange("hoje"); });
+        semanaLink.addEventListener("click", () => { applyQuickRange("semana"); });
+        mesLink.addEventListener("click", () => { applyQuickRange("mes"); });
+        personalizadoLink.addEventListener("click", () => { document.getElementById("open-calendar-btn").click(); });
       }
-
-      loadOrders(); // carrega pedidos
+      loadOrders();
     });
-
-
-
   </script>
   <!-- ========= All Javascript files linkup ======== -->
   <script src="assets/js/bootstrap.bundle.min.js"></script>
@@ -1996,7 +1828,5 @@
   <script src="assets/js/datatable.js"></script>
   <script src="assets/js/Sortable.min.js"></script>
   <script src="assets/js/main.js"></script>
-
 </body>
-
 </html>
