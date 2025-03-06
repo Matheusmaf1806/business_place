@@ -307,6 +307,15 @@
       height: 95%;
     }
 
+    .main-btn.status-button {
+      display: inline-block; 
+      /* ou display: inline-flex, se preferir */
+      min-width: 160px; /* Ajuste para caber o maior texto */
+      text-align: center;
+      white-space: nowrap; /* Para o texto não quebrar */
+      /* padding, cores, etc. continuam os mesmos */
+    }    
+
   </style>
   <!-- ======== Preloader =========== -->
   <div id="preloader">
@@ -1670,8 +1679,18 @@
     function renderPagination(data) {
       const pag = document.getElementById("pagination-controls");
       pag.innerHTML = "";
-      
+    
       const totalPages = Math.ceil(data.length / rowsPerPage);
+      const maxVisible = 5; // número máximo de páginas que você quer mostrar
+      // Ajuste a lógica para centralizar o currentPage dentro do range
+      let startPage = Math.max(1, currentPage - 2);
+      let endPage   = startPage + maxVisible - 1;
+    
+      // Se o endPage passar do total, “puxa” o range para trás
+      if (endPage > totalPages) {
+        endPage   = totalPages;
+        startPage = Math.max(1, endPage - maxVisible + 1);
+      }
     
       // Botão "Anterior"
       const prevBtn = document.createElement("button");
@@ -1684,8 +1703,8 @@
       };
       pag.appendChild(prevBtn);
     
-      // Números das páginas
-      for (let i = 1; i <= totalPages; i++) {
+      // Botões numéricos de startPage até endPage
+      for (let i = startPage; i <= endPage; i++) {
         const btn = document.createElement("button");
         btn.textContent = i;
         btn.disabled = (i === currentPage);
@@ -1707,7 +1726,7 @@
         renderPagination(displayedOrders);
       };
       pag.appendChild(nextBtn);
-    }    
+    }        
 
     function sortOrdersBy(key) {
       let dir = (sortDirections[key] === "asc") ? "desc" : "asc";
