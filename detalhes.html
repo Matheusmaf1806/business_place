@@ -1150,7 +1150,7 @@
       }
       try {
         // URL da API de pedidos (ajuste se necessário)
-        const url = `https://www.magictraveltur.com/api_pedidos.php?id_pedido=${pedidoId}`;
+        const url = `https://www.airland.com.br/supplier/api_pedidos.php?id_pedido=${pedidoId}`;
         const resp = await fetch(url, { credentials: 'include' });
         if (!resp.ok) throw new Error(`Erro ao buscar pedido: ${resp.status}`);
         const data = await resp.json();
