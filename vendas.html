@@ -1014,6 +1014,11 @@
             document.getElementById('agente_id').value = result.user_data.id;
           }
 
+          // 2) Preencher o affiliate_id que vem junto:
+          if (result.user_data && typeof result.user_data.affiliate_id !== "undefined") {
+            document.getElementById('affiliate_id').value = result.user_data.affiliate_id;
+          }
+
           // 2) Definir status como "Aguardando Emissão"
           document.getElementById('status').value = "Aguardando Emissão";
         }
