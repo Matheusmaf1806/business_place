@@ -148,21 +148,15 @@
               <i class="lni lni-briefcase mr-10"></i>
               Comercial
             </button>
-            <!-- Tab 5: Adicionais -->
+            <!-- Tab 5: Planilha -->
             <button id="tab-5" class="main-btn deactive-btn rounded-full"
               data-bs-toggle="tab" data-bs-target="#tabContent-5">
-              <i class="lni lni-comments-reply mr-10"></i>
-              Adicionais
-            </button>
-            <!-- Tab 6: Planilha -->
-            <button id="tab-6" class="main-btn deactive-btn rounded-full"
-              data-bs-toggle="tab" data-bs-target="#tabContent-6">
               <i class="lni lni-book mr-10"></i>
               Planilha
             </button>
-            <!-- Tab 7: Emissão -->
-            <button id="tab-7" class="main-btn deactive-btn rounded-full"
-              data-bs-toggle="tab" data-bs-target="#tabContent-7">
+            <!-- Tab 6: Emissão -->
+            <button id="tab-6" class="main-btn deactive-btn rounded-full"
+              data-bs-toggle="tab" data-bs-target="#tabContent-6">
               <i class="lni lni-checkmark-circle mr-10"></i>
               Emissão
             </button>
@@ -184,6 +178,19 @@
                     </tr>
                   </thead>
                   <tbody id="order-info"></tbody>
+                </table>
+              </div>
+
+              <div class="section">
+                <h3>Informações Adicionais</h3>
+                <table class="emissao-tabela">
+                  <thead>
+                    <tr>
+                      <th>Observações Operacionais</th>
+                      <th>Observações Financeiras</th>
+                    </tr>
+                  </thead>
+                  <tbody id="additional-info"></tbody>
                 </table>
               </div>
             </div>
@@ -263,24 +270,8 @@
               </div>
             </div>
 
-            <!-- ABA 5: Adicionais -->
+            <!-- ABA 5: Planilha -->
             <div class="tab-pane fade" id="tabContent-5">
-              <div class="section">
-                <h3>Informações Adicionais</h3>
-                <table class="emissao-tabela">
-                  <thead>
-                    <tr>
-                      <th>Observações Operacionais</th>
-                      <th>Observações Financeiras</th>
-                    </tr>
-                  </thead>
-                  <tbody id="additional-info"></tbody>
-                </table>
-              </div>
-            </div>
-
-            <!-- ABA 6: Planilha -->
-            <div class="tab-pane fade" id="tabContent-6">
               <div class="section">
                 <h3>Planilha do Pedido</h3>
 
@@ -342,8 +333,8 @@
               </div>
             </div>
 
-            <!-- ABA 7: Emissão -->
-            <div class="tab-pane fade" id="tabContent-7">
+            <!-- ABA 6: Emissão -->
+            <div class="tab-pane fade" id="tabContent-6">
               <div class="section">
                 <h3>Emissão</h3>
                 <table class="emissao-tabela">
@@ -434,7 +425,7 @@
 
         document.getElementById('pedido-id').textContent = pedidoId;
 
-        // Preenche "Informações do Pedido" (aba 1)
+        // Preenche "Informações do Pedido"
         document.getElementById('order-info').innerHTML = `
           <tr>
             <td>
@@ -455,7 +446,7 @@
           </tr>
         `;
 
-        // Preenche "Informações do Cliente" (aba 2)
+        // Preenche "Informações do Cliente"
         document.getElementById('customer-info').innerHTML = `
           <tr>
             <td>${pedido.nome_comprador || ''}</td>
@@ -467,7 +458,7 @@
           </tr>
         `;
 
-        // Financeiras (aba 3)
+        // Financeiro
         document.getElementById('financial-info').innerHTML = `
           <tr>
             <td>${pedido.gateway || '<input type="text" placeholder="Gateway">'}</td>
@@ -490,7 +481,7 @@
           </tr>
         `;
 
-        // Comerciais (aba 4)
+        // Comerciais
         document.getElementById('commercial-info').innerHTML = `
           <tr>
             <td>${pedido.origem_cliente || '<input type="text" placeholder="Origem do Cliente">'}</td>
@@ -500,7 +491,7 @@
           </tr>
         `;
 
-        // Adicionais (aba 5)
+        // Adicionais
         document.getElementById('additional-info').innerHTML = `
           <tr>
             <td>${pedido.observacoes_operacionais || '<input type="text" placeholder="Observações Operacionais">'}</td>
@@ -508,7 +499,7 @@
           </tr>
         `;
 
-        // Por fim, carrega a planilha (aba 6 e 7)
+        // Carrega Planilha (aba Planilha e Emissão)
         await loadPlanilhaPedido();
       } catch (err) {
         console.error(err);
@@ -527,7 +518,10 @@
 
       try {
         const url = `https://magictraveltur.com/api_planilhas.php?id_pedido=${pedidoId}&v=${Date.now()}`;
-        const resp = await fetch(url, { cache: 'no-store', credentials: 'include' });
+        const resp = await fetch(url, {
+          cache: 'no-store',
+          credentials: 'include'
+        });
         if (!resp.ok) throw new Error(`Erro ao buscar planilhas: ${resp.status}`);
 
         const planilhas = await resp.json();
