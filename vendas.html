@@ -850,12 +850,6 @@
                       <div class="select-position">
                         <select id="cliente_de" name="cliente_de" required>
                           <option value="">Selecione</option>
-                          <option value="Matheus Alvarenga">Matheus Alvarenga</option>
-                          <option value="Raphaela Raposo">Raphaela Raposo</option>
-                          <option value="Vanessa Barreto">Vanessa Barreto</option>
-                          <option value="Breno Severiano">Breno Severiano</option>
-                          <option value="Mariane Nunes">Mariane Nunes</option>
-                          <option value="Guilherme Raimundi">Guilherme Raimundi</option>
                         </select>
                       </div>
                     </div>
@@ -868,12 +862,6 @@
                       <div class="select-position">
                         <select id="efetivado_por" name="efetivado_por" required>
                           <option value="">Selecione</option>
-                          <option value="Matheus Alvarenga">Matheus Alvarenga</option>
-                          <option value="Raphaela Raposo">Raphaela Raposo</option>
-                          <option value="Vanessa Barreto">Vanessa Barreto</option>
-                          <option value="Breno Severiano">Breno Severiano</option>
-                          <option value="Mariane Nunes">Mariane Nunes</option>
-                          <option value="Guilherme Raimundi">Guilherme Raimundi</option>
                         </select>
                       </div>
                     </div>
@@ -1017,6 +1005,7 @@
           // 2) Preencher o affiliate_id que vem junto:
           if (result.user_data && typeof result.user_data.affiliate_id !== "undefined") {
             document.getElementById('affiliate_id').value = result.user_data.affiliate_id;
+            loadAffiliateUsers(result.user_data.affiliate_id);
           }
 
           // 2) Definir status como "Aguardando Emissão"
@@ -1028,6 +1017,37 @@
       }
     }
 
+    function loadAffiliateUsers(affiliateId) {
+      fetch(`https://airland.com.br/affiliatesacess/get_affiliate_users.php?affiliate_id=${affiliateId}`, {
+        credentials: 'include'
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            // Agora preenchemos os selects "cliente_de" e "efetivado_por"
+            populateSelectOptions('cliente_de', data.usuarios);
+            populateSelectOptions('efetivado_por', data.usuarios);
+          } else {
+            console.error('Erro ao buscar users:', data.error);
+          }
+        })
+        .catch(err => console.error('Erro no fetch de get_affiliate_users:', err));
+    }
+
+    function populateSelectOptions(selectId, usuarios) {
+      const selectElem = document.getElementById(selectId);
+      if (!selectElem) return;
+
+      // Limpa tudo, deixando só a option "Selecione"
+      selectElem.innerHTML = '<option value="">Selecione</option>';
+
+      usuarios.forEach(u => {
+        const opt = document.createElement('option');
+        opt.value = u.id; // Valor que vai pro backend => ID do usuário
+        opt.textContent = `${u.primeiro_nome} ${u.ultimo_nome}`; // Texto exibido
+        selectElem.appendChild(opt);
+      });
+    }
 
     // 2) Buscar dados do perfil e preencher os elementos
     function fetchUserProfile() {
