@@ -26,44 +26,67 @@
     /* Ajustes para as tabelas dentro das tabs do PlainAdmin */
     table.emissao-tabela {
       width: 100%;
-      margin-bottom: 1rem;
-      border-collapse: separate;
+      border-collapse: separate; 
       border-spacing: 0;
-      /* Cria cantos arredondados no cabeçalho, opcional */
-      border-radius: 4px;
-      overflow: hidden; /* para que o border-radius apareça */
-      table-layout: fixed;
+      margin-bottom: 1.5rem;
+      background-color: #ffffff;
+      border-radius: 12px;       /* cantos levemente arredondados */
+      overflow: hidden;          /* garante que o border-radius aparece */
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05); /* sombra bem sutil */
     }
 
     table.emissao-tabela thead {
-      background-color: rgb(54, 92, 245);
-      color: #fff;
+      background-color: #f5f5f7;  /* cor levemente cinza, estilo Apple */
     }
 
     table.emissao-tabela th {
-      text-align: center;
-      font-weight: 500;
-      padding: 0.75rem;
-      border-bottom: 1px solid #dee2e6;
+      padding: 12px 16px;
+      text-align: left;       /* À esquerda fica mais elegante. */
+      font-weight: 600;       /* Cabeçalho um pouco mais forte */
+      font-size: 0.95rem;     /* Ajuste de tamanho */
+      color: #333;            /* Texto mais escuro, melhor contraste */
+      border-bottom: 1px solid #e0e0e0;
     }
 
     table.emissao-tabela td {
-      text-align: center;
-      vertical-align: middle;
-      padding: 0.5rem;
-      /* Se quiser bordar sutil nas linhas: */
-      border-bottom: 1px solid #eee;
+      padding: 12px 16px;
+      font-size: 0.95rem;
+      color: #444;
+      border-bottom: 1px solid #f0f0f0; 
+      /* Borda MUITO sutil. Você pode reduzir para #f7f7f7 se quiser quase invisível. */
     }
+
+    /* Se quiser remover as bordas entre as células, tire o border-bottom. */
 
     /* Inputs e selects dentro da tabela */
     table.emissao-tabela input,
     table.emissao-tabela select {
       width: 100%;
       min-width: 80px;
-      padding: 6px;
       box-sizing: border-box;
+      border: 1px solid #d1d1d6;  /* tom de cinza claro, Apple-like */
+      border-radius: 8px;        
+      padding: 6px 8px;
       font-size: 0.9rem;
-      margin: 0;
+      color: #333;
+      background-color: #fff;
+      outline: none;
+    }
+
+    table.emissao-tabela input::placeholder,
+    table.emissao-tabela select::placeholder {
+      color: #999;
+    }
+
+    /* Tira borda/estilo do select padrão, em alguns browsers */
+    table.emissao-tabela select {
+      -webkit-appearance: none;  
+      -moz-appearance:    none;
+      background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg width='10' height='7' ... %3C/svg%3E"); 
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      background-size: 10px auto;
+      padding-right: 24px; 
     }
 
     .section h3 {
