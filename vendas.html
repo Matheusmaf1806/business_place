@@ -897,15 +897,13 @@
           <!-- end row de todos os blocos -->
 
           <!-- Campos Ocultos -->
-          <input type="hidden" id="id" name="id">
+          <input type="hidden" id="pedido_id" name="pedido_id">
           <input type="hidden" id="mes_venda" name="mes_venda">
           <input type="hidden" id="uf" name="uf">
           <input type="hidden" id="valor_comissao" name="valor_comissao">
           <input type="hidden" id="markup" name="markup">
           <input type="hidden" id="comissao_do_agente" name="comissao_do_agente">
-          <!-- Novo campo para a comissão do orçador -->
           <input type="hidden" id="comissao_do_orcador" name="comissao_do_orcador">
-          
           <input type="hidden" id="data_pgto" name="data_pgto">
           <input type="hidden" id="recebido" name="recebido">
           <input type="hidden" id="data_repasse" name="data_repasse">
@@ -1087,8 +1085,8 @@
 
     // Função updateFinance() para enviar dados à API Finance
     async function updateFinance() {
-      // Pegue do hidden #id que acabamos de preencher
-      const pedidoId = document.getElementById('id').value;
+      // Pegue do hidden #pedido_id que foi preenchido após o POST
+      const pedidoId = document.getElementById('pedido_id').value;
       
       const gatewayVal        = document.getElementById('gateway').value.trim();
       const dataVendaVal      = document.getElementById('data_venda').value;
@@ -1100,7 +1098,7 @@
       const agenteId          = document.getElementById('agente_id').value;
 
       const payload = {
-        id_pedido: pedidoId,  // <-- fundamental
+        id_pedido: pedidoId,  // Fundamental: o ID do pedido inserido
         gateway: gatewayVal,
         data_venda: dataVendaVal,
         valor_venda: valorVendaVal,
@@ -1111,7 +1109,6 @@
         agente_id: agenteId
       };
 
-      // Chama a API de finance
       try {
         const response = await fetch('https://airland.com.br/supplier/api_finance.php', {
           method: 'PUT',
@@ -1231,15 +1228,12 @@
             }
             const result = await response.json();
             if (result.success) {
-              // 1) Pegue o ID retornado
+              // Pegue o ID retornado (pedido_id) e armazene no campo hidden
               const novoId = result.pedido_id;
-              
-              // 2) Guarde no hidden input
-              document.getElementById('id').value = novoId;
+              document.getElementById('pedido_id').value = novoId;
 
-              // 3) Agora chame updateFinance(), mas usando esse ID
-              await updateFinance(); // (lá dentro, você pega do hidden #id)
-              
+              // Agora, chame updateFinance() que usará o valor correto
+              await updateFinance();
               alert("Dados salvos com sucesso!");
               window.location.reload(true);
             } else {
