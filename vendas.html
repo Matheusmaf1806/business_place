@@ -1087,18 +1087,20 @@
 
     // Função updateFinance() para enviar dados à API Finance
     async function updateFinance() {
-      const pedidoId = obterIdPedido();
-      const gatewayVal = document.getElementById('gateway').value.trim();
-      const dataVendaVal = document.getElementById('data_venda').value;
-      const valorVendaVal = parseFloat(document.getElementById('valor_venda').value) || 0;
-      const meioPgtoVal = document.getElementById('meio_pgto').value.trim();
-      const bandeiraCartaoVal = document.getElementById('bandeira_cartao').value.trim();
-      const parcelasVal = document.getElementById('parcelas').value;
-      const affiliateId = document.getElementById('affiliate_id').value;
-      const agenteId = document.getElementById('agente_id').value;
+      // Pegue do hidden #id que acabamos de preencher
+      const pedidoId = document.getElementById('id').value;
       
+      const gatewayVal        = document.getElementById('gateway').value.trim();
+      const dataVendaVal      = document.getElementById('data_venda').value;
+      const valorVendaVal     = parseFloat(document.getElementById('valor_venda').value) || 0;
+      const meioPgtoVal       = document.getElementById('meio_pgto').value.trim();
+      const bandeiraCartaoVal = document.getElementById('bandeira_cartao').value.trim();
+      const parcelasVal       = document.getElementById('parcelas').value;
+      const affiliateId       = document.getElementById('affiliate_id').value;
+      const agenteId          = document.getElementById('agente_id').value;
+
       const payload = {
-        id_pedido: pedidoId,
+        id_pedido: pedidoId,  // <-- fundamental
         gateway: gatewayVal,
         data_venda: dataVendaVal,
         valor_venda: valorVendaVal,
@@ -1108,7 +1110,8 @@
         affiliate_id: affiliateId,
         agente_id: agenteId
       };
-      
+
+      // Chama a API de finance
       try {
         const response = await fetch('https://airland.com.br/supplier/api_finance.php', {
           method: 'PUT',
@@ -1228,8 +1231,15 @@
             }
             const result = await response.json();
             if (result.success) {
-              // Após salvar o form, atualiza os dados financeiros
-              await updateFinance();
+              // 1) Pegue o ID retornado
+              const novoId = result.pedido_id;
+              
+              // 2) Guarde no hidden input
+              document.getElementById('id').value = novoId;
+
+              // 3) Agora chame updateFinance(), mas usando esse ID
+              await updateFinance(); // (lá dentro, você pega do hidden #id)
+              
               alert("Dados salvos com sucesso!");
               window.location.reload(true);
             } else {
