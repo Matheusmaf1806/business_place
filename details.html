@@ -1014,22 +1014,43 @@
                       <th>Câmbio do Dia</th>
                     </tr>
                   </thead>
-                  <tbody id="financial-info"></tbody>
+                  <tbody>
+                    <tr>
+                      <!-- Esses inputs têm ID para bater com o JavaScript -->
+                      <td><input type="text"   id="gatewayInput"          placeholder="Ex: Paypal" /></td>
+                      <td><input type="date"   id="dataVendaInput"        /></td>
+                      <td><input type="number" step="0.01" id="valorVendaInput" placeholder="Ex: 1000.00" /></td>
+                      <td><input type="number" step="0.01" id="valorRecebimentoInput" placeholder="Ex: 900.00" /></td>
+                      <td><input type="date"   id="dataRecebimentoInput"  /></td>
+                      <td><input type="number" step="0.01" id="cambioDiaInput"       placeholder="Ex: 5.20" /></td>
+                    </tr>
+                  </tbody>
                 </table>
 
                 <!-- Financeiro: Tabela 2 -->
                 <table class="emissao-tabela">
                   <thead>
                     <tr>
-                      <th>Receita</th>  <!-- era Valor Comissão -->
+                      <th>Receita</th>  <!-- Ex: Comissão ou outro descriptor -->
                       <th>Meio Pagamento</th>
                       <th>Bandeira Cartão</th>
                       <th>Parcelas</th>
                       <th>Custo</th>
                     </tr>
                   </thead>
-                  <tbody id="financial-info-2"></tbody>
+                  <tbody>
+                    <tr>
+                      <td><input type="number" step="0.01" id="receitaInput"        placeholder="Ex: 250.00" /></td>
+                      <td><input type="text"               id="meioPgtoInput"       placeholder="Ex: Cartão" /></td>
+                      <td><input type="text"               id="bandeiraCartaoInput" placeholder="Ex: Visa" /></td>
+                      <td><input type="number"             id="parcelasInput"       placeholder="Ex: 3" /></td>
+                      <td><input type="number" step="0.01" id="custoInput"          placeholder="Ex: 50.00" /></td>
+                    </tr>
+                  </tbody>
                 </table>
+
+                <!-- Botão para salvar -->
+                <button class="btn btn-primary" onclick="salvarFinanceiro()">Salvar Financeiro</button>
               </div>
             </div>
 
