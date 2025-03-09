@@ -1210,7 +1210,7 @@
     /*******************************************************
      * 4) Carregar Detalhes do Pedido (supplier_pedidos)
      *******************************************************/
-    async function carregarDetalhesPedido() {
+     async function carregarDetalhesPedido() {
       const pedidoId = obterIdPedido();
       if (pedidoId === 'Não informado') {
         alert('Pedido não informado.');
@@ -1219,12 +1219,17 @@
       try {
         const url = `https://airland.com.br/supplier/api_pedidos.php?id_pedido=${pedidoId}`;
         const resp = await fetch(url, { credentials: 'include' });
-        if (!resp.ok) throw new Error(`Erro ao buscar pedido: ${resp.status}`);
+        if (!resp.ok) {
+          throw new Error(`Erro ao buscar pedido: ${resp.status}`);
+        }
         const dados = await resp.json();
-        if (!Array.isArray(dados) || !dados.length) {
+
+        // Se a API retorna um objeto (ex: {id: 3186, destino: "...", ...} ):
+        if (!dados.id) {
           throw new Error('Nenhum pedido encontrado.');
         }
-        pedidoAtual = dados[0];
+        // Agora `dados` em si já é o objeto do pedido
+        pedidoAtual = dados;
         document.getElementById('pedido-id').textContent = pedidoId;
 
         // Preenche Aba 1 (Pedido)
@@ -1247,6 +1252,7 @@
             <td>${formatarData(pedidoAtual.data_venda)}</td>
           </tr>
         `;
+
         // Observações
         document.getElementById('additional-info').innerHTML = `
           <tr>
@@ -1254,6 +1260,7 @@
             <td>${pedidoAtual.observacoes_financeiras  || ''}</td>
           </tr>
         `;
+
         // Aba 2 (Cliente)
         document.getElementById('customer-info').innerHTML = `
           <tr>
@@ -1265,6 +1272,7 @@
             <td>${pedidoAtual.uf || ''}</td>
           </tr>
         `;
+
         // Aba 4 (Comercial)
         document.getElementById('commercial-info').innerHTML = `
           <tr>
