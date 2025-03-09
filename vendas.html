@@ -983,14 +983,19 @@
         if (!result.logged_in) {
           window.location.replace("https://businessplace.airland.com.br/signin.html");
         } else {
+          // Mostra o body
           document.body.style.display = "block";
+  
+          // Se o usuário tiver ID, guardamos no hidden
           if (result.user_data && typeof result.user_data.id !== "undefined") {
             document.getElementById('agente_id').value = result.user_data.id;
           }
+          // Se tiver affiliate_id, guardamos no hidden e carregamos usuários
           if (result.user_data && typeof result.user_data.affiliate_id !== "undefined") {
             document.getElementById('affiliate_id').value = result.user_data.affiliate_id;
             loadAffiliateUsers(result.user_data.affiliate_id);
           }
+          // Define status default
           document.getElementById('status').value = "Aguardando Emissão";
         }
       } catch (error) {
@@ -998,7 +1003,8 @@
         window.location.replace("https://businessplace.airland.com.br/signin.html");
       }
     }
-
+  
+    // 2) Buscar usuários do afiliado e preencher selects
     function loadAffiliateUsers(affiliateId) {
       fetch(`https://airland.com.br/affiliatesacess/get_affiliate_users.php?affiliate_id=${affiliateId}`, {
         credentials: 'include'
@@ -1014,7 +1020,8 @@
         })
         .catch(err => console.error('Erro no fetch de get_affiliate_users:', err));
     }
-
+  
+    // Função auxiliar para popular <select> com lista de usuários
     function populateSelectOptions(selectId, usuarios) {
       const selectElem = document.getElementById(selectId);
       if (!selectElem) return;
@@ -1026,9 +1033,10 @@
         selectElem.appendChild(opt);
       });
     }
-
+  
+    // 3) Carregar perfil do usuário logado (exemplo)
     function fetchUserProfile() {
-      const userId = 1; // Ajuste conforme necessário
+      const userId = 1; // Ajuste se necessário
       fetch(`https://airland.com.br/affiliatesacess/get_user_profile.php?id=${userId}`, {
         credentials: 'include'
       })
@@ -1036,28 +1044,33 @@
         .then(result => {
           if (result.success) {
             const data = result.data;
+            // Preenche nome no header
             if (document.getElementById("headerUserName")) {
               document.getElementById("headerUserName").textContent = data.primeiro_nome;
             }
+            // Preenche no dropdown
             if (document.getElementById("dropdownUserName")) {
               document.getElementById("dropdownUserName").textContent = data.primeiro_nome + " " + data.ultimo_nome;
             }
             if (document.getElementById("dropdownUserEmail")) {
               document.getElementById("dropdownUserEmail").textContent = data.email;
             }
+            // Preenche foto
             if (document.getElementById("profileImage")) {
               document.getElementById("profileImage").src = data.fotodeperfil;
             }
             if (document.getElementById("profileImageDropdown")) {
               document.getElementById("profileImageDropdown").src = data.fotodeperfil;
             }
+            // Ajusta todos os elementos .user-name
             const userName = data.primeiro_nome + " " + data.ultimo_nome;
             document.querySelectorAll(".user-name").forEach(el => {
               el.textContent = userName;
             });
+            // Promo box
             document.getElementById("promoImage").src = data.fotodeperfil;
             document.getElementById("promoUserName").textContent = userName;
-            document.getElementById("promoText").textContent = "Quem tem pena é galinha, os fracos que se arrebentem. A gente colhe o que planta e quem tem luz não nasceu pra sombra";
+            document.getElementById("promoText").textContent = "Quem tem pena é galinha, os fracos que se arrebentem...";
             document.getElementById("promoLink").textContent = userName;
           } else {
             console.error("Erro:", result.error);
@@ -1065,8 +1078,8 @@
         })
         .catch(error => console.error("Erro na API:", error));
     }
-
-    // Evento para formatar CPF
+  
+    // 4) Formatação de CPF ao digitar
     function formatCPF(value) {
       let v = value.replace(/\D/g, "");
       v = v.substring(0, 11);
@@ -1082,12 +1095,13 @@
     document.getElementById("cpf").addEventListener("input", function(e) {
       e.target.value = formatCPF(e.target.value);
     });
-
-    // Função updateFinance() para enviar dados à API Finance
+  
+    // 5) Função que faz o upsert no finance (PUT)
     async function updateFinance() {
-      // Pegue do hidden #pedido_id que foi preenchido após o POST
+      // Pegue do hidden #pedido_id que foi preenchido após inserir o pedido
       const pedidoId = document.getElementById('pedido_id').value;
-      
+  
+      // Campos que vão no payload
       const gatewayVal        = document.getElementById('gateway').value.trim();
       const dataVendaVal      = document.getElementById('data_venda').value;
       const valorVendaVal     = parseFloat(document.getElementById('valor_venda').value) || 0;
@@ -1096,9 +1110,10 @@
       const parcelasVal       = document.getElementById('parcelas').value;
       const affiliateId       = document.getElementById('affiliate_id').value;
       const agenteId          = document.getElementById('agente_id').value;
-
+  
+      // Monta o objeto JSON
       const payload = {
-        id_pedido: pedidoId,  // Fundamental: o ID do pedido inserido
+        id_pedido: pedidoId,
         gateway: gatewayVal,
         data_venda: dataVendaVal,
         valor_venda: valorVendaVal,
@@ -1108,7 +1123,7 @@
         affiliate_id: affiliateId,
         agente_id: agenteId
       };
-
+  
       try {
         const response = await fetch('https://airland.com.br/supplier/api_finance.php', {
           method: 'PUT',
@@ -1127,32 +1142,28 @@
         alert('Erro ao atualizar os dados financeiros: ' + error.message);
       }
     }
-
-    // Função para obter o id do pedido via URL
-    function obterIdPedido() {
-      const params = new URLSearchParams(window.location.search);
-      return params.get('pedido') || 'Não informado';
-    }
-
-    // Eventos para preenchimento automático de campos
+  
+    // 6) No onLoad, iniciamos
     document.addEventListener("DOMContentLoaded", async function () {
       await checkSession();
       fetchUserProfile();
-
+  
+      // Quando a data de venda mudar, atualiza mes_venda e data_pgto
       const dataVendaField = document.getElementById('data_venda');
-      const mesVendaField = document.getElementById('mes_venda');
-      const dataPgtoField = document.getElementById('data_pgto');
+      const mesVendaField  = document.getElementById('mes_venda');
+      const dataPgtoField  = document.getElementById('data_pgto');
       if (dataVendaField && mesVendaField && dataPgtoField) {
         dataVendaField.addEventListener('change', function () {
           const dataVenda = new Date(this.value + 'T00:00:00');
-          const mesVenda = dataVenda.toLocaleString('default', { month: 'long' });
-          mesVendaField.value = mesVenda; 
+          const mesVenda  = dataVenda.toLocaleString('default', { month: 'long' });
+          mesVendaField.value = mesVenda;
           dataPgtoField.value = this.value;
         });
       }
-
+  
+      // Quando o telefone perder foco, tentamos descobrir UF pelo DDD
       const telefoneField = document.getElementById('telefone');
-      const ufField = document.getElementById('uf');
+      const ufField       = document.getElementById('uf');
       if (telefoneField && ufField) {
         telefoneField.addEventListener('blur', function () {
           const ddd = this.value.replace(/\D/g, '').slice(0, 2);
@@ -1171,21 +1182,24 @@
           ufField.value = estados[ddd] || '';
         });
       }
-
-      // Evento do botão Salvar – integra o updateFinance() após o envio do formulário
+  
+      // 7) Evento do botão Salvar – faz POST no process_form.php e depois PUT no finance
       const submitButton = document.getElementById('submitButton');
       if (submitButton) {
         submitButton.addEventListener('click', async function () {
           const form = document.getElementById('salesForm');
           if (!form) return;
-
-          // Cálculos automáticos
-          const valorVenda = parseFloat(document.getElementById('valor_venda')?.value) || 0;
+  
+          // ---- Cálculos automáticos (comissão, markup, etc.)
+          const valorVenda     = parseFloat(document.getElementById('valor_venda')?.value) || 0;
           const valorRepassado = parseFloat(document.getElementById('valor_repassado')?.value) || 0;
+  
+          // Valor comissão e markup (exemplo simples)
           document.getElementById('valor_comissao').value = valorRepassado.toFixed(2);
           const markup = (valorRepassado > 0) ? (valorRepassado / valorRepassado) * 100 : 0;
           document.getElementById('markup').value = markup.toFixed(2);
-
+  
+          // Cálculo com base em categoria
           const categoria = document.getElementById('item')?.value || "";
           const comissoes = {
             "Ingressos": 0.003,
@@ -1196,16 +1210,17 @@
             "Aluguel de Carro": 0.01,
             "Cruzeiro": 0.01
           };
-          const comissaoTotal = valorRepassado * (comissoes[categoria] || 0);
-          const comissaoAgente = comissaoTotal * 0.70;
+          const comissaoTotal   = valorRepassado * (comissoes[categoria] || 0);
+          const comissaoAgente  = comissaoTotal * 0.70;
           const comissaoOrcador = comissaoTotal * 0.30;
           document.getElementById('comissao_do_agente').value = comissaoAgente.toFixed(2);
           document.getElementById('comissao_do_orcador').value = comissaoOrcador.toFixed(2);
-
+  
+          // Se data de venda e meio de pagamento forem válidos, definimos data_repasse
           const dataVendaString = document.getElementById('data_venda')?.value;
-          const meioPagamento = document.getElementById('meio_pgto')?.value;
+          const meioPagamento   = document.getElementById('meio_pgto')?.value;
           if (dataVendaString && meioPagamento) {
-            const dataVenda = new Date(dataVendaString);
+            const dataVenda   = new Date(dataVendaString);
             const dataRepasse = new Date(dataVenda);
             if (meioPagamento === 'Pix') {
               dataRepasse.setDate(dataRepasse.getDate());
@@ -1214,9 +1229,11 @@
             }
             document.getElementById('data_repasse').value = dataRepasse.toISOString().split('T')[0];
           }
-
+  
+          // ---- Envio do formulário
           const formData = new FormData(form);
           try {
+            // POST no process_form.php (insere na tabela supplier_pedidos)
             const response = await fetch('https://airland.com.br/Sales/process_form.php', {
               method: 'POST',
               body: formData
@@ -1228,12 +1245,14 @@
             }
             const result = await response.json();
             if (result.success) {
-              // Pegue o ID retornado (pedido_id) e armazene no campo hidden
+              // Recebemos o pedido_id do backend
               const novoId = result.pedido_id;
+              // Guardamos no hidden #pedido_id
               document.getElementById('pedido_id').value = novoId;
-
-              // Agora, chame updateFinance() que usará o valor correto
+  
+              // Depois chamamos updateFinance() => PUT no api_finance
               await updateFinance();
+  
               alert("Dados salvos com sucesso!");
               window.location.reload(true);
             } else {
@@ -1245,7 +1264,7 @@
         });
       }
     });
-  </script>
+  </script>  
 
   <!-- Demais scripts do template -->
   <script src="assets/js/bootstrap.bundle.min.js"></script>
