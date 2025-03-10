@@ -1417,17 +1417,17 @@
         return;
       }
       const pedidoId = obterIdPedido();
-      const gatewayVal = document.getElementById('gatewayInput').value.trim();
-      const dataVendaVal = document.getElementById('dataVendaInput').value;
-      const valorVendaVal = parseFloat(document.getElementById('valorVendaInput').value) || 0;
-      const valorRecebVal = parseFloat(document.getElementById('valorRecebimentoInput').value) || 0;
-      const dataRecebVal = document.getElementById('dataRecebimentoInput').value;
-      const cambioVal = document.getElementById('cambioDiaInput').value;
-      const receitaVal = parseFloat(document.getElementById('receitaInput').value) || 0;
-      const meioPgtoVal = document.getElementById('meioPgtoInput').value.trim();
+      const gatewayVal        = document.getElementById('gatewayInput').value.trim();
+      const dataVendaVal      = document.getElementById('dataVendaInput').value;
+      const valorVendaVal     = parseFloat(document.getElementById('valorVendaInput').value) || 0;
+      const valorRecebVal     = parseFloat(document.getElementById('valorRecebimentoInput').value) || 0;
+      const dataRecebVal      = document.getElementById('dataRecebimentoInput').value;
+      const cambioVal         = document.getElementById('cambioDiaInput').value;
+      const receitaVal        = parseFloat(document.getElementById('receitaInput').value) || 0;
+      const meioPgtoVal       = document.getElementById('meioPgtoInput').value.trim();
       const bandeiraCartaoVal = document.getElementById('bandeiraCartaoInput').value.trim();
-      const parcelasVal = document.getElementById('parcelasInput').value.trim();
-      const custoVal = parseFloat(document.getElementById('custoInput').value) || 0;
+      const parcelasVal       = document.getElementById('parcelasInput').value.trim();
+      const custoVal          = parseFloat(document.getElementById('custoInput').value) || 0;
 
       const financeBody = {
         pedido_id: pedidoId,
@@ -1515,16 +1515,19 @@
     }
 
     /*******************************************************
-     * Funções para o MENU ANINHADO no campo ITENS
+     * Agrupa os itens em: type -> category -> name -> [dias...]
      *******************************************************/
-    // Agrupar dados em estrutura aninhada: Tipo > Categoria > Nome (e opcionalmente dias)
     function groupMarkupData(data) {
       const grouped = {};
       data.forEach(item => {
-        const type = item.type || 'Tipo';
-        const category = item.category || 'Categoria';
-        const name = item.name_site || 'Nome';
-        const day = item.day ? `${item.day} dias` : '';
+        // Se quiser ignorar completamente itens sem type, use if (!item.type) return;
+        const type     = item.type       || '';
+        const category = item.category   || '';
+        const name     = item.name_site  || '';
+        const day      = item.day ? `${item.day} dias` : '';
+
+        // Se preferir agrupar “sem type” em algo fixo, faça:
+        // const type = item.type || 'Sem Tipo';
 
         if (!grouped[type]) {
           grouped[type] = {};
@@ -1535,7 +1538,6 @@
         if (!grouped[type][category][name]) {
           grouped[type][category][name] = [];
         }
-        // Se o dia existir, empilha no array
         if (day) {
           grouped[type][category][name].push(day);
         }
@@ -1543,40 +1545,47 @@
       return grouped;
     }
 
-    // Construir o HTML do menu aninhado a partir dos dados agrupados
+    /*******************************************************
+     * Gera o HTML do menu aninhado
+     * - Nível 1: type
+     * - Nível 2: category
+     * - Nível 3: name (+ dias entre parênteses, se houver)
+     *******************************************************/
     function buildNestedMenuHTML(groupedData) {
       let html = '<ul>';
       for (const type in groupedData) {
         html += `<li class="menu-item type-item">${type}<ul>`;
         for (const category in groupedData[type]) {
           html += `<li class="menu-item category-item">${category}<ul>`;
-          for (const name in groupedData[type][category]) {
-            const days = groupedData[type][category][name];
-            // Se não houver days, vira item final, senão cria subnível
-            if (!days.length) {
-              // sem days => clica direto no name
-              const dataValue = `${type} - ${category} - ${name}`;
-              html += `<li class="menu-item name-item" data-value="${dataValue}">${name}</li>`;
-            } else {
-              // com days => cria submenu
-              html += `<li class="menu-item name-item">${name}<ul>`;
-              days.forEach(day => {
-                // Monta data-value completo (type - category - name - day)
-                const dataValue = `${type} - ${category} - ${name} - ${day}`;
-                html += `<li class="day-item" data-value="${dataValue}">${day}</li>`;
-              });
-              html += `</ul></li>`;
+
+          const namesObj = groupedData[type][category];
+          for (const name in namesObj) {
+            const daysArray = namesObj[name]; // array de strings "1 dias", "2 dias", etc
+            let label = name;
+            if (daysArray.length) {
+              label += ` (${daysArray.join(', ')})`;
             }
+            // Ajuste o data-value conforme quiser
+            const dataValue = `${type} / ${category} / ${name}`;
+
+            html += `
+              <li class="menu-item name-item" data-value="${dataValue}">
+                ${label}
+              </li>
+            `;
           }
-          html += '</ul></li>'; // fecha category
+
+          html += '</ul></li>';
         }
-        html += '</ul></li>';   // fecha type
+        html += '</ul></li>';
       }
       html += '</ul>';
       return html;
     }
 
-    // Carregar os dados do menu e montar a estrutura
+    /*******************************************************
+     * Carrega o menu aninhado a partir da API get_markup_data
+     *******************************************************/
     async function loadNestedMenu() {
       try {
         const response = await fetch('https://airland.com.br/supplier/get_markup_data.php', {
@@ -1602,8 +1611,10 @@
         const rowHtml = `
           <tr data-id="${item.id}">
             <td style="position: relative;">
-              <!-- Campo ITENS com menu aninhado -->
-              <input type="text" class="itensInput" name="itens" value="${item.produto || ''}" placeholder="Selecione um item..." autocomplete="off">
+              <input type="text" class="itensInput" name="itens"
+                    value="${item.produto || ''}"
+                    placeholder="Selecione um item..."
+                    autocomplete="off">
               <div class="nested-menu" id="nestedMenu-${item.id}"></div>
             </td>
             <td><input type="date" name="data_uso" value="${item.data || ''}"></td>
@@ -1638,38 +1649,31 @@
         .forEach(el => el.addEventListener('input', recalcularPlanilha));
     }
 
-    // Função para carregar o menu aninhado para uma linha específica
+    /*******************************************************
+     * Função para carregar o menu aninhado para uma linha específica
+     *******************************************************/
     async function loadNestedMenuForRow(rowId) {
       const menuHTML = await loadNestedMenu();
       const menuContainer = document.getElementById(`nestedMenu-${rowId}`);
-      if (!menuContainer) return;
-
-      menuContainer.innerHTML = menuHTML;
-
-      // Captura o input associado
-      const itensInput = menuContainer.parentElement.querySelector('.itensInput');
-      if (!itensInput) return;
-
-      // Mostra o menu ao focar no input
-      itensInput.addEventListener('focus', () => {
-        menuContainer.style.display = 'block';
-      });
-      // Esconde menu ao perder o foco
-      itensInput.addEventListener('blur', () => {
-        setTimeout(() => {
-          menuContainer.style.display = 'none';
-        }, 200);
-      });
-
-      // Clique no menu
-      menuContainer.addEventListener('click', (e) => {
-        // Se clicou num item final
-        if (e.target && (e.target.classList.contains('name-item') || e.target.classList.contains('day-item'))) {
-          const value = e.target.getAttribute('data-value');
-          itensInput.value = value;
-          menuContainer.style.display = 'none';
-        }
-      });
+      if (menuContainer) {
+        menuContainer.innerHTML = menuHTML;
+        // Configurar eventos para esta instância do menu
+        const itensInput = menuContainer.parentElement.querySelector('.itensInput');
+        itensInput.addEventListener('focus', () => {
+          menuContainer.style.display = 'block';
+        });
+        itensInput.addEventListener('blur', () => {
+          setTimeout(() => {
+            menuContainer.style.display = 'none';
+          }, 200);
+        });
+        menuContainer.addEventListener('click', (e) => {
+          if (e.target && e.target.classList.contains('name-item')) {
+            itensInput.value = e.target.getAttribute('data-value');
+            menuContainer.style.display = 'none';
+          }
+        });
+      }
     }
 
     /*******************************************************
@@ -1762,19 +1766,21 @@
     function recalcularPlanilha() {
       const dolarMagic = parseFloat(document.getElementById('dolar-magic').textContent) || 0;
       document.querySelectorAll('#spreadsheet-info tr').forEach(linha => {
-        const valorUsd = parseFloat(linha.querySelector('[name="valorUsd"]')?.value) || 0;
-        const lobista = parseFloat(linha.querySelector('[name="lobista"]')?.value) || 0;
-        const numero = parseFloat(linha.querySelector('[name="numero"]')?.value) || 0;
+        const valorUsd  = parseFloat(linha.querySelector('[name="valorUsd"]')?.value) || 0;
+        const lobista   = parseFloat(linha.querySelector('[name="lobista"]')?.value) || 0;
+        const numero    = parseFloat(linha.querySelector('[name="numero"]')?.value) || 0;
         const margemPct = (parseFloat(linha.querySelector('[name="margem"]')?.value) || 0) / 100;
-        const taxaPct = (parseFloat(linha.querySelector('[name="taxa"]')?.value) || 0) / 100;
+        const taxaPct   = (parseFloat(linha.querySelector('[name="taxa"]')?.value) || 0) / 100;
+
         const totalDollar = (valorUsd + lobista) * numero;
-        const netReal = totalDollar * dolarMagic;
-        const totalPix = (margemPct < 1) ? netReal / (1 - margemPct) : netReal;
-        const total10x = (taxaPct < 1) ? totalPix / (1 - taxaPct) : totalPix;
+        const netReal     = totalDollar * dolarMagic;
+        const totalPix    = (margemPct < 1) ? netReal / (1 - margemPct) : netReal;
+        const total10x    = (taxaPct < 1)   ? totalPix / (1 - taxaPct)  : totalPix;
+
         linha.querySelector('[name="totalDollar"]').textContent = totalDollar.toFixed(2);
-        linha.querySelector('[name="netReal"]').textContent = netReal.toFixed(2);
-        linha.querySelector('[name="totalPix"]').textContent = totalPix.toFixed(2);
-        linha.querySelector('[name="total10x"]').textContent = total10x.toFixed(2);
+        linha.querySelector('[name="netReal"]').textContent      = netReal.toFixed(2);
+        linha.querySelector('[name="totalPix"]').textContent     = totalPix.toFixed(2);
+        linha.querySelector('[name="total10x"]').textContent     = total10x.toFixed(2);
       });
       somarTotaisPlanilha();
     }
@@ -1785,15 +1791,15 @@
     function somarTotaisPlanilha() {
       let totalDollar = 0, totalNetReal = 0, totalPix = 0, total10x = 0;
       document.querySelectorAll('#spreadsheet-info tr').forEach(linha => {
-        totalDollar += parseFloat(linha.querySelector('[name="totalDollar"]')?.textContent) || 0;
+        totalDollar  += parseFloat(linha.querySelector('[name="totalDollar"]')?.textContent) || 0;
         totalNetReal += parseFloat(linha.querySelector('[name="netReal"]').textContent) || 0;
-        totalPix += parseFloat(linha.querySelector('[name="totalPix"]').textContent) || 0;
-        total10x += parseFloat(linha.querySelector('[name="total10x"]').textContent) || 0;
+        totalPix     += parseFloat(linha.querySelector('[name="totalPix"]').textContent) || 0;
+        total10x     += parseFloat(linha.querySelector('[name="total10x"]').textContent) || 0;
       });
       document.getElementById('resumo-total-dollar').textContent = totalDollar.toFixed(2);
-      document.getElementById('resumo-net-real').textContent = totalNetReal.toFixed(2);
-      document.getElementById('resumo-total-pix').textContent = totalPix.toFixed(2);
-      document.getElementById('resumo-total-10x').textContent = total10x.toFixed(2);
+      document.getElementById('resumo-net-real').textContent     = totalNetReal.toFixed(2);
+      document.getElementById('resumo-total-pix').textContent    = totalPix.toFixed(2);
+      document.getElementById('resumo-total-10x').textContent    = total10x.toFixed(2);
     }
 
     /*******************************************************
@@ -1801,7 +1807,8 @@
      *******************************************************/
     function atualizarDolarMagic() {
       const dolarCambio = parseFloat(document.getElementById('dolar-cambio').value) || 0;
-      const dolarMagic = dolarCambio * 1.0098; // Exemplo de cálculo
+      // Exemplo de cálculo:
+      const dolarMagic = dolarCambio * 1.0098;
       document.getElementById('dolar-magic').textContent = dolarMagic.toFixed(2);
       recalcularPlanilha();
     }
@@ -1816,27 +1823,27 @@
         return;
       }
       const dolarCambio = parseFloat(document.getElementById('dolar-cambio').value) || 0;
-      const dolarMagic = parseFloat(document.getElementById('dolar-magic').textContent) || 0;
+      const dolarMagic  = parseFloat(document.getElementById('dolar-magic').textContent) || 0;
       const rows = document.querySelectorAll('#spreadsheet-info tr');
       const novos = [];
       const existentes = [];
       
       rows.forEach(linha => {
         const planilhaId = linha.getAttribute('data-id');
-        const itens = (linha.querySelector('[name="itens"]')?.value || '').trim();
-        const dataUso = linha.querySelector('[name="data_uso"]')?.value || '';
-        const idade = linha.querySelector('[name="idade"]')?.value || 'ADT';
-        const valorUsd = parseFloat(linha.querySelector('[name="valorUsd"]')?.value) || 0;
-        const lobista = parseFloat(linha.querySelector('[name="lobista"]')?.value) || 0;
-        const numero = parseFloat(linha.querySelector('[name="numero"]')?.value) || 0;
-        const margemPct = parseFloat(linha.querySelector('[name="margem"]')?.value) || 0;
-        const taxaPct = parseFloat(linha.querySelector('[name="taxa"]')?.value) || 0;
-        
+        const itens      = (linha.querySelector('[name="itens"]')?.value || '').trim();
+        const dataUso    = linha.querySelector('[name="data_uso"]')?.value || '';
+        const idade      = linha.querySelector('[name="idade"]')?.value || 'ADT';
+        const valorUsd   = parseFloat(linha.querySelector('[name="valorUsd"]')?.value) || 0;
+        const lobista    = parseFloat(linha.querySelector('[name="lobista"]')?.value) || 0;
+        const numero     = parseFloat(linha.querySelector('[name="numero"]')?.value) || 0;
+        const margemPct  = parseFloat(linha.querySelector('[name="margem"]')?.value) || 0;
+        const taxaPct    = parseFloat(linha.querySelector('[name="taxa"]')?.value) || 0;
+
         const totalDollar = (valorUsd + lobista) * numero;
-        const netBrl = totalDollar * dolarMagic;
-        const totalPix = (margemPct < 100) ? netBrl / (1 - margemPct / 100) : netBrl;
-        const total10x = (taxaPct < 100) ? totalPix / (1 - taxaPct / 100) : totalPix;
-        
+        const netBrl      = totalDollar * dolarMagic;
+        const totalPix    = (margemPct < 100) ? netBrl / (1 - margemPct / 100) : netBrl;
+        const total10x    = (taxaPct < 100) ? totalPix / (1 - taxaPct / 100) : totalPix;
+
         const obj = {
           id_pedido: pedidoId,
           produto: itens,
@@ -1911,7 +1918,7 @@
     }
 
     /*******************************************************
-     * 16) Salvar Emissão e recarregar a página
+     * 16) Salvar Emissão e recarregar a página (opcional)
      *******************************************************/
     async function salvarEmissao() {
       const pedidoId = obterIdPedido();
@@ -1922,10 +1929,11 @@
         if (!planilhaId) return;
         const original = planilhasEmMemoria.find(x => String(x.id) === planilhaId);
         if (!original) return;
+        // Exemplo de campos extras
         const dataPag = linha.querySelector('[name="dataPagamento"]')?.value || '';
-        const ident = linha.querySelector('[name="identificador"]')?.value || '';
-        const fornec = linha.querySelector('[name="fornecedor"]')?.value || '';
-        const stat = linha.querySelector('[name="status"]')?.value || '';
+        const ident   = linha.querySelector('[name="identificador"]')?.value || '';
+        const fornec  = linha.querySelector('[name="fornecedor"]')?.value || '';
+        const stat    = linha.querySelector('[name="status"]')?.value || '';
         updates.push({
           ...original,
           data_pagamento: dataPag,
