@@ -1059,7 +1059,6 @@
                   </thead>
                   <tbody>
                     <tr>
-                      <!-- Para planilhas usamos o parâmetro id_pedido -->
                       <td><input type="number" id="dolar-cambio" placeholder="Digite o câmbio" /></td>
                       <td id="dolar-magic">0.00</td>
                     </tr>
@@ -1127,7 +1126,7 @@
             </div>
           </div>
         </div>
-      </div><!-- container-fluid -->
+      </div>
     </section>
 
     <footer class="footer">
@@ -1150,20 +1149,16 @@
   <script src="assets/js/Sortable.min.js"></script>
   <script src="assets/js/main.js"></script>
 
-  <!-- SCRIPT PRINCIPAL (AJUSTADO PARA USAR PUT NO FINANCEIRO) -->
+  <!-- SCRIPT PRINCIPAL COM NO-CACHE E RELOAD -->
   <script>
     /*******************************************************
      * Auxiliar para gerar URL sem cache (adiciona timestamp)
      *******************************************************/
     function noCacheURL(url) {
       const random = Date.now();
-      if (url.includes('?')) {
-        return url + '&_nc=' + random;
-      } else {
-        return url + '?_nc=' + random;
-      }
+      return url.includes('?') ? (url + '&_nc=' + random) : (url + '?_nc=' + random);
     }
-  
+
     /*******************************************************
      * 1) Verificar Sessão (com fetch sem cache)
      *******************************************************/
@@ -1187,7 +1182,7 @@
         window.location.replace("https://businessplace.airland.com.br/signin.html");
       }
     }
-  
+
     /*******************************************************
      * 2) Obter ID do Pedido via Query (parâmetro "pedido")
      *******************************************************/
@@ -1195,7 +1190,7 @@
       const params = new URLSearchParams(window.location.search);
       return params.get('pedido') || 'Não informado';
     }
-  
+
     /*******************************************************
      * 3) Formatar Data
      *******************************************************/
@@ -1204,15 +1199,14 @@
       const d = new Date(dataStr);
       return isNaN(d) ? '' : d.toLocaleDateString('pt-BR');
     }
-  
+
     // Variáveis globais
-    let pedidoAtual = null;      // Dados de supplier_pedidos
-    let financeiroAtual = null;  // Dados de supplier_finance
-    let planilhasEmMemoria = []; // Dados de supplier_planilhas
-  
+    let pedidoAtual = null;
+    let financeiroAtual = null;
+    let planilhasEmMemoria = [];
+
     /*******************************************************
      * 4) Carregar Detalhes do Pedido (supplier_pedidos)
-     *    - Se vier array, pega o primeiro elemento.
      *******************************************************/
     async function carregarDetalhesPedido() {
       const pedidoId = obterIdPedido();
@@ -1221,27 +1215,23 @@
         return;
       }
       try {
-        // Para supplier_pedidos usamos "id"
         const url = `https://airland.com.br/supplier/api_pedidos.php?id=${pedidoId}`;
         const resp = await fetch(noCacheURL(url), {
           credentials: 'include',
           cache: 'no-store'
         });
-        if (!resp.ok) {
-          throw new Error(`Erro ao buscar pedido: ${resp.status}`);
-        }
+        if (!resp.ok) throw new Error(`Erro ao buscar pedido: ${resp.status}`);
         const dados = await resp.json();
-        // Se for array, pega o primeiro
+
+        // Se for array, pega primeiro
         let resultado = Array.isArray(dados) ? dados[0] : dados;
         if (!resultado || !resultado.id) {
           throw new Error('Nenhum pedido encontrado.');
         }
         pedidoAtual = resultado;
-  
-        // Exibe ID
         document.getElementById('pedido-id').textContent = pedidoId;
-  
-        // Aba 1: Pedido
+
+        // Aba 1
         document.getElementById('order-info').innerHTML = `
           <tr>
             <td>
@@ -1261,7 +1251,6 @@
             <td>${formatarData(pedidoAtual.data_venda)}</td>
           </tr>
         `;
-  
         // Observações
         document.getElementById('additional-info').innerHTML = `
           <tr>
@@ -1269,7 +1258,6 @@
             <td>${pedidoAtual.observacoes_financeiras || ''}</td>
           </tr>
         `;
-  
         // Aba 2: Cliente
         document.getElementById('customer-info').innerHTML = `
           <tr>
@@ -1281,7 +1269,6 @@
             <td>${pedidoAtual.uf || ''}</td>
           </tr>
         `;
-  
         // Aba 4: Comercial
         document.getElementById('commercial-info').innerHTML = `
           <tr>
@@ -1296,9 +1283,9 @@
         alert('Erro ao carregar Pedido: ' + e.message);
       }
     }
-  
+
     /*******************************************************
-     * 5) Carregar Financeiro (supplier_finance – "pedido_id")
+     * 5) Carregar Financeiro (supplier_finance)
      *******************************************************/
     async function carregarFinanceiro() {
       const pedidoId = obterIdPedido();
@@ -1309,14 +1296,10 @@
           credentials: 'include',
           cache: 'no-store'
         });
-        if (!respFin.ok) {
-          throw new Error(`Erro ao buscar finance: ${respFin.status}`);
-        }
+        if (!respFin.ok) throw new Error(`Erro ao buscar finance: ${respFin.status}`);
         const dadosFin = await respFin.json();
-        // Se for array, pega o primeiro
         financeiroAtual = Array.isArray(dadosFin) ? (dadosFin[0] || {}) : dadosFin;
-  
-        // Preenche campos
+
         document.getElementById('gatewayInput').value =
           financeiroAtual.gateway || (pedidoAtual ? pedidoAtual.gateway : '');
         document.getElementById('dataVendaInput').value =
@@ -1329,7 +1312,6 @@
           financeiroAtual.data_recebimento || '';
         document.getElementById('cambioDiaInput').value =
           financeiroAtual.cambio_dia || '';
-        // receita
         document.getElementById('receitaInput').value =
           financeiroAtual.receita || '';
         document.getElementById('meioPgtoInput').value =
@@ -1345,10 +1327,9 @@
         alert('Erro ao carregar Financeiro: ' + e.message);
       }
     }
-  
+
     /*******************************************************
-     * 6) Salvar Financeiro (PUT no api_detailspay – "pedido_id")
-     *    Depois recarrega a página sem cache
+     * 6) Salvar Financeiro (PUT) e recarregar
      *******************************************************/
     async function salvarFinanceiro() {
       if (!pedidoAtual) {
@@ -1367,7 +1348,7 @@
       const bandeiraCartaoVal = document.getElementById('bandeiraCartaoInput').value.trim();
       const parcelasVal       = document.getElementById('parcelasInput').value.trim();
       const custoVal          = parseFloat(document.getElementById('custoInput').value) || 0;
-  
+
       const financeBody = {
         pedido_id: pedidoId,
         gateway: gatewayVal,
@@ -1382,8 +1363,8 @@
         parcelas: parcelasVal,
         custo: custoVal
       };
-  
-      // PUT no supplier_finance
+
+      // PUT finance
       try {
         const resp = await fetch('https://airland.com.br/supplier/api_detailspay.php', {
           method: 'PUT',
@@ -1401,7 +1382,7 @@
         alert('Erro ao salvar Financeiro: ' + e.message);
         return;
       }
-  
+
       // Atualizar supplier_pedidos
       const pedidosBody = {
         id: pedidoAtual.id,
@@ -1429,15 +1410,13 @@
         alert('Erro ao atualizar Pedidos: ' + e.message);
         return;
       }
-  
+
       alert('Financeiro salvo com sucesso (PUT) e Pedidos atualizado!');
-  
-      // Recarrega a página (limpando cache via param)
-      location.reload();
+      location.reload(); // Recarrega a página
     }
-  
+
     /*******************************************************
-     * 7) Carregar Planilha (supplier_planilhas – "id_pedido")
+     * 7) Carregar Planilha
      *******************************************************/
     async function carregarPlanilha() {
       const pedidoId = obterIdPedido();
@@ -1458,7 +1437,7 @@
         console.error('Erro ao carregar planilha:', erro);
       }
     }
-  
+
     function montarPlanilhaPrincipal(lista) {
       const cont = document.getElementById('spreadsheet-info');
       cont.innerHTML = '';
@@ -1495,7 +1474,7 @@
         el.addEventListener('input', recalcularPlanilha);
       });
     }
-  
+
     function montarEmissao(lista) {
       const cont = document.getElementById('emission-info');
       cont.innerHTML = '';
@@ -1526,10 +1505,7 @@
         cont.insertAdjacentHTML('beforeend', row);
       });
     }
-  
-    /*******************************************************
-     * 8) Adicionar Linha / Excluir / Recalcular Planilha
-     *******************************************************/
+
     function adicionarLinha() {
       const cont = document.getElementById('spreadsheet-info');
       const rowHtml = `
@@ -1564,12 +1540,12 @@
         el.addEventListener('input', recalcularPlanilha);
       });
     }
-  
+
     async function excluirLinhaPlanilha(botao) {
       const row = botao.closest('tr');
       const planilhaId = row.getAttribute('data-id');
       if (!planilhaId) {
-        // Linha não salva no BD
+        // Linha nova (não existe no BD)
         row.remove();
         recalcularPlanilha();
         return;
@@ -1595,7 +1571,7 @@
         alert('Erro ao excluir: ' + e.message);
       }
     }
-  
+
     function recalcularPlanilha() {
       const dolarMagic = parseFloat(document.getElementById('dolar-magic').textContent) || 0;
       document.querySelectorAll('#spreadsheet-info tr').forEach(linha => {
@@ -1604,12 +1580,12 @@
         const numero    = parseFloat(linha.querySelector('[name="numero"]')?.value)   || 0;
         const margemPct = (parseFloat(linha.querySelector('[name="margem"]')?.value) || 0) / 100;
         const taxaPct   = (parseFloat(linha.querySelector('[name="taxa"]')?.value)   || 0) / 100;
-  
+
         const totalDollar = (valorUsd + lobista) * numero;
         const netReal     = totalDollar * dolarMagic;
         const totalPix    = (margemPct < 1) ? netReal / (1 - margemPct) : netReal;
         const total10x    = (taxaPct < 1)   ? totalPix / (1 - taxaPct)  : totalPix;
-  
+
         linha.querySelector('[name="totalDollar"]').textContent = totalDollar.toFixed(2);
         linha.querySelector('[name="netReal"]').textContent      = netReal.toFixed(2);
         linha.querySelector('[name="totalPix"]').textContent     = totalPix.toFixed(2);
@@ -1617,7 +1593,7 @@
       });
       somarTotaisPlanilha();
     }
-  
+
     function somarTotaisPlanilha() {
       let totalDollar = 0, totalNetReal = 0, totalPix = 0, total10x = 0;
       document.querySelectorAll('#spreadsheet-info tr').forEach(linha => {
@@ -1631,17 +1607,14 @@
       document.getElementById('resumo-total-pix').textContent     = totalPix.toFixed(2);
       document.getElementById('resumo-total-10x').textContent     = total10x.toFixed(2);
     }
-  
+
     function atualizarDolarMagic() {
       const dolarCambio = parseFloat(document.getElementById('dolar-cambio').value) || 0;
-      const dolarMagic  = dolarCambio * 1.0098; // Exemplo
+      const dolarMagic  = dolarCambio * 1.0098;
       document.getElementById('dolar-magic').textContent = dolarMagic.toFixed(2);
       recalcularPlanilha();
     }
-  
-    /*******************************************************
-     * 10) Salvar Planilha (POST/PUT) e recarregar
-     *******************************************************/
+
     async function salvarPlanilha() {
       const pedidoId = obterIdPedido();
       if (pedidoId === 'Não informado') {
@@ -1653,7 +1626,7 @@
       const rows = document.querySelectorAll('#spreadsheet-info tr');
       const novos = [];
       const existentes = [];
-  
+
       rows.forEach(linha => {
         const planilhaId = linha.getAttribute('data-id');
         const itens      = (linha.querySelector('[name="itens"]')?.value || '').trim();
@@ -1664,12 +1637,12 @@
         const numero     = parseFloat(linha.querySelector('[name="numero"]')?.value)   || 0;
         const margemPct  = parseFloat(linha.querySelector('[name="margem"]')?.value)  || 0;
         const taxaPct    = parseFloat(linha.querySelector('[name="taxa"]')?.value)    || 0;
-  
+
         const totalDollar = (valorUsd + lobista) * numero;
         const netBrl      = totalDollar * dolarMagic;
         const totalPix    = (margemPct < 100) ? netBrl / (1 - margemPct/100) : netBrl;
         const total10x    = (taxaPct < 100)   ? totalPix / (1 - taxaPct/100) : totalPix;
-  
+
         const obj = {
           id_pedido: pedidoId,
           produto: itens,
@@ -1687,7 +1660,7 @@
           dolar_cambio: dolarCambio,
           dolar_magic: dolarMagic
         };
-  
+
         if (planilhaId) {
           const original = planilhasEmMemoria.find(p => String(p.id) === planilhaId);
           if (original) {
@@ -1700,7 +1673,7 @@
           novos.push(obj);
         }
       });
-  
+
       // POST para novos
       if (novos.length) {
         try {
@@ -1740,14 +1713,9 @@
         }
       }
       alert('Planilha salva com sucesso!');
-  
-      // Recarrega a página (limpando cache via param)
-      location.reload();
+      location.reload(); // Recarrega a página
     }
-  
-    /*******************************************************
-     * 11) Salvar Emissão e recarregar
-     *******************************************************/
+
     async function salvarEmissao() {
       const pedidoId = obterIdPedido();
       if (pedidoId === 'Não informado') return;
@@ -1757,12 +1725,12 @@
         if (!planilhaId) return;
         const original = planilhasEmMemoria.find(x => String(x.id) === planilhaId);
         if (!original) return;
-  
+
         const dataPag  = linha.querySelector('[name="dataPagamento"]')?.value || '';
         const ident    = linha.querySelector('[name="identificador"]')?.value || '';
         const fornec   = linha.querySelector('[name="fornecedor"]')?.value    || '';
         const stat     = linha.querySelector('[name="status"]')?.value        || '';
-  
+
         updates.push({
           ...original,
           data_pagamento: dataPag,
@@ -1787,39 +1755,28 @@
           throw new Error(`Erro ao salvar Emissão: ${await respPut.text()}`);
         }
         alert('Emissão salva com sucesso!');
-        // Recarrega
         location.reload();
       } catch (e) {
         console.error(e);
         alert('Erro ao salvar Emissão: ' + e.message);
       }
     }
-  
-    /*******************************************************
-     * 12) Ao carregar a página
-     *******************************************************/
+
     document.addEventListener('DOMContentLoaded', async () => {
-      // Verifica sessão e carrega dados
       await verificarSessao();
       await carregarDetalhesPedido();
       await carregarFinanceiro();
       await carregarPlanilha();
-  
-      // Event listeners extras
+
       const inputDolarCambio = document.getElementById('dolar-cambio');
       if (inputDolarCambio) {
         inputDolarCambio.addEventListener('input', atualizarDolarMagic);
-      } else {
-        console.warn("Elemento 'dolar-cambio' não encontrado.");
       }
-  
       const btnAddLinha = document.getElementById('add-row-button');
       if (btnAddLinha) {
         btnAddLinha.addEventListener('click', adicionarLinha);
-      } else {
-        console.warn("Elemento 'add-row-button' não encontrado.");
       }
     });
-  </script>  
+  </script>
 </body>
 </html>
