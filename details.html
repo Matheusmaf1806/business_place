@@ -108,33 +108,82 @@
       cursor: pointer;
     }
 
+    /* A <td> ou <div> pai precisa ter position: relative; para o menu flutuar */
+    .nested-menu {
+      position: absolute;
+      top: 38px; /* ajuste conforme altura do input */
+      left: 0;
+      width: 240px; /* largura do menu */
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      display: none; /* começa oculto, vamos mostrar via JS ou :hover */
+      z-index: 9999;
+      padding: 6px 0;
+      font-size: 0.9rem;
+    }
+
+    /* Remove margens/padding do UL */
     .nested-menu ul {
       list-style: none;
       margin: 0;
-      padding-left: 10px;
+      padding: 0;
     }
 
+    /* Cada LI do menu */
     .nested-menu li {
-      padding: 6px 12px;
+      position: relative;
+      padding: 8px 12px;
       cursor: pointer;
+      border-bottom: 1px solid #f0f0f0;
       white-space: nowrap;
     }
 
+    /* Último item ou se preferir sem borda no último
+    .nested-menu li:last-child {
+      border-bottom: none;
+    }
+    */
+
+    /* Ao passar o mouse */
     .nested-menu li:hover {
-      background-color: #f0f0f0;
+      background-color: #f7f7f7;
     }
 
-    .nested-menu .menu-item {
-      position: relative;
+    /* Submenu - aninhe com "ul ul" para o 2º nível, "ul ul ul" para 3º, etc. */
+    .nested-menu ul ul {
+      position: absolute;
+      top: 0;
+      left: 100%;
+      min-width: 220px;
+      margin-top: -8px; /* para alinhar direitinho */
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      display: none; /* submenus também ocultos */
     }
 
-    /* Estilo para indicar que há subníveis */
+    /* Mostra o submenu ao passar o mouse no LI pai */
+    .nested-menu li:hover > ul {
+      display: block;
+    }
+
+    /* Indicador de que há submenu (setinha "▶" à direita) */
     .nested-menu .menu-item::after {
       content: '▶';
-      font-size: 0.8em;
       position: absolute;
-      right: 6px;
+      right: 8px;
+      opacity: 0.4;
+      font-size: 0.8em;
     }
+
+    /* Se não quiser a setinha no último nível (days), retire */
+    .nested-menu .day-item::after {
+      content: none;
+    }
+
   </style>
 </head>
 
@@ -1476,10 +1525,20 @@
         const category = item.category || 'Categoria';
         const name = item.name_site || 'Nome';
         const day = item.day ? `${item.day} dias` : '';
-        if (!grouped[type]) grouped[type] = {};
-        if (!grouped[type][category]) grouped[type][category] = {};
-        if (!grouped[type][category][name]) grouped[type][category][name] = [];
-        if (day) grouped[type][category][name].push(day);
+
+        if (!grouped[type]) {
+          grouped[type] = {};
+        }
+        if (!grouped[type][category]) {
+          grouped[type][category] = {};
+        }
+        if (!grouped[type][category][name]) {
+          grouped[type][category][name] = [];
+        }
+        // Se o dia existir, empilha no array
+        if (day) {
+          grouped[type][category][name].push(day);
+        }
       });
       return grouped;
     }
@@ -1492,16 +1551,26 @@
         for (const category in groupedData[type]) {
           html += `<li class="menu-item category-item">${category}<ul>`;
           for (const name in groupedData[type][category]) {
-            let label = name;
             const days = groupedData[type][category][name];
-            if (days.length) {
-              label += ` (${days.join(', ')})`;
+            // Se não houver days, vira item final, senão cria subnível
+            if (!days.length) {
+              // sem days => clica direto no name
+              const dataValue = `${type} - ${category} - ${name}`;
+              html += `<li class="menu-item name-item" data-value="${dataValue}">${name}</li>`;
+            } else {
+              // com days => cria submenu
+              html += `<li class="menu-item name-item">${name}<ul>`;
+              days.forEach(day => {
+                // Monta data-value completo (type - category - name - day)
+                const dataValue = `${type} - ${category} - ${name} - ${day}`;
+                html += `<li class="day-item" data-value="${dataValue}">${day}</li>`;
+              });
+              html += `</ul></li>`;
             }
-            html += `<li class="menu-item name-item" data-value="${type} - ${category} - ${name}">${label}</li>`;
           }
-          html += '</ul></li>';
+          html += '</ul></li>'; // fecha category
         }
-        html += '</ul></li>';
+        html += '</ul></li>';   // fecha type
       }
       html += '</ul>';
       return html;
@@ -1573,25 +1642,34 @@
     async function loadNestedMenuForRow(rowId) {
       const menuHTML = await loadNestedMenu();
       const menuContainer = document.getElementById(`nestedMenu-${rowId}`);
-      if (menuContainer) {
-        menuContainer.innerHTML = menuHTML;
-        // Configurar eventos para esta instância do menu
-        const itensInput = menuContainer.parentElement.querySelector('.itensInput');
-        itensInput.addEventListener('focus', () => {
-          menuContainer.style.display = 'block';
-        });
-        itensInput.addEventListener('blur', () => {
-          setTimeout(() => {
-            menuContainer.style.display = 'none';
-          }, 200);
-        });
-        menuContainer.addEventListener('click', (e) => {
-          if (e.target && e.target.classList.contains('name-item')) {
-            itensInput.value = e.target.getAttribute('data-value');
-            menuContainer.style.display = 'none';
-          }
-        });
-      }
+      if (!menuContainer) return;
+
+      menuContainer.innerHTML = menuHTML;
+
+      // Captura o input associado
+      const itensInput = menuContainer.parentElement.querySelector('.itensInput');
+      if (!itensInput) return;
+
+      // Mostra o menu ao focar no input
+      itensInput.addEventListener('focus', () => {
+        menuContainer.style.display = 'block';
+      });
+      // Esconde menu ao perder o foco
+      itensInput.addEventListener('blur', () => {
+        setTimeout(() => {
+          menuContainer.style.display = 'none';
+        }, 200);
+      });
+
+      // Clique no menu
+      menuContainer.addEventListener('click', (e) => {
+        // Se clicou num item final
+        if (e.target && (e.target.classList.contains('name-item') || e.target.classList.contains('day-item'))) {
+          const value = e.target.getAttribute('data-value');
+          itensInput.value = value;
+          menuContainer.style.display = 'none';
+        }
+      });
     }
 
     /*******************************************************
