@@ -1107,34 +1107,63 @@
             <div class="tab-pane fade" id="tabContent-6">
               <div class="section">
                 <h3>Emissão</h3>
+                <!-- Tabela principal da planilha -->
                 <table class="emissao-tabela">
                   <thead>
                     <tr>
                       <th>Itens</th>
-                      <th>Valor (U$)</th>
                       <th>Data de Uso</th>
-                      <th>Data de Pagamento</th>
-                      <th>Identificador</th>
-                      <th>Fornecedor</th>
-                      <th>Status</th>
+                      <th>Idade</th>
+                      <th>Valor (U$)</th>
+                      <th>Lobista</th>
+                      <th>Número</th>
+                      <th>Total U$</th>
+                      <th>Net R$</th>
+                      <th>Margem</th>
+                      <th>Pix</th>
+                      <th>Taxa</th>
+                      <th>10x</th>
+                      <th>Ações</th>
                     </tr>
                   </thead>
-                  <tbody id="emission-info"></tbody>
+                  <tbody id="spreadsheet-info">
+                    <!-- Linhas serão carregadas via JavaScript -->
+                  </tbody>
+                  <tfoot>
+                    <tr style="font-weight: bold; background-color: #f9f9f9;">
+                      <td colspan="6" style="text-align: right;">Totais:</td>
+                      <td id="resumo-total-dollar">0.00</td>
+                      <td id="resumo-net-real">0.00</td>
+                      <td></td>
+                      <td id="resumo-total-pix">0.00</td>
+                      <td></td>
+                      <td id="resumo-total-10x">0.00</td>
+                      <td></td>
+                    </tr>
+                  </tfoot>
                 </table>
-                <button class="btn btn-primary add-row-button" onclick="salvarEmissao()">Salvar Emissão</button>
+                <!-- Adiciona o datalist que será usado para autocomplete dos itens -->
+                <datalist id="markupOptions"></datalist>
+                <!-- Botões -->
+                <button id="add-row-button" class="btn btn-success add-row-button">Adicionar Linha</button>
+                <button class="btn btn-primary add-row-button" onclick="salvarPlanilha()">Salvar Planilha</button>
               </div>
             </div>
+            <!-- Fim Aba 5: Planilha -->
           </div>
         </div>
       </div>
     </section>
 
     <footer class="footer">
-      <!-- seu footer -->
+      <!-- seu footer inalterado -->
     </footer>
   </main>
+  <!-- ======== main-wrapper end =========== -->
 
-  <!-- Scripts do PlainAdmin -->
+  <!-- (Theme Option inalterado) -->
+
+  <!-- ========== Scripts do PlainAdmin ========== -->
   <script src="assets/js/bootstrap.bundle.min.js"></script>
   <script src="assets/js/Chart.min.js"></script>
   <script src="assets/js/apexcharts.min.js"></script>
@@ -1149,7 +1178,7 @@
   <script src="assets/js/Sortable.min.js"></script>
   <script src="assets/js/main.js"></script>
 
-  <!-- SCRIPT PRINCIPAL COM NO-CACHE E RELOAD -->
+  <!-- SCRIPT PRINCIPAL -->
   <script>
     /*******************************************************
      * Função auxiliar para evitar cache (adiciona timestamp)
@@ -1218,7 +1247,6 @@
         const resp = await fetch(noCacheURL(url), { credentials: 'include', cache: 'no-store' });
         if (!resp.ok) throw new Error(`Erro ao buscar pedido: ${resp.status}`);
         const dados = await resp.json();
-        // Se vier array, pega o primeiro elemento
         let resultado = Array.isArray(dados) ? dados[0] : dados;
         if (!resultado || !resultado.id) {
           throw new Error('Nenhum pedido encontrado.');
@@ -1430,6 +1458,37 @@
     }
 
     /*******************************************************
+     * NOVA FUNÇÃO: Carregar Opções de Markup para o datalist
+     *******************************************************/
+    async function loadMarkupOptions() {
+      try {
+        const response = await fetch('https://airland.com.br/supplier/get_markup_data.php', {
+          credentials: 'include',
+          cache: 'no-store'
+        });
+        const data = await response.json();
+        const datalist = document.getElementById('markupOptions');
+        datalist.innerHTML = '';
+        // Para cada registro, monta a cadeia de texto: Tipo - Categoria - Nome - Dias
+        data.forEach(item => {
+          // Se os campos "type" e "category" não existirem, use valores padrão ou ignore
+          const type = item.type || 'Tipo';
+          const category = item.category || 'Categoria';
+          const name = item.name_site || 'Nome';
+          const day = item.day ? item.day + ' dias' : '';
+          const optionValue = [type, category, name, day].filter(Boolean).join(' - ');
+          if(optionValue) {
+            const option = document.createElement('option');
+            option.value = optionValue;
+            datalist.appendChild(option);
+          }
+        });
+      } catch (error) {
+        console.error('Erro ao carregar opções de markup:', error);
+      }
+    }
+
+    /*******************************************************
      * 8) Montar Planilha Principal (supplier_planilhas)
      *******************************************************/
     function montarPlanilhaPrincipal(lista) {
@@ -1438,7 +1497,8 @@
       lista.forEach(item => {
         const rowHtml = `
           <tr data-id="${item.id}">
-            <td><input type="text" name="itens" value="${item.produto || ''}"></td>
+            <!-- Alterado para usar o datalist "markupOptions" -->
+            <td><input list="markupOptions" type="text" name="itens" value="${item.produto || ''}"></td>
             <td><input type="date" name="data_uso" value="${item.data || ''}"></td>
             <td>
               <select name="idade">
@@ -1510,7 +1570,8 @@
       const cont = document.getElementById('spreadsheet-info');
       const rowHtml = `
         <tr>
-          <td><input type="text" name="itens"></td>
+          <!-- Alterado para usar o datalist "markupOptions" -->
+          <td><input list="markupOptions" type="text" name="itens"></td>
           <td><input type="date" name="data_uso"></td>
           <td>
             <select name="idade">
@@ -1784,6 +1845,8 @@
       await carregarDetalhesPedido();
       await carregarFinanceiro();
       await carregarPlanilha();
+      // Carrega as opções de markup para o autocomplete do campo "itens"
+      await loadMarkupOptions();
 
       const inputDolarCambio = document.getElementById('dolar-cambio');
       if (inputDolarCambio) {
