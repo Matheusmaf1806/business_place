@@ -109,80 +109,34 @@
     }
 
     /* A <td> ou <div> pai precisa ter position: relative; para o menu flutuar */
-    .nested-menu {
-      position: absolute;
-      top: 38px; /* ajuste conforme altura do input */
-      left: 0;
-      width: 240px; /* largura do menu */
-      background-color: #fff;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      display: none; /* começa oculto, vamos mostrar via JS ou :hover */
-      z-index: 9999;
-      padding: 6px 0;
-      font-size: 0.9rem;
-    }
-
-    /* Remove margens/padding do UL */
-    .nested-menu ul {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-
-    /* Cada LI do menu */
-    .nested-menu li {
-      position: relative;
-      padding: 8px 12px;
-      cursor: pointer;
-      border-bottom: 1px solid #f0f0f0;
-      white-space: nowrap;
-    }
-
-    /* Último item ou se preferir sem borda no último
-    .nested-menu li:last-child {
-      border-bottom: none;
-    }
-    */
-
-    /* Ao passar o mouse */
-    .nested-menu li:hover {
-      background-color: #f7f7f7;
-    }
-
-    /* Submenu - aninhe com "ul ul" para o 2º nível, "ul ul ul" para 3º, etc. */
-    .nested-menu ul ul {
-      position: absolute;
-      top: 0;
-      left: 100%;
-      min-width: 220px;
-      margin-top: -8px; /* para alinhar direitinho */
-      background-color: #fff;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      display: none; /* submenus também ocultos */
-    }
-
-    /* Mostra o submenu ao passar o mouse no LI pai */
-    .nested-menu li:hover > ul {
-      display: block;
-    }
-
-    /* Indicador de que há submenu (setinha "▶" à direita) */
-    .nested-menu .menu-item::after {
-      content: '▶';
-      position: absolute;
-      right: 8px;
-      opacity: 0.4;
-      font-size: 0.8em;
-    }
-
-    /* Se não quiser a setinha no último nível (days), retire */
-    .nested-menu .day-item::after {
-      content: none;
-    }
+      .nested-menu {
+    position: absolute;
+    top: 38px; /* Ajuste se quiser */
+    left: 0;
+    z-index: 9999; 
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    width: 250px;
+    max-height: 300px;
+    overflow-y: auto;
+    display: none;
+    padding: 0;
+  }
+  .nested-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .nested-menu li {
+    padding: 8px 12px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .nested-menu li:hover {
+    background-color: #f0f0f0;
+  }
 
   </style>
 </head>
@@ -1551,30 +1505,22 @@
      * - Nível 2: category
      * - Nível 3: name (+ dias entre parênteses, se houver)
      *******************************************************/
-    function buildNestedMenuHTML(groupedData) {
+     function buildNestedMenuHTML(groupedData) {
       let html = '<ul>';
       for (const type in groupedData) {
         html += `<li class="menu-item type-item">${type}<ul>`;
         for (const category in groupedData[type]) {
           html += `<li class="menu-item category-item">${category}<ul>`;
-
-          const namesObj = groupedData[type][category];
-          for (const name in namesObj) {
-            const daysArray = namesObj[name]; // array de strings "1 dias", "2 dias", etc
+          for (const name in groupedData[type][category]) {
+            const daysArray = groupedData[type][category][name];
             let label = name;
             if (daysArray.length) {
+              // Se vier "1 dias, 2 dias", etc
               label += ` (${daysArray.join(', ')})`;
             }
-            // Ajuste o data-value conforme quiser
-            const dataValue = `${type} / ${category} / ${name}`;
-
-            html += `
-              <li class="menu-item name-item" data-value="${dataValue}">
-                ${label}
-              </li>
-            `;
+            const dataValue = `${type} - ${category} - ${name}`;
+            html += `<li class="menu-item name-item" data-value="${dataValue}">${label}</li>`;
           }
-
           html += '</ul></li>';
         }
         html += '</ul></li>';
@@ -1583,21 +1529,27 @@
       return html;
     }
 
-    /*******************************************************
-     * Carrega o menu aninhado a partir da API get_markup_data
-     *******************************************************/
-    async function loadNestedMenu() {
-      try {
-        const response = await fetch('https://airland.com.br/supplier/get_markup_data.php', {
-          credentials: 'include',
-          cache: 'no-store'
+    // 2) Ao focar no input, exibe o menu, ao clicar no item, preenche o input, etc.
+    async function loadNestedMenuForRow(rowId) {
+      const menuHTML = await loadNestedMenu();
+      const menuContainer = document.getElementById(`nestedMenu-${rowId}`);
+      if (menuContainer) {
+        menuContainer.innerHTML = menuHTML;
+        const itensInput = menuContainer.parentElement.querySelector('.itensInput');
+        itensInput.addEventListener('focus', () => {
+          menuContainer.style.display = 'block';
         });
-        const data = await response.json();
-        const grouped = groupMarkupData(data);
-        return buildNestedMenuHTML(grouped);
-      } catch (error) {
-        console.error('Erro ao carregar dados do menu:', error);
-        return '';
+        itensInput.addEventListener('blur', () => {
+          setTimeout(() => {
+            menuContainer.style.display = 'none';
+          }, 200);
+        });
+        menuContainer.addEventListener('click', (e) => {
+          if (e.target && e.target.classList.contains('name-item')) {
+            itensInput.value = e.target.getAttribute('data-value');
+            menuContainer.style.display = 'none';
+          }
+        });
       }
     }
 
