@@ -1320,6 +1320,7 @@
         alert('Não há dados do pedido para sincronizar.');
         return;
       }
+
       const pedidoId = obterIdPedido();
       // Lê os valores dos inputs
       const gatewayVal = document.getElementById('gatewayInput').value.trim();
@@ -1333,7 +1334,8 @@
       const bandeiraCartaoVal = document.getElementById('bandeiraCartaoInput').value.trim();
       const parcelasVal = document.getElementById('parcelasInput').value.trim();
       const custoVal = parseFloat(document.getElementById('custoInput').value) || 0;
-      // Monta o objeto para upsert via POST
+
+      // Monta o objeto para enviar
       const financeBody = {
         id_pedido: pedidoId,
         gateway: gatewayVal,
@@ -1348,9 +1350,14 @@
         parcelas: parcelasVal,
         custo: custoVal
       };
+
+      // Se financeiroAtual tiver ID, significa que já existe registro => usar PUT
+      // Senão, usamos POST
+      const methodFinance = (financeiroAtual && financeiroAtual.id) ? 'PUT' : 'POST';
+
       try {
         const resp = await fetch('https://airland.com.br/supplier/api_detailspay.php', {
-          method: 'POST',
+          method: methodFinance,
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
           body: JSON.stringify(financeBody)
@@ -1364,7 +1371,8 @@
         alert('Erro ao salvar Financeiro: ' + e.message);
         return;
       }
-      // Atualiza os dados do pedido (supplier_pedidos)
+
+      // Depois de salvar no financeiro, atualizamos também o supplier_pedidos
       const pedidosBody = {
         id: pedidoAtual.id,
         gateway: gatewayVal,
@@ -1374,6 +1382,7 @@
         bandeira_cartao: bandeiraCartaoVal,
         parcelas: parcelasVal
       };
+
       try {
         const respPed = await fetch('https://airland.com.br/supplier/api_pedidos.php', {
           method: 'PUT',
@@ -1390,7 +1399,9 @@
         alert('Erro ao atualizar Pedidos: ' + e.message);
         return;
       }
+
       alert('Dados financeiros salvos (sincronizados com Pedidos e Finance)!');
+      // Recarrega o financeiro para refletir o ID e método certo.
       carregarFinanceiro();
     }
 
