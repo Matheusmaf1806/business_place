@@ -875,13 +875,10 @@
     <!-- ========== CONTEÚDO PRINCIPAL ========== -->
     <section class="tab-components">
       <div class="container-fluid">
-        <!-- ========== title-wrapper start ========== -->
         <div class="title-wrapper pt-30">
           <div class="row align-items-center">
             <div class="col-md-6">
-              <div class="title">
-                <h2>Detalhes do Pedido</h2>
-              </div>
+              <div class="title"><h2>Detalhes do Pedido</h2></div>
             </div>
             <div class="col-md-6">
               <div class="breadcrumb-wrapper">
@@ -889,26 +886,21 @@
                   <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="#0">Dashboard</a></li>
                     <li class="breadcrumb-item">Pedidos</li>
-                    <li class="breadcrumb-item active" aria-current="page">
-                      Detalhes
-                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">Detalhes</li>
                   </ol>
                 </nav>
               </div>
             </div>
           </div>
         </div>
-        <!-- ========== title-wrapper end ========== -->
 
-        <!-- Botão de Voltar -->
         <a href="pages-orders.html" class="btn btn-primary back-button">Voltar para Página de Pedidos</a>
         <br />
         <h5>ID do Pedido: <span id="pedido-id">Carregando...</span></h5>
         <hr>
 
-        <!-- Cartão de Abas (Tabs) -->
         <div class="tab-style-3 card-style mb-30">
-          <!-- Navegação das Abas -->
+          <!-- Abas -->
           <nav class="nav" id="nav-tab">
             <button id="tab-1" class="main-btn deactive-btn rounded-full active" data-bs-toggle="tab" data-bs-target="#tabContent-1">
               <i class="lni lni-home mr-10"></i>Pedido
@@ -961,6 +953,7 @@
                 </table>
               </div>
             </div>
+
             <!-- Aba 2: Cliente -->
             <div class="tab-pane fade" id="tabContent-2">
               <div class="section">
@@ -980,11 +973,12 @@
                 </table>
               </div>
             </div>
+
             <!-- Aba 3: Financeiro -->
             <div class="tab-pane fade" id="tabContent-3">
               <div class="section">
                 <h3>Informações Financeiras</h3>
-                <!-- Financeiro: Tabela 1 -->
+                <!-- Tabela 1 -->
                 <table class="emissao-tabela">
                   <thead>
                     <tr>
@@ -1007,7 +1001,7 @@
                     </tr>
                   </tbody>
                 </table>
-                <!-- Financeiro: Tabela 2 -->
+                <!-- Tabela 2 -->
                 <table class="emissao-tabela">
                   <thead>
                     <tr>
@@ -1028,10 +1022,11 @@
                     </tr>
                   </tbody>
                 </table>
-                <!-- Botão para salvar financeiro -->
+                <!-- Botão para salvar Financeiro -->
                 <button class="btn btn-primary" onclick="salvarFinanceiro()">Salvar Financeiro</button>
               </div>
             </div>
+
             <!-- Aba 4: Comercial -->
             <div class="tab-pane fade" id="tabContent-4">
               <div class="section">
@@ -1049,11 +1044,12 @@
                 </table>
               </div>
             </div>
+
             <!-- Aba 5: Planilha -->
             <div class="tab-pane fade" id="tabContent-5">
               <div class="section">
                 <h3>Planilha do Pedido</h3>
-                <!-- Selecionar câmbio -->
+                <!-- Câmbio -->
                 <table class="emissao-tabela">
                   <thead>
                     <tr>
@@ -1063,9 +1059,7 @@
                   </thead>
                   <tbody>
                     <tr>
-                      <td>
-                        <input type="number" id="dolar-cambio" placeholder="Digite o câmbio" />
-                      </td>
+                      <td><input type="number" id="dolar-cambio" placeholder="Digite o câmbio" /></td>
                       <td id="dolar-magic">0.00</td>
                     </tr>
                   </tbody>
@@ -1103,11 +1097,12 @@
                     </tr>
                   </tfoot>
                 </table>
-                <!-- Botões da planilha -->
+                <!-- Botões -->
                 <button id="add-row-button" class="btn btn-success add-row-button">Adicionar Linha</button>
                 <button class="btn btn-primary add-row-button" onclick="salvarPlanilha()">Salvar Planilha</button>
               </div>
             </div>
+
             <!-- Aba 6: Emissão -->
             <div class="tab-pane fade" id="tabContent-6">
               <div class="section">
@@ -1131,16 +1126,13 @@
             </div>
           </div>
         </div>
-      </div><!-- /.container-fluid -->
+      </div><!-- container-fluid -->
     </section>
-    <!-- ========== fim do conteúdo principal ========== -->
 
-    <!-- Footer (PlainAdmin) -->
     <footer class="footer">
-      <!-- (Mantenha aqui o footer do PlainAdmin) -->
+      <!-- seu footer -->
     </footer>
   </main>
-  <!-- ======== main-wrapper end =========== -->
 
   <!-- Scripts do PlainAdmin -->
   <script src="assets/js/bootstrap.bundle.min.js"></script>
@@ -1157,7 +1149,7 @@
   <script src="assets/js/Sortable.min.js"></script>
   <script src="assets/js/main.js"></script>
 
-  <!-- SEU SCRIPT PRINCIPAL -->
+  <!-- SCRIPT PRINCIPAL (AJUSTADO PARA USAR PUT NO FINANCEIRO) -->
   <script>
     /*******************************************************
      * 1) Verificar Sessão
@@ -1178,7 +1170,7 @@
         window.location.replace("https://businessplace.airland.com.br/signin.html");
       }
     }
-  
+
     /*******************************************************
      * 2) Obter ID do Pedido via Query
      *******************************************************/
@@ -1186,7 +1178,7 @@
       const params = new URLSearchParams(window.location.search);
       return params.get('pedido') || 'Não informado';
     }
-  
+
     /*******************************************************
      * 3) Formatar Data
      *******************************************************/
@@ -1195,11 +1187,11 @@
       const d = new Date(dataStr);
       return isNaN(d) ? '' : d.toLocaleDateString('pt-BR');
     }
-  
-    let pedidoAtual = null;      // Dados de supplier_pedidos
-    let financeiroAtual = null;  // Dados de supplier_finance
-    let planilhasEmMemoria = []; // Dados de supplier_planilhas
-  
+
+    let pedidoAtual = null;      
+    let financeiroAtual = null;  
+    let planilhasEmMemoria = []; 
+
     /*******************************************************
      * 4) Carregar Detalhes do Pedido (supplier_pedidos)
      *******************************************************/
@@ -1221,8 +1213,8 @@
         }
         pedidoAtual = dados;
         document.getElementById('pedido-id').textContent = pedidoId;
-  
-        // Preencher Aba 1 (Pedido)
+
+        // Aba 1 (Pedido)
         document.getElementById('order-info').innerHTML = `
           <tr>
             <td>
@@ -1274,81 +1266,74 @@
         alert('Erro ao carregar Pedido: ' + e.message);
       }
     }
-  
+
     /*******************************************************
-     * 5) Carregar Financeiro (usando novo endpoint api_detailspay.php)
+     * 5) Carregar Financeiro (sempre GET com ?id_pedido=)
      *******************************************************/
     async function carregarFinanceiro() {
       const pedidoId = obterIdPedido();
       if (pedidoId === 'Não informado') return;
       try {
-        const urlFin = `https://airland.com.br/supplier/api_detailspay.php?pedido_id=${pedidoId}`;
+        // Ajuste aqui: GET com ?id_pedido=
+        const urlFin = `https://airland.com.br/supplier/api_detailspay.php?id_pedido=${pedidoId}`;
         const respFin = await fetch(urlFin, { credentials: 'include' });
-        if (!respFin.ok) throw new Error(`Erro ao buscar finance: ${respFin.status}`);
-        const dadosFin = await respFin.json();
-        // Se a resposta for um objeto com a propriedade "pedido_id", usa-o; caso contrário, se for array, pega o primeiro.
-        if (dadosFin && !Array.isArray(dadosFin) && dadosFin.pedido_id) {
-          financeiroAtual = dadosFin;
-        } else if (Array.isArray(dadosFin) && dadosFin.length) {
-          financeiroAtual = dadosFin[0];
-        } else {
-          financeiroAtual = {};
+        if (!respFin.ok) {
+          throw new Error(`Erro ao buscar finance: ${respFin.status}`);
         }
-        // Preencher os inputs
-        document.getElementById('gatewayInput').value =
-          financeiroAtual.gateway || pedidoAtual.gateway || '';
-        document.getElementById('dataVendaInput').value =
-          financeiroAtual.data_venda || pedidoAtual.data_venda || '';
-        document.getElementById('valorVendaInput').value =
-          financeiroAtual.valor_venda || pedidoAtual.valor_venda || '';
-        document.getElementById('valorRecebimentoInput').value =
-          financeiroAtual.valor_recebimento || '';
-        document.getElementById('dataRecebimentoInput').value =
-          financeiroAtual.data_recebimento || '';
-        document.getElementById('cambioDiaInput').value =
-          financeiroAtual.cambio_dia || '';
-        document.getElementById('receitaInput').value =
-          financeiroAtual.receita || '';
-        document.getElementById('meioPgtoInput').value =
-          financeiroAtual.meio_pgto || pedidoAtual.meio_pgto || '';
-        document.getElementById('bandeiraCartaoInput').value =
-          financeiroAtual.bandeira_cartao || pedidoAtual.bandeira_cartao || '';
-        document.getElementById('parcelasInput').value =
-          financeiroAtual.parcelas || pedidoAtual.parcelas || '';
-        document.getElementById('custoInput').value =
-          financeiroAtual.custo || '';
+        const dadosFin = await respFin.json();
+
+        // Se a resposta for array, pega o primeiro; se for objeto, pega direto
+        if (Array.isArray(dadosFin)) {
+          financeiroAtual = dadosFin[0] || {};
+        } else {
+          financeiroAtual = dadosFin;
+        }
+
+        // Preencher campos
+        document.getElementById('gatewayInput').value           = financeiroAtual.gateway || pedidoAtual.gateway || '';
+        document.getElementById('dataVendaInput').value         = financeiroAtual.data_venda || pedidoAtual.data_venda || '';
+        document.getElementById('valorVendaInput').value        = financeiroAtual.valor_venda || pedidoAtual.valor_venda || '';
+        document.getElementById('valorRecebimentoInput').value  = financeiroAtual.valor_recebimento || '';
+        document.getElementById('dataRecebimentoInput').value   = financeiroAtual.data_recebimento || '';
+        document.getElementById('cambioDiaInput').value         = financeiroAtual.cambio_dia || '';
+        document.getElementById('receitaInput').value           = financeiroAtual.receita || '';
+        document.getElementById('meioPgtoInput').value          = financeiroAtual.meio_pgto || pedidoAtual.meio_pgto || '';
+        document.getElementById('bandeiraCartaoInput').value    = financeiroAtual.bandeira_cartao || pedidoAtual.bandeira_cartao || '';
+        document.getElementById('parcelasInput').value          = financeiroAtual.parcelas || pedidoAtual.parcelas || '';
+        document.getElementById('custoInput').value             = financeiroAtual.custo || '';
       } catch (e) {
         console.error(e);
         alert('Erro ao carregar Financeiro: ' + e.message);
       }
     }
-  
+
     /*******************************************************
-     * 6) Salvar Financeiro (PUT em api_detailspay.php, usando "pedido_id")
+     * 6) Salvar Financeiro (sempre PUT no api_detailspay)
      *******************************************************/
     async function salvarFinanceiro() {
       if (!pedidoAtual) {
-        alert('Não há dados do pedido para sincronizar.');
+        alert('Não há dados do pedido carregado.');
         return;
       }
-  
       const pedidoId = obterIdPedido();
-      // Lê os valores dos inputs
-      const gatewayVal = document.getElementById('gatewayInput').value.trim();
-      const dataVendaVal = document.getElementById('dataVendaInput').value;
-      const valorVendaVal = parseFloat(document.getElementById('valorVendaInput').value) || 0;
-      const valorRecebVal = parseFloat(document.getElementById('valorRecebimentoInput').value) || 0;
-      const dataRecebVal = document.getElementById('dataRecebimentoInput').value;
-      const cambioVal = document.getElementById('cambioDiaInput').value;
-      const receitaVal = parseFloat(document.getElementById('receitaInput').value) || 0;
-      const meioPgtoVal = document.getElementById('meioPgtoInput').value.trim();
-      const bandeiraCartaoVal = document.getElementById('bandeiraCartaoInput').value.trim();
-      const parcelasVal = document.getElementById('parcelasInput').value.trim();
-      const custoVal = parseFloat(document.getElementById('custoInput').value) || 0;
-  
-      // Monta o objeto para PUT
+
+      // Lê valores da tela
+      const gatewayVal          = document.getElementById('gatewayInput').value.trim();
+      const dataVendaVal        = document.getElementById('dataVendaInput').value;
+      const valorVendaVal       = parseFloat(document.getElementById('valorVendaInput').value) || 0;
+      const valorRecebVal       = parseFloat(document.getElementById('valorRecebimentoInput').value) || 0;
+      const dataRecebVal        = document.getElementById('dataRecebimentoInput').value;
+      const cambioVal           = document.getElementById('cambioDiaInput').value;
+      const receitaVal          = parseFloat(document.getElementById('receitaInput').value) || 0;
+      const meioPgtoVal         = document.getElementById('meioPgtoInput').value.trim();
+      const bandeiraCartaoVal   = document.getElementById('bandeiraCartaoInput').value.trim();
+      const parcelasVal         = document.getElementById('parcelasInput').value.trim();
+      const custoVal            = parseFloat(document.getElementById('custoInput').value) || 0;
+
+      // Monta objeto para PUT
       const financeBody = {
-        pedido_id: pedidoId, // <-- Ajustado para "pedido_id"
+        // Campo 'pedido_id' ao invés de 'id'
+        pedido_id: pedidoId,
         gateway: gatewayVal,
         data_venda: dataVendaVal,
         valor_venda: valorVendaVal,
@@ -1361,10 +1346,10 @@
         parcelas: parcelasVal,
         custo: custoVal
       };
-  
+
       try {
         const resp = await fetch('https://airland.com.br/supplier/api_detailspay.php', {
-          method: 'PUT', // sempre PUT
+          method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
           body: JSON.stringify(financeBody)
@@ -1378,10 +1363,10 @@
         alert('Erro ao salvar Financeiro: ' + e.message);
         return;
       }
-  
-      // Depois de salvar no financeiro, atualiza supplier_pedidos
+
+      // Atualizar também no supplier_pedidos
       const pedidosBody = {
-        id: pedidoAtual.id, // no "pedidos" a PK é "id"
+        id: pedidoAtual.id, // no Pedidos é 'id'
         gateway: gatewayVal,
         data_venda: dataVendaVal,
         valor_venda: valorVendaVal,
@@ -1389,7 +1374,6 @@
         bandeira_cartao: bandeiraCartaoVal,
         parcelas: parcelasVal
       };
-  
       try {
         const respPed = await fetch('https://airland.com.br/supplier/api_pedidos.php', {
           method: 'PUT',
@@ -1406,19 +1390,19 @@
         alert('Erro ao atualizar Pedidos: ' + e.message);
         return;
       }
-  
-      alert('Dados financeiros salvos (PUT em Finance + update em Pedidos)!');
-      carregarFinanceiro();
+
+      alert('Financeiro salvo com sucesso (PUT) e Pedidos atualizado!');
+      carregarFinanceiro(); // recarrega para refletir
     }
-  
+
     /*******************************************************
-     * 7) Carregar e Exibir Planilha (supplier_planilhas)
+     * 7) Carregar Planilha (supplier_planilhas)
      *******************************************************/
     async function carregarPlanilha() {
       const pedidoId = obterIdPedido();
       if (pedidoId === 'Não informado') return;
       try {
-        const url = `https://airland.com.br/supplier/api_planilhas.php?pedido_id=${pedidoId}`;
+        const url = `https://airland.com.br/supplier/api_planilhas.php?id_pedido=${pedidoId}`;
         const resp = await fetch(url, { credentials: 'include' });
         if (!resp.ok) throw new Error(`Erro ao buscar planilha: ${resp.status}`);
         const dados = await resp.json();
@@ -1430,7 +1414,7 @@
         console.error('Erro ao carregar planilha:', erro);
       }
     }
-  
+
     function montarPlanilhaPrincipal(lista) {
       const cont = document.getElementById('spreadsheet-info');
       cont.innerHTML = '';
@@ -1467,7 +1451,7 @@
         el.addEventListener('input', recalcularPlanilha);
       });
     }
-  
+
     function montarEmissao(lista) {
       const cont = document.getElementById('emission-info');
       cont.innerHTML = '';
@@ -1486,11 +1470,11 @@
             <td><input type="text" name="fornecedor" value="${item.fornecedor || ''}"></td>
             <td>
               <select name="status">
-                <option value="Aguardando Emissão" ${item.status === 'Aguardando Emissão' ? 'selected' : ''}>Aguardando Emissão</option>
-                <option value="Emissão Bloqueada" ${item.status === 'Emissão Bloqueada' ? 'selected' : ''}>Emissão Bloqueada</option>
-                <option value="Emitido – Não Pago" ${item.status === 'Emitido – Não Pago' ? 'selected' : ''}>Emitido – Não Pago</option>
-                <option value="Emitido TIF" ${item.status === 'Emitido TIF' ? 'selected' : ''}>Emitido TIF</option>
-                <option value="Concluído" ${item.status === 'Concluído' ? 'selected' : ''}>Concluído</option>
+                <option value="Aguardando Emissão"  ${item.status === 'Aguardando Emissão' ? 'selected' : ''}>Aguardando Emissão</option>
+                <option value="Emissão Bloqueada"   ${item.status === 'Emissão Bloqueada' ? 'selected' : ''}>Emissão Bloqueada</option>
+                <option value="Emitido – Não Pago"  ${item.status === 'Emitido – Não Pago' ? 'selected' : ''}>Emitido – Não Pago</option>
+                <option value="Emitido TIF"         ${item.status === 'Emitido TIF' ? 'selected' : ''}>Emitido TIF</option>
+                <option value="Concluído"           ${item.status === 'Concluído' ? 'selected' : ''}>Concluído</option>
               </select>
             </td>
           </tr>
@@ -1498,7 +1482,7 @@
         cont.insertAdjacentHTML('beforeend', row);
       });
     }
-  
+
     /*******************************************************
      * 8) Funções da Planilha
      *******************************************************/
@@ -1536,11 +1520,12 @@
         el.addEventListener('input', recalcularPlanilha);
       });
     }
-  
+
     async function excluirLinhaPlanilha(botao) {
       const row = botao.closest('tr');
       const planilhaId = row.getAttribute('data-id');
       if (!planilhaId) {
+        // linha nova, não existe no banco
         row.remove();
         recalcularPlanilha();
         return;
@@ -1549,7 +1534,7 @@
       try {
         const resp = await fetch('https://airland.com.br/supplier/api_planilhas.php', {
           method: 'DELETE',
-          headers: {'Content-Type': 'application/json'},
+          headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
           body: JSON.stringify({ id: planilhaId })
         });
@@ -1565,7 +1550,7 @@
         alert('Erro ao excluir: ' + e.message);
       }
     }
-  
+
     /*******************************************************
      * 9) Recalcular Planilha
      *******************************************************/
@@ -1577,12 +1562,12 @@
         const numero    = parseFloat(linha.querySelector('[name="numero"]')?.value)   || 0;
         const margemPct = (parseFloat(linha.querySelector('[name="margem"]')?.value) || 0) / 100;
         const taxaPct   = (parseFloat(linha.querySelector('[name="taxa"]')?.value)   || 0) / 100;
-  
+
         const totalDollar = (valorUsd + lobista) * numero;
         const netReal     = totalDollar * dolarMagic;
         const totalPix    = (margemPct < 1) ? netReal / (1 - margemPct) : netReal;
         const total10x    = (taxaPct < 1)   ? totalPix / (1 - taxaPct)  : totalPix;
-  
+
         linha.querySelector('[name="totalDollar"]').textContent = totalDollar.toFixed(2);
         linha.querySelector('[name="netReal"]').textContent     = netReal.toFixed(2);
         linha.querySelector('[name="totalPix"]').textContent    = totalPix.toFixed(2);
@@ -1590,7 +1575,7 @@
       });
       somarTotaisPlanilha();
     }
-  
+
     function somarTotaisPlanilha() {
       let totalDollar = 0, totalNetReal = 0, totalPix = 0, total10x = 0;
       document.querySelectorAll('#spreadsheet-info tr').forEach(linha => {
@@ -1600,20 +1585,20 @@
         total10x     += parseFloat(linha.querySelector('[name="total10x"]').textContent) || 0;
       });
       document.getElementById('resumo-total-dollar').textContent = totalDollar.toFixed(2);
-      document.getElementById('resumo-net-real').textContent = totalNetReal.toFixed(2);
-      document.getElementById('resumo-total-pix').textContent = totalPix.toFixed(2);
-      document.getElementById('resumo-total-10x').textContent = total10x.toFixed(2);
+      document.getElementById('resumo-net-real').textContent      = totalNetReal.toFixed(2);
+      document.getElementById('resumo-total-pix').textContent     = totalPix.toFixed(2);
+      document.getElementById('resumo-total-10x').textContent     = total10x.toFixed(2);
     }
-  
+
     function atualizarDolarMagic() {
       const dolarCambio = parseFloat(document.getElementById('dolar-cambio').value) || 0;
-      const dolarMagic = dolarCambio * 1.0098;
+      const dolarMagic = dolarCambio * 1.0098; // exemplo
       document.getElementById('dolar-magic').textContent = dolarMagic.toFixed(2);
       recalcularPlanilha();
     }
-  
+
     /*******************************************************
-     * 10) Salvar Planilha (supplier_planilhas)
+     * 10) Salvar Planilha
      *******************************************************/
     async function salvarPlanilha() {
       const pedidoId = obterIdPedido();
@@ -1622,30 +1607,30 @@
         return;
       }
       const dolarCambio = parseFloat(document.getElementById('dolar-cambio').value) || 0;
-      const dolarMagic = parseFloat(document.getElementById('dolar-magic').textContent) || 0;
+      const dolarMagic  = parseFloat(document.getElementById('dolar-magic').textContent) || 0;
+
       const rows = document.querySelectorAll('#spreadsheet-info tr');
       const novos = [];
       const existentes = [];
-  
+
       rows.forEach(linha => {
         const planilhaId = linha.getAttribute('data-id');
-        const itens = (linha.querySelector('[name="itens"]')?.value || '').trim();
-        const dataUso = linha.querySelector('[name="data_uso"]')?.value || '';
-        const idade = linha.querySelector('[name="idade"]')?.value || 'ADT';
-        const valorUsd = parseFloat(linha.querySelector('[name="valorUsd"]')?.value) || 0;
-        const lobista = parseFloat(linha.querySelector('[name="lobista"]')?.value) || 0;
-        const numero = parseFloat(linha.querySelector('[name="numero"]')?.value) || 0;
-        const margemPct = parseFloat(linha.querySelector('[name="margem"]')?.value) || 0;
-        const taxaPct = parseFloat(linha.querySelector('[name="taxa"]')?.value) || 0;
-  
+        const itens      = (linha.querySelector('[name="itens"]')?.value || '').trim();
+        const dataUso    = linha.querySelector('[name="data_uso"]')?.value || '';
+        const idade      = linha.querySelector('[name="idade"]')?.value || 'ADT';
+        const valorUsd   = parseFloat(linha.querySelector('[name="valorUsd"]')?.value) || 0;
+        const lobista    = parseFloat(linha.querySelector('[name="lobista"]')?.value)  || 0;
+        const numero     = parseFloat(linha.querySelector('[name="numero"]')?.value)   || 0;
+        const margemPct  = parseFloat(linha.querySelector('[name="margem"]')?.value)   || 0;
+        const taxaPct    = parseFloat(linha.querySelector('[name="taxa"]')?.value)     || 0;
+
         const totalDollar = (valorUsd + lobista) * numero;
-        const netBrl = totalDollar * dolarMagic;
-        const totalPix = (margemPct < 100) ? netBrl / (1 - margemPct/100) : netBrl;
-        const total10x = (taxaPct < 100) ? totalPix / (1 - taxaPct/100) : totalPix;
-  
+        const netBrl      = totalDollar * dolarMagic;
+        const totalPix    = (margemPct < 100) ? netBrl / (1 - margemPct/100) : netBrl;
+        const total10x    = (taxaPct < 100)   ? totalPix / (1 - taxaPct/100) : totalPix;
+
         const obj = {
-          // Ajustando para "pedido_id" também aqui, se for esse o nome certo no backend
-          pedido_id: pedidoId,
+          id_pedido: pedidoId,
           produto: itens,
           data: dataUso,
           idade,
@@ -1659,24 +1644,25 @@
           taxa: taxaPct,
           total_10x: total10x,
           dolar_cambio: dolarCambio,
-          dolar_magic: dolarMagic
+          dolar_magic:  dolarMagic
         };
-  
+
         if (planilhaId) {
-          // Se a linha já existe no DB
+          // já existe no DB => PUT
           const original = planilhasEmMemoria.find(p => String(p.id) === planilhaId);
           if (original) {
-            obj.id = planilhaId; // Precisamos do ID p/ PUT
+            obj.id = planilhaId;
             existentes.push(obj);
           } else {
+            // caso extremo: ID na linha mas não encontrado em planilhasEmMemoria
             novos.push(obj);
           }
         } else {
-          // Linha nova => POST
+          // novo
           novos.push(obj);
         }
       });
-  
+
       // POST para novos
       if (novos.length) {
         try {
@@ -1709,30 +1695,27 @@
           return;
         }
       }
-  
       alert('Planilha salva com sucesso!');
       carregarPlanilha();
     }
-  
+
     /*******************************************************
      * 11) Salvar Emissão
      *******************************************************/
     async function salvarEmissao() {
       const pedidoId = obterIdPedido();
       if (pedidoId === 'Não informado') return;
+
       const updates = [];
-  
       document.querySelectorAll('#emission-info tr').forEach(linha => {
         const planilhaId = linha.getAttribute('data-id');
-        if (!planilhaId) return;
+        if (!planilhaId) return; // sem ID, não tem o que atualizar
         const original = planilhasEmMemoria.find(x => String(x.id) === planilhaId);
-        if (!original) return;
-  
-        const dataPag = linha.querySelector('[name="dataPagamento"]')?.value || '';
-        const ident   = linha.querySelector('[name="identificador"]')?.value || '';
-        const fornec  = linha.querySelector('[name="fornecedor"]')?.value || '';
-        const stat    = linha.querySelector('[name="status"]')?.value || '';
-  
+        if (!original) return; // não achou
+        const dataPag   = linha.querySelector('[name="dataPagamento"]')?.value || '';
+        const ident     = linha.querySelector('[name="identificador"]')?.value || '';
+        const fornec    = linha.querySelector('[name="fornecedor"]')?.value    || '';
+        const stat      = linha.querySelector('[name="status"]')?.value        || '';
         updates.push({
           ...original,
           data_pagamento: dataPag,
@@ -1741,16 +1724,16 @@
           status: stat
         });
       });
-  
+
       if (!updates.length) {
         alert('Nenhuma linha para atualizar Emissão.');
         return;
       }
-  
+
       try {
         const respPut = await fetch('https://airland.com.br/supplier/api_planilhas.php', {
           method: 'PUT',
-          headers: {'Content-Type': 'application/json'},
+          headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
           body: JSON.stringify(updates)
         });
@@ -1762,22 +1745,21 @@
         alert('Erro ao salvar Emissão: ' + e.message);
       }
     }
-  
+
     /*******************************************************
      * Ao carregar a página
      *******************************************************/
     document.addEventListener('DOMContentLoaded', async () => {
-      await verificarSessao();          // Verifica login
-      await carregarDetalhesPedido();   // Carrega supplier_pedidos
-      await carregarFinanceiro();       // Carrega financeiro (PUT fixo) via novo endpoint
-      await carregarPlanilha();         // Carrega supplier_planilhas
-  
+      await verificarSessao();
+      await carregarDetalhesPedido();
+      await carregarFinanceiro();
+      await carregarPlanilha();
+
       // Listener de câmbio
       document.getElementById('dolar-cambio').addEventListener('input', atualizarDolarMagic);
-  
-      // Botão de adicionar linha
+      // Botão "Adicionar Linha" da planilha
       document.getElementById('add-row-button').addEventListener('click', adicionarLinha);
     });
-  </script>  
+  </script>
 </body>
 </html>
