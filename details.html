@@ -30,21 +30,21 @@
       border-spacing: 0;
       margin-bottom: 1.5rem;
       background-color: #ffffff;
-      border-radius: 12px;       /* cantos levemente arredondados */
-      overflow: hidden;          /* garante que o border-radius aparece */
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05); /* sombra bem sutil */
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
 
     table.emissao-tabela thead {
-      background-color: #f5f5f7;  /* cor levemente cinza, estilo Apple */
+      background-color: #f5f5f7;
     }
 
     table.emissao-tabela th {
       padding: 12px 16px;
-      text-align: left;       /* À esquerda fica mais elegante. */
-      font-weight: 600;       /* Cabeçalho um pouco mais forte */
-      font-size: 0.95rem;     /* Ajuste de tamanho */
-      color: #333;            /* Texto mais escuro, melhor contraste */
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #333;
       border-bottom: 1px solid #e0e0e0;
     }
 
@@ -52,41 +52,21 @@
       padding: 12px 16px;
       font-size: 0.95rem;
       color: #444;
-      border-bottom: 1px solid #f0f0f0; 
-      /* Borda MUITO sutil. Você pode reduzir para #f7f7f7 se quiser quase invisível. */
+      border-bottom: 1px solid #f0f0f0;
     }
 
-    /* Se quiser remover as bordas entre as células, tire o border-bottom. */
-
-    /* Inputs e selects dentro da tabela */
     table.emissao-tabela input,
     table.emissao-tabela select {
       width: 100%;
       min-width: 80px;
       box-sizing: border-box;
-      border: 1px solid #d1d1d6;  /* tom de cinza claro, Apple-like */
-      border-radius: 8px;        
+      border: 1px solid #d1d1d6;
+      border-radius: 8px;
       padding: 6px 8px;
       font-size: 0.9rem;
       color: #333;
       background-color: #fff;
       outline: none;
-    }
-
-    table.emissao-tabela input::placeholder,
-    table.emissao-tabela select::placeholder {
-      color: #999;
-    }
-
-    /* Tira borda/estilo do select padrão, em alguns browsers */
-    table.emissao-tabela select {
-      -webkit-appearance: none;  
-      -moz-appearance:    none;
-      background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg width='10' height='7' ... %3C/svg%3E"); 
-      background-repeat: no-repeat;
-      background-position: right 8px center;
-      background-size: 10px auto;
-      padding-right: 24px; 
     }
 
     .section h3 {
@@ -108,36 +88,35 @@
       cursor: pointer;
     }
 
-    /* A <td> ou <div> pai precisa ter position: relative; para o menu flutuar */
-      .nested-menu {
-    position: absolute;
-    top: 38px; /* Ajuste se quiser */
-    left: 0;
-    z-index: 9999; 
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    width: 250px;
-    max-height: 300px;
-    overflow-y: auto;
-    display: none;
-    padding: 0;
-  }
-  .nested-menu ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  .nested-menu li {
-    padding: 8px 12px;
-    cursor: pointer;
-    white-space: nowrap;
-  }
-  .nested-menu li:hover {
-    background-color: #f0f0f0;
-  }
-
+    /* Menu flutuante */
+    .nested-menu {
+      position: absolute;
+      top: 38px;
+      left: 0;
+      z-index: 9999;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      width: 250px;
+      max-height: 300px;
+      overflow-y: auto;
+      display: none;
+      padding: 0;
+    }
+    .nested-menu ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .nested-menu li {
+      padding: 8px 12px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .nested-menu li:hover {
+      background-color: #f0f0f0;
+    }
   </style>
 </head>
 
@@ -1189,411 +1168,475 @@
   <script src="assets/js/Sortable.min.js"></script>
   <script src="assets/js/main.js"></script>
 
-  <!-- SCRIPT PRINCIPAL -->
-  <script>
-   /*******************************************************
-   * Função auxiliar para evitar cache (adiciona timestamp)
-   *******************************************************/
-  function noCacheURL(url) {
-    const random = Date.now();
-    return url.includes('?') ? url + '&_nc=' + random : url + '?_nc=' + random;
-  }
-
-  /*******************************************************
-   * 1) Verificar Sessão
-   *******************************************************/
-  async function verificarSessao() {
-    try {
-      const resposta = await fetch(
-        noCacheURL("https://airland.com.br/affiliatesacess/login_api.php/check"),
-        { credentials: 'include', cache: 'no-store' }
-      );
-      const dados = await resposta.json();
-      if (!dados.logged_in) {
-        // Se não estiver logado, redireciona:
+   <!-- SCRIPT PRINCIPAL COM A CORREÇÃO -->
+   <script>
+    /*******************************************************
+     * Função auxiliar para evitar cache (adiciona timestamp)
+     *******************************************************/
+    function noCacheURL(url) {
+      const random = Date.now();
+      return url.includes('?') ? url + '&_nc=' + random : url + '?_nc=' + random;
+    }
+ 
+    /*******************************************************
+     * 1) Verificar Sessão
+     *******************************************************/
+    async function verificarSessao() {
+      try {
+        const resposta = await fetch(
+          noCacheURL("https://airland.com.br/affiliatesacess/login_api.php/check"),
+          { credentials: 'include', cache: 'no-store' }
+        );
+        const dados = await resposta.json();
+        if (!dados.logged_in) {
+          window.location.replace("https://businessplace.airland.com.br/signin.html");
+        } else {
+          document.body.style.display = "block";
+        }
+      } catch (erro) {
+        console.error("Erro ao verificar a sessão:", erro);
         window.location.replace("https://businessplace.airland.com.br/signin.html");
-      } else {
-        // Exibe o body só depois de validar a sessão
-        document.body.style.display = "block";
       }
-    } catch (erro) {
-      console.error("Erro ao verificar a sessão:", erro);
-      window.location.replace("https://businessplace.airland.com.br/signin.html");
     }
-  }
-
-  /*******************************************************
-   * 2) Obter ID do Pedido a partir da URL (parâmetro "pedido")
-   *******************************************************/
-  function obterIdPedido() {
-    const params = new URLSearchParams(window.location.search);
-    return params.get('pedido') || 'Não informado';
-  }
-
-  /*******************************************************
-   * 3) Formatar Data para exibição (pt-BR)
-   *******************************************************/
-  function formatarData(dataStr) {
-    if (!dataStr) return '';
-    const d = new Date(dataStr);
-    return isNaN(d) ? '' : d.toLocaleDateString('pt-BR');
-  }
-
-  /*******************************************************
-   * Variáveis globais
-   *******************************************************/
-  let pedidoAtual       = null;
-  let financeiroAtual   = null;
-  let planilhasEmMemoria = [];
-
-  /*******************************************************
-   * 4) Carregar Detalhes do Pedido (supplier_pedidos)
-   *******************************************************/
-  async function carregarDetalhesPedido() {
-    const pedidoId = obterIdPedido();
-    if (pedidoId === 'Não informado') {
-      alert('Pedido não informado na URL (?pedido=123).');
-      return;
+ 
+    /*******************************************************
+     * 2) Obter ID do Pedido a partir da URL (parâmetro "pedido")
+     *******************************************************/
+    function obterIdPedido() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('pedido') || 'Não informado';
     }
-
-    try {
-      const url  = `https://airland.com.br/supplier/api_pedidos.php?id=${pedidoId}`;
-      const resp = await fetch(noCacheURL(url), { credentials: 'include', cache: 'no-store' });
-      if (!resp.ok) throw new Error(`Erro ao buscar pedido: ${resp.status}`);
-
-      const dados     = await resp.json();
-      const resultado = Array.isArray(dados) ? dados[0] : dados;
-
-      if (!resultado || !resultado.id) {
-        throw new Error('Nenhum pedido encontrado para esse ID.');
+ 
+    /*******************************************************
+     * 3) Formatar Data para exibição (pt-BR)
+     *******************************************************/
+    function formatarData(dataStr) {
+      if (!dataStr) return '';
+      const d = new Date(dataStr);
+      return isNaN(d) ? '' : d.toLocaleDateString('pt-BR');
+    }
+ 
+    /*******************************************************
+     * Variáveis globais
+     *******************************************************/
+    let pedidoAtual         = null;
+    let financeiroAtual     = null;
+    let planilhasEmMemoria = [];
+ 
+    /*******************************************************
+     * 4) Carregar Detalhes do Pedido (supplier_pedidos)
+     *******************************************************/
+    async function carregarDetalhesPedido() {
+      const pedidoId = obterIdPedido();
+      if (pedidoId === 'Não informado') {
+        alert('Pedido não informado.');
+        return;
       }
-
-      pedidoAtual = resultado;
-      document.getElementById('pedido-id').textContent = pedidoId;
-
-      // Preencher aba "Pedido"
-      document.getElementById('order-info').innerHTML = `
-        <tr>
-          <td>
-            <select>
-              <option value="Pagamento recebido"   ${resultado.status === 'Pagamento recebido' ? 'selected' : ''}>Pagamento recebido</option>
-              <option value="Envio de contrato"    ${resultado.status === 'Envio de contrato' ? 'selected' : ''}>Envio de contrato</option>
-              <option value="Aguardando Emissão"   ${resultado.status === 'Aguardando Emissão' ? 'selected' : ''}>Aguardando Emissão</option>
-              <option value="Emissão Bloqueada"    ${resultado.status === 'Emissão Bloqueada' ? 'selected' : ''}>Emissão Bloqueada</option>
-              <option value="Emitido por Completo" ${resultado.status === 'Emitido por Completo' ? 'selected' : ''}>Emitido por Completo</option>
-              <option value="Emissão Parcial"      ${resultado.status === 'Emissão Parcial' ? 'selected' : ''}>Emissão Parcial</option>
-              <option value="Envio de Brindes"     ${resultado.status === 'Envio de Brindes' ? 'selected' : ''}>Envio de Brindes</option>
-              <option value="Concluído"            ${resultado.status === 'Concluído' ? 'selected' : ''}>Concluído</option>
-            </select>
-          </td>
-          <td>${resultado.destino || ''}</td>
-          <td>${resultado.item || ''}</td>
-          <td>${formatarData(resultado.data_venda)}</td>
-        </tr>
-      `;
-
-      // Preencher Observações
-      document.getElementById('additional-info').innerHTML = `
-        <tr>
-          <td>${resultado.observacoes_operacionais || ''}</td>
-          <td>${resultado.observacoes_financeiras  || ''}</td>
-        </tr>
-      `;
-
-      // Preencher aba "Cliente"
-      document.getElementById('customer-info').innerHTML = `
-        <tr>
-          <td>${resultado.nome || resultado.nome_comprador || ''}</td>
-          <td>${resultado.email    || ''}</td>
-          <td>${resultado.telefone || ''}</td>
-          <td>${resultado.cpf      || ''}</td>
-          <td>${formatarData(resultado.data_nascimento)}</td>
-          <td>${resultado.uf       || ''}</td>
-        </tr>
-      `;
-
-      // Preencher aba "Comercial"
-      document.getElementById('commercial-info').innerHTML = `
-        <tr>
-          <td>${resultado.origem_cliente   || ''}</td>
-          <td>${resultado.cliente_de       || ''}</td>
-          <td>${resultado.efetivado_por    || ''}</td>
-          <td>${resultado.comissao_do_agente || ''}</td>
-        </tr>
-      `;
-
-    } catch (e) {
-      console.error(e);
-      alert('Erro ao carregar Pedido: ' + e.message);
+      try {
+        const url  = `https://airland.com.br/supplier/api_pedidos.php?id=${pedidoId}`;
+        const resp = await fetch(noCacheURL(url), { credentials: 'include', cache: 'no-store' });
+        if (!resp.ok) throw new Error(`Erro ao buscar pedido: ${resp.status}`);
+ 
+        const dados = await resp.json();
+        const resultado = Array.isArray(dados) ? dados[0] : dados;
+        if (!resultado || !resultado.id) {
+          throw new Error('Nenhum pedido encontrado.');
+        }
+        pedidoAtual = resultado;
+        document.getElementById('pedido-id').textContent = pedidoId;
+ 
+        // Preencher aba "Pedido"
+        document.getElementById('order-info').innerHTML = `
+          <tr>
+            <td>
+              <select>
+                <option value="Pagamento recebido"   ${resultado.status === 'Pagamento recebido' ? 'selected' : ''}>Pagamento recebido</option>
+                <option value="Envio de contrato"    ${resultado.status === 'Envio de contrato' ? 'selected' : ''}>Envio de contrato</option>
+                <option value="Aguardando Emissão"   ${resultado.status === 'Aguardando Emissão' ? 'selected' : ''}>Aguardando Emissão</option>
+                <option value="Emissão Bloqueada"    ${resultado.status === 'Emissão Bloqueada' ? 'selected' : ''}>Emissão Bloqueada</option>
+                <option value="Emitido por Completo" ${resultado.status === 'Emitido por Completo' ? 'selected' : ''}>Emitido por Completo</option>
+                <option value="Emissão Parcial"      ${resultado.status === 'Emissão Parcial' ? 'selected' : ''}>Emissão Parcial</option>
+                <option value="Envio de Brindes"     ${resultado.status === 'Envio de Brindes' ? 'selected' : ''}>Envio de Brindes</option>
+                <option value="Concluído"            ${resultado.status === 'Concluído' ? 'selected' : ''}>Concluído</option>
+              </select>
+            </td>
+            <td>${resultado.destino || ''}</td>
+            <td>${resultado.item || ''}</td>
+            <td>${formatarData(resultado.data_venda)}</td>
+          </tr>
+        `;
+ 
+        // Preencher Observações
+        document.getElementById('additional-info').innerHTML = `
+          <tr>
+            <td>${resultado.observacoes_operacionais || ''}</td>
+            <td>${resultado.observacoes_financeiras  || ''}</td>
+          </tr>
+        `;
+ 
+        // Preencher aba "Cliente"
+        document.getElementById('customer-info').innerHTML = `
+          <tr>
+            <td>${resultado.nome || resultado.nome_comprador || ''}</td>
+            <td>${resultado.email    || ''}</td>
+            <td>${resultado.telefone || ''}</td>
+            <td>${resultado.cpf      || ''}</td>
+            <td>${formatarData(resultado.data_nascimento)}</td>
+            <td>${resultado.uf       || ''}</td>
+          </tr>
+        `;
+ 
+        // Preencher aba "Comercial"
+        document.getElementById('commercial-info').innerHTML = `
+          <tr>
+            <td>${resultado.origem_cliente      || ''}</td>
+            <td>${resultado.cliente_de          || ''}</td>
+            <td>${resultado.efetivado_por       || ''}</td>
+            <td>${resultado.comissao_do_agente  || ''}</td>
+          </tr>
+        `;
+      } catch (e) {
+        console.error(e);
+        alert('Erro ao carregar Pedido: ' + e.message);
+      }
     }
-  }
-
-  /*******************************************************
-   * 5) Carregar Dados Financeiros (supplier_finance)
-   *******************************************************/
-  async function carregarFinanceiro() {
-    const pedidoId = obterIdPedido();
-    if (pedidoId === 'Não informado') return;
-
-    try {
-      const urlFin = `https://airland.com.br/supplier/api_detailspay.php?pedido_id=${pedidoId}`;
-      const respFin = await fetch(noCacheURL(urlFin), { credentials: 'include', cache: 'no-store' });
-      if (!respFin.ok) throw new Error(`Erro ao buscar finance: ${respFin.status}`);
-
-      const dadosFin     = await respFin.json();
-      financeiroAtual    = Array.isArray(dadosFin) ? (dadosFin[0] || {}) : dadosFin;
-
-      // Preencher campos Financeiro
-      document.getElementById('gatewayInput').value            = financeiroAtual.gateway          || (pedidoAtual ? pedidoAtual.gateway : '');
-      document.getElementById('dataVendaInput').value          = financeiroAtual.data_venda       || (pedidoAtual ? pedidoAtual.data_venda : '');
-      document.getElementById('valorVendaInput').value         = financeiroAtual.valor_venda      || (pedidoAtual ? pedidoAtual.valor_venda : '');
-      document.getElementById('valorRecebimentoInput').value   = financeiroAtual.valor_recebimento|| '';
-      document.getElementById('dataRecebimentoInput').value    = financeiroAtual.data_recebimento || '';
-      document.getElementById('cambioDiaInput').value          = financeiroAtual.cambio_dia       || '';
-      document.getElementById('receitaInput').value            = financeiroAtual.receita          || '';
-      document.getElementById('meioPgtoInput').value           = financeiroAtual.meio_pgto        || (pedidoAtual ? pedidoAtual.meio_pgto : '');
-      document.getElementById('bandeiraCartaoInput').value     = financeiroAtual.bandeira_cartao  || (pedidoAtual ? pedidoAtual.bandeira_cartao : '');
-      document.getElementById('parcelasInput').value           = financeiroAtual.parcelas         || (pedidoAtual ? pedidoAtual.parcelas : '');
-      document.getElementById('custoInput').value              = financeiroAtual.custo            || '';
-    } catch (e) {
-      console.error(e);
-      alert('Erro ao carregar Financeiro: ' + e.message);
+ 
+    /*******************************************************
+     * 5) Carregar Dados Financeiros (supplier_finance)
+     *******************************************************/
+    async function carregarFinanceiro() {
+      const pedidoId = obterIdPedido();
+      if (pedidoId === 'Não informado') return;
+      try {
+        const urlFin = `https://airland.com.br/supplier/api_detailspay.php?pedido_id=${pedidoId}`;
+        const respFin = await fetch(noCacheURL(urlFin), { credentials: 'include', cache: 'no-store' });
+        if (!respFin.ok) throw new Error(`Erro ao buscar finance: ${respFin.status}`);
+ 
+        const dadosFin = await respFin.json();
+        financeiroAtual = Array.isArray(dadosFin) ? (dadosFin[0] || {}) : dadosFin;
+ 
+        // Preencher campos Financeiro
+        document.getElementById('gatewayInput').value         = financeiroAtual.gateway           || (pedidoAtual ? pedidoAtual.gateway : '');
+        document.getElementById('dataVendaInput').value       = financeiroAtual.data_venda        || (pedidoAtual ? pedidoAtual.data_venda : '');
+        document.getElementById('valorVendaInput').value      = financeiroAtual.valor_venda       || (pedidoAtual ? pedidoAtual.valor_venda : '');
+        document.getElementById('valorRecebimentoInput').value= financeiroAtual.valor_recebimento || '';
+        document.getElementById('dataRecebimentoInput').value = financeiroAtual.data_recebimento  || '';
+        document.getElementById('cambioDiaInput').value       = financeiroAtual.cambio_dia        || '';
+        document.getElementById('receitaInput').value         = financeiroAtual.receita           || '';
+        document.getElementById('meioPgtoInput').value        = financeiroAtual.meio_pgto         || (pedidoAtual ? pedidoAtual.meio_pgto : '');
+        document.getElementById('bandeiraCartaoInput').value  = financeiroAtual.bandeira_cartao   || (pedidoAtual ? pedidoAtual.bandeira_cartao : '');
+        document.getElementById('parcelasInput').value        = financeiroAtual.parcelas          || (pedidoAtual ? pedidoAtual.parcelas : '');
+        document.getElementById('custoInput').value           = financeiroAtual.custo             || '';
+      } catch (e) {
+        console.error(e);
+        alert('Erro ao carregar Financeiro: ' + e.message);
+      }
     }
-  }
-
-  /*******************************************************
-   * 6) Salvar Dados Financeiros (PUT) e Atualizar Pedidos
-   *******************************************************/
-  async function salvarFinanceiro() {
-    if (!pedidoAtual) {
-      alert('Não há dados do pedido carregado para salvar Financeiro.');
-      return;
+ 
+    /*******************************************************
+     * 6) Salvar Dados Financeiros (PUT) e Atualizar Pedidos
+     *******************************************************/
+    async function salvarFinanceiro() {
+      if (!pedidoAtual) {
+        alert('Não há dados do pedido carregado.');
+        return;
+      }
+      const pedidoId          = obterIdPedido();
+      const gatewayVal        = document.getElementById('gatewayInput').value.trim();
+      const dataVendaVal      = document.getElementById('dataVendaInput').value;
+      const valorVendaVal     = parseFloat(document.getElementById('valorVendaInput').value) || 0;
+      const valorRecebVal     = parseFloat(document.getElementById('valorRecebimentoInput').value) || 0;
+      const dataRecebVal      = document.getElementById('dataRecebimentoInput').value;
+      const cambioVal         = document.getElementById('cambioDiaInput').value;
+      const receitaVal        = parseFloat(document.getElementById('receitaInput').value) || 0;
+      const meioPgtoVal       = document.getElementById('meioPgtoInput').value.trim();
+      const bandeiraCartaoVal = document.getElementById('bandeiraCartaoInput').value.trim();
+      const parcelasVal       = document.getElementById('parcelasInput').value.trim();
+      const custoVal          = parseFloat(document.getElementById('custoInput').value) || 0;
+ 
+      const financeBody = {
+        pedido_id: pedidoId,
+        gateway: gatewayVal,
+        data_venda: dataVendaVal,
+        valor_venda: valorVendaVal,
+        valor_recebimento: valorRecebVal,
+        data_recebimento: dataRecebVal,
+        cambio_dia: cambioVal,
+        receita: receitaVal,
+        meio_pgto: meioPgtoVal,
+        bandeira_cartao: bandeiraCartaoVal,
+        parcelas: parcelasVal,
+        custo: custoVal
+      };
+ 
+      try {
+        const resp = await fetch('https://airland.com.br/supplier/api_detailspay.php', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          cache: 'no-store',
+          body: JSON.stringify(financeBody)
+        });
+        if (!resp.ok) {
+          const msgErr = await resp.text();
+          throw new Error(msgErr);
+        }
+      } catch (e) {
+        console.error(e);
+        alert('Erro ao salvar Financeiro: ' + e.message);
+        return;
+      }
+ 
+      // Atualizar também em supplier_pedidos
+      const pedidosBody = {
+        id: pedidoAtual.id,
+        gateway: gatewayVal,
+        data_venda: dataVendaVal,
+        valor_venda: valorVendaVal,
+        meio_pgto: meioPgtoVal,
+        bandeira_cartao: bandeiraCartaoVal,
+        parcelas: parcelasVal
+      };
+      try {
+        const respPed = await fetch('https://airland.com.br/supplier/api_pedidos.php', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          cache: 'no-store',
+          body: JSON.stringify(pedidosBody)
+        });
+        if (!respPed.ok) {
+          const msgErr = await respPed.text();
+          throw new Error(msgErr);
+        }
+      } catch (e) {
+        console.error(e);
+        alert('Erro ao atualizar Pedidos: ' + e.message);
+        return;
+      }
+ 
+      alert('Financeiro salvo com sucesso (PUT) e Pedidos atualizado!');
+      location.reload();
     }
-
-    const pedidoId         = obterIdPedido();
-    const gatewayVal       = document.getElementById('gatewayInput').value.trim();
-    const dataVendaVal     = document.getElementById('dataVendaInput').value;
-    const valorVendaVal    = parseFloat(document.getElementById('valorVendaInput').value) || 0;
-    const valorRecebVal    = parseFloat(document.getElementById('valorRecebimentoInput').value) || 0;
-    const dataRecebVal     = document.getElementById('dataRecebimentoInput').value;
-    const cambioVal        = document.getElementById('cambioDiaInput').value;
-    const receitaVal       = parseFloat(document.getElementById('receitaInput').value) || 0;
-    const meioPgtoVal      = document.getElementById('meioPgtoInput').value.trim();
-    const bandeiraCartaoVal= document.getElementById('bandeiraCartaoInput').value.trim();
-    const parcelasVal      = document.getElementById('parcelasInput').value.trim();
-    const custoVal         = parseFloat(document.getElementById('custoInput').value) || 0;
-
-    // Montar o corpo para api_detailspay (finance)
-    const financeBody = {
-      pedido_id: pedidoId,
-      gateway: gatewayVal,
-      data_venda: dataVendaVal,
-      valor_venda: valorVendaVal,
-      valor_recebimento: valorRecebVal,
-      data_recebimento: dataRecebVal,
-      cambio_dia: cambioVal,
-      receita: receitaVal,
-      meio_pgto: meioPgtoVal,
-      bandeira_cartao: bandeiraCartaoVal,
-      parcelas: parcelasVal,
-      custo: custoVal
-    };
-
-    try {
-      // PUT em api_detailspay
-      const resp = await fetch('https://airland.com.br/supplier/api_detailspay.php', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        cache: 'no-store',
-        body: JSON.stringify(financeBody)
+ 
+    /*******************************************************
+     * 7) Carregar Planilha (supplier_planilhas)
+     *******************************************************/
+    async function carregarPlanilha() {
+      const pedidoId = obterIdPedido();
+      if (pedidoId === 'Não informado') return;
+      try {
+        const url  = `https://airland.com.br/supplier/api_planilhas.php?id_pedido=${pedidoId}`;
+        const resp = await fetch(noCacheURL(url), { credentials: 'include', cache: 'no-store' });
+        if (!resp.ok) throw new Error(`Erro ao buscar planilha: ${resp.status}`);
+ 
+        const dados = await resp.json();
+        planilhasEmMemoria = Array.isArray(dados) ? dados : [];
+ 
+        montarPlanilhaPrincipal(planilhasEmMemoria);
+        montarEmissao(planilhasEmMemoria);
+        recalcularPlanilha();
+      } catch (erro) {
+        console.error('Erro ao carregar planilha:', erro);
+      }
+    }
+ 
+    /*******************************************************
+     * 8) Carregar dados do markup (itens) e montar menu aninhado
+     *******************************************************/
+    async function loadNestedMenu() {
+      try {
+        const response = await fetch('https://airland.com.br/supplier/get_markup_data.php', {
+          credentials: 'include',
+          cache: 'no-store'
+        });
+        const data = await response.json();
+        const grouped = groupMarkupData(data);
+        return buildNestedMenuHTML(grouped);
+      } catch (error) {
+        console.error('Erro ao carregar dados do menu:', error);
+        return '';
+      }
+    }
+ 
+    /*******************************************************
+     * 8.1) Agrupar em type -> category -> name -> [dias...]
+     * (IMPORTANTE) Se o JSON real tiver "item.days" ou "item.dia", ajuste abaixo.
+     *******************************************************/
+    function groupMarkupData(data) {
+      const grouped = {};
+      data.forEach(item => {
+        const type     = item.type      || 'Tipo';
+        const category = item.category  || 'Categoria';
+        const name     = item.name_site || 'Nome';
+ 
+        // Ajuste aqui caso o campo real seja "day", "dia" ou outro:
+        // Exemplo usando "days":
+        const dayStr   = item.days ? `${item.days} dias` : '';
+ 
+        if (!grouped[type]) {
+          grouped[type] = {};
+        }
+        if (!grouped[type][category]) {
+          grouped[type][category] = {};
+        }
+        if (!grouped[type][category][name]) {
+          grouped[type][category][name] = [];
+        }
+        if (dayStr) {
+          grouped[type][category][name].push(dayStr);
+        }
       });
-      if (!resp.ok) {
-        const msgErr = await resp.text();
-        throw new Error(msgErr);
-      }
-    } catch (e) {
-      console.error(e);
-      alert('Erro ao salvar Financeiro: ' + e.message);
-      return;
+      return grouped;
     }
-
-    // Atualizar também o registro em supplier_pedidos (opcional)
-    const pedidosBody = {
-      id: pedidoAtual.id,
-      gateway: gatewayVal,
-      data_venda: dataVendaVal,
-      valor_venda: valorVendaVal,
-      meio_pgto: meioPgtoVal,
-      bandeira_cartao: bandeiraCartaoVal,
-      parcelas: parcelasVal
-    };
-    try {
-      const respPed = await fetch('https://airland.com.br/supplier/api_pedidos.php', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        cache: 'no-store',
-        body: JSON.stringify(pedidosBody)
-      });
-      if (!respPed.ok) {
-        const msgErr = await respPed.text();
-        throw new Error(msgErr);
-      }
-    } catch (e) {
-      console.error(e);
-      alert('Erro ao atualizar Pedidos: ' + e.message);
-      return;
-    }
-
-    alert('Financeiro salvo com sucesso e Pedidos atualizado!');
-    location.reload();
-  }
-
-  /*******************************************************
-   * 7) Carregar Planilha (supplier_planilhas)
-   *******************************************************/
-  async function carregarPlanilha() {
-    const pedidoId = obterIdPedido();
-    if (pedidoId === 'Não informado') return;
-
-    try {
-      const url = `https://airland.com.br/supplier/api_planilhas.php?id_pedido=${pedidoId}`;
-      const resp = await fetch(noCacheURL(url), { credentials: 'include', cache: 'no-store' });
-      if (!resp.ok) throw new Error(`Erro ao buscar planilha: ${resp.status}`);
-
-      const dados = await resp.json();
-      planilhasEmMemoria = Array.isArray(dados) ? dados : [];
-
-      // Montar a tabela principal
-      montarPlanilhaPrincipal(planilhasEmMemoria);
-
-      // (Se houver uma aba "Emissão", montarEmissao)
-      montarEmissao(planilhasEmMemoria);
-
-      // Recalcular
-      recalcularPlanilha();
-    } catch (erro) {
-      console.error('Erro ao carregar planilha:', erro);
-    }
-  }
-
-  /*******************************************************
-   * 8) Carregar dados do markup (itens) e montar menu aninhado
-   *******************************************************/
-  async function loadNestedMenu() {
-    try {
-      // Ajuste a URL se necessário:
-      const response = await fetch('https://airland.com.br/supplier/get_markup_data.php', {
-        credentials: 'include',
-        cache: 'no-store'
-      });
-      const data = await response.json();
-
-      // Ajuste aqui se na resposta o campo de dias for "days" ou "dia" etc.
-      const grouped = groupMarkupData(data);
-      return buildNestedMenuHTML(grouped);
-    } catch (error) {
-      console.error('Erro ao carregar dados do menu:', error);
-      return '';
-    }
-  }
-
-  /*******************************************************
-   * 8.1) Agrupar em type -> category -> name -> [dias...]
-   *     Atenção: verifique se no JSON as propriedades são "type", "category", "name_site", "day"
-   *******************************************************/
-  function groupMarkupData(data) {
-    const grouped = {};
-    data.forEach(item => {
-      // Ajuste estes nomes para bater com o JSON real:
-      const type     = item.type      || 'Tipo';
-      const category = item.category  || 'Categoria';
-      const name     = item.name_site || 'Nome';
-
-      // Se o JSON tiver "days" em vez de "day", troque aqui:
-      const dayStr   = item.day ? `${item.day} dias` : '';  
-      // Se vier item.days, faça: const dayStr = item.days ? `${item.days} dias` : '';
-
-      if (!grouped[type]) {
-        grouped[type] = {};
-      }
-      if (!grouped[type][category]) {
-        grouped[type][category] = {};
-      }
-      if (!grouped[type][category][name]) {
-        grouped[type][category][name] = [];
-      }
-      if (dayStr) {
-        grouped[type][category][name].push(dayStr);
-      }
-    });
-    return grouped;
-  }
-
-  /*******************************************************
-   * 8.2) Montar HTML do menu aninhado
-   *******************************************************/
-  function buildNestedMenuHTML(groupedData) {
-    let html = '<ul>';
-    for (const type in groupedData) {
-      html += `<li class="menu-item type-item">${type}<ul>`;
-      for (const category in groupedData[type]) {
-        html += `<li class="menu-item category-item">${category}<ul>`;
-        for (const name in groupedData[type][category]) {
-          // A array de "dias" (ex: ["1 dias","2 dias"])
-          const daysArray = groupedData[type][category][name];
-          let label = name;
-          if (daysArray.length) {
-            label += ` (${daysArray.join(', ')})`;
+ 
+    /*******************************************************
+     * 8.2) Montar HTML do menu aninhado
+     *******************************************************/
+    function buildNestedMenuHTML(groupedData) {
+      let html = '<ul>';
+      for (const type in groupedData) {
+        html += `<li class="menu-item type-item">${type}<ul>`;
+        for (const category in groupedData[type]) {
+          html += `<li class="menu-item category-item">${category}<ul>`;
+          for (const name in groupedData[type][category]) {
+            const daysArray = groupedData[type][category][name];
+            let label = name;
+            if (daysArray.length) {
+              label += ` (${daysArray.join(', ')})`;
+            }
+            const dataValue = `${type} - ${category} - ${name}`;
+            html += `<li class="menu-item name-item" data-value="${dataValue}">${label}</li>`;
           }
-          // Ao clicar, setamos no input "type - category - name"
-          const dataValue = `${type} - ${category} - ${name}`;
-          html += `<li class="menu-item name-item" data-value="${dataValue}">${label}</li>`;
+          html += '</ul></li>';
         }
         html += '</ul></li>';
       }
-      html += '</ul></li>';
+      html += '</ul>';
+      return html;
     }
-    html += '</ul>';
-    return html;
-  }
-
-  /*******************************************************
-   * 9) Montar Planilha Principal
-   *******************************************************/
-  function montarPlanilhaPrincipal(lista) {
-    const cont = document.getElementById('spreadsheet-info');
-    if (!cont) return;
-
-    cont.innerHTML = '';
-
-    lista.forEach(item => {
+ 
+    /*******************************************************
+     * 9) Montar Planilha Principal
+     *******************************************************/
+    function montarPlanilhaPrincipal(lista) {
+      const cont = document.getElementById('spreadsheet-info');
+      if (!cont) return;
+ 
+      cont.innerHTML = '';
+ 
+      lista.forEach(item => {
+        const rowHtml = `
+          <tr data-id="${item.id}">
+            <td style="position: relative;">
+              <input type="text" class="itensInput" name="itens"
+                    value="${item.produto || ''}"
+                    placeholder="Selecione um item..."
+                    autocomplete="off">
+              <div class="nested-menu" id="nestedMenu-${item.id}"></div>
+            </td>
+            <td><input type="date" name="data_uso" value="${item.data || ''}"></td>
+            <td>
+              <select name="idade">
+                <option value="ADT" ${item.idade === 'ADT' ? 'selected' : ''}>ADT</option>
+                <option value="CHD" ${item.idade === 'CHD' ? 'selected' : ''}>CHD</option>
+              </select>
+            </td>
+            <td><input type="number" name="valorUsd" value="${item.net_usd || 0}"></td>
+            <td><input type="number" name="lobista" value="${item.lobista || 0}"></td>
+            <td><input type="number" name="numero" value="${item.quantidade || 0}"></td>
+            <td name="totalDollar">${item.total_usd || 0}</td>
+            <td name="netReal">${item.net_brl || 0}</td>
+            <td><input type="number" name="margem" step="0.01" value="${item.margem || 0}"></td>
+            <td name="totalPix">${item.total_pix || 0}</td>
+            <td><input type="number" name="taxa" step="0.01" value="${item.taxa || 0}"></td>
+            <td name="total10x">${item.total_10x || 0}</td>
+            <td>
+              <button class="delete-row-button" onclick="excluirLinhaPlanilha(this)">
+                <i class="lni lni-trash-can"></i>
+              </button>
+            </td>
+          </tr>
+        `;
+        cont.insertAdjacentHTML('beforeend', rowHtml);
+ 
+        // Carregar menu aninhado
+        loadNestedMenuForRow(item.id);
+      });
+ 
+      // Listeners para recalcular
+      document.querySelectorAll('#spreadsheet-info tr input, #spreadsheet-info tr select')
+        .forEach(el => el.addEventListener('input', recalcularPlanilha));
+    }
+ 
+    /*******************************************************
+     * 9.1) Carregar e injetar menu aninhado em cada linha
+     *******************************************************/
+    async function loadNestedMenuForRow(rowId) {
+      const menuHTML = await loadNestedMenu();
+      const menuContainer = document.getElementById(`nestedMenu-${rowId}`);
+      if (!menuContainer) return;
+ 
+      menuContainer.innerHTML = menuHTML;
+ 
+      const itensInput = menuContainer.parentElement.querySelector('.itensInput');
+      itensInput.addEventListener('focus', () => {
+        menuContainer.style.display = 'block';
+      });
+      itensInput.addEventListener('blur', () => {
+        setTimeout(() => {
+          menuContainer.style.display = 'none';
+        }, 200);
+      });
+      menuContainer.addEventListener('click', (e) => {
+        if (e.target && e.target.classList.contains('name-item')) {
+          itensInput.value = e.target.getAttribute('data-value');
+          menuContainer.style.display = 'none';
+        }
+      });
+    }
+ 
+    /*******************************************************
+     * 9.2) Montar Emissão (se existir aba #tabContent-6)
+     *******************************************************/
+    function montarEmissao(lista) {
+      // Se quiser popular a aba de Emissão, faça aqui
+      // Exemplo: document.getElementById('emission-info')...
+    }
+ 
+    /*******************************************************
+     * 10) Adicionar Linha à Planilha
+     *******************************************************/
+    function adicionarLinha() {
+      const cont = document.getElementById('spreadsheet-info');
+      if (!cont) return;
+ 
+      const uniqueId = 'new-' + Date.now(); // ID temporário
+ 
       const rowHtml = `
-        <tr data-id="${item.id}">
+        <tr data-id="">
           <td style="position: relative;">
             <input type="text" class="itensInput" name="itens"
-                  value="${item.produto || ''}"
                   placeholder="Selecione um item..."
                   autocomplete="off">
-            <div class="nested-menu" id="nestedMenu-${item.id}"></div>
+            <div class="nested-menu" id="nestedMenu-${uniqueId}"></div>
           </td>
-          <td><input type="date" name="data_uso" value="${item.data || ''}"></td>
+          <td><input type="date" name="data_uso"></td>
           <td>
             <select name="idade">
-              <option value="ADT" ${item.idade === 'ADT' ? 'selected' : ''}>ADT</option>
-              <option value="CHD" ${item.idade === 'CHD' ? 'selected' : ''}>CHD</option>
+              <option value="ADT">ADT</option>
+              <option value="CHD">CHD</option>
             </select>
           </td>
-          <td><input type="number" name="valorUsd" value="${item.net_usd || 0}"></td>
-          <td><input type="number" name="lobista" value="${item.lobista || 0}"></td>
-          <td><input type="number" name="numero" value="${item.quantidade || 0}"></td>
-          <td name="totalDollar">${item.total_usd || 0}</td>
-          <td name="netReal">${item.net_brl || 0}</td>
-          <td><input type="number" name="margem" step="0.01" value="${item.margem || 0}"></td>
-          <td name="totalPix">${item.total_pix || 0}</td>
-          <td><input type="number" name="taxa" step="0.01" value="${item.taxa || 0}"></td>
-          <td name="total10x">${item.total_10x || 0}</td>
+          <td><input type="number" name="valorUsd"></td>
+          <td><input type="number" name="lobista"></td>
+          <td><input type="number" name="numero"></td>
+          <td name="totalDollar">0.00</td>
+          <td name="netReal">0.00</td>
+          <td><input type="number" name="margem" step="0.01"></td>
+          <td name="totalPix">0.00</td>
+          <td><input type="number" name="taxa" step="0.01"></td>
+          <td name="total10x">0.00</td>
           <td>
             <button class="delete-row-button" onclick="excluirLinhaPlanilha(this)">
               <i class="lni lni-trash-can"></i>
@@ -1602,416 +1645,296 @@
         </tr>
       `;
       cont.insertAdjacentHTML('beforeend', rowHtml);
-
-      // Carregar menu aninhado para cada linha
-      loadNestedMenuForRow(item.id);
-    });
-
-    // Listeners para recalcular
-    document.querySelectorAll('#spreadsheet-info tr input, #spreadsheet-info tr select')
-      .forEach(el => el.addEventListener('input', recalcularPlanilha));
-  }
-
-  /*******************************************************
-   * 9.1) Carregar e injetar menu aninhado em cada linha
-   *******************************************************/
-  async function loadNestedMenuForRow(rowId) {
-    const menuHTML     = await loadNestedMenu();
-    const menuContainer= document.getElementById(`nestedMenu-${rowId}`);
-    if (!menuContainer) return;
-
-    menuContainer.innerHTML = menuHTML;
-
-    const itensInput = menuContainer.parentElement.querySelector('.itensInput');
-    itensInput.addEventListener('focus', () => {
-      menuContainer.style.display = 'block';
-    });
-    itensInput.addEventListener('blur', () => {
-      setTimeout(() => {
-        menuContainer.style.display = 'none';
-      }, 200);
-    });
-    menuContainer.addEventListener('click', (e) => {
-      if (e.target && e.target.classList.contains('name-item')) {
-        itensInput.value = e.target.getAttribute('data-value');
-        menuContainer.style.display = 'none';
-      }
-    });
-  }
-
-  /*******************************************************
-   * 9.2) Montar Emissão (se existir uma aba #tabContent-6)
-   *******************************************************/
-  function montarEmissao(lista) {
-    // Se houver uma tabela de emissão, crie-a aqui
-    // Exemplo: preenche #emission-info
-  }
-
-  /*******************************************************
-   * 10) Adicionar Linha à Planilha
-   *******************************************************/
-  function adicionarLinha() {
-    const cont = document.getElementById('spreadsheet-info');
-    if (!cont) return;
-
-    const uniqueId = 'new-' + Date.now(); // ID temporário para a linha nova
-
-    const rowHtml = `
-      <tr data-id="">
-        <td style="position: relative;">
-          <input type="text" class="itensInput" name="itens"
-                placeholder="Selecione um item..."
-                autocomplete="off">
-          <div class="nested-menu" id="nestedMenu-${uniqueId}"></div>
-        </td>
-        <td><input type="date" name="data_uso"></td>
-        <td>
-          <select name="idade">
-            <option value="ADT">ADT</option>
-            <option value="CHD">CHD</option>
-          </select>
-        </td>
-        <td><input type="number" name="valorUsd"></td>
-        <td><input type="number" name="lobista"></td>
-        <td><input type="number" name="numero"></td>
-        <td name="totalDollar">0.00</td>
-        <td name="netReal">0.00</td>
-        <td><input type="number" name="margem" step="0.01"></td>
-        <td name="totalPix">0.00</td>
-        <td><input type="number" name="taxa" step="0.01"></td>
-        <td name="total10x">0.00</td>
-        <td>
-          <button class="delete-row-button" onclick="excluirLinhaPlanilha(this)">
-            <i class="lni lni-trash-can"></i>
-          </button>
-        </td>
-      </tr>
-    `;
-    cont.insertAdjacentHTML('beforeend', rowHtml);
-
-    const newRow = cont.lastElementChild;
-    newRow.querySelectorAll('input, select').forEach(el => {
-      el.addEventListener('input', recalcularPlanilha);
-    });
-
-    // Carregar menu aninhado para a nova linha
-    loadNestedMenuForRow(uniqueId);
-  }
-
-  /*******************************************************
-   * 11) Excluir Linha da Planilha
-   *******************************************************/
-  async function excluirLinhaPlanilha(botao) {
-    const row        = botao.closest('tr');
-    const planilhaId = row.getAttribute('data-id');
-
-    // Se não tiver ID, é uma linha nova ainda não salva no BD
-    if (!planilhaId) {
-      row.remove();
-      recalcularPlanilha();
-      return;
-    }
-
-    if (!confirm('Deseja excluir esta linha definitivamente?')) return;
-
-    try {
-      const resp = await fetch('https://airland.com.br/supplier/api_planilhas.php', {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        cache: 'no-store',
-        body: JSON.stringify({ id: planilhaId })
+ 
+      const newRow = cont.lastElementChild;
+      newRow.querySelectorAll('input, select').forEach(el => {
+        el.addEventListener('input', recalcularPlanilha);
       });
-      if (!resp.ok) {
-        const msgErr = await resp.text();
-        throw new Error(msgErr);
-      }
-      row.remove();
-      recalcularPlanilha();
-      alert('Linha excluída com sucesso!');
-    } catch (e) {
-      console.error(e);
-      alert('Erro ao excluir: ' + e.message);
+ 
+      loadNestedMenuForRow(uniqueId);
     }
-  }
-
-  /*******************************************************
-   * 12) Recalcular Valores da Planilha
-   *******************************************************/
-  function recalcularPlanilha() {
-    const dolarMagic = parseFloat(document.getElementById('dolar-magic').textContent) || 0;
-
-    document.querySelectorAll('#spreadsheet-info tr').forEach(linha => {
-      const valorUsd  = parseFloat(linha.querySelector('[name="valorUsd"]')?.value) || 0;
-      const lobista   = parseFloat(linha.querySelector('[name="lobista"]')?.value) || 0;
-      const numero    = parseFloat(linha.querySelector('[name="numero"]')?.value) || 0;
-      const margemPct = (parseFloat(linha.querySelector('[name="margem"]')?.value) || 0) / 100;
-      const taxaPct   = (parseFloat(linha.querySelector('[name="taxa"]')?.value) || 0) / 100;
-
-      const totalDollar = (valorUsd + lobista) * numero;
-      const netReal     = totalDollar * dolarMagic;
-
-      // Se a margem for, p.ex., 30 => 30%, subimos o valor Pix
-      // totalPix = netReal / (1 - 0.30) => netReal / 0.70
-      let totalPix  = netReal;
-      if (margemPct > 0 && margemPct < 1) {
-        totalPix = netReal / (1 - margemPct);
+ 
+    /*******************************************************
+     * 11) Excluir Linha da Planilha
+     *******************************************************/
+    async function excluirLinhaPlanilha(botao) {
+      const row = botao.closest('tr');
+      const planilhaId = row.getAttribute('data-id');
+ 
+      if (!planilhaId) {
+        // Linha nova, não salva no BD
+        row.remove();
+        recalcularPlanilha();
+        return;
       }
-
-      // Similar para 10x, usando taxa
-      let total10x = totalPix;
-      if (taxaPct > 0 && taxaPct < 1) {
-        total10x = totalPix / (1 - taxaPct);
-      }
-
-      linha.querySelector('[name="totalDollar"]').textContent = totalDollar.toFixed(2);
-      linha.querySelector('[name="netReal"]').textContent      = netReal.toFixed(2);
-      linha.querySelector('[name="totalPix"]').textContent     = totalPix.toFixed(2);
-      linha.querySelector('[name="total10x"]').textContent     = total10x.toFixed(2);
-    });
-
-    somarTotaisPlanilha();
-  }
-
-  /*******************************************************
-   * 13) Somar Totais da Planilha
-   *******************************************************/
-  function somarTotaisPlanilha() {
-    let totalDollar  = 0;
-    let totalNetReal = 0;
-    let totalPix     = 0;
-    let total10x     = 0;
-
-    document.querySelectorAll('#spreadsheet-info tr').forEach(linha => {
-      totalDollar  += parseFloat(linha.querySelector('[name="totalDollar"]')?.textContent) || 0;
-      totalNetReal += parseFloat(linha.querySelector('[name="netReal"]').textContent)      || 0;
-      totalPix     += parseFloat(linha.querySelector('[name="totalPix"]').textContent)     || 0;
-      total10x     += parseFloat(linha.querySelector('[name="total10x"]').textContent)     || 0;
-    });
-
-    document.getElementById('resumo-total-dollar').textContent = totalDollar.toFixed(2);
-    document.getElementById('resumo-net-real').textContent     = totalNetReal.toFixed(2);
-    document.getElementById('resumo-total-pix').textContent    = totalPix.toFixed(2);
-    document.getElementById('resumo-total-10x').textContent    = total10x.toFixed(2);
-  }
-
-  /*******************************************************
-   * 14) Atualizar Dólar Magic ao alterar câmbio
-   *******************************************************/
-  function atualizarDolarMagic() {
-    const dolarCambio = parseFloat(document.getElementById('dolar-cambio').value) || 0;
-
-    // Exemplo: "Dólar Magic" = câmbio do dia + 0.98% => Ajuste a fórmula se quiser
-    const dolarMagic = dolarCambio * 1.0098;
-
-    document.getElementById('dolar-magic').textContent = dolarMagic.toFixed(2);
-
-    // Recalcular planilha ao mudar
-    recalcularPlanilha();
-  }
-
-  /*******************************************************
-   * 15) Salvar Planilha (POST para novas linhas, PUT para existentes)
-   *******************************************************/
-  async function salvarPlanilha() {
-    const pedidoId = obterIdPedido();
-    if (pedidoId === 'Não informado') {
-      alert('Pedido não encontrado para salvar planilha.');
-      return;
-    }
-
-    const dolarCambio = parseFloat(document.getElementById('dolar-cambio').value) || 0;
-    const dolarMagic  = parseFloat(document.getElementById('dolar-magic').textContent) || 0;
-
-    const rows = document.querySelectorAll('#spreadsheet-info tr');
-    const novos = [];
-    const existentes = [];
-
-    rows.forEach(linha => {
-      const planilhaId = linha.getAttribute('data-id') || '';
-      const itens      = (linha.querySelector('[name="itens"]')?.value || '').trim();
-      const dataUso    = linha.querySelector('[name="data_uso"]')?.value || '';
-      const idade      = linha.querySelector('[name="idade"]')?.value || 'ADT';
-      const valorUsd   = parseFloat(linha.querySelector('[name="valorUsd"]')?.value) || 0;
-      const lobista    = parseFloat(linha.querySelector('[name="lobista"]')?.value) || 0;
-      const numero     = parseFloat(linha.querySelector('[name="numero"]')?.value) || 0;
-      const margemPct  = parseFloat(linha.querySelector('[name="margem"]')?.value) || 0;
-      const taxaPct    = parseFloat(linha.querySelector('[name="taxa"]')?.value) || 0;
-
-      const totalDollar = (valorUsd + lobista) * numero;
-      const netBrl      = totalDollar * dolarMagic;
-
-      const totalPix = (margemPct < 100)
-        ? netBrl / (1 - (margemPct / 100))
-        : netBrl;
-
-      const total10x = (taxaPct < 100)
-        ? totalPix / (1 - (taxaPct / 100))
-        : totalPix;
-
-      const obj = {
-        id_pedido: pedidoId,
-        produto: itens,
-        data: dataUso,
-        idade,
-        net_usd: valorUsd,
-        lobista,
-        quantidade: numero,
-        total_usd: totalDollar,
-        net_brl: netBrl,
-        margem: margemPct,
-        total_pix: totalPix,
-        taxa: taxaPct,
-        total_10x: total10x,
-        dolar_cambio: dolarCambio,
-        dolar_magic: dolarMagic
-      };
-
-      if (planilhaId) {
-        // Se o planilhaId existe, é um registro já salvo (PUT)
-        const original = planilhasEmMemoria.find(p => String(p.id) === planilhaId);
-        if (original) {
-          obj.id = planilhaId;
-          existentes.push(obj);
-        } else {
-          // Se cair aqui, é um caso raro em que o ID não está na planilhaEmMemoria
-          // mas a <tr> tem data-id. Normalmente não ocorre, mas deixamos cair em "novos"
-          novos.push(obj);
-        }
-      } else {
-        // Se não tem planilhaId, é um registro novo
-        novos.push(obj);
-      }
-    });
-
-    // POST para novos
-    if (novos.length > 0) {
+ 
+      if (!confirm('Deseja excluir esta linha?')) return;
       try {
-        const respPost = await fetch('https://airland.com.br/supplier/api_planilhas.php', {
-          method: 'POST',
+        const resp = await fetch('https://airland.com.br/supplier/api_planilhas.php', {
+          method: 'DELETE',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
           cache: 'no-store',
-          body: JSON.stringify(novos)
+          body: JSON.stringify({ id: planilhaId })
         });
-        if (!respPost.ok) {
-          throw new Error(`Erro no POST Planilha: ${await respPost.text()}`);
+        if (!resp.ok) {
+          const msgErr = await resp.text();
+          throw new Error(msgErr);
         }
+        row.remove();
+        recalcularPlanilha();
+        alert('Linha excluída com sucesso!');
       } catch (e) {
         console.error(e);
-        alert('Erro ao salvar planilha (POST): ' + e.message);
-        return;
+        alert('Erro ao excluir: ' + e.message);
       }
     }
-
-    // PUT para existentes
-    if (existentes.length > 0) {
+ 
+    /*******************************************************
+     * 12) Recalcular Valores da Planilha
+     *******************************************************/
+    function recalcularPlanilha() {
+      const dolarMagic = parseFloat(document.getElementById('dolar-magic').textContent) || 0;
+ 
+      document.querySelectorAll('#spreadsheet-info tr').forEach(linha => {
+        const valorUsd  = parseFloat(linha.querySelector('[name="valorUsd"]')?.value) || 0;
+        const lobista   = parseFloat(linha.querySelector('[name="lobista"]')?.value) || 0;
+        const numero    = parseFloat(linha.querySelector('[name="numero"]')?.value) || 0;
+        const margemPct = (parseFloat(linha.querySelector('[name="margem"]')?.value) || 0) / 100;
+        const taxaPct   = (parseFloat(linha.querySelector('[name="taxa"]')?.value) || 0) / 100;
+ 
+        const totalDollar = (valorUsd + lobista) * numero;
+        const netReal     = totalDollar * dolarMagic;
+ 
+        let totalPix  = netReal;
+        if (margemPct > 0 && margemPct < 1) {
+          totalPix = netReal / (1 - margemPct);
+        }
+ 
+        let total10x = totalPix;
+        if (taxaPct > 0 && taxaPct < 1) {
+          total10x = totalPix / (1 - taxaPct);
+        }
+ 
+        linha.querySelector('[name="totalDollar"]').textContent = totalDollar.toFixed(2);
+        linha.querySelector('[name="netReal"]').textContent      = netReal.toFixed(2);
+        linha.querySelector('[name="totalPix"]').textContent     = totalPix.toFixed(2);
+        linha.querySelector('[name="total10x"]').textContent     = total10x.toFixed(2);
+      });
+      somarTotaisPlanilha();
+    }
+ 
+    /*******************************************************
+     * 13) Somar Totais da Planilha
+     *******************************************************/
+    function somarTotaisPlanilha() {
+      let totalDollar  = 0;
+      let totalNetReal = 0;
+      let totalPix     = 0;
+      let total10x     = 0;
+ 
+      document.querySelectorAll('#spreadsheet-info tr').forEach(linha => {
+        totalDollar  += parseFloat(linha.querySelector('[name="totalDollar"]')?.textContent) || 0;
+        totalNetReal += parseFloat(linha.querySelector('[name="netReal"]').textContent)      || 0;
+        totalPix     += parseFloat(linha.querySelector('[name="totalPix"]').textContent)     || 0;
+        total10x     += parseFloat(linha.querySelector('[name="total10x"]').textContent)     || 0;
+      });
+ 
+      document.getElementById('resumo-total-dollar').textContent = totalDollar.toFixed(2);
+      document.getElementById('resumo-net-real').textContent     = totalNetReal.toFixed(2);
+      document.getElementById('resumo-total-pix').textContent    = totalPix.toFixed(2);
+      document.getElementById('resumo-total-10x').textContent    = total10x.toFixed(2);
+    }
+ 
+    /*******************************************************
+     * 14) Atualizar Dólar Magic
+     *******************************************************/
+    function atualizarDolarMagic() {
+      const dolarCambio = parseFloat(document.getElementById('dolar-cambio').value) || 0;
+      const dolarMagic  = dolarCambio * 1.0098; // Ajuste a fórmula conforme necessário
+      document.getElementById('dolar-magic').textContent = dolarMagic.toFixed(2);
+      recalcularPlanilha();
+    }
+ 
+    /*******************************************************
+     * 15) Salvar Planilha (POST para novos e PUT para existentes)
+     *******************************************************/
+    async function salvarPlanilha() {
+      const pedidoId = obterIdPedido();
+      if (pedidoId === 'Não informado') {
+        alert('Pedido não encontrado para salvar planilha.');
+        return;
+      }
+      const dolarCambio = parseFloat(document.getElementById('dolar-cambio').value) || 0;
+      const dolarMagic  = parseFloat(document.getElementById('dolar-magic').textContent) || 0;
+ 
+      const rows = document.querySelectorAll('#spreadsheet-info tr');
+      const novos = [];
+      const existentes = [];
+ 
+      rows.forEach(linha => {
+        const planilhaId = linha.getAttribute('data-id') || '';
+        const itens      = (linha.querySelector('[name="itens"]')?.value || '').trim();
+        const dataUso    = linha.querySelector('[name="data_uso"]')?.value || '';
+        const idade      = linha.querySelector('[name="idade"]')?.value || 'ADT';
+        const valorUsd   = parseFloat(linha.querySelector('[name="valorUsd"]')?.value) || 0;
+        const lobista    = parseFloat(linha.querySelector('[name="lobista"]')?.value) || 0;
+        const numero     = parseFloat(linha.querySelector('[name="numero"]')?.value) || 0;
+        const margemPct  = parseFloat(linha.querySelector('[name="margem"]')?.value) || 0;
+        const taxaPct    = parseFloat(linha.querySelector('[name="taxa"]')?.value) || 0;
+ 
+        const totalDollar = (valorUsd + lobista) * numero;
+        const netBrl      = totalDollar * dolarMagic;
+        const totalPix    = (margemPct < 100) ? netBrl / (1 - margemPct / 100) : netBrl;
+        const total10x    = (taxaPct < 100)   ? totalPix / (1 - taxaPct / 100) : totalPix;
+ 
+        const obj = {
+          id_pedido: pedidoId,
+          produto: itens,
+          data: dataUso,
+          idade,
+          net_usd: valorUsd,
+          lobista,
+          quantidade: numero,
+          total_usd: totalDollar,
+          net_brl: netBrl,
+          margem: margemPct,
+          total_pix: totalPix,
+          taxa: taxaPct,
+          total_10x: total10x,
+          dolar_cambio: dolarCambio,
+          dolar_magic: dolarMagic
+        };
+ 
+        if (planilhaId) {
+          const original = planilhasEmMemoria.find(p => String(p.id) === planilhaId);
+          if (original) {
+            obj.id = planilhaId;
+            existentes.push(obj);
+          } else {
+            novos.push(obj);
+          }
+        } else {
+          novos.push(obj);
+        }
+      });
+ 
+      // POST para novos
+      if (novos.length > 0) {
+        try {
+          const respPost = await fetch('https://airland.com.br/supplier/api_planilhas.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            cache: 'no-store',
+            body: JSON.stringify(novos)
+          });
+          if (!respPost.ok) {
+            throw new Error(`Erro no POST Planilha: ${await respPost.text()}`);
+          }
+        } catch (e) {
+          console.error(e);
+          alert('Erro ao salvar planilha (POST): ' + e.message);
+          return;
+        }
+      }
+ 
+      // PUT para existentes
+      if (existentes.length > 0) {
+        try {
+          const respPut = await fetch('https://airland.com.br/supplier/api_planilhas.php', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            cache: 'no-store',
+            body: JSON.stringify(existentes)
+          });
+          if (!respPut.ok) {
+            throw new Error(`Erro no PUT Planilha: ${await respPut.text()}`);
+          }
+        } catch (e) {
+          console.error(e);
+          alert('Erro ao salvar planilha (PUT): ' + e.message);
+          return;
+        }
+      }
+ 
+      alert('Planilha salva com sucesso!');
+      location.reload();
+    }
+ 
+    /*******************************************************
+     * 16) Salvar Emissão (opcional)
+     *******************************************************/
+    async function salvarEmissao() {
+      const pedidoId = obterIdPedido();
+      if (pedidoId === 'Não informado') return;
+ 
+      const updates = [];
+      // Exemplo: se tivéssemos #emission-info
+      document.querySelectorAll('#emission-info tr').forEach(linha => {
+        const planilhaId = linha.getAttribute('data-id');
+        if (!planilhaId) return;
+ 
+        const original = planilhasEmMemoria.find(x => String(x.id) === planilhaId);
+        if (!original) return;
+ 
+        const dataPag = linha.querySelector('[name="dataPagamento"]')?.value || '';
+        const ident   = linha.querySelector('[name="identificador"]')?.value || '';
+        const fornec  = linha.querySelector('[name="fornecedor"]')?.value || '';
+        const stat    = linha.querySelector('[name="status"]')?.value || '';
+ 
+        updates.push({
+          ...original,
+          data_pagamento: dataPag,
+          identificador: ident,
+          fornecedor: fornec,
+          status: stat
+        });
+      });
+ 
+      if (!updates.length) {
+        alert('Nenhuma linha para atualizar Emissão.');
+        return;
+      }
       try {
         const respPut = await fetch('https://airland.com.br/supplier/api_planilhas.php', {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
           cache: 'no-store',
-          body: JSON.stringify(existentes)
+          body: JSON.stringify(updates)
         });
         if (!respPut.ok) {
-          throw new Error(`Erro no PUT Planilha: ${await respPut.text()}`);
+          throw new Error(`Erro ao salvar Emissão: ${await respPut.text()}`);
         }
+        alert('Emissão salva com sucesso!');
+        location.reload();
       } catch (e) {
         console.error(e);
-        alert('Erro ao salvar planilha (PUT): ' + e.message);
-        return;
+        alert('Erro ao salvar Emissão: ' + e.message);
       }
     }
-
-    alert('Planilha salva com sucesso!');
-    location.reload();
-  }
-
-  /*******************************************************
-   * 16) Salvar Emissão (opcional) - se tiver Aba #tabContent-6
-   *******************************************************/
-  async function salvarEmissao() {
-    // Exemplo se tiver tabela #emission-info
-    // (ajuste conforme seus campos)
-    const pedidoId = obterIdPedido();
-    if (pedidoId === 'Não informado') return;
-
-    const updates = [];
-    document.querySelectorAll('#emission-info tr').forEach(linha => {
-      const planilhaId = linha.getAttribute('data-id');
-      if (!planilhaId) return;
-
-      const original = planilhasEmMemoria.find(x => String(x.id) === planilhaId);
-      if (!original) return;
-
-      const dataPag   = linha.querySelector('[name="dataPagamento"]')?.value || '';
-      const ident     = linha.querySelector('[name="identificador"]')?.value || '';
-      const fornec    = linha.querySelector('[name="fornecedor"]')?.value || '';
-      const stat      = linha.querySelector('[name="status"]')?.value || '';
-
-      updates.push({
-        ...original,
-        data_pagamento: dataPag,
-        identificador: ident,
-        fornecedor: fornec,
-        status: stat
-      });
+ 
+    /*******************************************************
+     * 17) Inicialização
+     *******************************************************/
+    document.addEventListener('DOMContentLoaded', async () => {
+      await verificarSessao();
+      await carregarDetalhesPedido();
+      await carregarFinanceiro();
+      await carregarPlanilha();
+ 
+      const inputDolarCambio = document.getElementById('dolar-cambio');
+      if (inputDolarCambio) {
+        inputDolarCambio.addEventListener('input', atualizarDolarMagic);
+      }
+ 
+      const btnAddLinha = document.getElementById('add-row-button');
+      if (btnAddLinha) {
+        btnAddLinha.addEventListener('click', adicionarLinha);
+      }
     });
-
-    if (!updates.length) {
-      alert('Nenhuma linha para atualizar Emissão.');
-      return;
-    }
-
-    try {
-      const respPut = await fetch('https://airland.com.br/supplier/api_planilhas.php', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        cache: 'no-store',
-        body: JSON.stringify(updates)
-      });
-      if (!respPut.ok) {
-        throw new Error(`Erro ao salvar Emissão: ${await respPut.text()}`);
-      }
-      alert('Emissão salva com sucesso!');
-      location.reload();
-    } catch (e) {
-      console.error(e);
-      alert('Erro ao salvar Emissão: ' + e.message);
-    }
-  }
-
-  /*******************************************************
-   * 17) Inicialização (DOMContentLoaded)
-   *******************************************************/
-  document.addEventListener('DOMContentLoaded', async () => {
-    // 1) Verifica se está logado
-    await verificarSessao();
-
-    // 2) Carrega detalhes do pedido
-    await carregarDetalhesPedido();
-
-    // 3) Carrega financeiro
-    await carregarFinanceiro();
-
-    // 4) Carrega planilha
-    await carregarPlanilha();
-
-    // 5) Configurar input do câmbio
-    const inputDolarCambio = document.getElementById('dolar-cambio');
-    if (inputDolarCambio) {
-      inputDolarCambio.addEventListener('input', atualizarDolarMagic);
-    }
-
-    // 6) Botão de adicionar linha
-    const btnAddLinha = document.getElementById('add-row-button');
-    if (btnAddLinha) {
-      btnAddLinha.addEventListener('click', adicionarLinha);
-    }
-  });
-
-  </script>
-</body>
-</html>
+   </script>
+ </body>
+ </html>
