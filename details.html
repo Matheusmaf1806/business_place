@@ -1164,6 +1164,7 @@
         if (!dados.logged_in) {
           window.location.replace("https://businessplace.airland.com.br/signin.html");
         } else {
+          // Exibe a página somente após confirmar que está logado
           document.body.style.display = "block";
         }
       } catch (erro) {
@@ -1181,7 +1182,7 @@
     }
   
     /*******************************************************
-     * 3) Formatar Data
+     * 3) Formatar Data (ex.: "2025-03-10" -> "10/03/2025")
      *******************************************************/
     function formatarData(dataStr) {
       if (!dataStr) return '';
@@ -1189,14 +1190,14 @@
       return isNaN(d) ? '' : d.toLocaleDateString('pt-BR');
     }
   
-    // Variáveis globais para armazenar os dados
+    // Variáveis globais para armazenar dados
     let pedidoAtual = null;      // Dados de supplier_pedidos (campo "id")
     let financeiroAtual = null;  // Dados de supplier_finance (campo "pedido_id")
     let planilhasEmMemoria = []; // Dados de supplier_planilhas (campo "id_pedido")
   
     /*******************************************************
      * 4) Carregar Detalhes do Pedido (supplier_pedidos)
-     * Se o retorno for um array, pega o primeiro elemento.
+     *    - Se o retorno for array, pega o primeiro elemento
      *******************************************************/
     async function carregarDetalhesPedido() {
       const pedidoId = obterIdPedido();
@@ -1205,22 +1206,23 @@
         return;
       }
       try {
-        // Para supplier_pedidos usamos o parâmetro "id"
         const url = `https://airland.com.br/supplier/api_pedidos.php?id=${pedidoId}`;
         const resp = await fetch(url, { credentials: 'include' });
         if (!resp.ok) {
           throw new Error(`Erro ao buscar pedido: ${resp.status}`);
         }
         const dados = await resp.json();
-        // Se o retorno for um array, utiliza o primeiro elemento
-        let resultado = Array.isArray(dados) ? dados[0] : dados;
+  
+        // Se vier array, pega o primeiro
+        const resultado = Array.isArray(dados) ? dados[0] : dados;
         if (!resultado || !resultado.id) {
           throw new Error('Nenhum pedido encontrado.');
         }
+  
         pedidoAtual = resultado;
         document.getElementById('pedido-id').textContent = pedidoId;
   
-        // Preencher Aba 1: Pedido
+        // Preencher Aba 1 (Pedido)
         document.getElementById('order-info').innerHTML = `
           <tr>
             <td>
@@ -1241,7 +1243,7 @@
           </tr>
         `;
   
-        // Preencher Observações
+        // Observações
         document.getElementById('additional-info').innerHTML = `
           <tr>
             <td>${pedidoAtual.observacoes_operacionais || ''}</td>
@@ -1249,7 +1251,7 @@
           </tr>
         `;
   
-        // Preencher Aba 2: Cliente
+        // Aba 2 (Cliente)
         document.getElementById('customer-info').innerHTML = `
           <tr>
             <td>${pedidoAtual.nome || pedidoAtual.nome_comprador || ''}</td>
@@ -1261,7 +1263,7 @@
           </tr>
         `;
   
-        // Preencher Aba 4: Comercial
+        // Aba 4 (Comercial)
         document.getElementById('commercial-info').innerHTML = `
           <tr>
             <td>${pedidoAtual.origem_cliente || ''}</td>
@@ -1289,19 +1291,32 @@
           throw new Error(`Erro ao buscar finance: ${respFin.status}`);
         }
         const dadosFin = await respFin.json();
+        // Se vier array, pega o primeiro
         financeiroAtual = Array.isArray(dadosFin) ? (dadosFin[0] || {}) : dadosFin;
-        // Preencher os campos de financeiro
-        document.getElementById('gatewayInput').value = financeiroAtual.gateway || (pedidoAtual ? pedidoAtual.gateway : '');
-        document.getElementById('dataVendaInput').value = financeiroAtual.data_venda || (pedidoAtual ? pedidoAtual.data_venda : '');
-        document.getElementById('valorVendaInput').value = financeiroAtual.valor_venda || (pedidoAtual ? pedidoAtual.valor_venda : '');
-        document.getElementById('valorRecebimentoInput').value = financeiroAtual.valor_recebimento || '';
-        document.getElementById('dataRecebimentoInput').value = financeiroAtual.data_recebimento || '';
-        document.getElementById('cambioDiaInput').value = financeiroAtual.cambio_dia || '';
-        document.getElementById('receitaInput').value = financeiroAtual.receita || '';
-        document.getElementById('meioPgtoInput').value = financeiroAtual.meio_pgto || (pedidoAtual ? pedidoAtual.meio_pgto : '');
-        document.getElementById('bandeiraCartaoInput').value = financeiroAtual.bandeira_cartao || (pedidoAtual ? pedidoAtual.bandeira_cartao : '');
-        document.getElementById('parcelasInput').value = financeiroAtual.parcelas || (pedidoAtual ? pedidoAtual.parcelas : '');
-        document.getElementById('custoInput').value = financeiroAtual.custo || '';
+  
+        // Preencher campos de financeiro
+        document.getElementById('gatewayInput').value =
+          financeiroAtual.gateway || (pedidoAtual ? pedidoAtual.gateway : '');
+        document.getElementById('dataVendaInput').value =
+          financeiroAtual.data_venda || (pedidoAtual ? pedidoAtual.data_venda : '');
+        document.getElementById('valorVendaInput').value =
+          financeiroAtual.valor_venda || (pedidoAtual ? pedidoAtual.valor_venda : '');
+        document.getElementById('valorRecebimentoInput').value =
+          financeiroAtual.valor_recebimento || '';
+        document.getElementById('dataRecebimentoInput').value =
+          financeiroAtual.data_recebimento || '';
+        document.getElementById('cambioDiaInput').value =
+          financeiroAtual.cambio_dia || '';
+        document.getElementById('receitaInput').value =
+          financeiroAtual.receita || '';
+        document.getElementById('meioPgtoInput').value =
+          financeiroAtual.meio_pgto || (pedidoAtual ? pedidoAtual.meio_pgto : '');
+        document.getElementById('bandeiraCartaoInput').value =
+          financeiroAtual.bandeira_cartao || (pedidoAtual ? pedidoAtual.bandeira_cartao : '');
+        document.getElementById('parcelasInput').value =
+          financeiroAtual.parcelas || (pedidoAtual ? pedidoAtual.parcelas : '');
+        document.getElementById('custoInput').value =
+          financeiroAtual.custo || '';
       } catch (e) {
         console.error(e);
         alert('Erro ao carregar Financeiro: ' + e.message);
@@ -1317,6 +1332,8 @@
         return;
       }
       const pedidoId = obterIdPedido();
+  
+      // Lê os campos
       const gatewayVal = document.getElementById('gatewayInput').value.trim();
       const dataVendaVal = document.getElementById('dataVendaInput').value;
       const valorVendaVal = parseFloat(document.getElementById('valorVendaInput').value) || 0;
@@ -1344,6 +1361,7 @@
         custo: custoVal
       };
   
+      // PUT em api_detailspay
       try {
         const resp = await fetch('https://airland.com.br/supplier/api_detailspay.php', {
           method: 'PUT',
@@ -1361,7 +1379,7 @@
         return;
       }
   
-      // Atualizar também o registro em supplier_pedidos (que usa o campo "id")
+      // Atualizar também supplier_pedidos (campo "id")
       const pedidosBody = {
         id: pedidoAtual.id,
         gateway: gatewayVal,
@@ -1389,7 +1407,8 @@
       }
   
       alert('Financeiro salvo com sucesso (PUT) e Pedidos atualizado!');
-      carregarFinanceiro();
+      // Forçar reload ignorando cache
+      window.location.reload(true);
     }
   
     /*******************************************************
@@ -1404,6 +1423,7 @@
         if (!resp.ok) throw new Error(`Erro ao buscar planilha: ${resp.status}`);
         const dados = await resp.json();
         planilhasEmMemoria = Array.isArray(dados) ? dados : [];
+  
         montarPlanilhaPrincipal(planilhasEmMemoria);
         montarEmissao(planilhasEmMemoria);
         recalcularPlanilha();
@@ -1481,7 +1501,7 @@
     }
   
     /*******************************************************
-     * 8) Funções de Planilha: Adicionar, Excluir e Recalcular Linhas
+     * 8) Adicionar Linha e Excluir Linha
      *******************************************************/
     function adicionarLinha() {
       const cont = document.getElementById('spreadsheet-info');
@@ -1512,6 +1532,7 @@
         </tr>
       `;
       cont.insertAdjacentHTML('beforeend', rowHtml);
+  
       const newRow = cont.lastElementChild;
       newRow.querySelectorAll('input, select').forEach(el => {
         el.addEventListener('input', recalcularPlanilha);
@@ -1522,7 +1543,7 @@
       const row = botao.closest('tr');
       const planilhaId = row.getAttribute('data-id');
       if (!planilhaId) {
-        // Linha nova; não existe no banco de dados
+        // Linha nova, não existe no BD
         row.remove();
         recalcularPlanilha();
         return;
@@ -1548,6 +1569,9 @@
       }
     }
   
+    /*******************************************************
+     * 9) Recalcular Planilha
+     *******************************************************/
     function recalcularPlanilha() {
       const dolarMagic = parseFloat(document.getElementById('dolar-magic').textContent) || 0;
       document.querySelectorAll('#spreadsheet-info tr').forEach(linha => {
@@ -1556,10 +1580,12 @@
         const numero = parseFloat(linha.querySelector('[name="numero"]')?.value) || 0;
         const margemPct = (parseFloat(linha.querySelector('[name="margem"]')?.value) || 0) / 100;
         const taxaPct = (parseFloat(linha.querySelector('[name="taxa"]')?.value) || 0) / 100;
+  
         const totalDollar = (valorUsd + lobista) * numero;
         const netReal = totalDollar * dolarMagic;
         const totalPix = (margemPct < 1) ? netReal / (1 - margemPct) : netReal;
         const total10x = (taxaPct < 1) ? totalPix / (1 - taxaPct) : totalPix;
+  
         linha.querySelector('[name="totalDollar"]').textContent = totalDollar.toFixed(2);
         linha.querySelector('[name="netReal"]').textContent = netReal.toFixed(2);
         linha.querySelector('[name="totalPix"]').textContent = totalPix.toFixed(2);
@@ -1584,7 +1610,7 @@
   
     function atualizarDolarMagic() {
       const dolarCambio = parseFloat(document.getElementById('dolar-cambio').value) || 0;
-      const dolarMagic = dolarCambio * 1.0098; // Exemplo de cálculo
+      const dolarMagic = dolarCambio * 1.0098; // Exemplo
       document.getElementById('dolar-magic').textContent = dolarMagic.toFixed(2);
       recalcularPlanilha();
     }
@@ -1620,7 +1646,6 @@
         const totalPix = (margemPct < 100) ? netBrl / (1 - margemPct / 100) : netBrl;
         const total10x = (taxaPct < 100) ? totalPix / (1 - taxaPct / 100) : totalPix;
   
-        // Para planilhas usamos "id_pedido"
         const obj = {
           id_pedido: pedidoId,
           produto: itens,
@@ -1640,6 +1665,7 @@
         };
   
         if (planilhaId) {
+          // Se existe no BD
           const original = planilhasEmMemoria.find(p => String(p.id) === planilhaId);
           if (original) {
             obj.id = planilhaId;
@@ -1648,6 +1674,7 @@
             novos.push(obj);
           }
         } else {
+          // Novo
           novos.push(obj);
         }
       });
@@ -1668,6 +1695,7 @@
           return;
         }
       }
+  
       // PUT para existentes
       if (existentes.length) {
         try {
@@ -1684,8 +1712,10 @@
           return;
         }
       }
+  
       alert('Planilha salva com sucesso!');
-      carregarPlanilha();
+      // Forçar reload ignorando cache
+      window.location.reload(true);
     }
   
     /*******************************************************
@@ -1694,16 +1724,19 @@
     async function salvarEmissao() {
       const pedidoId = obterIdPedido();
       if (pedidoId === 'Não informado') return;
+  
       const updates = [];
       document.querySelectorAll('#emission-info tr').forEach(linha => {
         const planilhaId = linha.getAttribute('data-id');
         if (!planilhaId) return;
         const original = planilhasEmMemoria.find(x => String(x.id) === planilhaId);
         if (!original) return;
+  
         const dataPag = linha.querySelector('[name="dataPagamento"]')?.value || '';
         const ident = linha.querySelector('[name="identificador"]')?.value || '';
         const fornec = linha.querySelector('[name="fornecedor"]')?.value || '';
         const stat = linha.querySelector('[name="status"]')?.value || '';
+  
         updates.push({
           ...original,
           data_pagamento: dataPag,
@@ -1712,6 +1745,7 @@
           status: stat
         });
       });
+  
       if (!updates.length) {
         alert('Nenhuma linha para atualizar Emissão.');
         return;
@@ -1725,7 +1759,8 @@
         });
         if (!respPut.ok) throw new Error(`Erro ao salvar Emissão: ${await respPut.text()}`);
         alert('Emissão salva com sucesso!');
-        carregarPlanilha();
+        // Forçar reload ignorando cache
+        window.location.reload(true);
       } catch (e) {
         console.error(e);
         alert('Erro ao salvar Emissão: ' + e.message);
@@ -1741,13 +1776,14 @@
       await carregarFinanceiro();
       await carregarPlanilha();
   
-      // Verifica se os elementos existem antes de adicionar os event listeners
+      // Adicionar event listeners, se existirem
       const inputDolarCambio = document.getElementById('dolar-cambio');
       if (inputDolarCambio) {
         inputDolarCambio.addEventListener('input', atualizarDolarMagic);
       } else {
         console.warn("Elemento 'dolar-cambio' não encontrado.");
       }
+  
       const btnAddLinha = document.getElementById('add-row-button');
       if (btnAddLinha) {
         btnAddLinha.addEventListener('click', adicionarLinha);
