@@ -1152,8 +1152,8 @@
   <!-- SCRIPT PRINCIPAL (AJUSTADO PARA USAR PUT NO FINANCEIRO) -->
   <script>
     /*******************************************************
-     * 1) Verificar Sessão
-     *******************************************************/
+    * 1) Verificar Sessão
+    *******************************************************/
     async function verificarSessao() {
       try {
         const resposta = await fetch("https://airland.com.br/affiliatesacess/login_api.php/check", {
@@ -1172,10 +1172,11 @@
     }
 
     /*******************************************************
-     * 2) Obter ID do Pedido via Query
+     * 2) Obter ID do Pedido via Query (usando "pedido_id" ou "pedido")
      *******************************************************/
     function obterIdPedido() {
       const params = new URLSearchParams(window.location.search);
+      // Aqui definimos que o parâmetro na URL é "pedido" – ajuste se necessário
       return params.get('pedido') || 'Não informado';
     }
 
@@ -1188,9 +1189,9 @@
       return isNaN(d) ? '' : d.toLocaleDateString('pt-BR');
     }
 
-    let pedidoAtual = null;      
-    let financeiroAtual = null;  
-    let planilhasEmMemoria = []; 
+    let pedidoAtual = null;      // Dados de supplier_pedidos
+    let financeiroAtual = null;  // Dados de supplier_finance
+    let planilhasEmMemoria = []; // Dados de supplier_planilhas
 
     /*******************************************************
      * 4) Carregar Detalhes do Pedido (supplier_pedidos)
@@ -1202,7 +1203,8 @@
         return;
       }
       try {
-        const url = `https://airland.com.br/supplier/api_pedidos.php?id_pedido=${pedidoId}`;
+        // Ajuste: usar "pedido_id" na query string
+        const url = `https://airland.com.br/supplier/api_pedidos.php?pedido_id=${pedidoId}`;
         const resp = await fetch(url, { credentials: 'include' });
         if (!resp.ok) {
           throw new Error(`Erro ao buscar pedido: ${resp.status}`);
@@ -1214,7 +1216,7 @@
         pedidoAtual = dados;
         document.getElementById('pedido-id').textContent = pedidoId;
 
-        // Aba 1 (Pedido)
+        // Preencher Aba 1 (Pedido)
         document.getElementById('order-info').innerHTML = `
           <tr>
             <td>
@@ -1268,28 +1270,26 @@
     }
 
     /*******************************************************
-     * 5) Carregar Financeiro (sempre GET com ?id_pedido=)
+     * 5) Carregar Financeiro (GET com ?pedido_id=)
      *******************************************************/
     async function carregarFinanceiro() {
       const pedidoId = obterIdPedido();
       if (pedidoId === 'Não informado') return;
       try {
-        // Ajuste aqui: GET com ?id_pedido=
-        const urlFin = `https://airland.com.br/supplier/api_detailspay.php?id_pedido=${pedidoId}`;
+        // Note que o back-end espera "pedido_id" na query string
+        const urlFin = `https://airland.com.br/supplier/api_detailspay.php?pedido_id=${pedidoId}`;
         const respFin = await fetch(urlFin, { credentials: 'include' });
         if (!respFin.ok) {
           throw new Error(`Erro ao buscar finance: ${respFin.status}`);
         }
         const dadosFin = await respFin.json();
-
-        // Se a resposta for array, pega o primeiro; se for objeto, pega direto
+        // Se a resposta for um array, pega o primeiro elemento; se for objeto, usa direto
         if (Array.isArray(dadosFin)) {
           financeiroAtual = dadosFin[0] || {};
         } else {
           financeiroAtual = dadosFin;
         }
-
-        // Preencher campos
+        // Preencher campos do Financeiro, priorizando os dados do financeiro se existirem
         document.getElementById('gatewayInput').value           = financeiroAtual.gateway || pedidoAtual.gateway || '';
         document.getElementById('dataVendaInput').value         = financeiroAtual.data_venda || pedidoAtual.data_venda || '';
         document.getElementById('valorVendaInput').value        = financeiroAtual.valor_venda || pedidoAtual.valor_venda || '';
@@ -1317,7 +1317,7 @@
       }
       const pedidoId = obterIdPedido();
 
-      // Lê valores da tela
+      // Lê os valores dos inputs
       const gatewayVal          = document.getElementById('gatewayInput').value.trim();
       const dataVendaVal        = document.getElementById('dataVendaInput').value;
       const valorVendaVal       = parseFloat(document.getElementById('valorVendaInput').value) || 0;
@@ -1330,9 +1330,8 @@
       const parcelasVal         = document.getElementById('parcelasInput').value.trim();
       const custoVal            = parseFloat(document.getElementById('custoInput').value) || 0;
 
-      // Monta objeto para PUT
+      // Monta o objeto para PUT – OBS: o campo deve ser "pedido_id" para o back-end
       const financeBody = {
-        // Campo 'pedido_id' ao invés de 'id'
         pedido_id: pedidoId,
         gateway: gatewayVal,
         data_venda: dataVendaVal,
@@ -1364,9 +1363,9 @@
         return;
       }
 
-      // Atualizar também no supplier_pedidos
+      // Atualizar também o registro em supplier_pedidos
       const pedidosBody = {
-        id: pedidoAtual.id, // no Pedidos é 'id'
+        id: pedidoAtual.id, // no Pedidos o campo é "id"
         gateway: gatewayVal,
         data_venda: dataVendaVal,
         valor_venda: valorVendaVal,
@@ -1392,7 +1391,7 @@
       }
 
       alert('Financeiro salvo com sucesso (PUT) e Pedidos atualizado!');
-      carregarFinanceiro(); // recarrega para refletir
+      carregarFinanceiro(); // recarrega para refletir os dados atualizados
     }
 
     /*******************************************************
@@ -1402,7 +1401,7 @@
       const pedidoId = obterIdPedido();
       if (pedidoId === 'Não informado') return;
       try {
-        const url = `https://airland.com.br/supplier/api_planilhas.php?id_pedido=${pedidoId}`;
+        const url = `https://airland.com.br/supplier/api_planilhas.php?pedido_id=${pedidoId}`;
         const resp = await fetch(url, { credentials: 'include' });
         if (!resp.ok) throw new Error(`Erro ao buscar planilha: ${resp.status}`);
         const dados = await resp.json();
@@ -1470,11 +1469,11 @@
             <td><input type="text" name="fornecedor" value="${item.fornecedor || ''}"></td>
             <td>
               <select name="status">
-                <option value="Aguardando Emissão"  ${item.status === 'Aguardando Emissão' ? 'selected' : ''}>Aguardando Emissão</option>
-                <option value="Emissão Bloqueada"   ${item.status === 'Emissão Bloqueada' ? 'selected' : ''}>Emissão Bloqueada</option>
-                <option value="Emitido – Não Pago"  ${item.status === 'Emitido – Não Pago' ? 'selected' : ''}>Emitido – Não Pago</option>
-                <option value="Emitido TIF"         ${item.status === 'Emitido TIF' ? 'selected' : ''}>Emitido TIF</option>
-                <option value="Concluído"           ${item.status === 'Concluído' ? 'selected' : ''}>Concluído</option>
+                <option value="Aguardando Emissão" ${item.status === 'Aguardando Emissão' ? 'selected' : ''}>Aguardando Emissão</option>
+                <option value="Emissão Bloqueada" ${item.status === 'Emissão Bloqueada' ? 'selected' : ''}>Emissão Bloqueada</option>
+                <option value="Emitido – Não Pago" ${item.status === 'Emitido – Não Pago' ? 'selected' : ''}>Emitido – Não Pago</option>
+                <option value="Emitido TIF" ${item.status === 'Emitido TIF' ? 'selected' : ''}>Emitido TIF</option>
+                <option value="Concluído" ${item.status === 'Concluído' ? 'selected' : ''}>Concluído</option>
               </select>
             </td>
           </tr>
@@ -1525,7 +1524,7 @@
       const row = botao.closest('tr');
       const planilhaId = row.getAttribute('data-id');
       if (!planilhaId) {
-        // linha nova, não existe no banco
+        // Linha nova, não existe no DB
         row.remove();
         recalcularPlanilha();
         return;
@@ -1562,12 +1561,10 @@
         const numero    = parseFloat(linha.querySelector('[name="numero"]')?.value)   || 0;
         const margemPct = (parseFloat(linha.querySelector('[name="margem"]')?.value) || 0) / 100;
         const taxaPct   = (parseFloat(linha.querySelector('[name="taxa"]')?.value)   || 0) / 100;
-
         const totalDollar = (valorUsd + lobista) * numero;
         const netReal     = totalDollar * dolarMagic;
         const totalPix    = (margemPct < 1) ? netReal / (1 - margemPct) : netReal;
         const total10x    = (taxaPct < 1)   ? totalPix / (1 - taxaPct)  : totalPix;
-
         linha.querySelector('[name="totalDollar"]').textContent = totalDollar.toFixed(2);
         linha.querySelector('[name="netReal"]').textContent     = netReal.toFixed(2);
         linha.querySelector('[name="totalPix"]').textContent    = totalPix.toFixed(2);
@@ -1592,13 +1589,13 @@
 
     function atualizarDolarMagic() {
       const dolarCambio = parseFloat(document.getElementById('dolar-cambio').value) || 0;
-      const dolarMagic = dolarCambio * 1.0098; // exemplo
+      const dolarMagic  = dolarCambio * 1.0098; // Exemplo de cálculo
       document.getElementById('dolar-magic').textContent = dolarMagic.toFixed(2);
       recalcularPlanilha();
     }
 
     /*******************************************************
-     * 10) Salvar Planilha
+     * 10) Salvar Planilha (supplier_planilhas)
      *******************************************************/
     async function salvarPlanilha() {
       const pedidoId = obterIdPedido();
@@ -1608,7 +1605,6 @@
       }
       const dolarCambio = parseFloat(document.getElementById('dolar-cambio').value) || 0;
       const dolarMagic  = parseFloat(document.getElementById('dolar-magic').textContent) || 0;
-
       const rows = document.querySelectorAll('#spreadsheet-info tr');
       const novos = [];
       const existentes = [];
@@ -1619,10 +1615,10 @@
         const dataUso    = linha.querySelector('[name="data_uso"]')?.value || '';
         const idade      = linha.querySelector('[name="idade"]')?.value || 'ADT';
         const valorUsd   = parseFloat(linha.querySelector('[name="valorUsd"]')?.value) || 0;
-        const lobista    = parseFloat(linha.querySelector('[name="lobista"]')?.value)  || 0;
-        const numero     = parseFloat(linha.querySelector('[name="numero"]')?.value)   || 0;
-        const margemPct  = parseFloat(linha.querySelector('[name="margem"]')?.value)   || 0;
-        const taxaPct    = parseFloat(linha.querySelector('[name="taxa"]')?.value)     || 0;
+        const lobista    = parseFloat(linha.querySelector('[name="lobista"]')?.value) || 0;
+        const numero     = parseFloat(linha.querySelector('[name="numero"]')?.value) || 0;
+        const margemPct  = parseFloat(linha.querySelector('[name="margem"]')?.value) || 0;
+        const taxaPct    = parseFloat(linha.querySelector('[name="taxa"]')?.value) || 0;
 
         const totalDollar = (valorUsd + lobista) * numero;
         const netBrl      = totalDollar * dolarMagic;
@@ -1630,7 +1626,7 @@
         const total10x    = (taxaPct < 100)   ? totalPix / (1 - taxaPct/100) : totalPix;
 
         const obj = {
-          id_pedido: pedidoId,
+          pedido_id: pedidoId,
           produto: itens,
           data: dataUso,
           idade,
@@ -1648,17 +1644,14 @@
         };
 
         if (planilhaId) {
-          // já existe no DB => PUT
           const original = planilhasEmMemoria.find(p => String(p.id) === planilhaId);
           if (original) {
             obj.id = planilhaId;
             existentes.push(obj);
           } else {
-            // caso extremo: ID na linha mas não encontrado em planilhasEmMemoria
             novos.push(obj);
           }
         } else {
-          // novo
           novos.push(obj);
         }
       });
@@ -1705,17 +1698,16 @@
     async function salvarEmissao() {
       const pedidoId = obterIdPedido();
       if (pedidoId === 'Não informado') return;
-
       const updates = [];
       document.querySelectorAll('#emission-info tr').forEach(linha => {
         const planilhaId = linha.getAttribute('data-id');
-        if (!planilhaId) return; // sem ID, não tem o que atualizar
+        if (!planilhaId) return;
         const original = planilhasEmMemoria.find(x => String(x.id) === planilhaId);
-        if (!original) return; // não achou
-        const dataPag   = linha.querySelector('[name="dataPagamento"]')?.value || '';
-        const ident     = linha.querySelector('[name="identificador"]')?.value || '';
-        const fornec    = linha.querySelector('[name="fornecedor"]')?.value    || '';
-        const stat      = linha.querySelector('[name="status"]')?.value        || '';
+        if (!original) return;
+        const dataPag = linha.querySelector('[name="dataPagamento"]')?.value || '';
+        const ident   = linha.querySelector('[name="identificador"]')?.value || '';
+        const fornec  = linha.querySelector('[name="fornecedor"]')?.value    || '';
+        const stat    = linha.querySelector('[name="status"]')?.value        || '';
         updates.push({
           ...original,
           data_pagamento: dataPag,
@@ -1724,12 +1716,10 @@
           status: stat
         });
       });
-
       if (!updates.length) {
         alert('Nenhuma linha para atualizar Emissão.');
         return;
       }
-
       try {
         const respPut = await fetch('https://airland.com.br/supplier/api_planilhas.php', {
           method: 'PUT',
@@ -1755,10 +1745,15 @@
       await carregarFinanceiro();
       await carregarPlanilha();
 
-      // Listener de câmbio
-      document.getElementById('dolar-cambio').addEventListener('input', atualizarDolarMagic);
-      // Botão "Adicionar Linha" da planilha
-      document.getElementById('add-row-button').addEventListener('click', adicionarLinha);
+      // Verifica se os elementos existem antes de adicionar os event listeners:
+      const inputDolarCambio = document.getElementById('dolar-cambio');
+      if (inputDolarCambio) {
+        inputDolarCambio.addEventListener('input', atualizarDolarMagic);
+      }
+      const btnAddLinha = document.getElementById('add-row-button');
+      if (btnAddLinha) {
+        btnAddLinha.addEventListener('click', adicionarLinha);
+      }
     });
   </script>
 </body>
