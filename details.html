@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -107,6 +106,34 @@
       border: none;
       color: #dc3545;
       cursor: pointer;
+    }
+
+    .nested-menu ul {
+      list-style: none;
+      margin: 0;
+      padding-left: 10px;
+    }
+
+    .nested-menu li {
+      padding: 6px 12px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .nested-menu li:hover {
+      background-color: #f0f0f0;
+    }
+
+    .nested-menu .menu-item {
+      position: relative;
+    }
+
+    /* Estilo para indicar que há subníveis */
+    .nested-menu .menu-item::after {
+      content: '▶';
+      font-size: 0.8em;
+      position: absolute;
+      right: 6px;
     }
   </style>
 </head>
@@ -1084,51 +1111,35 @@
                       <th>Ações</th>
                     </tr>
                   </thead>
-                  <tbody id="spreadsheet-info"></tbody>
-                  <tfoot>
-                    <tr style="font-weight: bold; background-color: #f9f9f9;">
-                      <td colspan="6" style="text-align: right;">Totais:</td>
-                      <td id="resumo-total-dollar">0.00</td>
-                      <td id="resumo-net-real">0.00</td>
-                      <td></td>
-                      <td id="resumo-total-pix">0.00</td>
-                      <td></td>
-                      <td id="resumo-total-10x">0.00</td>
-                      <td></td>
-                    </tr>
-                  </tfoot>
-                </table>
-                <!-- Botões -->
-                <button id="add-row-button" class="btn btn-success add-row-button">Adicionar Linha</button>
-                <button class="btn btn-primary add-row-button" onclick="salvarPlanilha()">Salvar Planilha</button>
-              </div>
-            </div>
-
-            <!-- Aba 6: Emissão -->
-            <div class="tab-pane fade" id="tabContent-6">
-              <div class="section">
-                <h3>Emissão</h3>
-                <!-- Tabela principal da planilha -->
-                <table class="emissao-tabela">
-                  <thead>
-                    <tr>
-                      <th>Itens</th>
-                      <th>Data de Uso</th>
-                      <th>Idade</th>
-                      <th>Valor (U$)</th>
-                      <th>Lobista</th>
-                      <th>Número</th>
-                      <th>Total U$</th>
-                      <th>Net R$</th>
-                      <th>Margem</th>
-                      <th>Pix</th>
-                      <th>Taxa</th>
-                      <th>10x</th>
-                      <th>Ações</th>
-                    </tr>
-                  </thead>
                   <tbody id="spreadsheet-info">
-                    <!-- Linhas serão carregadas via JavaScript -->
+                    <tr>
+                      <!-- Aqui, o campo ITENS com menu aninhado -->
+                      <td style="position: relative;">
+                        <input type="text" class="itensInput" name="itens" value="" placeholder="Selecione um item..." autocomplete="off">
+                        <div class="nested-menu" id="nestedMenu"></div>
+                      </td>
+                      <td><input type="date" name="data_uso"></td>
+                      <td>
+                        <select name="idade">
+                          <option value="ADT">ADT</option>
+                          <option value="CHD">CHD</option>
+                        </select>
+                      </td>
+                      <td><input type="number" name="valorUsd"></td>
+                      <td><input type="number" name="lobista"></td>
+                      <td><input type="number" name="numero"></td>
+                      <td name="totalDollar">0.00</td>
+                      <td name="netReal">0.00</td>
+                      <td><input type="number" name="margem" step="0.01"></td>
+                      <td name="totalPix">0.00</td>
+                      <td><input type="number" name="taxa" step="0.01"></td>
+                      <td name="total10x">0.00</td>
+                      <td>
+                        <button class="delete-row-button" onclick="excluirLinhaPlanilha(this)">
+                          <i class="lni lni-trash-can"></i>
+                        </button>
+                      </td>
+                    </tr>
                   </tbody>
                   <tfoot>
                     <tr style="font-weight: bold; background-color: #f9f9f9;">
@@ -1143,14 +1154,10 @@
                     </tr>
                   </tfoot>
                 </table>
-                <!-- Adiciona o datalist que será usado para autocomplete dos itens -->
-                <datalist id="markupOptions"></datalist>
-                <!-- Botões -->
                 <button id="add-row-button" class="btn btn-success add-row-button">Adicionar Linha</button>
                 <button class="btn btn-primary add-row-button" onclick="salvarPlanilha()">Salvar Planilha</button>
               </div>
             </div>
-            <!-- Fim Aba 5: Planilha -->
           </div>
         </div>
       </div>
@@ -1190,7 +1197,7 @@
     }
 
     /*******************************************************
-     * 1) Verificar Sessão (fetch sem cache)
+     * 1) Verificar Sessão
      *******************************************************/
     async function verificarSessao() {
       try {
@@ -1228,7 +1235,7 @@
     }
 
     /*******************************************************
-     * Variáveis globais para armazenar os dados
+     * Variáveis globais
      *******************************************************/
     let pedidoAtual = null;
     let financeiroAtual = null;
@@ -1255,7 +1262,7 @@
         pedidoAtual = resultado;
         document.getElementById('pedido-id').textContent = pedidoId;
         
-        // Preencher Aba "Pedido"
+        // Preencher aba "Pedido"
         document.getElementById('order-info').innerHTML = `
           <tr>
             <td>
@@ -1284,7 +1291,7 @@
           </tr>
         `;
         
-        // Preencher Aba "Cliente"
+        // Preencher aba "Cliente"
         document.getElementById('customer-info').innerHTML = `
           <tr>
             <td>${pedidoAtual.nome || pedidoAtual.nome_comprador || ''}</td>
@@ -1296,7 +1303,7 @@
           </tr>
         `;
         
-        // Preencher Aba "Comercial"
+        // Preencher aba "Comercial"
         document.getElementById('commercial-info').innerHTML = `
           <tr>
             <td>${pedidoAtual.origem_cliente || ''}</td>
@@ -1361,17 +1368,17 @@
         return;
       }
       const pedidoId = obterIdPedido();
-      const gatewayVal        = document.getElementById('gatewayInput').value.trim();
-      const dataVendaVal      = document.getElementById('dataVendaInput').value;
-      const valorVendaVal     = parseFloat(document.getElementById('valorVendaInput').value) || 0;
-      const valorRecebVal     = parseFloat(document.getElementById('valorRecebimentoInput').value) || 0;
-      const dataRecebVal      = document.getElementById('dataRecebimentoInput').value;
-      const cambioVal         = document.getElementById('cambioDiaInput').value;
-      const receitaVal        = parseFloat(document.getElementById('receitaInput').value) || 0;
-      const meioPgtoVal       = document.getElementById('meioPgtoInput').value.trim();
+      const gatewayVal = document.getElementById('gatewayInput').value.trim();
+      const dataVendaVal = document.getElementById('dataVendaInput').value;
+      const valorVendaVal = parseFloat(document.getElementById('valorVendaInput').value) || 0;
+      const valorRecebVal = parseFloat(document.getElementById('valorRecebimentoInput').value) || 0;
+      const dataRecebVal = document.getElementById('dataRecebimentoInput').value;
+      const cambioVal = document.getElementById('cambioDiaInput').value;
+      const receitaVal = parseFloat(document.getElementById('receitaInput').value) || 0;
+      const meioPgtoVal = document.getElementById('meioPgtoInput').value.trim();
       const bandeiraCartaoVal = document.getElementById('bandeiraCartaoInput').value.trim();
-      const parcelasVal       = document.getElementById('parcelasInput').value.trim();
-      const custoVal          = parseFloat(document.getElementById('custoInput').value) || 0;
+      const parcelasVal = document.getElementById('parcelasInput').value.trim();
+      const custoVal = parseFloat(document.getElementById('custoInput').value) || 0;
 
       const financeBody = {
         pedido_id: pedidoId,
@@ -1459,32 +1466,60 @@
     }
 
     /*******************************************************
-     * NOVA FUNÇÃO: Carregar Opções de Markup para o datalist
+     * Funções para o MENU ANINHADO no campo ITENS
      *******************************************************/
-    async function loadMarkupOptions() {
+    // Agrupar dados em estrutura aninhada: Tipo > Categoria > Nome (e opcionalmente dias)
+    function groupMarkupData(data) {
+      const grouped = {};
+      data.forEach(item => {
+        const type = item.type || 'Tipo';
+        const category = item.category || 'Categoria';
+        const name = item.name_site || 'Nome';
+        const day = item.day ? `${item.day} dias` : '';
+        if (!grouped[type]) grouped[type] = {};
+        if (!grouped[type][category]) grouped[type][category] = {};
+        if (!grouped[type][category][name]) grouped[type][category][name] = [];
+        if (day) grouped[type][category][name].push(day);
+      });
+      return grouped;
+    }
+
+    // Construir o HTML do menu aninhado a partir dos dados agrupados
+    function buildNestedMenuHTML(groupedData) {
+      let html = '<ul>';
+      for (const type in groupedData) {
+        html += `<li class="menu-item type-item">${type}<ul>`;
+        for (const category in groupedData[type]) {
+          html += `<li class="menu-item category-item">${category}<ul>`;
+          for (const name in groupedData[type][category]) {
+            let label = name;
+            const days = groupedData[type][category][name];
+            if (days.length) {
+              label += ` (${days.join(', ')})`;
+            }
+            html += `<li class="menu-item name-item" data-value="${type} - ${category} - ${name}">${label}</li>`;
+          }
+          html += '</ul></li>';
+        }
+        html += '</ul></li>';
+      }
+      html += '</ul>';
+      return html;
+    }
+
+    // Carregar os dados do menu e montar a estrutura
+    async function loadNestedMenu() {
       try {
         const response = await fetch('https://airland.com.br/supplier/get_markup_data.php', {
           credentials: 'include',
           cache: 'no-store'
         });
         const data = await response.json();
-        const datalist = document.getElementById('markupOptions');
-        datalist.innerHTML = '';
-        // Para cada registro, monta a cadeia de texto: Tipo - Categoria - Nome - Dias
-        data.forEach(item => {
-          const type = item.type || 'Tipo';
-          const category = item.category || 'Categoria';
-          const name = item.name_site || 'Nome';
-          const day = item.day ? item.day + ' dias' : '';
-          const optionValue = [type, category, name, day].filter(Boolean).join(' - ');
-          if (optionValue) {
-            const option = document.createElement('option');
-            option.value = optionValue;
-            datalist.appendChild(option);
-          }
-        });
+        const grouped = groupMarkupData(data);
+        return buildNestedMenuHTML(grouped);
       } catch (error) {
-        console.error('Erro ao carregar opções de markup:', error);
+        console.error('Erro ao carregar dados do menu:', error);
+        return '';
       }
     }
 
@@ -1497,8 +1532,11 @@
       lista.forEach(item => {
         const rowHtml = `
           <tr data-id="${item.id}">
-            <!-- Alterado para usar o datalist "markupOptions" -->
-            <td><input list="markupOptions" type="text" name="itens" value="${item.produto || ''}"></td>
+            <td style="position: relative;">
+              <!-- Campo ITENS com menu aninhado -->
+              <input type="text" class="itensInput" name="itens" value="${item.produto || ''}" placeholder="Selecione um item..." autocomplete="off">
+              <div class="nested-menu" id="nestedMenu-${item.id}"></div>
+            </td>
             <td><input type="date" name="data_uso" value="${item.data || ''}"></td>
             <td>
               <select name="idade">
@@ -1523,18 +1561,44 @@
           </tr>
         `;
         cont.insertAdjacentHTML('beforeend', rowHtml);
+        // Para cada linha, carregar o menu aninhado
+        loadNestedMenuForRow(item.id);
       });
       // Adiciona listener para recalcular quando houver alterações
       document.querySelectorAll('#spreadsheet-info tr input, #spreadsheet-info tr select')
-              .forEach(el => el.addEventListener('input', recalcularPlanilha));
+        .forEach(el => el.addEventListener('input', recalcularPlanilha));
+    }
+
+    // Função para carregar o menu aninhado para uma linha específica
+    async function loadNestedMenuForRow(rowId) {
+      const menuHTML = await loadNestedMenu();
+      const menuContainer = document.getElementById(`nestedMenu-${rowId}`);
+      if (menuContainer) {
+        menuContainer.innerHTML = menuHTML;
+        // Configurar eventos para esta instância do menu
+        const itensInput = menuContainer.parentElement.querySelector('.itensInput');
+        itensInput.addEventListener('focus', () => {
+          menuContainer.style.display = 'block';
+        });
+        itensInput.addEventListener('blur', () => {
+          setTimeout(() => {
+            menuContainer.style.display = 'none';
+          }, 200);
+        });
+        menuContainer.addEventListener('click', (e) => {
+          if (e.target && e.target.classList.contains('name-item')) {
+            itensInput.value = e.target.getAttribute('data-value');
+            menuContainer.style.display = 'none';
+          }
+        });
+      }
     }
 
     /*******************************************************
-     * 9) Montar Emissao
+     * 9) Montar Emissão (implementação simplificada)
      *******************************************************/
     function montarEmissao(lista) {
-      // Nesta implementação, a aba "Emissão" é simplificada.
-      // Se precisar algo específico, inserir aqui.
+      // Implementação para a aba de Emissão se necessário
     }
 
     /*******************************************************
@@ -1544,8 +1608,10 @@
       const cont = document.getElementById('spreadsheet-info');
       const rowHtml = `
         <tr>
-          <!-- Alterado para usar o datalist "markupOptions" -->
-          <td><input list="markupOptions" type="text" name="itens"></td>
+          <td style="position: relative;">
+            <input type="text" class="itensInput" name="itens" placeholder="Selecione um item..." autocomplete="off">
+            <div class="nested-menu" id="nestedMenu-new"></div>
+          </td>
           <td><input type="date" name="data_uso"></td>
           <td>
             <select name="idade">
@@ -1574,6 +1640,8 @@
       newRow.querySelectorAll('input, select').forEach(el => {
         el.addEventListener('input', recalcularPlanilha);
       });
+      // Carregar menu aninhado para a nova linha
+      loadNestedMenuForRow('new');
     }
 
     /*******************************************************
@@ -1616,21 +1684,19 @@
     function recalcularPlanilha() {
       const dolarMagic = parseFloat(document.getElementById('dolar-magic').textContent) || 0;
       document.querySelectorAll('#spreadsheet-info tr').forEach(linha => {
-        const valorUsd  = parseFloat(linha.querySelector('[name="valorUsd"]')?.value) || 0;
-        const lobista   = parseFloat(linha.querySelector('[name="lobista"]')?.value) || 0;
-        const numero    = parseFloat(linha.querySelector('[name="numero"]')?.value) || 0;
+        const valorUsd = parseFloat(linha.querySelector('[name="valorUsd"]')?.value) || 0;
+        const lobista = parseFloat(linha.querySelector('[name="lobista"]')?.value) || 0;
+        const numero = parseFloat(linha.querySelector('[name="numero"]')?.value) || 0;
         const margemPct = (parseFloat(linha.querySelector('[name="margem"]')?.value) || 0) / 100;
-        const taxaPct   = (parseFloat(linha.querySelector('[name="taxa"]')?.value) || 0) / 100;
-
+        const taxaPct = (parseFloat(linha.querySelector('[name="taxa"]')?.value) || 0) / 100;
         const totalDollar = (valorUsd + lobista) * numero;
-        const netReal     = totalDollar * dolarMagic;
-        const totalPix    = (margemPct < 1) ? netReal / (1 - margemPct) : netReal;
-        const total10x    = (taxaPct < 1)   ? totalPix / (1 - taxaPct)  : totalPix;
-
+        const netReal = totalDollar * dolarMagic;
+        const totalPix = (margemPct < 1) ? netReal / (1 - margemPct) : netReal;
+        const total10x = (taxaPct < 1) ? totalPix / (1 - taxaPct) : totalPix;
         linha.querySelector('[name="totalDollar"]').textContent = totalDollar.toFixed(2);
-        linha.querySelector('[name="netReal"]').textContent      = netReal.toFixed(2);
-        linha.querySelector('[name="totalPix"]').textContent     = totalPix.toFixed(2);
-        linha.querySelector('[name="total10x"]').textContent     = total10x.toFixed(2);
+        linha.querySelector('[name="netReal"]').textContent = netReal.toFixed(2);
+        linha.querySelector('[name="totalPix"]').textContent = totalPix.toFixed(2);
+        linha.querySelector('[name="total10x"]').textContent = total10x.toFixed(2);
       });
       somarTotaisPlanilha();
     }
@@ -1641,10 +1707,10 @@
     function somarTotaisPlanilha() {
       let totalDollar = 0, totalNetReal = 0, totalPix = 0, total10x = 0;
       document.querySelectorAll('#spreadsheet-info tr').forEach(linha => {
-        totalDollar  += parseFloat(linha.querySelector('[name="totalDollar"]')?.textContent) || 0;
+        totalDollar += parseFloat(linha.querySelector('[name="totalDollar"]')?.textContent) || 0;
         totalNetReal += parseFloat(linha.querySelector('[name="netReal"]').textContent) || 0;
-        totalPix     += parseFloat(linha.querySelector('[name="totalPix"]').textContent) || 0;
-        total10x     += parseFloat(linha.querySelector('[name="total10x"]').textContent) || 0;
+        totalPix += parseFloat(linha.querySelector('[name="totalPix"]').textContent) || 0;
+        total10x += parseFloat(linha.querySelector('[name="total10x"]').textContent) || 0;
       });
       document.getElementById('resumo-total-dollar').textContent = totalDollar.toFixed(2);
       document.getElementById('resumo-net-real').textContent = totalNetReal.toFixed(2);
@@ -1663,7 +1729,7 @@
     }
 
     /*******************************************************
-     * 15) Salvar Planilha (POST para novos e PUT para existentes) e recarregar
+     * 15) Salvar Planilha (POST para novos e PUT para existentes)
      *******************************************************/
     async function salvarPlanilha() {
       const pedidoId = obterIdPedido();
@@ -1672,11 +1738,11 @@
         return;
       }
       const dolarCambio = parseFloat(document.getElementById('dolar-cambio').value) || 0;
-      const dolarMagic  = parseFloat(document.getElementById('dolar-magic').textContent) || 0;
+      const dolarMagic = parseFloat(document.getElementById('dolar-magic').textContent) || 0;
       const rows = document.querySelectorAll('#spreadsheet-info tr');
       const novos = [];
       const existentes = [];
-
+      
       rows.forEach(linha => {
         const planilhaId = linha.getAttribute('data-id');
         const itens = (linha.querySelector('[name="itens"]')?.value || '').trim();
@@ -1687,12 +1753,12 @@
         const numero = parseFloat(linha.querySelector('[name="numero"]')?.value) || 0;
         const margemPct = parseFloat(linha.querySelector('[name="margem"]')?.value) || 0;
         const taxaPct = parseFloat(linha.querySelector('[name="taxa"]')?.value) || 0;
-
+        
         const totalDollar = (valorUsd + lobista) * numero;
         const netBrl = totalDollar * dolarMagic;
         const totalPix = (margemPct < 100) ? netBrl / (1 - margemPct / 100) : netBrl;
         const total10x = (taxaPct < 100) ? totalPix / (1 - taxaPct / 100) : totalPix;
-
+        
         const obj = {
           id_pedido: pedidoId,
           produto: itens,
@@ -1710,7 +1776,7 @@
           dolar_cambio: dolarCambio,
           dolar_magic: dolarMagic
         };
-
+        
         if (planilhaId) {
           const original = planilhasEmMemoria.find(p => String(p.id) === planilhaId);
           if (original) {
@@ -1723,7 +1789,7 @@
           novos.push(obj);
         }
       });
-
+      
       // POST para novos
       if (novos.length) {
         try {
@@ -1767,7 +1833,7 @@
     }
 
     /*******************************************************
-     * 16) Salvar Emissao e recarregar a página
+     * 16) Salvar Emissão e recarregar a página
      *******************************************************/
     async function salvarEmissao() {
       const pedidoId = obterIdPedido();
@@ -1822,15 +1888,14 @@
       await carregarFinanceiro();
       await carregarPlanilha();
 
-      // Carrega as opções de markup para o autocomplete do campo "itens"
-      await loadMarkupOptions();
-
+      // Configurar o input do câmbio
       const inputDolarCambio = document.getElementById('dolar-cambio');
       if (inputDolarCambio) {
         inputDolarCambio.addEventListener('input', atualizarDolarMagic);
       } else {
         console.warn("Elemento 'dolar-cambio' não encontrado.");
       }
+      // Configurar o botão para adicionar linha
       const btnAddLinha = document.getElementById('add-row-button');
       if (btnAddLinha) {
         btnAddLinha.addEventListener('click', adicionarLinha);
