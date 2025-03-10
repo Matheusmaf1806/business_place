@@ -901,52 +901,38 @@
         <!-- ========== title-wrapper end ========== -->
 
         <!-- Botão de Voltar -->
-        <a href="pages-orders.html" class="btn btn-primary back-button">
-          Voltar para Página de Pedidos
-        </a>
+        <a href="pages-orders.html" class="btn btn-primary back-button">Voltar para Página de Pedidos</a>
         <br />
         <h5>ID do Pedido: <span id="pedido-id">Carregando...</span></h5>
         <hr>
 
-        <!-- CARTÃO DE ABAS (Tabs) -->
+        <!-- Cartão de Abas (Tabs) -->
         <div class="tab-style-3 card-style mb-30">
           <!-- Navegação das Abas -->
           <nav class="nav" id="nav-tab">
-            <button id="tab-1" class="main-btn deactive-btn rounded-full active" 
-              data-bs-toggle="tab" data-bs-target="#tabContent-1">
-              <i class="lni lni-home mr-10"></i>
-              Pedido
+            <button id="tab-1" class="main-btn deactive-btn rounded-full active" data-bs-toggle="tab" data-bs-target="#tabContent-1">
+              <i class="lni lni-home mr-10"></i>Pedido
             </button>
-            <button id="tab-2" class="main-btn deactive-btn rounded-full"
-              data-bs-toggle="tab" data-bs-target="#tabContent-2">
-              <i class="lni lni-user mr-10"></i>
-              Cliente
+            <button id="tab-2" class="main-btn deactive-btn rounded-full" data-bs-toggle="tab" data-bs-target="#tabContent-2">
+              <i class="lni lni-user mr-10"></i>Cliente
             </button>
-            <button id="tab-3" class="main-btn deactive-btn rounded-full"
-              data-bs-toggle="tab" data-bs-target="#tabContent-3">
-              <i class="lni lni-credit-cards mr-10"></i>
-              Financeiro
+            <button id="tab-3" class="main-btn deactive-btn rounded-full" data-bs-toggle="tab" data-bs-target="#tabContent-3">
+              <i class="lni lni-credit-cards mr-10"></i>Financeiro
             </button>
-            <button id="tab-4" class="main-btn deactive-btn rounded-full"
-              data-bs-toggle="tab" data-bs-target="#tabContent-4">
-              <i class="lni lni-briefcase mr-10"></i>
-              Comercial
+            <button id="tab-4" class="main-btn deactive-btn rounded-full" data-bs-toggle="tab" data-bs-target="#tabContent-4">
+              <i class="lni lni-briefcase mr-10"></i>Comercial
             </button>
-            <button id="tab-5" class="main-btn deactive-btn rounded-full"
-              data-bs-toggle="tab" data-bs-target="#tabContent-5">
-              <i class="lni lni-book mr-10"></i>
-              Planilha
+            <button id="tab-5" class="main-btn deactive-btn rounded-full" data-bs-toggle="tab" data-bs-target="#tabContent-5">
+              <i class="lni lni-book mr-10"></i>Planilha
             </button>
-            <button id="tab-6" class="main-btn deactive-btn rounded-full"
-              data-bs-toggle="tab" data-bs-target="#tabContent-6">
-              <i class="lni lni-checkmark-circle mr-10"></i>
-              Emissão
+            <button id="tab-6" class="main-btn deactive-btn rounded-full" data-bs-toggle="tab" data-bs-target="#tabContent-6">
+              <i class="lni lni-checkmark-circle mr-10"></i>Emissão
             </button>
           </nav>
 
           <!-- Conteúdo das Abas -->
           <div class="tab-content" id="nav-tabContent3">
-            <!-- ABA 1: Pedido -->
+            <!-- Aba 1: Pedido -->
             <div class="tab-pane fade show active" id="tabContent-1">
               <div class="section">
                 <h3>Informações do Pedido</h3>
@@ -962,7 +948,6 @@
                   <tbody id="order-info"></tbody>
                 </table>
               </div>
-
               <div class="section">
                 <h3>Informações Adicionais</h3>
                 <table class="emissao-tabela">
@@ -976,8 +961,7 @@
                 </table>
               </div>
             </div>
-
-            <!-- ABA 2: Cliente -->
+            <!-- Aba 2: Cliente -->
             <div class="tab-pane fade" id="tabContent-2">
               <div class="section">
                 <h3>Informações do Cliente</h3>
@@ -996,12 +980,10 @@
                 </table>
               </div>
             </div>
-
-            <!-- ABA 3: Financeiro -->
+            <!-- Aba 3: Financeiro -->
             <div class="tab-pane fade" id="tabContent-3">
               <div class="section">
                 <h3>Informações Financeiras</h3>
-
                 <!-- Financeiro: Tabela 1 -->
                 <table class="emissao-tabela">
                   <thead>
@@ -1016,22 +998,20 @@
                   </thead>
                   <tbody>
                     <tr>
-                      <!-- Esses inputs têm ID para bater com o JavaScript -->
-                      <td><input type="text"   id="gatewayInput"          placeholder="Ex: Paypal" /></td>
-                      <td><input type="date"   id="dataVendaInput"        /></td>
+                      <td><input type="text" id="gatewayInput" placeholder="Ex: Paypal" /></td>
+                      <td><input type="date" id="dataVendaInput" /></td>
                       <td><input type="number" step="0.01" id="valorVendaInput" placeholder="Ex: 1000.00" /></td>
                       <td><input type="number" step="0.01" id="valorRecebimentoInput" placeholder="Ex: 900.00" /></td>
-                      <td><input type="date"   id="dataRecebimentoInput"  /></td>
-                      <td><input type="number" step="0.01" id="cambioDiaInput"       placeholder="Ex: 5.20" /></td>
+                      <td><input type="date" id="dataRecebimentoInput" /></td>
+                      <td><input type="number" step="0.01" id="cambioDiaInput" placeholder="Ex: 5.20" /></td>
                     </tr>
                   </tbody>
                 </table>
-
                 <!-- Financeiro: Tabela 2 -->
                 <table class="emissao-tabela">
                   <thead>
                     <tr>
-                      <th>Receita</th>  <!-- Ex: Comissão ou outro descriptor -->
+                      <th>Receita</th>
                       <th>Meio Pagamento</th>
                       <th>Bandeira Cartão</th>
                       <th>Parcelas</th>
@@ -1040,21 +1020,19 @@
                   </thead>
                   <tbody>
                     <tr>
-                      <td><input type="number" step="0.01" id="receitaInput"        placeholder="Ex: 250.00" /></td>
-                      <td><input type="text"               id="meioPgtoInput"       placeholder="Ex: Cartão" /></td>
-                      <td><input type="text"               id="bandeiraCartaoInput" placeholder="Ex: Visa" /></td>
-                      <td><input type="number"             id="parcelasInput"       placeholder="Ex: 3" /></td>
-                      <td><input type="number" step="0.01" id="custoInput"          placeholder="Ex: 50.00" /></td>
+                      <td><input type="number" step="0.01" id="receitaInput" placeholder="Ex: 250.00" /></td>
+                      <td><input type="text" id="meioPgtoInput" placeholder="Ex: Cartão" /></td>
+                      <td><input type="text" id="bandeiraCartaoInput" placeholder="Ex: Visa" /></td>
+                      <td><input type="number" id="parcelasInput" placeholder="Ex: 3" /></td>
+                      <td><input type="number" step="0.01" id="custoInput" placeholder="Ex: 50.00" /></td>
                     </tr>
                   </tbody>
                 </table>
-
-                <!-- Botão para salvar -->
+                <!-- Botão para salvar financeiro -->
                 <button class="btn btn-primary" onclick="salvarFinanceiro()">Salvar Financeiro</button>
               </div>
             </div>
-
-            <!-- ABA 4: Comercial -->
+            <!-- Aba 4: Comercial -->
             <div class="tab-pane fade" id="tabContent-4">
               <div class="section">
                 <h3>Informações Comerciais</h3>
@@ -1071,12 +1049,10 @@
                 </table>
               </div>
             </div>
-
-            <!-- ABA 5: Planilha -->
+            <!-- Aba 5: Planilha -->
             <div class="tab-pane fade" id="tabContent-5">
               <div class="section">
                 <h3>Planilha do Pedido</h3>
-
                 <!-- Selecionar câmbio -->
                 <table class="emissao-tabela">
                   <thead>
@@ -1094,7 +1070,6 @@
                     </tr>
                   </tbody>
                 </table>
-
                 <!-- Tabela principal da planilha -->
                 <table class="emissao-tabela">
                   <thead>
@@ -1128,14 +1103,12 @@
                     </tr>
                   </tfoot>
                 </table>
-
                 <!-- Botões da planilha -->
                 <button id="add-row-button" class="btn btn-success add-row-button">Adicionar Linha</button>
                 <button class="btn btn-primary add-row-button" onclick="salvarPlanilha()">Salvar Planilha</button>
               </div>
             </div>
-
-            <!-- ABA 6: Emissão -->
+            <!-- Aba 6: Emissão -->
             <div class="tab-pane fade" id="tabContent-6">
               <div class="section">
                 <h3>Emissão</h3>
@@ -1162,11 +1135,10 @@
     </section>
     <!-- ========== fim do conteúdo principal ========== -->
 
-    <!-- ========== footer start (PlainAdmin) ========== -->
+    <!-- Footer (PlainAdmin) -->
     <footer class="footer">
       <!-- (Mantenha aqui o footer do PlainAdmin) -->
     </footer>
-    <!-- ========== footer end ========== -->
   </main>
   <!-- ======== main-wrapper end =========== -->
 
@@ -1185,7 +1157,7 @@
   <script src="assets/js/Sortable.min.js"></script>
   <script src="assets/js/main.js"></script>
 
-  <!-- SEU SCRIPT PRINCIPAL (com sincronização de dados Financeiro <-> Pedidos) -->
+  <!-- SEU SCRIPT PRINCIPAL -->
   <script>
     /*******************************************************
      * 1) Verificar Sessão
@@ -1224,14 +1196,14 @@
       return isNaN(d) ? '' : d.toLocaleDateString('pt-BR');
     }
 
-    let pedidoAtual = null;      // Armazenamos dados vindos de supplier_pedidos
-    let financeiroAtual = null;  // Armazenamos dados vindos de supplier_finance
-    let planilhasEmMemoria = []; // Armazenamos dados de supplier_planilhas
+    let pedidoAtual = null;      // Dados de supplier_pedidos
+    let financeiroAtual = null;  // Dados de supplier_finance
+    let planilhasEmMemoria = []; // Dados de supplier_planilhas
 
     /*******************************************************
      * 4) Carregar Detalhes do Pedido (supplier_pedidos)
      *******************************************************/
-     async function carregarDetalhesPedido() {
+    async function carregarDetalhesPedido() {
       const pedidoId = obterIdPedido();
       if (pedidoId === 'Não informado') {
         alert('Pedido não informado.');
@@ -1244,28 +1216,25 @@
           throw new Error(`Erro ao buscar pedido: ${resp.status}`);
         }
         const dados = await resp.json();
-
-        // Se a API retorna um objeto (ex: {id: 3186, destino: "...", ...} ):
         if (!dados.id) {
           throw new Error('Nenhum pedido encontrado.');
         }
-        // Agora `dados` em si já é o objeto do pedido
         pedidoAtual = dados;
         document.getElementById('pedido-id').textContent = pedidoId;
 
-        // Preenche Aba 1 (Pedido)
+        // Preencher Aba 1 (Pedido)
         document.getElementById('order-info').innerHTML = `
           <tr>
             <td>
               <select>
-                <option value="Pagamento recebido"   ${pedidoAtual.status === 'Pagamento recebido'   ? 'selected' : ''}>Pagamento recebido</option>
-                <option value="Envio de contrato"    ${pedidoAtual.status === 'Envio de contrato'    ? 'selected' : ''}>Envio de contrato</option>
-                <option value="Aguardando Emissão"   ${pedidoAtual.status === 'Aguardando Emissão'   ? 'selected' : ''}>Aguardando Emissão</option>
-                <option value="Emissão Bloqueada"    ${pedidoAtual.status === 'Emissão Bloqueada'    ? 'selected' : ''}>Emissão Bloqueada</option>
+                <option value="Pagamento recebido"   ${pedidoAtual.status === 'Pagamento recebido' ? 'selected' : ''}>Pagamento recebido</option>
+                <option value="Envio de contrato"    ${pedidoAtual.status === 'Envio de contrato' ? 'selected' : ''}>Envio de contrato</option>
+                <option value="Aguardando Emissão"   ${pedidoAtual.status === 'Aguardando Emissão' ? 'selected' : ''}>Aguardando Emissão</option>
+                <option value="Emissão Bloqueada"    ${pedidoAtual.status === 'Emissão Bloqueada' ? 'selected' : ''}>Emissão Bloqueada</option>
                 <option value="Emitido por Completo" ${pedidoAtual.status === 'Emitido por Completo' ? 'selected' : ''}>Emitido por Completo</option>
-                <option value="Emissão Parcial"      ${pedidoAtual.status === 'Emissão Parcial'      ? 'selected' : ''}>Emissão Parcial</option>
-                <option value="Envio de Brindes"     ${pedidoAtual.status === 'Envio de Brindes'     ? 'selected' : ''}>Envio de Brindes</option>
-                <option value="Concluído"            ${pedidoAtual.status === 'Concluído'            ? 'selected' : ''}>Concluído</option>
+                <option value="Emissão Parcial"      ${pedidoAtual.status === 'Emissão Parcial' ? 'selected' : ''}>Emissão Parcial</option>
+                <option value="Envio de Brindes"     ${pedidoAtual.status === 'Envio de Brindes' ? 'selected' : ''}>Envio de Brindes</option>
+                <option value="Concluído"            ${pedidoAtual.status === 'Concluído' ? 'selected' : ''}>Concluído</option>
               </select>
             </td>
             <td>${pedidoAtual.destino || ''}</td>
@@ -1273,7 +1242,6 @@
             <td>${formatarData(pedidoAtual.data_venda)}</td>
           </tr>
         `;
-
         // Observações
         document.getElementById('additional-info').innerHTML = `
           <tr>
@@ -1281,25 +1249,23 @@
             <td>${pedidoAtual.observacoes_financeiras  || ''}</td>
           </tr>
         `;
-
         // Aba 2 (Cliente)
         document.getElementById('customer-info').innerHTML = `
           <tr>
             <td>${pedidoAtual.nome || pedidoAtual.nome_comprador || ''}</td>
-            <td>${pedidoAtual.email     || ''}</td>
-            <td>${pedidoAtual.telefone  || ''}</td>
-            <td>${pedidoAtual.cpf       || ''}</td>
+            <td>${pedidoAtual.email || ''}</td>
+            <td>${pedidoAtual.telefone || ''}</td>
+            <td>${pedidoAtual.cpf || ''}</td>
             <td>${formatarData(pedidoAtual.data_nascimento)}</td>
             <td>${pedidoAtual.uf || ''}</td>
           </tr>
         `;
-
         // Aba 4 (Comercial)
         document.getElementById('commercial-info').innerHTML = `
           <tr>
             <td>${pedidoAtual.origem_cliente || ''}</td>
-            <td>${pedidoAtual.cliente_de     || ''}</td>
-            <td>${pedidoAtual.efetivado_por  || ''}</td>
+            <td>${pedidoAtual.cliente_de || ''}</td>
+            <td>${pedidoAtual.efetivado_por || ''}</td>
             <td>${pedidoAtual.comissao_do_agente || ''}</td>
           </tr>
         `;
@@ -1310,59 +1276,36 @@
     }
 
     /*******************************************************
-     * 5) Carregar Financeiro (supplier_finance) e sincronizar
+     * 5) Carregar Financeiro (usando novo endpoint api_detailspay.php)
      *******************************************************/
     async function carregarFinanceiro() {
       const pedidoId = obterIdPedido();
       if (pedidoId === 'Não informado') return;
-
       try {
-        const urlFin = `https://airland.com.br/supplier/api_finance.php?id_pedido=${pedidoId}`;
+        const urlFin = `https://airland.com.br/supplier/api_detailspay.php?id_pedido=${pedidoId}`;
         const respFin = await fetch(urlFin, { credentials: 'include' });
         if (!respFin.ok) throw new Error(`Erro ao buscar finance: ${respFin.status}`);
         const dadosFin = await respFin.json();
-
-        if (Array.isArray(dadosFin) && dadosFin.length) {
+        // Se a resposta for um objeto com a propriedade id, usa-o; caso contrário, se for array, pega o primeiro elemento.
+        if (dadosFin && !Array.isArray(dadosFin) && dadosFin.id) {
+          financeiroAtual = dadosFin;
+        } else if (Array.isArray(dadosFin) && dadosFin.length) {
           financeiroAtual = dadosFin[0];
         } else {
-          // Nenhum registro em supplier_finance, começa com objeto vazio
           financeiroAtual = {};
         }
-
-        // Preencher campos da tela, priorizando supplier_finance, se existir.
-        // Se não tiver em finance, mas tiver em pedidos, usamos de pedidos.
-        document.getElementById('gatewayInput').value =
-          financeiroAtual.gateway || pedidoAtual.gateway || '';
-
-        document.getElementById('dataVendaInput').value =
-          financeiroAtual.data_venda || pedidoAtual.data_venda || '';
-
-        document.getElementById('valorVendaInput').value =
-          financeiroAtual.valor_venda || pedidoAtual.valor_venda || '';
-
-        document.getElementById('valorRecebimentoInput').value =
-          financeiroAtual.valor_recebimento || '';
-
-        document.getElementById('dataRecebimentoInput').value =
-          financeiroAtual.data_recebimento || '';
-
-        document.getElementById('cambioDiaInput').value =
-          financeiroAtual.cambio_dia || '';
-
-        document.getElementById('receitaInput').value =
-          financeiroAtual.receita || '';
-
-        document.getElementById('meioPgtoInput').value =
-          financeiroAtual.meio_pgto || pedidoAtual.meio_pgto || '';
-
-        document.getElementById('bandeiraCartaoInput').value =
-          financeiroAtual.bandeira_cartao || pedidoAtual.bandeira_cartao || '';
-
-        document.getElementById('parcelasInput').value =
-          financeiroAtual.parcelas || pedidoAtual.parcelas || '';
-
-        document.getElementById('custoInput').value =
-          financeiroAtual.custo || '';
+        // Preencher os inputs com os dados do financeiro (priorizando os dados do financeiro, se existirem)
+        document.getElementById('gatewayInput').value = financeiroAtual.gateway || pedidoAtual.gateway || '';
+        document.getElementById('dataVendaInput').value = financeiroAtual.data_venda || pedidoAtual.data_venda || '';
+        document.getElementById('valorVendaInput').value = financeiroAtual.valor_venda || pedidoAtual.valor_venda || '';
+        document.getElementById('valorRecebimentoInput').value = financeiroAtual.valor_recebimento || '';
+        document.getElementById('dataRecebimentoInput').value = financeiroAtual.data_recebimento || '';
+        document.getElementById('cambioDiaInput').value = financeiroAtual.cambio_dia || '';
+        document.getElementById('receitaInput').value = financeiroAtual.receita || '';
+        document.getElementById('meioPgtoInput').value = financeiroAtual.meio_pgto || pedidoAtual.meio_pgto || '';
+        document.getElementById('bandeiraCartaoInput').value = financeiroAtual.bandeira_cartao || pedidoAtual.bandeira_cartao || '';
+        document.getElementById('parcelasInput').value = financeiroAtual.parcelas || pedidoAtual.parcelas || '';
+        document.getElementById('custoInput').value = financeiroAtual.custo || '';
       } catch (e) {
         console.error(e);
         alert('Erro ao carregar Financeiro: ' + e.message);
@@ -1370,7 +1313,7 @@
     }
 
     /*******************************************************
-     * 6) Salvar Financeiro (sincronizar com Pedidos e Finance)
+     * 6) Salvar Financeiro (usando novo endpoint api_detailspay.php)
      *******************************************************/
     async function salvarFinanceiro() {
       if (!pedidoAtual) {
@@ -1378,23 +1321,21 @@
         return;
       }
       const pedidoId = obterIdPedido();
-
-      // Lê valores da tela
-      const gatewayVal          = document.getElementById('gatewayInput').value.trim();
-      const dataVendaVal        = document.getElementById('dataVendaInput').value;
-      const valorVendaVal       = parseFloat(document.getElementById('valorVendaInput').value) || 0;
-      const valorRecebVal       = parseFloat(document.getElementById('valorRecebimentoInput').value) || 0;
-      const dataRecebVal        = document.getElementById('dataRecebimentoInput').value;
-      const cambioVal           = document.getElementById('cambioDiaInput').value;
-      const receitaVal          = parseFloat(document.getElementById('receitaInput').value) || 0;
-      const meioPgtoVal         = document.getElementById('meioPgtoInput').value.trim();
-      const bandeiraCartaoVal   = document.getElementById('bandeiraCartaoInput').value.trim();
-      const parcelasVal         = document.getElementById('parcelasInput').value.trim();
-      const custoVal            = parseFloat(document.getElementById('custoInput').value) || 0;
-
-      // Precisamos atualizar supplier_finance. Se não existir -> POST, se existir -> PUT
+      // Lê os valores dos inputs
+      const gatewayVal = document.getElementById('gatewayInput').value.trim();
+      const dataVendaVal = document.getElementById('dataVendaInput').value;
+      const valorVendaVal = parseFloat(document.getElementById('valorVendaInput').value) || 0;
+      const valorRecebVal = parseFloat(document.getElementById('valorRecebimentoInput').value) || 0;
+      const dataRecebVal = document.getElementById('dataRecebimentoInput').value;
+      const cambioVal = document.getElementById('cambioDiaInput').value;
+      const receitaVal = parseFloat(document.getElementById('receitaInput').value) || 0;
+      const meioPgtoVal = document.getElementById('meioPgtoInput').value.trim();
+      const bandeiraCartaoVal = document.getElementById('bandeiraCartaoInput').value.trim();
+      const parcelasVal = document.getElementById('parcelasInput').value.trim();
+      const custoVal = parseFloat(document.getElementById('custoInput').value) || 0;
+      // Monta o objeto para upsert via POST
       const financeBody = {
-        id_pedido: pedidoId, // sempre
+        id_pedido: pedidoId,
         gateway: gatewayVal,
         data_venda: dataVendaVal,
         valor_venda: valorVendaVal,
@@ -1407,14 +1348,10 @@
         parcelas: parcelasVal,
         custo: custoVal
       };
-
-      const methodFinance = (financeiroAtual && financeiroAtual.id) ? 'PUT' : 'POST';
-      const urlFinance = 'https://airland.com.br/supplier/api_finance.php';
-
       try {
-        const resp = await fetch(urlFinance, {
-          method: methodFinance,
-          headers: {'Content-Type': 'application/json'},
+        const resp = await fetch('https://airland.com.br/supplier/api_detailspay.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
           body: JSON.stringify(financeBody)
         });
@@ -1427,12 +1364,9 @@
         alert('Erro ao salvar Financeiro: ' + e.message);
         return;
       }
-
-      // Precisamos atualizar supplier_pedidos para os campos:
-      // gateway, data_venda, valor_venda, meio_pgto, bandeira_cartao, parcelas
-      // (seu backend deve aceitar PUT ou outro endpoint para atualizar)
+      // Atualiza os dados do pedido (supplier_pedidos)
       const pedidosBody = {
-        id: pedidoAtual.id, // ID do pedido
+        id: pedidoAtual.id,
         gateway: gatewayVal,
         data_venda: dataVendaVal,
         valor_venda: valorVendaVal,
@@ -1443,7 +1377,7 @@
       try {
         const respPed = await fetch('https://airland.com.br/supplier/api_pedidos.php', {
           method: 'PUT',
-          headers: {'Content-Type': 'application/json'},
+          headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
           body: JSON.stringify(pedidosBody)
         });
@@ -1456,9 +1390,7 @@
         alert('Erro ao atualizar Pedidos: ' + e.message);
         return;
       }
-
       alert('Dados financeiros salvos (sincronizados com Pedidos e Finance)!');
-      // Recarrega para refletir ID etc. (opcional)
       carregarFinanceiro();
     }
 
@@ -1468,14 +1400,12 @@
     async function carregarPlanilha() {
       const pedidoId = obterIdPedido();
       if (pedidoId === 'Não informado') return;
-
       try {
         const url = `https://airland.com.br/supplier/api_planilhas.php?id_pedido=${pedidoId}`;
         const resp = await fetch(url, { credentials: 'include' });
         if (!resp.ok) throw new Error(`Erro ao buscar planilha: ${resp.status}`);
         const dados = await resp.json();
         planilhasEmMemoria = Array.isArray(dados) ? dados : [];
-
         montarPlanilhaPrincipal(planilhasEmMemoria);
         montarEmissao(planilhasEmMemoria);
         recalcularPlanilha();
@@ -1490,23 +1420,23 @@
       lista.forEach(item => {
         const rowHtml = `
           <tr data-id="${item.id}">
-            <td><input type="text"   name="itens"     value="${item.produto      || ''}"></td>
-            <td><input type="date"   name="data_uso"  value="${item.data         || ''}"></td>
+            <td><input type="text" name="itens" value="${item.produto || ''}"></td>
+            <td><input type="date" name="data_uso" value="${item.data || ''}"></td>
             <td>
               <select name="idade">
                 <option value="ADT" ${item.idade === 'ADT' ? 'selected' : ''}>ADT</option>
                 <option value="CHD" ${item.idade === 'CHD' ? 'selected' : ''}>CHD</option>
               </select>
             </td>
-            <td><input type="number" name="valorUsd"  value="${item.net_usd      || 0}"></td>
-            <td><input type="number" name="lobista"   value="${item.lobista      || 0}"></td>
-            <td><input type="number" name="numero"    value="${item.quantidade   || 0}"></td>
-            <td name="totalDollar">${item.total_usd   || 0}</td>
-            <td name="netReal">${item.net_brl         || 0}</td>
+            <td><input type="number" name="valorUsd" value="${item.net_usd || 0}"></td>
+            <td><input type="number" name="lobista" value="${item.lobista || 0}"></td>
+            <td><input type="number" name="numero" value="${item.quantidade || 0}"></td>
+            <td name="totalDollar">${item.total_usd || 0}</td>
+            <td name="netReal">${item.net_brl || 0}</td>
             <td><input type="number" name="margem" step="0.01" value="${item.margem || 0}"></td>
-            <td name="totalPix">${item.total_pix      || 0}</td>
-            <td><input type="number" name="taxa"   step="0.01" value="${item.taxa || 0}"></td>
-            <td name="total10x">${item.total_10x      || 0}</td>
+            <td name="totalPix">${item.total_pix || 0}</td>
+            <td><input type="number" name="taxa" step="0.01" value="${item.taxa || 0}"></td>
+            <td name="total10x">${item.total_10x || 0}</td>
             <td>
               <button class="delete-row-button" onclick="excluirLinhaPlanilha(this)">
                 <i class="lni lni-trash-can"></i>
@@ -1516,7 +1446,6 @@
         `;
         cont.insertAdjacentHTML('beforeend', rowHtml);
       });
-      // listeners
       cont.querySelectorAll('input, select').forEach(el => {
         el.addEventListener('input', recalcularPlanilha);
       });
@@ -1536,15 +1465,15 @@
             <td>${item.net_usd || 0}</td>
             <td>${item.data ? formatarData(item.data) : ''}</td>
             <td><input type="date" name="dataPagamento" value="${item.data_pagamento || ''}"></td>
-            <td><input type="text" name="identificador" value="${item.identificador   || ''}"></td>
-            <td><input type="text" name="fornecedor"    value="${item.fornecedor     || ''}"></td>
+            <td><input type="text" name="identificador" value="${item.identificador || ''}"></td>
+            <td><input type="text" name="fornecedor" value="${item.fornecedor || ''}"></td>
             <td>
               <select name="status">
-                <option value="Aguardando Emissão"   ${item.status === 'Aguardando Emissão'   ? 'selected' : ''}>Aguardando Emissão</option>
-                <option value="Emissão Bloqueada"    ${item.status === 'Emissão Bloqueada'    ? 'selected' : ''}>Emissão Bloqueada</option>
-                <option value="Emitido – Não Pago"   ${item.status === 'Emitido – Não Pago'   ? 'selected' : ''}>Emitido – Não Pago</option>
-                <option value="Emitido TIF"          ${item.status === 'Emitido TIF'          ? 'selected' : ''}>Emitido TIF</option>
-                <option value="Concluído"            ${item.status === 'Concluído'            ? 'selected' : ''}>Concluído</option>
+                <option value="Aguardando Emissão" ${item.status === 'Aguardando Emissão' ? 'selected' : ''}>Aguardando Emissão</option>
+                <option value="Emissão Bloqueada" ${item.status === 'Emissão Bloqueada' ? 'selected' : ''}>Emissão Bloqueada</option>
+                <option value="Emitido – Não Pago" ${item.status === 'Emitido – Não Pago' ? 'selected' : ''}>Emitido – Não Pago</option>
+                <option value="Emitido TIF" ${item.status === 'Emitido TIF' ? 'selected' : ''}>Emitido TIF</option>
+                <option value="Concluído" ${item.status === 'Concluído' ? 'selected' : ''}>Concluído</option>
               </select>
             </td>
           </tr>
@@ -1560,8 +1489,8 @@
       const cont = document.getElementById('spreadsheet-info');
       const rowHtml = `
         <tr>
-          <td><input type="text"   name="itens"></td>
-          <td><input type="date"   name="data_uso"></td>
+          <td><input type="text" name="itens"></td>
+          <td><input type="date" name="data_uso"></td>
           <td>
             <select name="idade">
               <option value="ADT">ADT</option>
@@ -1585,8 +1514,6 @@
         </tr>
       `;
       cont.insertAdjacentHTML('beforeend', rowHtml);
-
-      // Recalcular quando editar
       const newRow = cont.lastElementChild;
       newRow.querySelectorAll('input, select').forEach(el => {
         el.addEventListener('input', recalcularPlanilha);
@@ -1597,13 +1524,11 @@
       const row = botao.closest('tr');
       const planilhaId = row.getAttribute('data-id');
       if (!planilhaId) {
-        // Linha nova, não salva
         row.remove();
         recalcularPlanilha();
         return;
       }
       if (!confirm('Deseja excluir esta linha?')) return;
-
       try {
         const resp = await fetch('https://airland.com.br/supplier/api_planilhas.php', {
           method: 'DELETE',
@@ -1635,12 +1560,10 @@
         const numero    = parseFloat(linha.querySelector('[name="numero"]')?.value)   || 0;
         const margemPct = (parseFloat(linha.querySelector('[name="margem"]')?.value) || 0) / 100;
         const taxaPct   = (parseFloat(linha.querySelector('[name="taxa"]')?.value)   || 0) / 100;
-
         const totalDollar = (valorUsd + lobista) * numero;
         const netReal     = totalDollar * dolarMagic;
         const totalPix    = (margemPct < 1) ? netReal / (1 - margemPct) : netReal;
         const total10x    = (taxaPct < 1)   ? totalPix / (1 - taxaPct)  : totalPix;
-
         linha.querySelector('[name="totalDollar"]').textContent = totalDollar.toFixed(2);
         linha.querySelector('[name="netReal"]').textContent     = netReal.toFixed(2);
         linha.querySelector('[name="totalPix"]').textContent    = totalPix.toFixed(2);
@@ -1653,19 +1576,18 @@
       let totalDollar = 0, totalNetReal = 0, totalPix = 0, total10x = 0;
       document.querySelectorAll('#spreadsheet-info tr').forEach(linha => {
         totalDollar  += parseFloat(linha.querySelector('[name="totalDollar"]')?.textContent) || 0;
-        totalNetReal += parseFloat(linha.querySelector('[name="netReal"]').textContent)      || 0;
-        totalPix     += parseFloat(linha.querySelector('[name="totalPix"]').textContent)     || 0;
-        total10x     += parseFloat(linha.querySelector('[name="total10x"]').textContent)     || 0;
+        totalNetReal += parseFloat(linha.querySelector('[name="netReal"]').textContent) || 0;
+        totalPix     += parseFloat(linha.querySelector('[name="totalPix"]').textContent) || 0;
+        total10x     += parseFloat(linha.querySelector('[name="total10x"]').textContent) || 0;
       });
       document.getElementById('resumo-total-dollar').textContent = totalDollar.toFixed(2);
-      document.getElementById('resumo-net-real').textContent      = totalNetReal.toFixed(2);
-      document.getElementById('resumo-total-pix').textContent     = totalPix.toFixed(2);
-      document.getElementById('resumo-total-10x').textContent     = total10x.toFixed(2);
+      document.getElementById('resumo-net-real').textContent = totalNetReal.toFixed(2);
+      document.getElementById('resumo-total-pix').textContent = totalPix.toFixed(2);
+      document.getElementById('resumo-total-10x').textContent = total10x.toFixed(2);
     }
 
     function atualizarDolarMagic() {
       const dolarCambio = parseFloat(document.getElementById('dolar-cambio').value) || 0;
-      // Fator de exemplo
       const dolarMagic = dolarCambio * 1.0098;
       document.getElementById('dolar-magic').textContent = dolarMagic.toFixed(2);
       recalcularPlanilha();
@@ -1681,63 +1603,54 @@
         return;
       }
       const dolarCambio = parseFloat(document.getElementById('dolar-cambio').value) || 0;
-      const dolarMagic  = parseFloat(document.getElementById('dolar-magic').textContent) || 0;
-
+      const dolarMagic = parseFloat(document.getElementById('dolar-magic').textContent) || 0;
       const rows = document.querySelectorAll('#spreadsheet-info tr');
       const novos = [];
       const existentes = [];
-
       rows.forEach(linha => {
         const planilhaId = linha.getAttribute('data-id');
-        const itens      = (linha.querySelector('[name="itens"]')?.value || '').trim();
-        const dataUso    = linha.querySelector('[name="data_uso"]')?.value || '';
-        const idade      = linha.querySelector('[name="idade"]')?.value || 'ADT';
-        const valorUsd   = parseFloat(linha.querySelector('[name="valorUsd"]')?.value) || 0;
-        const lobista    = parseFloat(linha.querySelector('[name="lobista"]')?.value)  || 0;
-        const numero     = parseFloat(linha.querySelector('[name="numero"]')?.value)   || 0;
-        const margemPct  = parseFloat(linha.querySelector('[name="margem"]')?.value)   || 0;
-        const taxaPct    = parseFloat(linha.querySelector('[name="taxa"]')?.value)     || 0;
-
+        const itens = (linha.querySelector('[name="itens"]')?.value || '').trim();
+        const dataUso = linha.querySelector('[name="data_uso"]')?.value || '';
+        const idade = linha.querySelector('[name="idade"]')?.value || 'ADT';
+        const valorUsd = parseFloat(linha.querySelector('[name="valorUsd"]')?.value) || 0;
+        const lobista = parseFloat(linha.querySelector('[name="lobista"]')?.value) || 0;
+        const numero = parseFloat(linha.querySelector('[name="numero"]')?.value) || 0;
+        const margemPct = parseFloat(linha.querySelector('[name="margem"]')?.value) || 0;
+        const taxaPct = parseFloat(linha.querySelector('[name="taxa"]')?.value) || 0;
         const totalDollar = (valorUsd + lobista) * numero;
-        const netBrl      = totalDollar * dolarMagic;
-        const totalPix    = (margemPct < 100) ? netBrl / (1 - margemPct/100) : netBrl;
-        const total10x    = (taxaPct < 100)   ? totalPix / (1 - taxaPct/100) : totalPix;
-
+        const netBrl = totalDollar * dolarMagic;
+        const totalPix = (margemPct < 100) ? netBrl / (1 - margemPct/100) : netBrl;
+        const total10x = (taxaPct < 100) ? totalPix / (1 - taxaPct/100) : totalPix;
         const obj = {
           id_pedido: pedidoId,
-          produto:   itens,
-          data:      dataUso,
+          produto: itens,
+          data: dataUso,
           idade,
-          net_usd:   valorUsd,
+          net_usd: valorUsd,
           lobista,
           quantidade: numero,
           total_usd: totalDollar,
-          net_brl:   netBrl,
-          margem:    margemPct,
+          net_brl: netBrl,
+          margem: margemPct,
           total_pix: totalPix,
-          taxa:      taxaPct,
+          taxa: taxaPct,
           total_10x: total10x,
           dolar_cambio: dolarCambio,
-          dolar_magic:  dolarMagic
+          dolar_magic: dolarMagic
         };
-
         if (planilhaId) {
-          // PUT
           const original = planilhasEmMemoria.find(p => String(p.id) === planilhaId);
           if (original) {
             obj.id = planilhaId;
             existentes.push(obj);
           } else {
-            // não achou => POST
             novos.push(obj);
           }
         } else {
-          // POST
           novos.push(obj);
         }
       });
-
-      // POST
+      // POST para novos
       if (novos.length) {
         try {
           const respPost = await fetch('https://airland.com.br/supplier/api_planilhas.php', {
@@ -1753,7 +1666,7 @@
           return;
         }
       }
-      // PUT
+      // PUT para existentes
       if (existentes.length) {
         try {
           const respPut = await fetch('https://airland.com.br/supplier/api_planilhas.php', {
@@ -1769,7 +1682,6 @@
           return;
         }
       }
-
       alert('Planilha salva com sucesso!');
       carregarPlanilha();
     }
@@ -1780,32 +1692,28 @@
     async function salvarEmissao() {
       const pedidoId = obterIdPedido();
       if (pedidoId === 'Não informado') return;
-
       const updates = [];
       document.querySelectorAll('#emission-info tr').forEach(linha => {
         const planilhaId = linha.getAttribute('data-id');
         if (!planilhaId) return;
         const original = planilhasEmMemoria.find(x => String(x.id) === planilhaId);
         if (!original) return;
-
-        const dataPag   = linha.querySelector('[name="dataPagamento"]')?.value || '';
-        const ident     = linha.querySelector('[name="identificador"]')?.value || '';
-        const fornec    = linha.querySelector('[name="fornecedor"]')?.value    || '';
-        const stat      = linha.querySelector('[name="status"]')?.value        || '';
-
+        const dataPag = linha.querySelector('[name="dataPagamento"]')?.value || '';
+        const ident = linha.querySelector('[name="identificador"]')?.value || '';
+        const fornec = linha.querySelector('[name="fornecedor"]')?.value || '';
+        const stat = linha.querySelector('[name="status"]')?.value || '';
         updates.push({
           ...original,
           data_pagamento: dataPag,
           identificador: ident,
-          fornecedor:   fornec,
-          status:       stat
+          fornecedor: fornec,
+          status: stat
         });
       });
       if (!updates.length) {
         alert('Nenhuma linha para atualizar Emissão.');
         return;
       }
-
       try {
         const respPut = await fetch('https://airland.com.br/supplier/api_planilhas.php', {
           method: 'PUT',
@@ -1826,11 +1734,10 @@
      * Ao carregar a página
      *******************************************************/
     document.addEventListener('DOMContentLoaded', async () => {
-      await verificarSessao();          // 1) Verifica login
-      await carregarDetalhesPedido();   // 2) Carrega supplier_pedidos
-      await carregarFinanceiro();       // 3) Carrega supplier_finance
-      await carregarPlanilha();         // 4) Carrega supplier_planilhas
-
+      await verificarSessao();          // Verifica login
+      await carregarDetalhesPedido();   // Carrega supplier_pedidos
+      await carregarFinanceiro();       // Carrega financeiro via novo endpoint
+      await carregarPlanilha();         // Carrega supplier_planilhas
       // Listener de câmbio
       document.getElementById('dolar-cambio').addEventListener('input', atualizarDolarMagic);
       // Botão de adicionar linha
