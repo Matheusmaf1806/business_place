@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1471,13 +1472,12 @@
         datalist.innerHTML = '';
         // Para cada registro, monta a cadeia de texto: Tipo - Categoria - Nome - Dias
         data.forEach(item => {
-          // Se os campos "type" e "category" não existirem, use valores padrão ou ignore
           const type = item.type || 'Tipo';
           const category = item.category || 'Categoria';
           const name = item.name_site || 'Nome';
           const day = item.day ? item.day + ' dias' : '';
           const optionValue = [type, category, name, day].filter(Boolean).join(' - ');
-          if(optionValue) {
+          if (optionValue) {
             const option = document.createElement('option');
             option.value = optionValue;
             datalist.appendChild(option);
@@ -1530,37 +1530,11 @@
     }
 
     /*******************************************************
-     * 9) Montar Emissão
+     * 9) Montar Emissao
      *******************************************************/
     function montarEmissao(lista) {
-      const cont = document.getElementById('emission-info');
-      cont.innerHTML = '';
-      if (!lista.length) {
-        cont.innerHTML = `<tr><td colspan="7">Nenhum item.</td></tr>`;
-        return;
-      }
-      lista.forEach(item => {
-        const row = `
-          <tr data-id="${item.id}">
-            <td>${item.produto || ''}</td>
-            <td>${item.net_usd || 0}</td>
-            <td>${item.data ? formatarData(item.data) : ''}</td>
-            <td><input type="date" name="dataPagamento" value="${item.data_pagamento || ''}"></td>
-            <td><input type="text" name="identificador" value="${item.identificador || ''}"></td>
-            <td><input type="text" name="fornecedor" value="${item.fornecedor || ''}"></td>
-            <td>
-              <select name="status">
-                <option value="Aguardando Emissão" ${item.status === 'Aguardando Emissão' ? 'selected' : ''}>Aguardando Emissão</option>
-                <option value="Emissão Bloqueada" ${item.status === 'Emissão Bloqueada' ? 'selected' : ''}>Emissão Bloqueada</option>
-                <option value="Emitido – Não Pago" ${item.status === 'Emitido – Não Pago' ? 'selected' : ''}>Emitido – Não Pago</option>
-                <option value="Emitido TIF" ${item.status === 'Emitido TIF' ? 'selected' : ''}>Emitido TIF</option>
-                <option value="Concluído" ${item.status === 'Concluído' ? 'selected' : ''}>Concluído</option>
-              </select>
-            </td>
-          </tr>
-        `;
-        cont.insertAdjacentHTML('beforeend', row);
-      });
+      // Nesta implementação, a aba "Emissão" é simplificada.
+      // Se precisar algo específico, inserir aqui.
     }
 
     /*******************************************************
@@ -1647,10 +1621,12 @@
         const numero    = parseFloat(linha.querySelector('[name="numero"]')?.value) || 0;
         const margemPct = (parseFloat(linha.querySelector('[name="margem"]')?.value) || 0) / 100;
         const taxaPct   = (parseFloat(linha.querySelector('[name="taxa"]')?.value) || 0) / 100;
+
         const totalDollar = (valorUsd + lobista) * numero;
         const netReal     = totalDollar * dolarMagic;
         const totalPix    = (margemPct < 1) ? netReal / (1 - margemPct) : netReal;
         const total10x    = (taxaPct < 1)   ? totalPix / (1 - taxaPct)  : totalPix;
+
         linha.querySelector('[name="totalDollar"]').textContent = totalDollar.toFixed(2);
         linha.querySelector('[name="netReal"]').textContent      = netReal.toFixed(2);
         linha.querySelector('[name="totalPix"]').textContent     = totalPix.toFixed(2);
@@ -1791,7 +1767,7 @@
     }
 
     /*******************************************************
-     * 16) Salvar Emissão e recarregar a página
+     * 16) Salvar Emissao e recarregar a página
      *******************************************************/
     async function salvarEmissao() {
       const pedidoId = obterIdPedido();
@@ -1845,6 +1821,7 @@
       await carregarDetalhesPedido();
       await carregarFinanceiro();
       await carregarPlanilha();
+
       // Carrega as opções de markup para o autocomplete do campo "itens"
       await loadMarkupOptions();
 
