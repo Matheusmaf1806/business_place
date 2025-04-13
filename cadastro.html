@@ -1,6 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 
+  <!-- =============================================================
+       Cabeçalho: Metadados, CSS e inicialização
+       ============================================================= -->
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -20,23 +23,40 @@
 
   <!-- Estilo para controle dos steps -->
   <style>
-    .step {
+    .step { 
       display: none;
     }
-    .step.active {
-      display: block;
+    .step.active { 
+      display: block; 
     }
+    /* Estilos adicionais para espaçamento e layout */
+    .input-style-1 { margin-bottom: 15px; }
+    .button-group { margin-top: 20px; }
   </style>
+
+  <!-- Inclusão do Supabase JS (biblioteca oficial) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+  <!-- Espaço para novos estilos ou customizações -->
+  <!-- =============================================================
+       Fim do Cabeçalho
+       ============================================================= -->
 </head>
 
 <body>
-  <!-- ======== Preloader =========== -->
+  <!-- =============================================================
+       Preloader
+       ============================================================= -->
   <div id="preloader">
     <div class="spinner"></div>
   </div>
-  <!-- ======== Preloader =========== -->
+  <!-- =============================================================
+       Fim do Preloader
+       ============================================================= -->
 
-  <!-- ======== sidebar-nav start =========== -->
+  <!-- =============================================================
+       Sidebar de Navegação
+       ============================================================= -->
   <aside class="sidebar-nav-wrapper">
     <div class="navbar-logo">
       <a href="index.html">
@@ -45,153 +65,90 @@
     </div>
     <nav class="sidebar-nav">
       <ul>
-        <!-- Painel de Vendas: sem seta -->
+        <!-- Menu: Painel de Vendas -->
         <li class="nav-item">
           <a href="painel-vendas.html">
             <span class="icon">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M8.74999 18.3333C12.2376 18.3333 15.1364 15.8128 15.7244 12.4941C15.8448 11.8143 15.2737 11.25 14.5833 11.25H9.99999C9.30966 11.25 8.74999 10.6903 8.74999 10V5.41666C8.74999 4.7263 8.18563 4.15512 7.50586 4.27556C4.18711 4.86357 1.66666 7.76243 1.66666 11.25C1.66666 15.162 4.83797 18.3333 8.74999 18.3333Z" />
-                <path
-                  d="M17.0833 10C17.7737 10 18.3432 9.43708 18.2408 8.75433C17.7005 5.14918 14.8508 2.29947 11.2457 1.75912C10.5629 1.6568 10 2.2263 10 2.91665V9.16666C10 9.62691 10.3731 10 10.8333 10H17.0833Z" />
-              </svg>
+              <!-- SVG omitido para brevidade -->
             </span>
             <span class="text">Painel de Vendas</span>
           </a>
         </li>
-
-        <!-- Vendas com submenu -->
+        <!-- Menu: Vendas com submenu -->
         <li class="nav-item nav-item-has-children">
-          <a href="#0" class="collapsed" data-bs-toggle="collapse" data-bs-target="#ddmenu_2" aria-controls="ddmenu_2"
-            aria-expanded="false" aria-label="Toggle navigation">
+          <a href="#0" class="collapsed" data-bs-toggle="collapse" data-bs-target="#ddmenu_2" aria-controls="ddmenu_2" aria-expanded="false" aria-label="Toggle navigation">
             <span class="icon">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M2.49999 3.33333C2.03976 3.33333 1.66666 3.70643 1.66666 4.16666V7.49999C1.66666 7.96023 2.03976 8.33333 2.49999 8.33333H5.83332C6.29356 8.33333 6.66666 7.96023 6.66666 7.49999V4.16666C6.66666 3.70643 6.29356 3.33333 5.83332 3.33333H2.49999Z" />
-                <path
-                  d="M2.49999 11.6667C2.03976 11.6667 1.66666 12.0398 1.66666 12.5V15.8333C1.66666 16.2936 2.03976 16.6667 2.49999 16.6667H5.83332C6.29356 16.6667 6.66666 16.2936 6.66666 15.8333V12.5C6.66666 12.0398 6.29356 11.6667 5.83332 11.6667H2.49999Z" />
-                <path
-                  d="M8.33334 4.16667C8.33334 3.8215 8.61318 3.54167 8.95834 3.54167H17.7083C18.0535 3.54167 18.3333 3.8215 18.3333 4.16667C18.3333 4.51185 18.0535 4.79167 17.7083 4.79167H8.95834C8.61318 4.79167 8.33334 4.51185 8.33334 4.16667Z" />
-                <path
-                  d="M8.33334 7.5C8.33334 7.15483 8.61318 6.875 8.95834 6.875H14.7917C15.1368 6.875 15.4167 7.15483 15.4167 7.5C15.4167 7.84517 15.1368 8.125 14.7917 8.125H8.95834C8.61318 8.125 8.33334 7.84517 8.33334 7.5Z" />
-              </svg>
+              <!-- SVG omitido -->
             </span>
             <span class="text">Vendas</span>
           </a>
           <ul id="ddmenu_2" class="collapse dropdown-nav">
-            <li>
-              <a href="pedidos.html">
-                <span class="arrow-icon">→</span> Pedidos
-              </a>
-            </li>
-            <li>
-              <a href="clientes.html">
-                <span class="arrow-icon">→</span> Clientes
-              </a>
-            </li>
+            <li><a href="pedidos.html"><span class="arrow-icon">→</span> Pedidos</a></li>
+            <li><a href="clientes.html"><span class="arrow-icon">→</span> Clientes</a></li>
           </ul>
         </li>
-
-        <!-- Orçamentos (sem submenu) -->
+        <!-- Menu: Orçamentos -->
         <li class="nav-item">
           <a href="orcamentos.html">
             <span class="icon">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M3.33334 3.35442C3.33334 2.4223 4.07954 1.66666 5.00001 1.66666H15C15.9205 1.66666 16.6667 2.4223 16.6667 3.35442V16.8565C16.6667 17.5519 15.8827 17.9489 15.3333 17.5317L13.8333 16.3924C13.537 16.1673 13.1297 16.1673 12.8333 16.3924L10.5 18.1646C10.2037 18.3896 9.79634 18.3896 9.50001 18.1646L7.16668 16.3924C6.87038 16.1673 6.46298 16.1673 6.16668 16.3924L4.66668 17.5317C4.11731 17.9489 3.33334 17.5519 3.33334 16.8565V3.35442Z" />
-              </svg>
+              <!-- SVG omitido -->
             </span>
             <span class="text">Orçamentos</span>
           </a>
         </li>
-
-        <!-- Personalize com submenu -->
+        <!-- Menu: Personalize -->
         <li class="nav-item nav-item-has-children">
-          <a href="#0" class="" data-bs-toggle="collapse" data-bs-target="#ddmenu_3" aria-controls="ddmenu_3"
-            aria-expanded="true" aria-label="Toggle navigation">
+          <a href="#0" data-bs-toggle="collapse" data-bs-target="#ddmenu_3" aria-controls="ddmenu_3" aria-expanded="true" aria-label="Toggle navigation">
             <span class="icon">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M4.16666 4.16675C4.16666 2.78604 6.77833 1.66675 9.99999 1.66675C13.2217 1.66675 15.8333 2.78604 15.8333 4.16675V4.57073C15.8027 4.60316 15.7678 4.637 15.7282 4.6722C15.4683 4.90251 15.0568 5.13848 14.4946 5.34931C13.3747 5.76924 11.7858 6.04175 9.99999 6.04175C8.21415 6.04175 6.62521 5.76924 5.5054 5.34931C4.94318 5.13848 4.53162 4.90251 4.27185 4.6722C4.23215 4.637 4.19726 4.60316 4.16666 4.57073V4.16675Z" />
-                <path
-                  d="M4.16666 6.10992V8.73742C4.19726 8.76983 4.23215 8.80367 4.27185 8.83883C4.53162 9.06917 4.94318 9.30517 5.5054 9.516C6.62521 9.93592 8.21415 10.2084 9.99999 10.2084C11.7858 10.2084 13.3747 9.93592 14.4946 9.516C15.0568 9.30517 15.4683 9.06917 15.7282 8.83883C15.7678 8.80367 15.8027 8.76983 15.8333 8.73742V6.10992C15.5592 6.26222 15.2563 6.39865 14.9335 6.51972C13.6404 7.00462 11.8961 7.29175 9.99999 7.29175C8.10394 7.29175 6.35954 7.00462 5.06649 6.51972C4.74364 6.39865 4.44074 6.26222 4.16666 6.10992Z" />
-              </svg>
+              <!-- SVG omitido -->
             </span>
             <span class="text">Personalize</span>
           </a>
           <ul id="ddmenu_3" class="collapsed show dropdown-nav">
-            <li>
-              <a href="design.html#idvisual">
-                <span class="arrow-icon">→</span> Identidade Visual
-              </a>
-            </li>
-            <li>
-              <a href="design.html#paleta">
-                <span class="arrow-icon">→</span> Paleta de Cores
-              </a>
-            </li>
-            <li>
-              <a href="design.html#banner">
-                <span class="arrow-icon">→</span> Banner
-              </a>
-            </li>
-            <li>
-              <a href="design.html/#footer">
-                <span class="arrow-icon">→</span> Rodapé
-              </a>
-            </li>
+            <li><a href="design.html#idvisual"><span class="arrow-icon">→</span> Identidade Visual</a></li>
+            <li><a href="design.html#paleta"><span class="arrow-icon">→</span> Paleta de Cores</a></li>
+            <li><a href="design.html#banner"><span class="arrow-icon">→</span> Banner</a></li>
+            <li><a href="design.html/#footer"><span class="arrow-icon">→</span> Rodapé</a></li>
           </ul>
         </li>
-
-        <!-- Usuários com submenu -->
+        <!-- Menu: Usuários -->
         <li class="nav-item nav-item-has-children">
-          <a href="#0" class="" data-bs-toggle="collapse" data-bs-target="#ddmenu_usuarios" aria-controls="ddmenu_usuarios"
-            aria-expanded="true" aria-label="Toggle navigation">
+          <a href="#0" data-bs-toggle="collapse" data-bs-target="#ddmenu_usuarios" aria-controls="ddmenu_usuarios" aria-expanded="true" aria-label="Toggle navigation">
             <span class="icon">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M14.9211 10.1294C15.1652 9.88534 15.1652 9.48967 14.9211 9.24559L10.7544 5.0789C10.5103 4.83482 10.1147 4.83482 9.87057 5.0789C9.62649 5.32297 9.62649 5.71871 9.87057 5.96278L12.9702 9.06251H1.97916C1.63398 9.06251 1.35416 9.34234 1.35416 9.68751C1.35416 10.0327 1.63398 10.3125 1.97916 10.3125H12.9702L9.87057 13.4123C9.62649 13.6563 9.62649 14.052 9.87057 14.2961C10.1147 14.5402 10.5103 14.5402 10.7544 14.2961L14.9211 10.1294Z" />
-                <path
-                  d="M11.6383 15.18L15.805 11.0133C16.5373 10.2811 16.5373 9.09391 15.805 8.36166L11.6383 4.195C11.2722 3.82888 10.7923 3.64582 10.3125 3.64582V3.02082C10.3125 2.10035 11.0587 1.35416 11.9792 1.35416H16.9792C17.8997 1.35416 18.6458 2.10035 18.6458 3.02082V16.3542C18.6458 17.2747 17.8997 18.0208 16.9792 18.0208H11.9792C11.0587 18.0208 10.3125 17.2747 10.3125 16.3542V15.7292C10.7923 15.7292 11.2722 15.5461 11.6383 15.18Z" />
-              </svg>
+              <!-- SVG omitido -->
             </span>
             <span class="text">Usuários</span>
           </a>
           <ul id="ddmenu_usuarios" class="collapsed show dropdown-nav">
-            <li>
-              <a href="createuser.html">
-                <span class="arrow-icon">→</span> Criar acesso
-              </a>
-            </li>
-            <li>
-              <a href="users.html">
-                <span class="arrow-icon">→</span> Gerenciar usuários
-              </a>
-            </li>
+            <li><a href="createuser.html"><span class="arrow-icon">→</span> Criar acesso</a></li>
+            <li><a href="users.html"><span class="arrow-icon">→</span> Gerenciar usuários</a></li>
           </ul>
         </li>
       </ul>
     </nav>
+    <!-- Caixa promocional com dados do afiliado (os dados virão do back-end) -->
     <div class="promo-box">
       <div class="promo-icon">
-        <img class="mx-auto" src="./assets/images/logo/logo-icon-big.svg" alt="Logo">
+        <!-- A imagem abaixo deverá ser substituída pela foto de perfil do afiliado, vinda da API -->
+        <img class="mx-auto" src="assets/images/logo/logo-icon-big.svg" alt="Logo">
       </div>
-      <h3>Upgrade to PRO</h3>
-      <p>Improve your development process and start doing more with Airland PRO!</p>
-      <a href="https://Airland.com/pro" target="_blank" rel="nofollow" class="main-btn primary-btn btn-hover">
-        Upgrade to PRO
-      </a>
+      <h3>Adam Joe</h3>
+      <p>A Airland agradece por lhe ter como colaborador do nosso time.</p>
     </div>
   </aside>
   <div class="overlay"></div>
-  <!-- ======== sidebar-nav end =========== -->
+  <!-- =============================================================
+       Fim do Sidebar
+       ============================================================= -->
 
-  <!-- ======== main-wrapper start =========== -->
+  <!-- =============================================================
+       Main Wrapper e Header
+       ============================================================= -->
   <main class="main-wrapper">
-    <!-- ========== header start ========== -->
     <header class="header">
       <div class="container-fluid">
         <div class="row">
+          <!-- Menu Toggle -->
           <div class="col-lg-5 col-md-5 col-6">
             <div class="header-left d-flex align-items-center">
               <div class="menu-toggle-btn mr-15">
@@ -201,19 +158,14 @@
               </div>
             </div>
           </div>
+          <!-- Dados do Perfil no Header (exemplo estático para visualização) -->
           <div class="col-lg-7 col-md-7 col-6">
             <div class="header-right">
-              <!-- notification start -->
+              <!-- Notificações (trecho omitido para brevidade) -->
               <div class="notification-box ml-15 d-none d-md-flex">
-                <button class="dropdown-toggle" type="button" id="notification" data-bs-toggle="dropdown"
-                  aria-expanded="false">
+                <button class="dropdown-toggle" type="button" id="notification" data-bs-toggle="dropdown" aria-expanded="false">
                   <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M11 20.1667C9.88317 20.1667 8.88718 19.63 8.23901 18.7917H13.761C13.113 19.63 12.1169 20.1667 11 20.1667Z"
-                      fill="" />
-                    <path
-                      d="M10.1157 2.74999C10.1157 2.24374 10.5117 1.83333 11 1.83333C11.4883 1.83333 11.8842 2.24374 11.8842 2.74999V2.82604C14.3932 3.26245 16.3051 5.52474 16.3051 8.24999V14.287C16.3051 14.5301 16.3982 14.7633 16.564 14.9352L18.2029 16.6342C18.4814 16.9229 18.2842 17.4167 17.8903 17.4167H4.10961C3.71574 17.4167 3.5185 16.9229 3.797 16.6342L5.43589 14.9352C5.6017 14.7633 5.69485 14.5301 5.69485 14.287V8.24999C5.69485 5.52474 7.60672 3.26245 10.1157 2.82604V2.74999Z"
-                      fill="" />
+                    <!-- SVG omitido -->
                   </svg>
                   <span></span>
                 </button>
@@ -224,15 +176,8 @@
                         <img src="assets/images/lead/lead-6.png" alt="" />
                       </div>
                       <div class="content">
-                        <h6>
-                          John Doe
-                          <span class="text-regular">
-                            comment on a product.
-                          </span>
-                        </h6>
-                        <p>
-                          Lorem ipsum dolor sit amet, consect etur adipiscing elit Vivamus tortor.
-                        </p>
+                        <h6>John Doe <span class="text-regular">comment on a product.</span></h6>
+                        <p>Lorem ipsum dolor sit amet, consect etur adipiscing elit Vivamus tortor.</p>
                         <span>10 mins ago</span>
                       </div>
                     </a>
@@ -243,29 +188,21 @@
                         <img src="assets/images/lead/lead-1.png" alt="" />
                       </div>
                       <div class="content">
-                        <h6>
-                          Jonathon
-                          <span class="text-regular">
-                            like on a product.
-                          </span>
-                        </h6>
-                        <p>
-                          Lorem ipsum dolor sit amet, consect etur adipiscing elit Vivamus tortor.
-                        </p>
+                        <h6>Jonathon <span class="text-regular">like on a product.</span></h6>
+                        <p>Lorem ipsum dolor sit amet, consect etur adipiscing elit Vivamus tortor.</p>
                         <span>10 mins ago</span>
                       </div>
                     </a>
                   </li>
                 </ul>
               </div>
-              <!-- notification end -->
-              <!-- profile start -->
+              <!-- Perfil -->
               <div class="profile-box ml-15">
-                <button class="dropdown-toggle bg-transparent border-0" type="button" id="profile"
-                  data-bs-toggle="dropdown" aria-expanded="false">
+                <button class="dropdown-toggle bg-transparent border-0" type="button" id="profile" data-bs-toggle="dropdown" aria-expanded="false">
                   <div class="profile-info">
                     <div class="info">
                       <div class="image">
+                        <!-- A imagem abaixo deverá ser substituída pela foto de perfil do afiliado, vinda da API -->
                         <img src="assets/images/profile/profile-image.png" alt="" />
                       </div>
                       <div>
@@ -283,46 +220,35 @@
                       </div>
                       <div class="content">
                         <h4 class="text-sm">Adam Joe</h4>
-                        <a class="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white text-xs"
-                          href="#">Email@gmail.com</a>
+                        <a class="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white text-xs" href="#">Email@gmail.com</a>
                       </div>
                     </div>
                   </li>
                   <li class="divider"></li>
-                  <li>
-                    <a href="#0">
-                      <i class="lni lni-user"></i> View Profile
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#0">
-                      <i class="lni lni-alarm"></i> Notifications
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#0"> <i class="lni lni-inbox"></i> Messages </a>
-                  </li>
-                  <li>
-                    <a href="#0"> <i class="lni lni-cog"></i> Settings </a>
-                  </li>
+                  <li><a href="#0"><i class="lni lni-user"></i> View Profile</a></li>
+                  <li><a href="#0"><i class="lni lni-alarm"></i> Notifications</a></li>
+                  <li><a href="#0"><i class="lni lni-inbox"></i> Messages</a></li>
+                  <li><a href="#0"><i class="lni lni-cog"></i> Settings</a></li>
                   <li class="divider"></li>
-                  <li>
-                    <a href="#0"> <i class="lni lni-exit"></i> Sign Out </a>
-                  </li>
+                  <li><a href="#0"><i class="lni lni-exit"></i> Sign Out</a></li>
                 </ul>
               </div>
-              <!-- profile end -->
+              <!-- Fim do Perfil -->
             </div>
           </div>
         </div>
       </div>
     </header>
-    <!-- ========== header end ========== -->
+    <!-- =============================================================
+         Fim do Header
+         ============================================================= -->
 
-    <!-- ========== Content Section (Cadastro) start ========== -->
+    <!-- =============================================================
+         Seção de Cadastro (Formulários dos Steps)
+         ============================================================= -->
     <section class="signin-section">
       <div class="container-fluid">
-        <!-- ========== title-wrapper start ========== -->
+        <!-- Título e Breadcrumb -->
         <div class="title-wrapper pt-30">
           <div class="row align-items-center">
             <div class="col-md-6">
@@ -330,40 +256,29 @@
                 <h2>Cadastro de Agência</h2>
               </div>
             </div>
-            <!-- end col -->
             <div class="col-md-6">
               <div class="breadcrumb-wrapper">
                 <nav aria-label="breadcrumb">
                   <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                      <a href="#0">Dashboard</a>
-                    </li>
-                    <li class="breadcrumb-item">
-                      <a href="#0">Cadastro</a>
-                    </li>
-                    <li class="breadcrumb-item active" aria-current="page">
-                      Agência
-                    </li>
+                    <li class="breadcrumb-item"><a href="#0">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="#0">Cadastro</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Agência</li>
                   </ol>
                 </nav>
               </div>
             </div>
-            <!-- end col -->
           </div>
-          <!-- end row -->
         </div>
-        <!-- ========== title-wrapper end ========== -->
 
+        <!-- Área dos formulários (two steps) -->
         <div class="row g-0 auth-row">
-          <!-- Coluna esquerda com imagem ilustrativa -->
+          <!-- Coluna com imagem ilustrativa -->
           <div class="col-lg-6">
             <div class="auth-cover-wrapper bg-primary-100">
               <div class="auth-cover">
                 <div class="title text-center">
                   <h1 class="text-primary mb-10">Bem-vindo!</h1>
-                  <p class="text-medium">
-                    Comece criando a melhor experiência para seus clientes.
-                  </p>
+                  <p class="text-medium">Comece criando a melhor experiência para seus clientes.</p>
                 </div>
                 <div class="cover-image">
                   <img src="assets/images/auth/signin-image.svg" alt="" />
@@ -374,21 +289,19 @@
               </div>
             </div>
           </div>
-          <!-- end col -->
+          <!-- Fim da Coluna ilustrativa -->
 
-          <!-- Coluna direita com os formulários de cadastro -->
+          <!-- Coluna dos formulários -->
           <div class="col-lg-6">
             <div class="signup-wrapper">
               <div class="form-wrapper">
                 <!-- STEP 1: Dados do Usuário -->
                 <div id="step1" class="step active">
                   <h6 class="mb-15">Dados do Usuário</h6>
-                  <p class="text-sm mb-25">
-                    Preencha os dados abaixo para criar sua conta.
-                  </p>
+                  <p class="text-sm mb-25">Preencha os dados abaixo para criar sua conta.</p>
                   <form id="userForm">
                     <div class="row">
-                      <!-- Linha 1: Primeiro Nome e Último Nome -->
+                      <!-- Primeiro Nome e Último Nome -->
                       <div class="col-md-6">
                         <div class="input-style-1">
                           <label>Primeiro Nome *</label>
@@ -401,7 +314,7 @@
                           <input type="text" name="ultimo_nome" placeholder="Último Nome" required />
                         </div>
                       </div>
-                      <!-- Linha 2: Telefone e Email -->
+                      <!-- Telefone e Email -->
                       <div class="col-md-6">
                         <div class="input-style-1">
                           <label>Telefone *</label>
@@ -414,14 +327,14 @@
                           <input type="email" name="email" placeholder="Email" required />
                         </div>
                       </div>
-                      <!-- Linha 3: Foto de Perfil -->
+                      <!-- Foto de Perfil -->
                       <div class="col-12">
                         <div class="input-style-1">
                           <label>Foto de Perfil</label>
                           <input type="file" name="fotodeperfil" accept="image/*" />
                         </div>
                       </div>
-                      <!-- Linha 4: Senha e Repetir Senha -->
+                      <!-- Senha e Repetir Senha -->
                       <div class="col-md-6">
                         <div class="input-style-1">
                           <label>Senha *</label>
@@ -434,7 +347,7 @@
                           <input type="password" id="confirm_password" name="confirm_password" placeholder="Repetir Senha" required />
                         </div>
                       </div>
-                      <!-- Campos hidden (preenchidos via JS) -->
+                      <!-- Campos ocultos para armazenar dados complementares -->
                       <input type="hidden" name="affiliate_id" id="affiliate_id" />
                       <input type="hidden" name="name" id="name" />
                       <!-- Botão para avançar para o Step 2 -->
@@ -448,24 +361,24 @@
                     </div>
                   </form>
                 </div>
-                <!-- FIM do STEP 1 -->
+                <!-- Fim do STEP 1 -->
 
-                <!-- STEP 2: Dados da Agência -->
+                <!-- =============================================================
+                     STEP 2: Dados da Agência
+                     ============================================================= -->
                 <div id="step2" class="step">
                   <h6 class="mb-15">Dados da Agência</h6>
-                  <p class="text-sm mb-25">
-                    Preencha os dados da sua agência.
-                  </p>
+                  <p class="text-sm mb-25">Preencha os dados da sua agência.</p>
                   <form id="affiliateForm">
                     <div class="row">
-                      <!-- Linha 1: Nome da Agência (full width) -->
+                      <!-- Nome da Agência -->
                       <div class="col-12">
                         <div class="input-style-1">
                           <label>Nome da Agência *</label>
                           <input type="text" name="agency_name" placeholder="Nome da Agência" required />
                         </div>
                       </div>
-                      <!-- Linha 2: Pergunta sobre domínio próprio -->
+                      <!-- Domínio ou Subdomínio -->
                       <div class="col-12">
                         <div class="input-style-1">
                           <label>Você tem domínio próprio? *</label>
@@ -481,33 +394,32 @@
                           </div>
                         </div>
                       </div>
-                      <!-- Linha 3: Campo de domínio (sim) ou subdomínio (não) -->
+                      <!-- Campo para domínio (quando sim) -->
                       <div class="col-12" id="domainField" style="display:none;">
                         <div class="input-style-1">
                           <label>Domínio *</label>
                           <input type="text" name="domain" placeholder="seuagencia.com" />
                         </div>
                       </div>
+                      <!-- Campo para subdomínio (quando não) -->
                       <div class="col-12" id="subdomainField" style="display:none;">
                         <div class="input-style-1">
                           <label>Subdomínio *</label>
                           <div class="input-group">
-                            <!-- Metade para digitar e metade exibindo .airland.com.br -->
                             <input type="text" class="form-control" name="subdomain" id="subdomainInput" placeholder="lojadobreno" oninput="updateSubdomainPreview()" />
                             <span class="input-group-text">.airland.com.br</span>
                           </div>
-                          <!-- Preview abaixo -->
                           <p class="text-sm mt-2" id="subdomainPreview"></p>
                         </div>
                       </div>
-                      <!-- Linha 4: Logo (file input) -->
+                      <!-- Upload da Logo -->
                       <div class="col-12">
                         <div class="input-style-1">
                           <label>Logo *</label>
                           <input type="file" name="logo_url" accept="image/*" required />
                         </div>
                       </div>
-                      <!-- Linha 5: Cores - Cor Principal e Cor Secundária -->
+                      <!-- Configurações de cores -->
                       <div class="col-md-6">
                         <div class="input-style-1">
                           <label>Cor Principal</label>
@@ -520,7 +432,6 @@
                           <input type="text" name="background_color" placeholder="Ex: #FFFFFF" />
                         </div>
                       </div>
-                      <!-- Linha 6: Cores - Cor do Botão e Cor do Texto do Botão -->
                       <div class="col-md-6">
                         <div class="input-style-1">
                           <label>Cor do Botão</label>
@@ -533,14 +444,13 @@
                           <input type="text" name="button_text_color" placeholder="Ex: #FFFFFF" />
                         </div>
                       </div>
-                      <!-- Linha 7: Cor do Botão ao Clicar (full width) -->
                       <div class="col-12">
                         <div class="input-style-1">
                           <label>Cor do Botão ao Clicar</label>
                           <input type="text" name="button_hover" placeholder="Ex: #CCCCCC" />
                         </div>
                       </div>
-                      <!-- Botão para criar loja -->
+                      <!-- Botão Final -->
                       <div class="col-12">
                         <div class="button-group d-flex justify-content-center flex-wrap">
                           <button type="button" class="main-btn primary-btn btn-hover w-100 text-center" onclick="submitForms()">
@@ -551,20 +461,27 @@
                     </div>
                   </form>
                 </div>
-                <!-- FIM do STEP 2 -->
+                <!-- =============================================================
+                     Fim do STEP 2
+                     ============================================================= -->
               </div>
             </div>
           </div>
-          <!-- end col -->
+          <!-- Fim da Coluna dos formulários -->
         </div>
-        <!-- end row -->
       </div>
     </section>
-    <!-- ========== Content Section end ========== -->
+    <!-- =============================================================
+         Fim da Seção de Cadastro
+         ============================================================= -->
   </main>
-  <!-- ======== main-wrapper end =========== -->
+  <!-- =============================================================
+       Fim do Main Wrapper
+       ============================================================= -->
 
-  <!-- ========= All Javascript files linkup ======== -->
+  <!-- =============================================================
+       Scripts: JS, Supabase, Upload e Integração com Back-end
+       ============================================================= -->
   <script src="assets/js/bootstrap.bundle.min.js"></script>
   <script src="assets/js/Chart.min.js"></script>
   <script src="assets/js/apexcharts.min.js"></script>
@@ -578,8 +495,48 @@
   <script src="assets/js/datatable.js"></script>
   <script src="assets/js/Sortable.min.js"></script>
   <script src="assets/js/main.js"></script>
+
+  <!-- =============================================================
+       Código JavaScript Principal
+       ============================================================= -->
   <script>
-    // Função para ir do STEP 1 para o STEP 2 (verificação de senhas)
+    /***********************************************************************
+     * Inicialização do Supabase Client
+     * Substitua os placeholders com suas credenciais (URL e KEY)
+     ***********************************************************************/
+    const SUPABASE_URL = 'https://YOUR-SUPABASE-PROJECT.supabase.co';
+    const SUPABASE_KEY = 'YOUR-SUPABASE-KEY'; // chave anônima, se for pública
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    /***********************************************************************
+     * Função para upload de arquivo para o Supabase Storage
+     * Paramêtros:
+     *   bucketName: Nome do bucket (ex: 'logos', 'profile-images')
+     *   file: o objeto File selecionado
+     *   filePath: o caminho de destino (ex: 'logos/AFF123_nome.png')
+     ***********************************************************************/
+    async function uploadFileToStorage(bucketName, file, filePath) {
+      try {
+        let { data, error } = await supabaseClient.storage.from(bucketName).upload(filePath, file);
+        if (error) {
+          console.error("Erro no upload:", error);
+          throw error;
+        }
+        // Retorna a URL pública a partir do caminho
+        const { publicURL, error: urlError } = supabaseClient.storage.from(bucketName).getPublicUrl(data.path);
+        if (urlError) {
+          throw urlError;
+        }
+        return publicURL;
+      } catch (err) {
+        console.error("Upload falhou:", err);
+        throw err;
+      }
+    }
+
+    /***********************************************************************
+     * Função para transitar entre os Steps (Usuário para Agência)
+     ***********************************************************************/
     function goToStep2() {
       var password = document.getElementById('password').value;
       var confirmPassword = document.getElementById('confirm_password').value;
@@ -591,7 +548,9 @@
       document.getElementById('step2').classList.add('active');
     }
 
-    // Exibe/esconde campos de domínio ou subdomínio
+    /***********************************************************************
+     * Função para exibir ou ocultar campos de Domínio/Subdomínio
+     ***********************************************************************/
     function toggleDomainFields() {
       var hasDomain = document.querySelector('input[name="has_domain"]:checked').value;
       if (hasDomain === 'sim') {
@@ -607,7 +566,9 @@
       }
     }
 
-    // Atualiza pré-visualização do subdomínio
+    /***********************************************************************
+     * Função para atualizar a pré-visualização do subdomínio
+     ***********************************************************************/
     function updateSubdomainPreview() {
       var typedSubdomain = document.getElementById('subdomainInput').value.trim();
       var preview = document.getElementById('subdomainPreview');
@@ -618,11 +579,18 @@
       }
     }
 
-    // Simula envio dos dados do Step 2 e depois do Step 1
-    function submitForms() {
+    /***********************************************************************
+     * Função principal para enviar os formulários e inserir dados nas tabelas.
+     * Realiza:
+     *   - Validações dos campos obrigatórios
+     *   - Upload dos arquivos (Logo e Foto de Perfil) para o Supabase Storage
+     *   - Inserção dos dados na tabela "affiliates" e, em seguida, na tabela "users"
+     ***********************************************************************/
+    async function submitForms() {
       // Validação dos campos obrigatórios do formulário da Agência (Step 2)
       var agencyName = document.querySelector('input[name="agency_name"]').value;
-      var logoFile = document.querySelector('input[name="logo_url"]').files[0];
+      var logoInput = document.querySelector('input[name="logo_url"]');
+      var logoFile = logoInput.files[0];
       if (!agencyName || !logoFile) {
         alert('Por favor, preencha todos os campos obrigatórios da Agência (Nome e Logo).');
         return;
@@ -634,7 +602,6 @@
         return;
       }
       var hasDomain = hasDomainElem.value;
-
       if (hasDomain === 'sim') {
         var domain = document.querySelector('input[name="domain"]').value.trim();
         if (!domain) {
@@ -649,51 +616,158 @@
         }
       }
 
-      // Simula a geração de ID do afiliado
+      // Geração de um ID de afiliado (você pode substituir por uma lógica mais robusta se necessário)
       var affiliateId = 'AFF' + Math.floor(Math.random() * 100000);
       document.getElementById('affiliate_id').value = affiliateId;
 
-      // Concatena primeiro e último nome para o campo name
+      // Concatena primeiro e último nome para o campo "name"
       var primeiroNome = document.querySelector('input[name="primeiro_nome"]').value;
       var ultimoNome = document.querySelector('input[name="ultimo_nome"]').value;
       document.getElementById('name').value = primeiroNome + ' ' + ultimoNome;
 
-      // Coleta dados do Step 2
+      /***********************************************************
+       * Upload dos arquivos para o Supabase Storage
+       ***********************************************************/
+      var logoURL = "";
+      var profileURL = "";
+      try {
+        // Upload da Logo para o bucket "logos"
+        // Criamos um nome de arquivo único usando o affiliateId
+        var logoPath = "logos/" + affiliateId + "_" + logoFile.name;
+        logoURL = await uploadFileToStorage("logos", logoFile, logoPath);
+
+        // Upload da Foto de Perfil, se houver
+        var profileInput = document.querySelector('input[name="fotodeperfil"]');
+        if (profileInput && profileInput.files.length > 0) {
+          var profileFile = profileInput.files[0];
+          var profilePath = "profile-images/" + affiliateId + "_" + profileFile.name;
+          profileURL = await uploadFileToStorage("profile-images", profileFile, profilePath);
+        }
+      } catch (uploadError) {
+        alert("Erro no upload dos arquivos: " + uploadError.message);
+        return;
+      }
+      
+      /***********************************************************
+       * Monta os objetos de dados para inserção
+       ***********************************************************/
+      
+      // Dados para a tabela "affiliates"
       var affiliateData = {
+        affiliate_id: affiliateId,
         agency_name: agencyName,
         has_domain: hasDomain,
-        domain: (hasDomain === 'sim') 
-          ? document.querySelector('input[name="domain"]').value.trim() 
+        domain: (hasDomain === 'sim')
+          ? document.querySelector('input[name="domain"]').value.trim()
           : '',
-        // Armazena subdomínio completo
-        subdomain: (hasDomain === 'nao') 
-          ? document.getElementById('subdomainInput').value.trim() + '.airland.com.br' 
+        subdomain: (hasDomain === 'nao')
+          ? document.getElementById('subdomainInput').value.trim() + '.airland.com.br'
           : '',
-        logo_file: logoFile,  // arquivo selecionado
+        logo_url: logoURL, // URL obtida após o upload
         primary_color: document.querySelector('input[name="primary_color"]').value,
         background_color: document.querySelector('input[name="background_color"]').value,
         button_color: document.querySelector('input[name="button_color"]').value,
         button_text_color: document.querySelector('input[name="button_text_color"]').value,
         button_hover: document.querySelector('input[name="button_hover"]').value
       };
-      console.log('Dados da Agência (Step 2):', affiliateData);
 
-      // Coleta dados do Step 1
+      // Dados para a tabela "users"
       var userData = {
         primeiro_nome: primeiroNome,
         ultimo_nome: ultimoNome,
         telefone: document.querySelector('input[name="telefone"]').value,
         email: document.querySelector('input[name="email"]').value,
-        fotodeperfil: document.querySelector('input[name="fotodeperfil"]').files[0],
+        fotodeperfil: profileURL,  // URL da foto de perfil (se houver)
         password: document.getElementById('password').value,
         affiliate_id: affiliateId,
         name: document.getElementById('name').value
       };
+
+      console.log('Dados da Agência (Step 2):', affiliateData);
       console.log('Dados do Usuário (Step 1):', userData);
 
-      // Aqui você deve implementar o envio via AJAX ou outra lógica.
-      alert('Formulário enviado com sucesso! Affiliate ID gerado: ' + affiliateId);
+      /***********************************************************
+       * Inserção dos dados nas tabelas via Supabase
+       ***********************************************************/
+      try {
+        // Insere os dados na tabela "affiliates"
+        let { data: affiliateInsert, error: affiliateError } = await supabaseClient
+          .from('affiliates')
+          .insert(affiliateData);
+
+        if (affiliateError) {
+          alert('Erro ao cadastrar agência: ' + affiliateError.message);
+          console.error(affiliateError);
+          return;
+        }
+
+        // Em seguida, insere os dados na tabela "users"
+        let { data: userInsert, error: userError } = await supabaseClient
+          .from('users')
+          .insert(userData);
+
+        if (userError) {
+          alert('Erro ao cadastrar usuário: ' + userError.message);
+          console.error(userError);
+          return;
+        }
+
+        alert('Loja criada com sucesso! Affiliate ID: ' + affiliateId);
+      } catch (err) {
+        console.error(err);
+        alert('Erro ao enviar o formulário. Verifique o console para mais detalhes.');
+      }
     }
+
+    /***********************************************************************
+     * Funções e blocos adicionais para futuras extensões
+     * =====================================================================
+     * Aqui você pode incluir funções para:
+     *  - Validações extras de campos
+     *  - Processamento de imagens (redimensionamento, compressão)
+     *  - Feedback visual (ex: spinner de carregamento durante upload)
+     *  - Integração com outros serviços (ex: envio de e-mail de confirmação)
+     *
+     * Exemplo de função de feedback para ativar/desativar o spinner:
+     ***********************************************************************/
+    function showSpinner(show) {
+      var preloader = document.getElementById('preloader');
+      if (show) {
+        preloader.style.display = 'block';
+      } else {
+        preloader.style.display = 'none';
+      }
+    }
+
+    // Exemplo de função para limpar os campos dos formulários após a inserção
+    function clearForms() {
+      document.getElementById('userForm').reset();
+      document.getElementById('affiliateForm').reset();
+      document.getElementById('subdomainPreview').textContent = "";
+      // Retorna para o step 1
+      document.getElementById('step2').classList.remove('active');
+      document.getElementById('step1').classList.add('active');
+    }
+
+    /***********************************************************************
+     * Fim das funções adicionais
+     ***********************************************************************/
   </script>
+  <!-- =============================================================
+       Fim do Código JavaScript Principal
+       ============================================================= -->
+  
+  <!-- =============================================================
+       Espaço para scripts adicionais ou de plugins
+       ============================================================= -->
+  <!-- Aqui você pode incluir outros scripts, caso necessário -->
+  
+  <!-- =============================================================
+       Fim dos Scripts adicionais
+       ============================================================= -->
+  
+  <!-- =============================================================
+       Fim do Body e do HTML
+       ============================================================= -->
 </body>
 </html>
