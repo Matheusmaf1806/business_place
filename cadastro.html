@@ -515,236 +515,237 @@
        Código JavaScript Principal com integração ao Supabase
        Ajustado para importar o supabaseClient do arquivo supabaseClient.js
        ============================================================= -->
-  <script type="module">
-  import supabaseClient from "./supabaseClient.js";
-
-  // Função para sanitizar nomes de arquivos (opcional, mas recomendado)
-  function sanitizeFileName(fileName) {
-    return fileName.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_.-]/g, '');
-  }
-
-  /***********************************************************************
-   * Função para upload de arquivo para o Supabase Storage.
-   * bucketName: Nome do bucket (ex: 'logos', 'profile-images')
-   * file: o objeto File selecionado
-   * filePath: caminho relativo de destino (ex: 'AFF123_nome.png')
-   ***********************************************************************/
-  async function uploadFileToStorage(bucketName, file, filePath) {
-    try {
-      let { data, error } = await supabaseClient.storage
-        .from(bucketName)
-        .upload(filePath, file);
-      if (error) {
-        console.error("Erro no upload:", error);
-        throw error;
-      }
-      const { publicURL, error: urlError } =
-        supabaseClient.storage.from(bucketName).getPublicUrl(data.path);
-      if (urlError) {
-        throw urlError;
-      }
-      return publicURL;
-    } catch (err) {
-      console.error("Upload falhou:", err);
-      throw err;
-    }
-  }
-
-  /***********************************************************************
-   * Função para transitar do STEP 1 para o STEP 2 (valida senhas)
-   ***********************************************************************/
-  function goToStep2() {
-    const password = document.getElementById("password").value;
-    const confirmPassword = document.getElementById("confirm_password").value;
-    if (password !== confirmPassword) {
-      alert("As senhas não coincidem!");
-      return;
-    }
-    document.getElementById("step1").classList.remove("active");
-    document.getElementById("step2").classList.add("active");
-  }
-
-  /***********************************************************************
-   * Função para exibir/ocultar os campos de Domínio/Subdomínio
-   ***********************************************************************/
-  function toggleDomainFields() {
-    const hasDomain = document.querySelector('input[name="has_domain"]:checked').value;
-    if (hasDomain === "sim") {
-      document.getElementById("domainField").style.display = "block";
-      document.getElementById("subdomainField").style.display = "none";
-      document.querySelector('input[name="domain"]').required = true;
-      document.querySelector('input[name="subdomain"]').required = false;
-    } else if (hasDomain === "nao") {
-      document.getElementById("domainField").style.display = "none";
-      document.getElementById("subdomainField").style.display = "block";
-      document.querySelector('input[name="subdomain"]').required = true;
-      document.querySelector('input[name="domain"]').required = false;
-    }
-  }
-
-  /***********************************************************************
-   * Função para atualizar a pré-visualização do subdomínio.
-   ***********************************************************************/
-  function updateSubdomainPreview() {
-    const typedSubdomain = document.getElementById("subdomainInput").value.trim();
-    const preview = document.getElementById("subdomainPreview");
-    if (typedSubdomain) {
-      preview.textContent = "Sua loja ficará: " + typedSubdomain + ".airland.com.br";
-    } else {
-      preview.textContent = "";
-    }
-  }
-
-  /***********************************************************************
-   * Função principal para enviar os formulários e inserir dados no Supabase.
-   * Realiza:
-   *  - Validação dos campos obrigatórios
-   *  - Upload dos arquivos (Logo e Foto de Perfil) para o Storage
-   *  - Inserção dos dados nas tabelas "affiliates" e "users"
-   *
-   * Usamos upsert na tabela "affiliates" com base no campo "slug",
-   * para evitar conflitos caso já exista uma agência com o mesmo slug.
-   ***********************************************************************/
-   async function submitForms() {
-    const agencyName = document.querySelector('input[name="agency_name"]').value.trim();
-    const logoInput = document.querySelector('input[name="logo_url"]');
-    const logoFile = logoInput.files[0];
-    if (!agencyName || !logoFile) {
-      alert('Por favor, preencha todos os campos obrigatórios da Agência (Nome e Logo).');
-      return;
-    }
-    const hasDomainElem = document.querySelector('input[name="has_domain"]:checked');
-    if (!hasDomainElem) {
-      alert('Por favor, responda se possui domínio próprio.');
-      return;
-    }
-    const hasDomain = hasDomainElem.value;
-    if (hasDomain === "sim") {
-      const domain = document.querySelector('input[name="domain"]').value.trim();
-      if (!domain) {
-        alert("Por favor, informe o domínio.");
-        return;
-      }
-    } else if (hasDomain === "nao") {
-      const subdomain = document.getElementById("subdomainInput").value.trim();
-      if (!subdomain) {
-        alert("Por favor, informe o subdomínio.");
-        return;
-      }
-    }
-
-    // Captura os dados do usuário
-    const primeiroNome = document.querySelector('input[name="primeiro_nome"]').value.trim();
-    const ultimoNome = document.querySelector('input[name="ultimo_nome"]').value.trim();
-    document.getElementById("name").value = primeiroNome + " " + ultimoNome;
-
-    let logoURL = "";
-    let profileURL = "";
-    try {
-      const sanitizedLogoFileName = sanitizeFileName(logoFile.name);
-      // Construa o caminho sem repetir o nome do bucket (o bucket já está definido no método .from)
-      const logoPath = agencyName + "_" + sanitizedLogoFileName;
-      logoURL = await uploadFileToStorage("logos", logoFile, logoPath);
-
-      const profileInput = document.querySelector('input[name="fotodeperfil"]');
-      if (profileInput && profileInput.files.length > 0) {
-        const profileFile = profileInput.files[0];
-        const sanitizedProfileFileName = sanitizeFileName(profileFile.name);
-        const profilePath = agencyName + "_" + sanitizedProfileFileName;
-        profileURL = await uploadFileToStorage("profile-images", profileFile, profilePath);
-      }
-    } catch (uploadError) {
-      alert("Erro no upload dos arquivos: " + uploadError.message);
-      return;
-    }
-
-    // Monta o objeto de dados para a tabela "affiliates"
-    const affiliateData = {
-      slug: agencyName, // campo único para identificar a agência
-      name: agencyName, // o nome da agência
-      domain: hasDomain === "sim" ? document.querySelector('input[name="domain"]').value.trim() : "",
-      subdomain: hasDomain === "nao" ? document.getElementById("subdomainInput").value.trim() + ".airland.com.br" : "",
-      logo_url: logoURL,
-      primary_color: document.querySelector('input[name="primary_color"]').value.trim(),
-      background_color: document.querySelector('input[name="background_color"]').value.trim(),
-      button_color: document.querySelector('input[name="button_color"]').value.trim(),
-      button_text_color: document.querySelector('input[name="button_text_color"]').value.trim(),
-      button_hover: document.querySelector('input[name="button_hover"]').value.trim()
-    };
-
-    // Em vez de gerar o affiliate_id manualmente, vamos obter o id inserido na tabela affiliates.
-    // Utilize upsert (com onConflict) para inserir ou atualizar com base no campo "slug".
-    let affiliateInsertResult = await supabaseClient
-      .from("affiliates")
-      .insert(affiliateData, { upsert: true, onConflict: "slug" })
-      .select(); // Seleciona os dados inseridos/atualizados
-
-    if (affiliateInsertResult.error) {
-      alert("Erro ao cadastrar agência: " + affiliateInsertResult.error.message);
-      console.error(affiliateInsertResult.error);
-      return;
-    }
-
-    // Recupera o ID da agência (coluna id do registro, que é um inteiro)
-    const affiliateId = affiliateInsertResult.data[0].id;
-
-    // Monta o objeto de dados para a tabela "users"
-    const userData = {
-      primeiro_nome: primeiroNome,
-      ultimo_nome: ultimoNome,
-      telefone: document.querySelector('input[name="telefone"]').value.trim(),
-      email: document.querySelector('input[name="email"]').value.trim(),
-      fotodeperfil: profileURL,
-      password: document.getElementById("password").value,
-      affiliate_id: affiliateId,  // Usar o ID numérico da agência
-      name: document.getElementById("name").value
-    };
-
-    console.log("Dados da Agência:", affiliateData);
-    console.log("Dados do Usuário:", userData);
-
-    try {
-      let { data: userInsert, error: userError } = await supabaseClient
-        .from("users")
-        .insert(userData);
-      if (userError) {
-        alert("Erro ao cadastrar usuário: " + userError.message);
-        console.error(userError);
-        return;
-      }
-
-      alert("Loja criada com sucesso! Agência: " + agencyName);
-      clearForms();
-    } catch (err) {
-      console.error(err);
-      alert("Erro ao enviar o formulário. Verifique o console para mais detalhes.");
-    }
-  }
-
-  /***********************************************************************
-   * Função para limpar os formulários e retornar ao Step 1 (opcional)
-   ***********************************************************************/
-  function clearForms() {
-    document.getElementById("userForm").reset();
-    document.getElementById("affiliateForm").reset();
-    document.getElementById("subdomainPreview").textContent = "";
-    document.getElementById("step2").classList.remove("active");
-    document.getElementById("step1").classList.add("active");
-  }
-
-  /***********************************************************************
-   * Função para exibir/ocultar o spinner de carregamento (exemplo)
-   ***********************************************************************/
-  function showSpinner(show) {
-    const preloader = document.getElementById("preloader");
-    preloader.style.display = show ? "block" : "none";
-  }
-
-  // Torna as funções globais para uso via atributos inline
-  window.goToStep2 = goToStep2;
-  window.toggleDomainFields = toggleDomainFields;
-  window.updateSubdomainPreview = updateSubdomainPreview;
-  window.submitForms = submitForms;
-</script>
+       <script type="module">
+        import supabaseClient from "./supabaseClient.js";
+      
+        // Função para sanitizar nomes de arquivos (opcional, mas recomendado)
+        function sanitizeFileName(fileName) {
+          return fileName.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_.-]/g, '');
+        }
+      
+        /***********************************************************************
+         * Função para upload de arquivo para o Supabase Storage.
+         * bucketName: Nome do bucket (ex: 'logos', 'profile-images')
+         * file: o objeto File selecionado
+         * filePath: caminho relativo de destino (ex: 'AFF123_nome.png')
+         ***********************************************************************/
+        async function uploadFileToStorage(bucketName, file, filePath) {
+          try {
+            let { data, error } = await supabaseClient.storage
+              .from(bucketName)
+              .upload(filePath, file);
+            if (error) {
+              console.error("Erro no upload:", error);
+              throw error;
+            }
+            const { publicURL, error: urlError } =
+              supabaseClient.storage.from(bucketName).getPublicUrl(data.path);
+            if (urlError) {
+              throw urlError;
+            }
+            return publicURL;
+          } catch (err) {
+            console.error("Upload falhou:", err);
+            throw err;
+          }
+        }
+      
+        /***********************************************************************
+         * Função para transitar do STEP 1 para o STEP 2 (valida senhas)
+         ***********************************************************************/
+        function goToStep2() {
+          const password = document.getElementById("password").value;
+          const confirmPassword = document.getElementById("confirm_password").value;
+          if (password !== confirmPassword) {
+            alert("As senhas não coincidem!");
+            return;
+          }
+          document.getElementById("step1").classList.remove("active");
+          document.getElementById("step2").classList.add("active");
+        }
+      
+        /***********************************************************************
+         * Função para exibir/ocultar os campos de Domínio/Subdomínio
+         ***********************************************************************/
+        function toggleDomainFields() {
+          const hasDomain = document.querySelector('input[name="has_domain"]:checked').value;
+          if (hasDomain === "sim") {
+            document.getElementById("domainField").style.display = "block";
+            document.getElementById("subdomainField").style.display = "none";
+            document.querySelector('input[name="domain"]').required = true;
+            document.querySelector('input[name="subdomain"]').required = false;
+          } else if (hasDomain === "nao") {
+            document.getElementById("domainField").style.display = "none";
+            document.getElementById("subdomainField").style.display = "block";
+            document.querySelector('input[name="subdomain"]').required = true;
+            document.querySelector('input[name="domain"]').required = false;
+          }
+        }
+      
+        /***********************************************************************
+         * Função para atualizar a pré-visualização do subdomínio.
+         ***********************************************************************/
+        function updateSubdomainPreview() {
+          const typedSubdomain = document.getElementById("subdomainInput").value.trim();
+          const preview = document.getElementById("subdomainPreview");
+          if (typedSubdomain) {
+            preview.textContent = "Sua loja ficará: " + typedSubdomain + ".airland.com.br";
+          } else {
+            preview.textContent = "";
+          }
+        }
+      
+        /***********************************************************************
+         * Função principal para enviar os formulários e inserir dados no Supabase.
+         * Realiza:
+         *  - Validação dos campos obrigatórios
+         *  - Upload dos arquivos (Logo e Foto de Perfil) para o Storage,
+         *    transformando-os em links públicos
+         *  - Inserção dos dados nas tabelas "affiliates" e "users"
+         *
+         * Usamos upsert na tabela "affiliates" com base no campo "slug",
+         * para evitar conflitos caso já exista uma agência com o mesmo slug.
+         ***********************************************************************/
+        async function submitForms() {
+          const agencyName = document.querySelector('input[name="agency_name"]').value.trim();
+          const logoInput = document.querySelector('input[name="logo_url"]');
+          const logoFile = logoInput.files[0];
+          if (!agencyName || !logoFile) {
+            alert('Por favor, preencha todos os campos obrigatórios da Agência (Nome e Logo).');
+            return;
+          }
+          const hasDomainElem = document.querySelector('input[name="has_domain"]:checked');
+          if (!hasDomainElem) {
+            alert('Por favor, responda se possui domínio próprio.');
+            return;
+          }
+          const hasDomain = hasDomainElem.value;
+          if (hasDomain === "sim") {
+            const domain = document.querySelector('input[name="domain"]').value.trim();
+            if (!domain) {
+              alert("Por favor, informe o domínio.");
+              return;
+            }
+          } else if (hasDomain === "nao") {
+            const subdomain = document.getElementById("subdomainInput").value.trim();
+            if (!subdomain) {
+              alert("Por favor, informe o subdomínio.");
+              return;
+            }
+          }
+      
+          // Captura os dados do usuário
+          const primeiroNome = document.querySelector('input[name="primeiro_nome"]').value.trim();
+          const ultimoNome = document.querySelector('input[name="ultimo_nome"]').value.trim();
+          document.getElementById("name").value = primeiroNome + " " + ultimoNome;
+      
+          let logoURL = "";
+          let profileURL = "";
+          try {
+            const sanitizedLogoFileName = sanitizeFileName(logoFile.name);
+            // Construa o caminho para o logo
+            const logoPath = agencyName + "_" + sanitizedLogoFileName;
+            logoURL = await uploadFileToStorage("logos", logoFile, logoPath);
+      
+            // Se houver foto de perfil, realiza o upload e transforma em link público
+            const profileInput = document.querySelector('input[name="fotodeperfil"]');
+            if (profileInput && profileInput.files.length > 0) {
+              const profileFile = profileInput.files[0];
+              const sanitizedProfileFileName = sanitizeFileName(profileFile.name);
+              const profilePath = agencyName + "_" + sanitizedProfileFileName;
+              profileURL = await uploadFileToStorage("profile-images", profileFile, profilePath);
+            }
+          } catch (uploadError) {
+            alert("Erro no upload dos arquivos: " + uploadError.message);
+            return;
+          }
+      
+          // Monta o objeto de dados para a tabela "affiliates"
+          const affiliateData = {
+            slug: agencyName, // campo único para identificar a agência
+            name: agencyName, // o nome da agência
+            domain: hasDomain === "sim" ? document.querySelector('input[name="domain"]').value.trim() : "",
+            subdomain: hasDomain === "nao" ? document.getElementById("subdomainInput").value.trim() + ".airland.com.br" : "",
+            logo_url: logoURL,
+            primary_color: document.querySelector('input[name="primary_color"]').value.trim(),
+            background_color: document.querySelector('input[name="background_color"]').value.trim(),
+            button_color: document.querySelector('input[name="button_color"]').value.trim(),
+            button_text_color: document.querySelector('input[name="button_text_color"]').value.trim(),
+            button_hover: document.querySelector('input[name="button_hover"]').value.trim()
+          };
+      
+          // Insere (ou atualiza) a agência na tabela "affiliates" via upsert baseado no campo slug
+          let affiliateInsertResult = await supabaseClient
+            .from("affiliates")
+            .insert(affiliateData, { upsert: true, onConflict: "slug" })
+            .select();
+      
+          if (affiliateInsertResult.error) {
+            alert("Erro ao cadastrar agência: " + affiliateInsertResult.error.message);
+            console.error(affiliateInsertResult.error);
+            return;
+          }
+      
+          // Recupera o ID da agência (coluna id do registro, que é um inteiro)
+          const affiliateId = affiliateInsertResult.data[0].id;
+      
+          // Monta o objeto de dados para a tabela "users"
+          const userData = {
+            primeiro_nome: primeiroNome,
+            ultimo_nome: ultimoNome,
+            telefone: document.querySelector('input[name="telefone"]').value.trim(),
+            email: document.querySelector('input[name="email"]').value.trim(),
+            fotodeperfil: profileURL, // Link público da foto de perfil
+            password: document.getElementById("password").value,
+            affiliate_id: affiliateId,  // Utiliza o ID numérico da agência
+            name: document.getElementById("name").value
+          };
+      
+          console.log("Dados da Agência:", affiliateData);
+          console.log("Dados do Usuário:", userData);
+      
+          try {
+            let { data: userInsert, error: userError } = await supabaseClient
+              .from("users")
+              .insert(userData);
+            if (userError) {
+              alert("Erro ao cadastrar usuário: " + userError.message);
+              console.error(userError);
+              return;
+            }
+      
+            alert("Loja criada com sucesso! Agência: " + agencyName);
+            clearForms();
+          } catch (err) {
+            console.error(err);
+            alert("Erro ao enviar o formulário. Verifique o console para mais detalhes.");
+          }
+        }
+      
+        /***********************************************************************
+         * Função para limpar os formulários e retornar ao Step 1 (opcional)
+         ***********************************************************************/
+        function clearForms() {
+          document.getElementById("userForm").reset();
+          document.getElementById("affiliateForm").reset();
+          document.getElementById("subdomainPreview").textContent = "";
+          document.getElementById("step2").classList.remove("active");
+          document.getElementById("step1").classList.add("active");
+        }
+      
+        /***********************************************************************
+         * Função para exibir/ocultar o spinner de carregamento (exemplo)
+         ***********************************************************************/
+        function showSpinner(show) {
+          const preloader = document.getElementById("preloader");
+          preloader.style.display = show ? "block" : "none";
+        }
+      
+        // Torna as funções globais para uso via atributos inline
+        window.goToStep2 = goToStep2;
+        window.toggleDomainFields = toggleDomainFields;
+        window.updateSubdomainPreview = updateSubdomainPreview;
+        window.submitForms = submitForms;
+    </script>
 </body>
 </html>
