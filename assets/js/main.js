@@ -2,7 +2,7 @@
 
 document.addEventListener('DOMContentLoaded', function () {
   /* ========= Preloader ======== */
-  const preloader = document.querySelector('#preloader'); // Assumindo que é um único elemento
+  const preloader = document.querySelector('#preloader');
   window.addEventListener('load', function () {
     if (preloader) {
       preloader.style.display = 'none';
@@ -25,9 +25,11 @@ document.addEventListener('DOMContentLoaded', function () {
   const sidebarNavWrapper = document.querySelector('.sidebar-nav-wrapper');
   const mainWrapper = document.querySelector('.main-wrapper');
   const menuToggleButton = document.querySelector('#menu-toggle');
-  const menuToggleButtonIcon = document.querySelector('#menu-toggle i');
+  // Se #menu-toggle existir, busque seu ícone (dentro dele)
+  const menuToggleButtonIcon = menuToggleButton ? menuToggleButton.querySelector('i') : null;
   const overlay = document.querySelector('.overlay');
 
+  // Verifica se todos os elementos necessários existem
   if (menuToggleButton && sidebarNavWrapper && mainWrapper && overlay && menuToggleButtonIcon) {
     menuToggleButton.addEventListener('click', () => {
       sidebarNavWrapper.classList.toggle('active');
@@ -55,6 +57,8 @@ document.addEventListener('DOMContentLoaded', function () {
       overlay.classList.remove('active');
       mainWrapper.classList.remove('active');
     });
+  } else {
+    console.warn('Um ou mais elementos necessários para o sidebar toggle não foram encontrados.');
   }
 
   // ========== Theme Switcher ==========
@@ -83,12 +87,11 @@ document.addEventListener('DOMContentLoaded', function () {
   const rightSidebarButton = document.querySelector('.rightSidebarButton');
   const dropdownMenuEnd = document.querySelectorAll('.header-right .dropdown-menu');
 
-  if (rightSidebarButton && leftSidebarButton) {
+  if (rightSidebarButton && leftSidebarButton && dropdownMenuEnd) {
     rightSidebarButton.addEventListener('click', () => {
       document.body.classList.add('rightSidebar');
       rightSidebarButton.classList.add('active');
       leftSidebarButton.classList.remove('active');
-
       dropdownMenuEnd.forEach((el) => {
         el.classList.remove('dropdown-menu-end');
       });
@@ -97,7 +100,6 @@ document.addEventListener('DOMContentLoaded', function () {
       document.body.classList.remove('rightSidebar');
       leftSidebarButton.classList.add('active');
       rightSidebarButton.classList.remove('active');
-
       dropdownMenuEnd.forEach((el) => {
         el.classList.add('dropdown-menu-end');
       });
@@ -110,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const logo = document.querySelector('.navbar-logo img');
 
   if (lightThemeButton && darkThemeButton && logo) {
-    // Verifica a preferência de tema do usuário
+    // Recupera a preferência de tema, se existir
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
       document.body.classList.add('darkTheme');
@@ -143,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // ========== Enabling Bootstrap Tooltips ==========
   const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-  const tooltipList = Array.from(tooltipTriggerList).map(
-    (tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl)
-  );
+  Array.from(tooltipTriggerList).forEach((tooltipTriggerEl) => {
+    new bootstrap.Tooltip(tooltipTriggerEl);
+  });
 });
