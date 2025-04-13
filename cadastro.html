@@ -34,10 +34,6 @@
     .button-group { margin-top: 20px; }
   </style>
 
-  <!-- Inclusão do Supabase JS (biblioteca oficial) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-
-  <!-- Espaço para novos estilos ou customizações -->
   <!-- =============================================================
        Fim do Cabeçalho
        ============================================================= -->
@@ -129,7 +125,7 @@
     <!-- Caixa promocional com dados do afiliado (os dados virão do back-end) -->
     <div class="promo-box">
       <div class="promo-icon">
-        <!-- A imagem abaixo deverá ser substituída pela foto de perfil do afiliado, vinda da API -->
+        <!-- A imagem abaixo deverá ser substituída pela foto de perfil do afiliado via API -->
         <img class="mx-auto" src="assets/images/logo/logo-icon-big.svg" alt="Logo">
       </div>
       <h3>Adam Joe</h3>
@@ -158,13 +154,13 @@
               </div>
             </div>
           </div>
-          <!-- Dados do Perfil no Header (exemplo estático para visualização) -->
+          <!-- Dados do Perfil no Header (exemplo estático; devem ser atualizados via API) -->
           <div class="col-lg-7 col-md-7 col-6">
             <div class="header-right">
               <!-- Notificações (trecho omitido para brevidade) -->
               <div class="notification-box ml-15 d-none d-md-flex">
                 <button class="dropdown-toggle" type="button" id="notification" data-bs-toggle="dropdown" aria-expanded="false">
-                  <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
                     <!-- SVG omitido -->
                   </svg>
                   <span></span>
@@ -202,7 +198,7 @@
                   <div class="profile-info">
                     <div class="info">
                       <div class="image">
-                        <!-- A imagem abaixo deverá ser substituída pela foto de perfil do afiliado, vinda da API -->
+                        <!-- A imagem abaixo deverá ser substituída pela foto de perfil do afiliado via API -->
                         <img src="assets/images/profile/profile-image.png" alt="" />
                       </div>
                       <div>
@@ -270,9 +266,9 @@
           </div>
         </div>
 
-        <!-- Área dos formulários (two steps) -->
+        <!-- Área dos formulários (Steps) -->
         <div class="row g-0 auth-row">
-          <!-- Coluna com imagem ilustrativa -->
+          <!-- Coluna ilustrativa -->
           <div class="col-lg-6">
             <div class="auth-cover-wrapper bg-primary-100">
               <div class="auth-cover">
@@ -347,15 +343,13 @@
                           <input type="password" id="confirm_password" name="confirm_password" placeholder="Repetir Senha" required />
                         </div>
                       </div>
-                      <!-- Campos ocultos para armazenar dados complementares -->
+                      <!-- Campos ocultos para dados complementares -->
                       <input type="hidden" name="affiliate_id" id="affiliate_id" />
                       <input type="hidden" name="name" id="name" />
                       <!-- Botão para avançar para o Step 2 -->
                       <div class="col-12">
                         <div class="button-group d-flex justify-content-center flex-wrap">
-                          <button type="button" class="main-btn primary-btn btn-hover w-100 text-center" onclick="goToStep2()">
-                            Próximo
-                          </button>
+                          <button type="button" class="main-btn primary-btn btn-hover w-100 text-center" onclick="goToStep2()">Próximo</button>
                         </div>
                       </div>
                     </div>
@@ -450,12 +444,10 @@
                           <input type="text" name="button_hover" placeholder="Ex: #CCCCCC" />
                         </div>
                       </div>
-                      <!-- Botão Final -->
+                      <!-- Botão Final: Criar Loja -->
                       <div class="col-12">
                         <div class="button-group d-flex justify-content-center flex-wrap">
-                          <button type="button" class="main-btn primary-btn btn-hover w-100 text-center" onclick="submitForms()">
-                            Criar Loja
-                          </button>
+                          <button type="button" class="main-btn primary-btn btn-hover w-100 text-center" onclick="submitForms()">Criar Loja</button>
                         </div>
                       </div>
                     </div>
@@ -480,33 +472,9 @@
        ============================================================= -->
 
   <!-- =============================================================
-       Scripts: JS, Supabase, Upload e Integração com Back-end
+       Scripts: JS, Plugins e Código Principal
        ============================================================= -->
-   <script>
-    // Função para checar a sessão via API
-    async function checkSession() {
-      try {
-        const response = await fetch("https://airland.com.br/affiliatesacess/login_api.php/check", {
-          credentials: 'include'
-        });
-        const result = await response.json();
-        console.log("Resposta da Sessão:", result);
-        if (result.logged_in) {
-          // Se estiver logado, exibe o conteúdo removendo o display: none
-          document.body.style.display = "block";
-        } else {
-          // Se não estiver logado, redireciona para a página de login
-          window.location.replace("https://businessplace.airland.com.br/signin.html");
-        }
-      } catch (error) {
-        console.error("Erro ao verificar a sessão:", error);
-        window.location.replace("https://businessplace.airland.com.br/signin.html");
-      }
-    }
-
-    // Executa a verificação assim que o DOM estiver carregado
-    document.addEventListener("DOMContentLoaded", checkSession);
-  </script>
+  <!-- (Inclua seus scripts de plugins/CSS padrão abaixo) -->
   <script src="assets/js/bootstrap.bundle.min.js"></script>
   <script src="assets/js/Chart.min.js"></script>
   <script src="assets/js/apexcharts.min.js"></script>
@@ -522,20 +490,15 @@
   <script src="assets/js/main.js"></script>
 
   <!-- =============================================================
-       Código JavaScript Principal
+       Código JavaScript Principal com integração ao Supabase
+       Ajustado para importar o supabaseClient do arquivo supabaseClient.js
        ============================================================= -->
-  <script>
-    /***********************************************************************
-     * Inicialização do Supabase Client
-     * Substitua os placeholders com suas credenciais (URL e KEY)
-     ***********************************************************************/
-    const supabaseUrl = "https://qiblwjpijwhtlmylrlxl.supabase.co";
-    const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFpYmx3anBpandodGxteWxybHhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE4Nzk2MzcsImV4cCI6MjA1NzQ1NTYzN30.WyNSVoxb3y0-2wJooTJUsqPdzCpkpGjb3Xr2YyDazVQ";
-    const supabaseClient = supabase.createClient(supabaseUrl, supabaseAnonKey);
+  <script type="module">
+    import { supabaseClient } from "./supabaseClient.js";
 
     /***********************************************************************
      * Função para upload de arquivo para o Supabase Storage
-     * Paramêtros:
+     * Parâmetros:
      *   bucketName: Nome do bucket (ex: 'logos', 'profile-images')
      *   file: o objeto File selecionado
      *   filePath: o caminho de destino (ex: 'logos/AFF123_nome.png')
@@ -547,7 +510,7 @@
           console.error("Erro no upload:", error);
           throw error;
         }
-        // Retorna a URL pública a partir do caminho
+        // Obtém a URL pública a partir do caminho
         const { publicURL, error: urlError } = supabaseClient.storage.from(bucketName).getPublicUrl(data.path);
         if (urlError) {
           throw urlError;
@@ -574,7 +537,7 @@
     }
 
     /***********************************************************************
-     * Função para exibir ou ocultar campos de Domínio/Subdomínio
+     * Função para exibir ou ocultar os campos de Domínio/Subdomínio
      ***********************************************************************/
     function toggleDomainFields() {
       var hasDomain = document.querySelector('input[name="has_domain"]:checked').value;
@@ -605,15 +568,15 @@
     }
 
     /***********************************************************************
-     * Função principal para enviar os formulários e inserir dados nas tabelas.
+     * Função principal para enviar os formulários e inserir dados no Supabase
      * Realiza:
-     *   - Validações dos campos obrigatórios
-     *   - Upload dos arquivos (Logo e Foto de Perfil) para o Supabase Storage
-     *   - Inserção dos dados na tabela "affiliates" e, em seguida, na tabela "users"
+     *   - Validação dos campos obrigatórios
+     *   - Upload dos arquivos (Logo e Foto de Perfil) para o Storage
+     *   - Inserção dos dados nas tabelas "affiliates" e "users"
      ***********************************************************************/
     async function submitForms() {
       // Validação dos campos obrigatórios do formulário da Agência (Step 2)
-      var agencyName = document.querySelector('input[name="agency_name"]').value;
+      var agencyName = document.querySelector('input[name="agency_name"]').value.trim();
       var logoInput = document.querySelector('input[name="logo_url"]');
       var logoFile = logoInput.files[0];
       if (!agencyName || !logoFile) {
@@ -641,13 +604,13 @@
         }
       }
 
-      // Geração de um ID de afiliado (você pode substituir por uma lógica mais robusta se necessário)
+      // Geração de um ID de afiliado (exemplo simples)
       var affiliateId = 'AFF' + Math.floor(Math.random() * 100000);
       document.getElementById('affiliate_id').value = affiliateId;
 
       // Concatena primeiro e último nome para o campo "name"
-      var primeiroNome = document.querySelector('input[name="primeiro_nome"]').value;
-      var ultimoNome = document.querySelector('input[name="ultimo_nome"]').value;
+      var primeiroNome = document.querySelector('input[name="primeiro_nome"]').value.trim();
+      var ultimoNome = document.querySelector('input[name="ultimo_nome"]').value.trim();
       document.getElementById('name').value = primeiroNome + ' ' + ultimoNome;
 
       /***********************************************************
@@ -657,7 +620,6 @@
       var profileURL = "";
       try {
         // Upload da Logo para o bucket "logos"
-        // Criamos um nome de arquivo único usando o affiliateId
         var logoPath = "logos/" + affiliateId + "_" + logoFile.name;
         logoURL = await uploadFileToStorage("logos", logoFile, logoPath);
 
@@ -688,20 +650,20 @@
         subdomain: (hasDomain === 'nao')
           ? document.getElementById('subdomainInput').value.trim() + '.airland.com.br'
           : '',
-        logo_url: logoURL, // URL obtida após o upload
-        primary_color: document.querySelector('input[name="primary_color"]').value,
-        background_color: document.querySelector('input[name="background_color"]').value,
-        button_color: document.querySelector('input[name="button_color"]').value,
-        button_text_color: document.querySelector('input[name="button_text_color"]').value,
-        button_hover: document.querySelector('input[name="button_hover"]').value
+        logo_url: logoURL,
+        primary_color: document.querySelector('input[name="primary_color"]').value.trim(),
+        background_color: document.querySelector('input[name="background_color"]').value.trim(),
+        button_color: document.querySelector('input[name="button_color"]').value.trim(),
+        button_text_color: document.querySelector('input[name="button_text_color"]').value.trim(),
+        button_hover: document.querySelector('input[name="button_hover"]').value.trim()
       };
 
       // Dados para a tabela "users"
       var userData = {
         primeiro_nome: primeiroNome,
         ultimo_nome: ultimoNome,
-        telefone: document.querySelector('input[name="telefone"]').value,
-        email: document.querySelector('input[name="email"]').value,
+        telefone: document.querySelector('input[name="telefone"]').value.trim(),
+        email: document.querySelector('input[name="email"]').value.trim(),
         fotodeperfil: profileURL,  // URL da foto de perfil (se houver)
         password: document.getElementById('password').value,
         affiliate_id: affiliateId,
@@ -726,7 +688,7 @@
           return;
         }
 
-        // Em seguida, insere os dados na tabela "users"
+        // Insere os dados na tabela "users"
         let { data: userInsert, error: userError } = await supabaseClient
           .from('users')
           .insert(userData);
@@ -738,6 +700,8 @@
         }
 
         alert('Loja criada com sucesso! Affiliate ID: ' + affiliateId);
+        // Opcional: limpar os formulários e retornar ao Step 1
+        clearForms();
       } catch (err) {
         console.error(err);
         alert('Erro ao enviar o formulário. Verifique o console para mais detalhes.');
@@ -745,35 +709,23 @@
     }
 
     /***********************************************************************
-     * Funções e blocos adicionais para futuras extensões
-     * =====================================================================
-     * Aqui você pode incluir funções para:
-     *  - Validações extras de campos
-     *  - Processamento de imagens (redimensionamento, compressão)
-     *  - Feedback visual (ex: spinner de carregamento durante upload)
-     *  - Integração com outros serviços (ex: envio de e-mail de confirmação)
-     *
-     * Exemplo de função de feedback para ativar/desativar o spinner:
+     * Função para limpar os formulários e retornar ao Step 1 (opcional)
      ***********************************************************************/
-    function showSpinner(show) {
-      var preloader = document.getElementById('preloader');
-      if (show) {
-        preloader.style.display = 'block';
-      } else {
-        preloader.style.display = 'none';
-      }
-    }
-
-    // Exemplo de função para limpar os campos dos formulários após a inserção
     function clearForms() {
       document.getElementById('userForm').reset();
       document.getElementById('affiliateForm').reset();
       document.getElementById('subdomainPreview').textContent = "";
-      // Retorna para o step 1
       document.getElementById('step2').classList.remove('active');
       document.getElementById('step1').classList.add('active');
     }
 
+    /***********************************************************************
+     * Função para exibir/ocultar o spinner de carregamento (exemplo)
+     ***********************************************************************/
+    function showSpinner(show) {
+      var preloader = document.getElementById('preloader');
+      preloader.style.display = show ? 'block' : 'none';
+    }
     /***********************************************************************
      * Fim das funções adicionais
      ***********************************************************************/
@@ -781,18 +733,10 @@
   <!-- =============================================================
        Fim do Código JavaScript Principal
        ============================================================= -->
-  
+
   <!-- =============================================================
        Espaço para scripts adicionais ou de plugins
        ============================================================= -->
-  <!-- Aqui você pode incluir outros scripts, caso necessário -->
-  
-  <!-- =============================================================
-       Fim dos Scripts adicionais
-       ============================================================= -->
-  
-  <!-- =============================================================
-       Fim do Body e do HTML
-       ============================================================= -->
+  <!-- Aqui você pode incluir outros scripts, se necessário -->
 </body>
 </html>
