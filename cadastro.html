@@ -7,7 +7,7 @@
   <link rel="shortcut icon" href="assets/images/favicon.svg" type="image/x-icon" />
   <title>Cadastro de Agências</title>
 
-  <!-- ========== CSS files ========== -->
+  <!-- ========== CSS Files ========== -->
   <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
   <link rel="stylesheet" href="assets/css/lineicons.css" />
   <link rel="stylesheet" href="assets/css/quill/bubble.css" />
@@ -18,10 +18,49 @@
   <link rel="stylesheet" href="assets/css/main.css" />
 
   <style>
-    /* Layout Geral: Ajuste para Dashboard com Sidebar */
-    /* A sidebar fixa terá 260px de largura */
+    /* Reset e ajustes básicos */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+    }
+    /* Preloader */
+    #preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #444;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    /* Placeholder para a Sidebar */
+    #sidebar-placeholder {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 260px;  /* Largura definida para a sidebar */
+      height: 100%;
+      z-index: 999;
+    }
+    /* Main Content do Dashboard */
     .main-wrapper {
-      margin-left: 260px; /* Espaço para a sidebar */
+      margin-left: 260px;  /* Espaço para a sidebar */
       padding: 20px;
       min-height: 100vh;
       background-color: #f8f9fa;
@@ -44,101 +83,82 @@
       margin: 0;
       font-size: 1.2rem;
     }
-    /* Container do cadastro: afastado do header fixo */
+    /* Espaço para o conteúdo, afastado do header fixo */
     .cadastro-container {
       margin-top: 80px;
     }
-    /* Steps do formulário */
+    /* Controle dos Steps do Formulário */
     .step {
       display: none;
     }
     .step.active {
       display: block;
     }
-    /* Se for necessário, ajustes adicionais para compatibilizar com a sidebar */
   </style>
 </head>
 <body>
-  <!-- Preloader Único -->
+  <!-- Preloader -->
   <div id="preloader">
     <div class="spinner"></div>
   </div>
 
-  <!-- Importa e inicializa a sidebar através do módulo -->
-  <script type="module">
-    // Certifique-se de que o caminho está correto em relação a este arquivo.
-    import { initAirlandPage } from './assets/js/sidebar.js';
-    initAirlandPage();
-  </script>
+  <!-- Placeholder para a Sidebar -->
+  <div id="sidebar-placeholder"></div>
 
   <!-- Header do Dashboard -->
   <header class="header">
     <h1>Dashboard Airland</h1>
-    <!-- Aqui você pode incluir botões de perfil, notificações, etc. -->
+    <!-- Aqui é possível incluir botões ou itens de perfil -->
   </header>
 
-  <!-- Main Wrapper: Conteúdo do Dashboard -->
+  <!-- Main Content -->
   <main class="main-wrapper">
     <div class="cadastro-container container-fluid">
       <div class="row">
         <div class="col-12">
           <h2>Cadastro de Agências</h2>
-          <p>Aqui você cadastra sua agência. Siga os passos abaixo:</p>
-          
+          <p>Siga os passos abaixo para realizar seu cadastro.</p>
+
           <!-- Step 1: Dados do Usuário -->
           <div id="step1" class="step active">
             <h5>Step 1 – Dados do Usuário</h5>
             <form id="userForm">
               <div class="row">
                 <!-- Primeiro Nome e Último Nome -->
-                <div class="col-md-6">
-                  <div class="mb-3">
-                    <label class="form-label">Primeiro Nome *</label>
-                    <input type="text" name="primeiro_nome" class="form-control" placeholder="Primeiro Nome" required />
-                  </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Primeiro Nome *</label>
+                  <input type="text" name="primeiro_nome" class="form-control" placeholder="Primeiro Nome" required>
                 </div>
-                <div class="col-md-6">
-                  <div class="mb-3">
-                    <label class="form-label">Último Nome *</label>
-                    <input type="text" name="ultimo_nome" class="form-control" placeholder="Último Nome" required />
-                  </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Último Nome *</label>
+                  <input type="text" name="ultimo_nome" class="form-control" placeholder="Último Nome" required>
                 </div>
                 <!-- Telefone e Email -->
-                <div class="col-md-6">
-                  <div class="mb-3">
-                    <label class="form-label">Telefone *</label>
-                    <input type="text" name="telefone" class="form-control" placeholder="Telefone" required />
-                  </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Telefone *</label>
+                  <input type="text" name="telefone" class="form-control" placeholder="Telefone" required>
                 </div>
-                <div class="col-md-6">
-                  <div class="mb-3">
-                    <label class="form-label">Email *</label>
-                    <input type="email" name="email" class="form-control" placeholder="Email" required />
-                  </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Email *</label>
+                  <input type="email" name="email" class="form-control" placeholder="Email" required>
                 </div>
                 <!-- Foto de Perfil -->
-                <div class="col-12">
-                  <div class="mb-3">
-                    <label class="form-label">Foto de Perfil</label>
-                    <input type="file" name="fotodeperfil" class="form-control" accept="image/*" />
-                  </div>
+                <div class="col-12 mb-3">
+                  <label class="form-label">Foto de Perfil</label>
+                  <input type="file" name="fotodeperfil" class="form-control" accept="image/*">
                 </div>
                 <!-- Senha e Repetir Senha -->
-                <div class="col-md-6">
-                  <div class="mb-3">
-                    <label class="form-label">Senha *</label>
-                    <input type="password" id="password" name="password" class="form-control" placeholder="Senha" required />
-                  </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Senha *</label>
+                  <input type="password" id="password" name="password" class="form-control" placeholder="Senha" required>
                 </div>
-                <div class="col-md-6">
-                  <div class="mb-3">
-                    <label class="form-label">Repetir Senha *</label>
-                    <input type="password" id="confirm_password" name="confirm_password" class="form-control" placeholder="Repetir Senha" required />
-                  </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Repetir Senha *</label>
+                  <input type="password" id="confirm_password" name="confirm_password" class="form-control" placeholder="Repetir Senha" required>
                 </div>
                 <!-- Campos Hidden -->
-                <input type="hidden" name="affiliate_id" id="affiliate_id" />
-                <input type="hidden" name="name" id="name" />
+                <input type="hidden" name="affiliate_id" id="affiliate_id">
+                <input type="hidden" name="name" id="name">
                 <!-- Botão Próximo -->
                 <div class="col-12">
                   <button type="button" class="btn btn-primary w-100" onclick="goToStep2(event)">Próximo</button>
@@ -146,7 +166,7 @@
               </div>
             </form>
           </div>
-          <!-- Fim do Step 1 -->
+          <!-- End Step 1 -->
 
           <!-- Step 2: Dados da Agência -->
           <div id="step2" class="step">
@@ -154,81 +174,61 @@
             <form id="affiliateForm">
               <div class="row">
                 <!-- Nome da Agência -->
-                <div class="col-12">
-                  <div class="mb-3">
-                    <label class="form-label">Nome da Agência *</label>
-                    <input type="text" name="agency_name" class="form-control" placeholder="Nome da Agência" required />
-                  </div>
+                <div class="col-12 mb-3">
+                  <label class="form-label">Nome da Agência *</label>
+                  <input type="text" name="agency_name" class="form-control" placeholder="Nome da Agência" required>
                 </div>
                 <!-- Domínio Próprio -->
-                <div class="col-12">
-                  <div class="mb-3">
-                    <label class="form-label">Você tem domínio próprio? *</label>
-                    <div>
-                      <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="has_domain" id="domainYes" value="sim" onclick="toggleDomainFields()" required>
-                        <label class="form-check-label" for="domainYes">Sim</label>
-                      </div>
-                      <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="has_domain" id="domainNo" value="nao" onclick="toggleDomainFields()" required>
-                        <label class="form-check-label" for="domainNo">Não</label>
-                      </div>
+                <div class="col-12 mb-3">
+                  <label class="form-label">Você tem domínio próprio? *</label>
+                  <div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" name="has_domain" id="domainYes" value="sim" onclick="toggleDomainFields()" required>
+                      <label class="form-check-label" for="domainYes">Sim</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" name="has_domain" id="domainNo" value="nao" onclick="toggleDomainFields()" required>
+                      <label class="form-check-label" for="domainNo">Não</label>
                     </div>
                   </div>
                 </div>
-                <!-- Campo para Domínio (quando sim) -->
-                <div class="col-12" id="domainField" style="display: none;">
-                  <div class="mb-3">
-                    <label class="form-label">Domínio *</label>
-                    <input type="text" name="domain" class="form-control" placeholder="seuagencia.com" />
-                  </div>
+                <!-- Campo para Domínio -->
+                <div class="col-12 mb-3" id="domainField" style="display: none;">
+                  <label class="form-label">Domínio *</label>
+                  <input type="text" name="domain" class="form-control" placeholder="seuagencia.com">
                 </div>
-                <!-- Campo para Subdomínio (quando não) -->
-                <div class="col-12" id="subdomainField" style="display: none;">
-                  <div class="mb-3">
-                    <label class="form-label">Subdomínio *</label>
-                    <input type="text" name="subdomain" class="form-control" placeholder="airland.com.br" value="airland.com.br" readonly />
-                  </div>
+                <!-- Campo para Subdomínio -->
+                <div class="col-12 mb-3" id="subdomainField" style="display: none;">
+                  <label class="form-label">Subdomínio *</label>
+                  <input type="text" name="subdomain" class="form-control" placeholder="airland.com.br" value="airland.com.br" readonly>
                 </div>
                 <!-- Logo URL -->
-                <div class="col-12">
-                  <div class="mb-3">
-                    <label class="form-label">Logo URL *</label>
-                    <input type="text" name="logo_url" class="form-control" placeholder="URL da Logo" required />
-                  </div>
+                <div class="col-12 mb-3">
+                  <label class="form-label">Logo URL *</label>
+                  <input type="text" name="logo_url" class="form-control" placeholder="URL da Logo" required>
                 </div>
                 <!-- Cores: Primary e Background -->
-                <div class="col-md-6">
-                  <div class="mb-3">
-                    <label class="form-label">Cor Principal</label>
-                    <input type="text" name="primary_color" class="form-control" placeholder="Ex: #000000" />
-                  </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Cor Principal</label>
+                  <input type="text" name="primary_color" class="form-control" placeholder="Ex: #000000">
                 </div>
-                <div class="col-md-6">
-                  <div class="mb-3">
-                    <label class="form-label">Cor Secundária</label>
-                    <input type="text" name="background_color" class="form-control" placeholder="Ex: #FFFFFF" />
-                  </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Cor Secundária</label>
+                  <input type="text" name="background_color" class="form-control" placeholder="Ex: #FFFFFF">
                 </div>
                 <!-- Cores: Button e Button Text -->
-                <div class="col-md-6">
-                  <div class="mb-3">
-                    <label class="form-label">Cor do Botão</label>
-                    <input type="text" name="button_color" class="form-control" placeholder="Ex: #FF0000" />
-                  </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Cor do Botão</label>
+                  <input type="text" name="button_color" class="form-control" placeholder="Ex: #FF0000">
                 </div>
-                <div class="col-md-6">
-                  <div class="mb-3">
-                    <label class="form-label">Cor do Texto do Botão</label>
-                    <input type="text" name="button_text_color" class="form-control" placeholder="Ex: #FFFFFF" />
-                  </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Cor do Texto do Botão</label>
+                  <input type="text" name="button_text_color" class="form-control" placeholder="Ex: #FFFFFF">
                 </div>
-                <!-- Cor do Botão ao Clicar -->
-                <div class="col-12">
-                  <div class="mb-3">
-                    <label class="form-label">Cor do Botão ao Clicar</label>
-                    <input type="text" name="button_hover" class="form-control" placeholder="Ex: #CCCCCC" />
-                  </div>
+                <!-- Botão Hover -->
+                <div class="col-12 mb-3">
+                  <label class="form-label">Cor do Botão ao Clicar</label>
+                  <input type="text" name="button_hover" class="form-control" placeholder="Ex: #CCCCCC">
                 </div>
                 <!-- Botão Enviar -->
                 <div class="col-12">
@@ -237,7 +237,7 @@
               </div>
             </form>
           </div>
-          <!-- Fim do Step 2 -->
+          <!-- End Step 2 -->
         </div>
       </div>
     </div>
@@ -256,12 +256,11 @@
   <script src="assets/js/quill.min.js"></script>
   <script src="assets/js/datatable.js"></script>
   <script src="assets/js/Sortable.min.js"></script>
-  <!-- Importa o main.js (depois da sidebar ter sido inserida) -->
+  <!-- Importa main.js (após o conteúdo da sidebar e do formulário estar presente) -->
   <script src="./assets/js/main.js"></script>
 
-  <!-- Scripts Inline: Funções para os formulários -->
+  <!-- Scripts Inline para Formulário -->
   <script>
-    // Transição do Step 1 para o Step 2 (validação das senhas)
     function goToStep2(e) {
       e.preventDefault();
       const password = document.getElementById('password').value;
@@ -273,7 +272,6 @@
       document.getElementById('step1').classList.remove('active');
       document.getElementById('step2').classList.add('active');
     }
-    // Exibe/esconde campo de domínio ou subdomínio
     function toggleDomainFields() {
       const hasDomain = document.querySelector('input[name="has_domain"]:checked').value;
       if (hasDomain === 'sim') {
@@ -288,7 +286,6 @@
         document.querySelector('input[name="domain"]').required = false;
       }
     }
-    // Simula o envio dos formulários (Step 2 e depois Step 1)
     function submitAll(e) {
       e.preventDefault();
       const agencyName = document.querySelector('input[name="agency_name"]').value;
@@ -316,14 +313,11 @@
           return;
         }
       }
-      // Simulação: Gera um affiliateId
       const affiliateId = 'AFF' + Math.floor(Math.random() * 100000);
       document.getElementById('affiliate_id').value = affiliateId;
-      // Concatena primeiro e último nome
       const primeiroNome = document.querySelector('input[name="primeiro_nome"]').value;
       const ultimoNome = document.querySelector('input[name="ultimo_nome"]').value;
       document.getElementById('name').value = primeiroNome + ' ' + ultimoNome;
-
       const affiliateData = {
         agency_name: agencyName,
         has_domain: hasDomain,
@@ -337,7 +331,6 @@
         button_hover: document.querySelector('input[name="button_hover"]').value
       };
       console.log('Dados da Agência (Step 2):', affiliateData);
-  
       const userData = {
         primeiro_nome: primeiroNome,
         ultimo_nome: ultimoNome,
@@ -349,7 +342,6 @@
         name: document.getElementById('name').value
       };
       console.log('Dados do Usuário (Step 1):', userData);
-  
       alert('Formulário enviado com sucesso! Affiliate ID gerado: ' + affiliateId);
     }
   </script>
