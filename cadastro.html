@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -16,14 +17,14 @@
   <link rel="stylesheet" href="assets/css/morris.css" />
   <link rel="stylesheet" href="assets/css/datatable.css" />
   <link rel="stylesheet" href="assets/css/main.css" />
-  
+
   <!-- Estilo para controle dos steps -->
   <style>
-    .step { 
-      display: none; 
+    .step {
+      display: none;
     }
-    .step.active { 
-      display: block; 
+    .step.active {
+      display: block;
     }
   </style>
 </head>
@@ -209,10 +210,10 @@
                   <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                       d="M11 20.1667C9.88317 20.1667 8.88718 19.63 8.23901 18.7917H13.761C13.113 19.63 12.1169 20.1667 11 20.1667Z"
-                      fill=""/>
+                      fill="" />
                     <path
                       d="M10.1157 2.74999C10.1157 2.24374 10.5117 1.83333 11 1.83333C11.4883 1.83333 11.8842 2.24374 11.8842 2.74999V2.82604C14.3932 3.26245 16.3051 5.52474 16.3051 8.24999V14.287C16.3051 14.5301 16.3982 14.7633 16.564 14.9352L18.2029 16.6342C18.4814 16.9229 18.2842 17.4167 17.8903 17.4167H4.10961C3.71574 17.4167 3.5185 16.9229 3.797 16.6342L5.43589 14.9352C5.6017 14.7633 5.69485 14.5301 5.69485 14.287V8.24999C5.69485 5.52474 7.60672 3.26245 10.1157 2.82604V2.74999Z"
-                      fill=""/>
+                      fill="" />
                   </svg>
                   <span></span>
                 </button>
@@ -480,7 +481,7 @@
                           </div>
                         </div>
                       </div>
-                      <!-- Linha 3: Campo para domínio ou subdomínio -->
+                      <!-- Linha 3: Campo de domínio (sim) ou subdomínio (não) -->
                       <div class="col-12" id="domainField" style="display:none;">
                         <div class="input-style-1">
                           <label>Domínio *</label>
@@ -491,16 +492,19 @@
                         <div class="input-style-1">
                           <label>Subdomínio *</label>
                           <div class="input-group">
-                            <input type="text" name="subdomain" placeholder="Seu subdomínio" required />
+                            <!-- Metade para digitar e metade exibindo .airland.com.br -->
+                            <input type="text" class="form-control" name="subdomain" id="subdomainInput" placeholder="lojadobreno" oninput="updateSubdomainPreview()" />
                             <span class="input-group-text">.airland.com.br</span>
                           </div>
+                          <!-- Preview abaixo -->
+                          <p class="text-sm mt-2" id="subdomainPreview"></p>
                         </div>
                       </div>
-                      <!-- Linha 4: Logo (Campo para envio de arquivo) -->
+                      <!-- Linha 4: Logo (file input) -->
                       <div class="col-12">
                         <div class="input-style-1">
                           <label>Logo *</label>
-                          <input type="file" name="logo" accept="image/*" required />
+                          <input type="file" name="logo_url" accept="image/*" required />
                         </div>
                       </div>
                       <!-- Linha 5: Cores - Cor Principal e Cor Secundária -->
@@ -536,7 +540,7 @@
                           <input type="text" name="button_hover" placeholder="Ex: #CCCCCC" />
                         </div>
                       </div>
-                      <!-- Botão para envio (nome alterado para "Criar Loja") -->
+                      <!-- Botão para criar loja -->
                       <div class="col-12">
                         <div class="button-group d-flex justify-content-center flex-wrap">
                           <button type="button" class="main-btn primary-btn btn-hover w-100 text-center" onclick="submitForms()">
@@ -575,7 +579,7 @@
   <script src="assets/js/Sortable.min.js"></script>
   <script src="assets/js/main.js"></script>
   <script>
-    // Transição do Step 1 para o Step 2 com verificação de senha
+    // Função para ir do STEP 1 para o STEP 2 (verificação de senhas)
     function goToStep2() {
       var password = document.getElementById('password').value;
       var confirmPassword = document.getElementById('confirm_password').value;
@@ -587,7 +591,7 @@
       document.getElementById('step2').classList.add('active');
     }
 
-    // Exibe ou esconde os campos de domínio de acordo com a resposta
+    // Exibe/esconde campos de domínio ou subdomínio
     function toggleDomainFields() {
       var hasDomain = document.querySelector('input[name="has_domain"]:checked').value;
       if (hasDomain === 'sim') {
@@ -603,14 +607,24 @@
       }
     }
 
-    // Simulação de envio dos dados dos dois steps
+    // Atualiza pré-visualização do subdomínio
+    function updateSubdomainPreview() {
+      var typedSubdomain = document.getElementById('subdomainInput').value.trim();
+      var preview = document.getElementById('subdomainPreview');
+      if (typedSubdomain) {
+        preview.textContent = "Sua loja ficará: " + typedSubdomain + ".airland.com.br";
+      } else {
+        preview.textContent = "";
+      }
+    }
+
+    // Simula envio dos dados do Step 2 e depois do Step 1
     function submitForms() {
       // Validação dos campos obrigatórios do formulário da Agência (Step 2)
       var agencyName = document.querySelector('input[name="agency_name"]').value;
-      var logoFile = document.querySelector('input[name="logo"]').files[0];
-      
+      var logoFile = document.querySelector('input[name="logo_url"]').files[0];
       if (!agencyName || !logoFile) {
-        alert('Por favor, preencha todos os campos obrigatórios da Agência e selecione a Logo.');
+        alert('Por favor, preencha todos os campos obrigatórios da Agência (Nome e Logo).');
         return;
       }
 
@@ -620,36 +634,42 @@
         return;
       }
       var hasDomain = hasDomainElem.value;
+
       if (hasDomain === 'sim') {
-        var domain = document.querySelector('input[name="domain"]').value;
+        var domain = document.querySelector('input[name="domain"]').value.trim();
         if (!domain) {
           alert('Por favor, informe o domínio.');
           return;
         }
       } else if (hasDomain === 'nao') {
-        var subdomain = document.querySelector('input[name="subdomain"]').value;
+        var subdomain = document.getElementById('subdomainInput').value.trim();
         if (!subdomain) {
           alert('Por favor, informe o subdomínio.');
           return;
         }
       }
 
-      // Simula o envio dos dados da Agência para obter o affiliate_id gerado
+      // Simula a geração de ID do afiliado
       var affiliateId = 'AFF' + Math.floor(Math.random() * 100000);
       document.getElementById('affiliate_id').value = affiliateId;
 
-      // Concatena primeiro e último nome para o campo name do usuário
+      // Concatena primeiro e último nome para o campo name
       var primeiroNome = document.querySelector('input[name="primeiro_nome"]').value;
       var ultimoNome = document.querySelector('input[name="ultimo_nome"]').value;
       document.getElementById('name').value = primeiroNome + ' ' + ultimoNome;
 
-      // Coleta dos dados do formulário da Agência (Step 2)
+      // Coleta dados do Step 2
       var affiliateData = {
         agency_name: agencyName,
         has_domain: hasDomain,
-        domain: hasDomain === 'sim' ? document.querySelector('input[name="domain"]').value : '',
-        subdomain: hasDomain === 'nao' ? document.querySelector('input[name="subdomain"]').value : '',
-        logo: logoFile,
+        domain: (hasDomain === 'sim') 
+          ? document.querySelector('input[name="domain"]').value.trim() 
+          : '',
+        // Armazena subdomínio completo
+        subdomain: (hasDomain === 'nao') 
+          ? document.getElementById('subdomainInput').value.trim() + '.airland.com.br' 
+          : '',
+        logo_file: logoFile,  // arquivo selecionado
         primary_color: document.querySelector('input[name="primary_color"]').value,
         background_color: document.querySelector('input[name="background_color"]').value,
         button_color: document.querySelector('input[name="button_color"]').value,
@@ -658,7 +678,7 @@
       };
       console.log('Dados da Agência (Step 2):', affiliateData);
 
-      // Coleta dos dados do formulário do Usuário (Step 1)
+      // Coleta dados do Step 1
       var userData = {
         primeiro_nome: primeiroNome,
         ultimo_nome: ultimoNome,
@@ -671,10 +691,7 @@
       };
       console.log('Dados do Usuário (Step 1):', userData);
 
-      // Aqui você deve implementar o envio via AJAX ou outra lógica, obedecendo a ordem:
-      // 1. Enviar primeiro os dados do Step 2 (affiliates) para obter o ID.
-      // 2. Em seguida, enviar os dados do Step 1 (users) com o affiliate_id capturado.
-
+      // Aqui você deve implementar o envio via AJAX ou outra lógica.
       alert('Formulário enviado com sucesso! Affiliate ID gerado: ' + affiliateId);
     }
   </script>
