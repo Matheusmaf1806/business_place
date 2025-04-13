@@ -1,0 +1,1392 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="shortcut icon" href="assets/images/favicon.svg" type="image/x-icon" />
+  <title>Analytics Dashboard | Airland Demo</title>
+
+  <!-- ========== All CSS files linkup ========= -->
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="assets/css/lineicons.css" />
+  <link rel="stylesheet" href="assets/css/quill/bubble.css" />
+  <link rel="stylesheet" href="assets/css/quill/snow.css" />
+  <link rel="stylesheet" href="assets/css/fullcalendar.css" />
+  <link rel="stylesheet" href="assets/css/morris.css" />
+  <link rel="stylesheet" href="assets/css/datatable.css" />
+  <link rel="stylesheet" href="assets/css/main.css" />
+</head>
+
+<body>
+  <!-- ======== Preloader =========== -->
+  <div id="preloader">
+    <div class="spinner"></div>
+  </div>
+  <!-- ======== Preloader =========== -->
+
+  <!-- ======== sidebar-nav start =========== -->
+  <!-- =============================================================
+       Sidebar de Navegação
+       ============================================================= -->
+       <aside class="sidebar-nav-wrapper">
+        <div class="navbar-logo">
+          <a href="index.html">
+            <img src="assets/images/logo/logo.svg" alt="logo" />
+          </a>
+        </div>
+        <nav class="sidebar-nav">
+          <ul>
+            <!-- Menu: Painel de Vendas -->
+            <li class="nav-item">
+              <a href="painel-vendas.html">
+                <span class="icon">
+                  <!-- SVG omitido para brevidade -->
+                </span>
+                <span class="text">Painel de Vendas</span>
+              </a>
+            </li>
+            <!-- Menu: Vendas com submenu -->
+            <li class="nav-item nav-item-has-children">
+              <a href="#0" class="collapsed" data-bs-toggle="collapse" data-bs-target="#ddmenu_2" aria-controls="ddmenu_2" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="icon">
+                  <!-- SVG omitido -->
+                </span>
+                <span class="text">Vendas</span>
+              </a>
+              <ul id="ddmenu_2" class="collapse dropdown-nav">
+                <li><a href="pedidos.html"><span class="arrow-icon">→</span> Pedidos</a></li>
+                <li><a href="clientes.html"><span class="arrow-icon">→</span> Clientes</a></li>
+              </ul>
+            </li>
+            <!-- Menu: Orçamentos -->
+            <li class="nav-item">
+              <a href="orcamentos.html">
+                <span class="icon">
+                  <!-- SVG omitido -->
+                </span>
+                <span class="text">Orçamentos</span>
+              </a>
+            </li>
+            <!-- Menu: Personalize -->
+            <li class="nav-item nav-item-has-children">
+              <a href="#0" data-bs-toggle="collapse" data-bs-target="#ddmenu_3" aria-controls="ddmenu_3" aria-expanded="true" aria-label="Toggle navigation">
+                <span class="icon">
+                  <!-- SVG omitido -->
+                </span>
+                <span class="text">Personalize</span>
+              </a>
+              <ul id="ddmenu_3" class="collapsed show dropdown-nav">
+                <li><a href="design.html#idvisual"><span class="arrow-icon">→</span> Identidade Visual</a></li>
+                <li><a href="design.html#paleta"><span class="arrow-icon">→</span> Paleta de Cores</a></li>
+                <li><a href="design.html#banner"><span class="arrow-icon">→</span> Banner</a></li>
+                <li><a href="design.html/#footer"><span class="arrow-icon">→</span> Rodapé</a></li>
+              </ul>
+            </li>
+            <!-- Menu: Usuários -->
+            <li class="nav-item nav-item-has-children">
+              <a href="#0" data-bs-toggle="collapse" data-bs-target="#ddmenu_usuarios" aria-controls="ddmenu_usuarios" aria-expanded="true" aria-label="Toggle navigation">
+                <span class="icon">
+                  <!-- SVG omitido -->
+                </span>
+                <span class="text">Usuários</span>
+              </a>
+              <ul id="ddmenu_usuarios" class="collapsed show dropdown-nav">
+                <li><a href="createuser.html"><span class="arrow-icon">→</span> Criar acesso</a></li>
+                <li><a href="users.html"><span class="arrow-icon">→</span> Gerenciar usuários</a></li>
+              </ul>
+            </li>
+          </ul>
+        </nav>
+        <!-- Caixa promocional com dados do afiliado (os dados virão do back-end) -->
+        <div class="promo-box">
+          <div class="promo-icon">
+            <!-- A imagem abaixo deverá ser substituída pela foto de perfil do afiliado via API -->
+            <img class="mx-auto" src="assets/images/logo/logo-icon-big.svg" alt="Logo">
+          </div>
+          <h3>Adam Joe</h3>
+          <p>A Airland agradece por lhe ter como colaborador do nosso time.</p>
+        </div>
+      </aside>
+      <div class="overlay"></div>
+      <!-- =============================================================
+           Fim do Sidebar
+           ============================================================= -->
+    
+      <!-- =============================================================
+           Main Wrapper e Header
+           ============================================================= -->
+      <main class="main-wrapper">
+        <header class="header">
+          <div class="container-fluid">
+            <div class="row">
+              <!-- Menu Toggle -->
+              <div class="col-lg-5 col-md-5 col-6">
+                <div class="header-left d-flex align-items-center">
+                  <div class="menu-toggle-btn mr-15">
+                    <button id="menu-toggle" class="main-btn primary-btn btn-hover">
+                      <i class="lni lni-chevron-left me-2"></i> Menu
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <!-- Dados do Perfil no Header (exemplo estático; devem ser atualizados via API) -->
+              <div class="col-lg-7 col-md-7 col-6">
+                <div class="header-right">
+                  <!-- Notificações (trecho omitido para brevidade) -->
+                  <div class="notification-box ml-15 d-none d-md-flex">
+                    <button class="dropdown-toggle" type="button" id="notification" data-bs-toggle="dropdown" aria-expanded="false">
+                      <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                        <!-- SVG omitido -->
+                      </svg>
+                      <span></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notification">
+                      <li>
+                        <a href="#0">
+                          <div class="image">
+                            <img src="assets/images/lead/lead-6.png" alt="" />
+                          </div>
+                          <div class="content">
+                            <h6>John Doe <span class="text-regular">comment on a product.</span></h6>
+                            <p>Lorem ipsum dolor sit amet, consect etur adipiscing elit Vivamus tortor.</p>
+                            <span>10 mins ago</span>
+                          </div>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#0">
+                          <div class="image">
+                            <img src="assets/images/lead/lead-1.png" alt="" />
+                          </div>
+                          <div class="content">
+                            <h6>Jonathon <span class="text-regular">like on a product.</span></h6>
+                            <p>Lorem ipsum dolor sit amet, consect etur adipiscing elit Vivamus tortor.</p>
+                            <span>10 mins ago</span>
+                          </div>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <!-- Perfil -->
+                  <div class="profile-box ml-15">
+                    <button class="dropdown-toggle bg-transparent border-0" type="button" id="profile" data-bs-toggle="dropdown" aria-expanded="false">
+                      <div class="profile-info">
+                        <div class="info">
+                          <div class="image">
+                            <!-- A imagem abaixo deverá ser substituída pela foto de perfil do afiliado via API -->
+                            <img src="assets/images/profile/profile-image.png" alt="" />
+                          </div>
+                          <div>
+                            <h6 class="fw-500">Adam Joe</h6>
+                            <p>Admin</p>
+                          </div>
+                        </div>
+                      </div>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profile">
+                      <li>
+                        <div class="author-info flex items-center !p-1">
+                          <div class="image">
+                            <img src="assets/images/profile/profile-image.png" alt="image">
+                          </div>
+                          <div class="content">
+                            <h4 class="text-sm">Adam Joe</h4>
+                            <a class="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white text-xs" href="#">Email@gmail.com</a>
+                          </div>
+                        </div>
+                      </li>
+                      <li class="divider"></li>
+                      <li><a href="#0"><i class="lni lni-user"></i> View Profile</a></li>
+                      <li><a href="#0"><i class="lni lni-alarm"></i> Notifications</a></li>
+                      <li><a href="#0"><i class="lni lni-inbox"></i> Messages</a></li>
+                      <li><a href="#0"><i class="lni lni-cog"></i> Settings</a></li>
+                      <li class="divider"></li>
+                      <li><a href="#0"><i class="lni lni-exit"></i> Sign Out</a></li>
+                    </ul>
+                  </div>
+                  <!-- Fim do Perfil -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+        <!-- =============================================================
+          Fim do Header
+        ============================================================= -->    
+
+    <!-- ========== section start ========== -->
+    <section class="section">
+      <div class="container-fluid">
+        <!-- ========== title-wrapper start ========== -->
+        <div class="title-wrapper pt-30">
+          <div class="row align-items-center">
+            <div class="col-md-6">
+              <div class="title">
+                <h2>Analytics Dashboard</h2>
+              </div>
+            </div>
+            <!-- end col -->
+            <div class="col-md-6">
+              <div class="breadcrumb-wrapper">
+                <nav aria-label="breadcrumb">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                      <a href="#0">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                      Analytics
+                    </li>
+                  </ol>
+                </nav>
+              </div>
+            </div>
+            <!-- end col -->
+          </div>
+          <!-- end row -->
+        </div>
+        <!-- ========== title-wrapper end ========== -->
+        <div class="row">
+          <div class="col-xl-3 col-lg-4 col-sm-6">
+            <div class="icon-card mb-30">
+              <div class="icon purple">
+                <i class="lni lni-users"></i>
+              </div>
+              <div class="content">
+                <h6 class="mb-10">Users</h6>
+                <h3 class="text-bold mb-10">6453</h3>
+                <p class="text-sm text-success">
+                  <i class="lni lni-arrow-up"></i> +23.4%
+                </p>
+              </div>
+            </div>
+            <!-- End Icon Cart -->
+          </div>
+          <!-- End Col -->
+          <div class="col-xl-3 col-lg-4 col-sm-6">
+            <div class="icon-card mb-30">
+              <div class="icon success">
+                <i class="lni lni-eye"></i>
+              </div>
+              <div class="content">
+                <h6 class="mb-10">Page views</h6>
+                <h3 class="text-bold mb-10">876</h3>
+                <p class="text-sm text-danger">
+                  <i class="lni lni-arrow-down"></i> -12.00%
+                </p>
+              </div>
+            </div>
+            <!-- End Icon Cart -->
+          </div>
+          <!-- End Col -->
+          <div class="col-xl-3 col-lg-4 col-sm-6">
+            <div class="icon-card mb-30">
+              <div class="icon primary">
+                <i class="lni lni-thumbs-up"></i>
+              </div>
+              <div class="content">
+                <h6 class="mb-10">Impressions</h6>
+                <h3 class="text-bold mb-10">976</h3>
+                <p class="text-sm text-danger">
+                  <i class="lni lni-arrow-down"></i> -2.00%
+                </p>
+              </div>
+            </div>
+            <!-- End Icon Cart -->
+          </div>
+          <!-- End Col -->
+          <div class="col-xl-3 col-lg-4 col-sm-6">
+            <div class="icon-card mb-30">
+              <div class="icon orange">
+                <i class="lni lni-pie-chart"></i>
+              </div>
+              <div class="content">
+                <h6 class="mb-10">Bounce Rate</h6>
+                <h3 class="text-bold mb-10">346</h3>
+                <p class="text-sm text-success">
+                  <i class="lni lni-arrow-up"></i> +23.4%
+                </p>
+              </div>
+            </div>
+            <!-- End Icon Cart -->
+          </div>
+          <!-- End Col -->
+        </div>
+        <!-- End Row -->
+        <div class="row">
+          <!-- End Col -->
+          <div class="col-lg-6">
+            <div class="card-style mb-30">
+              <div class="title d-flex justify-content-between align-items-center">
+                <h6 class="mb-10">Browser States</h6>
+                <div class="more-btn-wrapper mb-10">
+                  <button class="more-btn dropdown-toggle" id="moreAction" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    <i class="lni lni-more-alt"></i>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="moreAction">
+                    <li class="dropdown-item">
+                      <a href="#0" class="text-gray">Clear All</a>
+                    </li>
+                    <li class="dropdown-item">
+                      <a href="#0" class="text-gray">Delete Cookies</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div id="map" style="width: 100%; height: 400px"></div>
+              <div class="table-wrapper">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>
+                        <h5 class="text-sm text-medium">Countries</h5>
+                      </th>
+                      <th>
+                        <h5 class="text-sm text-medium">Orders</h5>
+                      </th>
+                      <th>
+                        <h5 class="text-sm text-medium">Earnings</h5>
+                      </th>
+                    </tr>
+                    <!-- end table row -->
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p class="text-sm">United State</p>
+                      </td>
+                      <td>
+                        <p class="text-sm">23,543</p>
+                      </td>
+                      <td>
+                        <p class="text-sm">$35,4457</p>
+                      </td>
+                    </tr>
+                    <!-- end table row -->
+                    <tr>
+                      <td>
+                        <p class="text-sm">United Kingdom</p>
+                      </td>
+                      <td>
+                        <p class="text-sm">23,543</p>
+                      </td>
+                      <td>
+                        <p class="text-sm">$35,4457</p>
+                      </td>
+                    </tr>
+                    <!-- end table row -->
+                    <tr>
+                      <td>
+                        <p class="text-sm">Canada</p>
+                      </td>
+                      <td>
+                        <p class="text-sm">23,543</p>
+                      </td>
+                      <td>
+                        <p class="text-sm">$35,4457</p>
+                      </td>
+                    </tr>
+                    <!-- end table row -->
+                    <tr>
+                      <td>
+                        <p class="text-sm">U A E</p>
+                      </td>
+                      <td>
+                        <p class="text-sm">83,543</p>
+                      </td>
+                      <td>
+                        <p class="text-sm">$95,4457</p>
+                      </td>
+                    </tr>
+                    <!-- end table row -->
+                    <tr>
+                      <td>
+                        <p class="text-sm">Spain</p>
+                      </td>
+                      <td>
+                        <p class="text-sm">3,543</p>
+                      </td>
+                      <td>
+                        <p class="text-sm">$15,4457</p>
+                      </td>
+                    </tr>
+                    <!-- end table row -->
+                    <tr>
+                      <td>
+                        <p class="text-sm">Germany</p>
+                      </td>
+                      <td>
+                        <p class="text-sm">33,543</p>
+                      </td>
+                      <td>
+                        <p class="text-sm">$45,4457</p>
+                      </td>
+                    </tr>
+                    <!-- end table row -->
+                  </tbody>
+                </table>
+                <!-- end table -->
+              </div>
+            </div>
+
+            <!-- End Card Style -->
+
+            <div class="card-style clients-table-card mb-30">
+              <div class="title d-flex justify-content-between align-items-center">
+                <h6 class="mb-10">Browser States</h6>
+                <div class="more-btn-wrapper mb-10">
+                  <button class="more-btn dropdown-toggle" id="moreAction" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    <i class="lni lni-more-alt"></i>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="moreAction">
+                    <li class="dropdown-item">
+                      <a href="#0" class="text-gray">Clear All</a>
+                    </li>
+                    <li class="dropdown-item">
+                      <a href="#0" class="text-gray">Delete Cookies</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="table-wrapper">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>
+                        <h5 class="text-sm text-medium">Browser</h5>
+                      </th>
+                      <th>
+                        <h5 class="text-sm text-medium">Sessions</h5>
+                      </th>
+                      <th>
+                        <h5 class="text-sm text-medium">Bounce Rate</h5>
+                      </th>
+                    </tr>
+                    <!-- end table row -->
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p class="text-sm">Chrome</p>
+                      </td>
+                      <td>
+                        <p class="text-sm">10853(52%)</p>
+                      </td>
+                      <td>
+                        <p class="text-sm">52.80%</p>
+                      </td>
+                    </tr>
+                    <!-- end table row -->
+                    <tr>
+                      <td>
+                        <p class="text-sm">Safari</p>
+                      </td>
+                      <td>
+                        <p class="text-sm">10853(52%)</p>
+                      </td>
+                      <td>
+                        <p class="text-sm">52.80%</p>
+                      </td>
+                    </tr>
+                    <!-- end table row -->
+                    <tr>
+                      <td>
+                        <p class="text-sm">FireFox</p>
+                      </td>
+                      <td>
+                        <p class="text-sm">10853(52%)</p>
+                      </td>
+                      <td>
+                        <p class="text-sm">52.80%</p>
+                      </td>
+                    </tr>
+                    <!-- end table row -->
+                    <tr>
+                      <td>
+                        <p class="text-sm">Opera</p>
+                      </td>
+                      <td>
+                        <p class="text-sm">10853(52%)</p>
+                      </td>
+                      <td>
+                        <p class="text-sm">52.80%</p>
+                      </td>
+                    </tr>
+                    <!-- end table row -->
+                  </tbody>
+                </table>
+                <!-- end table -->
+              </div>
+            </div>
+            <!-- end card -->
+          </div>
+          <!-- End Col -->
+        </div>
+        <!-- End Row -->
+      </div>
+      <!-- end container -->
+    </section>
+    <!-- ========== section end ========== -->
+
+    <!-- ========== footer start =========== -->
+    <footer class="footer">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-6 order-last order-md-first">
+            <div class="copyright text-center text-md-start">
+              <p class="text-sm">
+                Designed and Developed by
+                <a href="https://Airland.com" rel="nofollow" target="_blank">
+                  Airland
+                </a>
+              </p>
+            </div>
+          </div>
+          <!-- end col-->
+        </div>
+        <!-- end row -->
+      </div>
+      <!-- end container -->
+    </footer>
+    <!-- ========== footer end =========== -->
+  </main>
+  <!-- ======== main-wrapper end =========== -->
+
+  <!-- ============ Theme Option Start ============= -->
+  <button class="option-btn">
+    <i class="lni lni-cog"></i>
+  </button>
+  <div class="option-overlay"></div>
+  <div class="option-box">
+    <div class="option-header">
+      <h5>Settings</h5>
+      <button class="option-btn-close text-gray">
+        <i class="lni lni-close"></i>
+      </button>
+    </div>
+    <h6 class="mb-10">Layout</h6>
+    <ul class="mb-30">
+      <li><button class="leftSidebarButton active">Left Sidebar</button></li>
+      <li><button class="rightSidebarButton">Right Sidebar</button></li>
+    </ul>
+
+    <h6 class="mb-10">Theme</h6>
+    <ul class="d-flex flex-wrap align-items-center">
+      <li>
+        <button class="lightThemeButton active">
+          Light Theme + Sidebar 1
+        </button>
+      </li>
+      <li><button class="darkThemeButton">Dark Theme + Sidebar 1</button></li>
+    </ul>
+
+    <div class="promo-box">
+      <div class="promo-icon">
+        <img class="mx-auto" src="./assets/images/logo/logo-icon-big.svg" alt="Logo">
+      </div>
+      <h3>Upgrade to PRO</h3>
+      <p>Improve your development process and start doing more with Airland PRO!</p>
+      <a href="https://Airland.com/pro" target="_blank" rel="nofollow" class="main-btn primary-btn btn-hover">
+        Upgrade to PRO
+      </a>
+    </div>
+  </div>
+  <!-- ============ Theme Option End ============= -->
+  <script>
+    // Função para checar a sessão via API
+    async function checkSession() {
+      try {
+        const response = await fetch("https://airland.com.br/affiliatesacess/login_api.php/check", {
+          credentials: 'include'
+        });
+        const result = await response.json();
+        console.log("Resposta da Sessão:", result);
+        if (result.logged_in) {
+          // Se estiver logado, exibe o conteúdo removendo o display: none
+          document.body.style.display = "block";
+        } else {
+          // Se não estiver logado, redireciona para a página de login
+          window.location.replace("https://businessplace.airland.com.br/signin.html");
+        }
+      } catch (error) {
+        console.error("Erro ao verificar a sessão:", error);
+        window.location.replace("https://businessplace.airland.com.br/signin.html");
+      }
+    }
+
+    // Executa a verificação assim que o DOM estiver carregado
+    document.addEventListener("DOMContentLoaded", checkSession);
+  </script>
+  <!-- ========= All Javascript files linkup ======== -->
+  <script src="assets/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/Chart.min.js"></script>
+  <script src="assets/js/apexcharts.min.js"></script>
+  <script src="assets/js/dynamic-pie-chart.js"></script>
+  <script src="assets/js/moment.min.js"></script>
+  <script src="assets/js/fullcalendar.js"></script>
+  <script src="assets/js/jvectormap.min.js"></script>
+  <script src="assets/js/world-merc.js"></script>
+  <script src="assets/js/polyfill.js"></script>
+  <script src="assets/js/quill.min.js"></script>
+  <script src="assets/js/datatable.js"></script>
+  <script src="assets/js/Sortable.min.js"></script>
+  <script src="assets/js/main.js"></script>
+
+  <script>
+    // ======== jvectormap activation
+    const markers = [
+      { name: "Egypt", coords: [26.8206, 30.8025] },
+      { name: "Russia", coords: [61.524, 105.3188] },
+      { name: "Canada", coords: [56.1304, -106.3468] },
+      { name: "Greenland", coords: [71.7069, -42.6043] },
+      { name: "Brazil", coords: [-14.235, -51.9253] },
+    ];
+
+    const jvm = new jsVectorMap({
+      map: "world_merc",
+      selector: "#map",
+      zoomButtons: false,
+
+      regionStyle: {
+        initial: {
+          fill: "#d1d5db",
+        },
+      },
+
+      labels: {
+        markers: {
+          render: (marker) => marker.name,
+        },
+      },
+
+      markersSelectable: true,
+      selectedMarkers: markers.map((marker, index) => {
+        const name = marker.name;
+
+        if (name === "Russia" || name === "Brazil") {
+          return index;
+        }
+      }),
+      markers: markers,
+      markerStyle: {
+        initial: { fill: "#4A6CF7" },
+        selected: { fill: "#ff5050" },
+      },
+      markerLabelStyle: {
+        initial: {
+          fontWeight: 400,
+          fontSize: 14,
+        },
+      },
+    });
+
+    // =========== chart three start
+    const ctx3 = document.getElementById("Chart3").getContext("2d");
+    const chart3 = new Chart(ctx3, {
+      type: "line",
+      data: {
+        labels: [
+          "Jan",
+          "Fab",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ],
+        datasets: [
+          {
+            label: "Visitors",
+            backgroundColor: "transparent",
+            borderColor: "#9b51e0",
+            data: [80, 120, 110, 100, 130, 150, 115, 145, 140, 130, 160, 210],
+            pointBackgroundColor: "transparent",
+            pointHoverBackgroundColor: "#9b51e0",
+            pointBorderColor: "transparent",
+            pointHoverBorderColor: "#fff",
+            pointHoverBorderWidth: 3,
+            borderWidth: 5,
+            pointRadius: 5,
+            pointHoverRadius: 8,
+            fill: false,
+            cubicInterpolationMode: "monotone", // Add this line for curved line
+          },
+          {
+            label: "Visits",
+            backgroundColor: "transparent",
+            borderColor: "#4a6cf7",
+            data: [
+              120, 160, 150, 140, 165, 210, 135, 155, 170, 140, 130, 200,
+            ],
+            pointBackgroundColor: "transparent",
+            pointHoverBackgroundColor: "#4a6cf7",
+            pointBorderColor: "transparent",
+            pointHoverBorderColor: "#fff",
+            pointHoverBorderWidth: 3,
+            borderWidth: 5,
+            pointRadius: 5,
+            pointHoverRadius: 8,
+            fill: false,
+            cubicInterpolationMode: "monotone", // Add this line for curved line
+          },
+        ],
+      },
+      options: {
+        plugins: {
+          tooltip: {
+            callbacks: {
+              labelColor: function (context) {
+                return {
+                  backgroundColor: "rgba(104, 110, 255, .0)",
+                };
+              },
+            },
+            intersect: false,
+            backgroundColor: "#fbfbfb",
+            titleColor: "#8F92A1",
+            bodyColor: "#272727",
+            titleFont: {
+              fontSize: 16,
+              fontFamily: "Plus Jakarta Sans",
+              fontStyle: "400",
+              display: false,
+            },
+            bodyFont: {
+              family: "Plus Jakarta Sans",
+              size: 16,
+            },
+            multiKeyBackground: "transparent",
+            displayColors: false,
+            padding: 15,
+            borderColor: "rgba(143, 146, 161, .1)",
+            borderWidth: 1,
+          },
+          legend: {
+            display: false,
+          },
+        },
+        responsive: true,
+        // maintainAspectRatio: false,
+        layout: {
+          padding: {
+            top: 0,
+          },
+        },
+        title: {
+          display: false,
+        },
+        legend: {
+          display: false,
+        },
+        scales: {
+          y: {
+            grid: {
+              display: false,
+              drawTicks: false,
+              drawBorder: false,
+            },
+            ticks: {
+              padding: 35,
+              max: 300,
+              min: 50,
+            },
+          },
+          x: {
+            grid: {
+              display: false,
+              drawBorder: false,
+              color: "rgba(143, 146, 161, .1)",
+              zeroLineColor: "rgba(143, 146, 161, .1)",
+            },
+            ticks: {
+              padding: 20,
+            },
+          },
+        },
+      },
+    });
+    // =========== chart three end
+
+    // ================== chart four start
+    const ctx4 = document.getElementById("Chart4").getContext("2d");
+    const chart4 = new Chart(ctx4, {
+      type: "bar",
+      data: {
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+        datasets: [
+          {
+            label: "",
+            backgroundColor: "#4A6CF7",
+            borderColor: "transparent",
+            borderRadius: 20,
+            borderWidth: 5,
+            barThickness: 20,
+            maxBarThickness: 20,
+            data: [600, 700, 1000, 700, 650, 800],
+          },
+          {
+            label: "",
+            backgroundColor: "#d50100",
+            borderColor: "transparent",
+            borderRadius: 20,
+            borderWidth: 5,
+            barThickness: 20,
+            maxBarThickness: 20,
+            data: [690, 740, 720, 1120, 876, 900],
+          },
+        ],
+      },
+      options: {
+        plugins: {
+          tooltip: {
+            backgroundColor: "#F3F6F8",
+            titleColor: "#8F92A1",
+            titleFontSize: 12,
+            bodyColor: "#171717",
+            bodyFont: {
+              weight: "bold",
+              size: 16,
+            },
+            multiKeyBackground: "transparent",
+            displayColors: false,
+            padding: {
+              x: 30,
+              y: 10,
+            },
+            bodyAlign: "center",
+            titleAlign: "center",
+            enabled: true,
+          },
+          legend: {
+            display: false,
+          },
+        },
+        layout: {
+          padding: {
+            top: 0,
+          },
+        },
+        responsive: true,
+        // maintainAspectRatio: false,
+        title: {
+          display: false,
+        },
+        scales: {
+          y: {
+            grid: {
+              display: false,
+              drawTicks: false,
+              drawBorder: false,
+            },
+            ticks: {
+              padding: 35,
+              max: 1200,
+              min: 0,
+            },
+          },
+          x: {
+            grid: {
+              display: false,
+              drawBorder: false,
+              color: "rgba(143, 146, 161, .1)",
+              zeroLineColor: "rgba(143, 146, 161, .1)",
+            },
+            ticks: {
+              padding: 20,
+            },
+          },
+        },
+      },
+    });
+    // =========== chart four end
+
+    //============ doughnutChart1 start
+    const doughnutChart1 = new ApexCharts(
+      document.querySelector("#doughnutChart1"),
+      (options = {
+        series: [83, 67, 55, 44],
+        chart: {
+          height: 350,
+          type: "radialBar",
+        },
+
+        plotOptions: {
+          radialBar: {
+            dataLabels: {
+              name: {
+                fontSize: "22px",
+              },
+              value: {
+                fontSize: "16px",
+              },
+            },
+            hollow: {
+              size: "40%",
+            },
+            track: {
+              strokeWidth: "100%",
+              margin: 10,
+            },
+          },
+        },
+        stroke: {
+          lineCap: "round",
+        },
+        labels: ["Desktop", "Tablet", "Mobile", "Others"],
+        colors: ["#4a6cf7", "#f2994a", "#d50100", "#f7c800"],
+      })
+    );
+    doughnutChart1.render();
+    //============ doughnutChart1 end
+
+    // =========== referralsCtx1 start
+    const referralsCtx1 = document.getElementById("referralsChart1").getContext("2d");
+    const referralsChart1 = new Chart(referralsCtx1, {
+      type: "line",
+      data: {
+        labels: [
+          "Jan",
+          "Fab",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ],
+        datasets: [
+          {
+            label: "",
+            backgroundColor: "transparent",
+            borderColor: "#219653",
+            borderWidth: 3,
+            data: [5, 40, 20, 80, 30, 90, 60, 75, 35, 85, 50, 90],
+            pointBackgroundColor: "transparent",
+            pointBorderColor: "transparent",
+            pointRadius: 8,
+            cubicInterpolationMode: "monotone",
+          },
+        ],
+      },
+      options: {
+        plugins: {
+          tooltip: {
+            enabled: false,
+          },
+          legend: {
+            display: false,
+          },
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+        layout: {
+          padding: {
+            top: 0,
+          },
+        },
+        title: {
+          display: false,
+        },
+        scales: {
+          y: {
+            display: false,
+          },
+          x: {
+            display: false,
+          },
+        },
+      },
+    });
+    // =========== referralsCtx1 end
+
+    // =========== referralsCtx2 start
+    const referralsCtx2 = document.getElementById("referralsChart2").getContext("2d");
+    const referralsChart2 = new Chart(referralsCtx2, {
+      type: "line",
+      data: {
+        labels: [
+          "Jan",
+          "Fab",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ],
+        datasets: [
+          {
+            label: "",
+            backgroundColor: "transparent",
+            borderColor: "#EB5757",
+            borderWidth: 3,
+            data: [50, 40, 90, 80, 60, 40, 75, 55, 70, 40, 54, 10],
+            pointBackgroundColor: "transparent",
+            pointBorderColor: "transparent",
+            pointRadius: 8,
+            cubicInterpolationMode: "monotone",
+          },
+        ],
+      },
+      options: {
+        plugins: {
+          tooltip: {
+            enabled: false,
+          },
+          legend: {
+            display: false,
+          },
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+        layout: {
+          padding: {
+            top: 0,
+          },
+        },
+        title: {
+          display: false,
+        },
+        scales: {
+          y: {
+            display: false,
+          },
+          x: {
+            display: false,
+          },
+        },
+      },
+    });
+
+    // =========== referralsCtx2 end
+
+    // =========== referralsCtx3 start
+    const referralsCtx3 = document.getElementById("referralsChart3").getContext("2d");
+    const referralsChart3 = new Chart(referralsCtx3, {
+      type: "line",
+      data: {
+        labels: [
+          "Jan",
+          "Fab",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ],
+        datasets: [
+          {
+            label: "",
+            backgroundColor: "transparent",
+            borderColor: "#219653",
+            borderWidth: 3,
+            data: [5, 40, 25, 75, 40, 90, 60, 75, 35, 85, 60, 90],
+            pointBackgroundColor: "transparent",
+            pointBorderColor: "transparent",
+            pointRadius: 8,
+            cubicInterpolationMode: "monotone",
+          },
+        ],
+      },
+      options: {
+        plugins: {
+          tooltip: {
+            enabled: false,
+          },
+          legend: {
+            display: false,
+          },
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+        layout: {
+          padding: {
+            top: 0,
+          },
+        },
+        title: {
+          display: false,
+        },
+        scales: {
+          y: {
+            display: false,
+          },
+          x: {
+            display: false,
+          },
+        },
+      },
+    });
+    // =========== referralsCtx3 end
+
+    // =========== referralsCtx4 start
+    const referralsCtx4 = document.getElementById("referralsChart4").getContext("2d");
+    const referralsChart4 = new Chart(referralsCtx4, {
+      type: "line",
+      data: {
+        labels: [
+          "Jan",
+          "Fab",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ],
+        // Information about the dataset
+        datasets: [
+          {
+            label: "",
+            backgroundColor: "transparent",
+            borderColor: "#EB5757",
+            borderWidth: 3,
+            data: [55, 40, 80, 75, 50, 35, 75, 55, 60, 30, 34, 10],
+            pointBackgroundColor: "transparent",
+            pointBorderColor: "transparent",
+            pointRadius: 8,
+            cubicInterpolationMode: "monotone",
+          },
+        ],
+      },
+
+      options: {
+        plugins: {
+          tooltip: {
+            enabled: false,
+          },
+          legend: {
+            display: false,
+          },
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+        layout: {
+          padding: {
+            top: 0,
+          },
+        },
+        title: {
+          display: false,
+        },
+        scales: {
+          y: {
+            display: false,
+          },
+          x: {
+            display: false,
+          },
+        },
+      },
+    });
+    // =========== referralsCtx4 end
+
+    // =========== referralsCtx5 start
+    const referralsCtx5 = document.getElementById("referralsChart5").getContext("2d");
+    const referralsChart5 = new Chart(referralsCtx5, {
+      type: "line",
+      data: {
+        labels: [
+          "Jan",
+          "Fab",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ],
+        datasets: [
+          {
+            label: "",
+            backgroundColor: "transparent",
+            borderColor: "#219653",
+            borderWidth: 3,
+            data: [5, 40, 20, 80, 30, 90, 60, 75, 35, 85, 50, 90],
+            pointBackgroundColor: "transparent",
+            pointBorderColor: "transparent",
+            pointRadius: 8,
+            cubicInterpolationMode: "monotone",
+          },
+        ],
+      },
+
+      options: {
+        plugins: {
+          tooltip: {
+            enabled: false,
+          },
+          legend: {
+            display: false,
+          },
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+        layout: {
+          padding: {
+            top: 0,
+          },
+        },
+        title: {
+          display: false,
+        },
+        scales: {
+          y: {
+            display: false,
+          },
+          x: {
+            display: false,
+          },
+        },
+      },
+    });
+    // =========== referralsCtx5 end
+
+    // =========== referralsCtx6 start
+    const referralsCtx6 = document.getElementById("referralsChart6").getContext("2d");
+    const referralsChart6 = new Chart(referralsCtx6, {
+      type: "line",
+      data: {
+        labels: [
+          "Jan",
+          "Fab",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ],
+        datasets: [
+          {
+            label: "",
+            backgroundColor: "transparent",
+            borderColor: "#219653",
+            borderWidth: 3,
+            data: [5, 40, 20, 80, 30, 90, 60, 75, 35, 85, 50, 90],
+            pointBackgroundColor: "transparent",
+            pointBorderColor: "transparent",
+            pointRadius: 8,
+            cubicInterpolationMode: "monotone",
+          },
+        ],
+      },
+
+      options: {
+        plugins: {
+          tooltip: {
+            enabled: false,
+          },
+          legend: {
+            display: false,
+          },
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+        layout: {
+          padding: {
+            top: 0,
+          },
+        },
+        title: {
+          display: false,
+        },
+        scales: {
+          y: {
+            display: false,
+          },
+          x: {
+            display: false,
+          },
+        },
+      },
+    });
+      // =========== referralsCtx6 end
+
+    // =========== theme change
+    const lightThemeColors = {
+      darkBorder: "rgba(143, 146, 161, .1)",
+      darkColor: "#5A6A85",
+    };
+
+    const darkThemeColors = {
+      darkBorder: "#2b2b42",
+      darkColor: "#838C9A",
+    };
+
+    // Function to apply theme colors to the chart
+    function applyThemeColors(themeColors) {
+
+      chart3.options.scales.y.grid.color = themeColors.darkBorder;
+      chart3.options.scales.y.grid.borderColor = themeColors.darkBorder;
+      chart3.options.scales.x.ticks.color = themeColors.darkColor;
+      chart3.options.scales.y.ticks.color = themeColors.darkColor;
+
+      chart4.options.scales.y.grid.color = themeColors.darkBorder;
+      chart4.options.scales.y.grid.borderColor = themeColors.darkBorder;
+      chart4.options.scales.x.ticks.color = themeColors.darkColor;
+      chart4.options.scales.y.ticks.color = themeColors.darkColor;
+
+      chart3.update();
+      chart4.update();
+    }
+
+    const darkThemeButton = document.querySelector('.darkThemeButton')
+    const lightThemeButton = document.querySelector('.lightThemeButton')
+
+    // Check if the user has a saved theme preference
+    const savedTheme = localStorage.getItem('theme')
+
+    // Check the saved theme preference and apply appropriate colors
+    if (savedTheme === 'dark') {
+      applyThemeColors(darkThemeColors);
+    } else {
+      applyThemeColors(lightThemeColors);
+    }
+
+    // Event listeners for theme buttons
+    darkThemeButton.addEventListener('click', () => {
+      applyThemeColors(darkThemeColors);
+    });   
+    
+    lightThemeButton.addEventListener('click', () => {
+      applyThemeColors(lightThemeColors);
+    });
+  </script>
+</body>
+
+</html>
