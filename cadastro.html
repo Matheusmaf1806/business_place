@@ -27,7 +27,8 @@
   </style>
 </head>
 <body>
-  <!-- Preloader -->
+
+  <!-- Preloader (apenas 1) -->
   <div id="preloader">
     <div class="spinner"></div>
   </div>
@@ -66,7 +67,9 @@
               <div class="auth-cover">
                 <div class="title text-center">
                   <h1 class="text-primary mb-10">Bem-vindo!</h1>
-                  <p class="text-medium">Comece criando a melhor experiência para seus clientes.</p>
+                  <p class="text-medium">
+                    Comece criando a melhor experiência para seus clientes.
+                  </p>
                 </div>
                 <div class="cover-image">
                   <img src="assets/images/auth/signin-image.svg" alt="" />
@@ -272,7 +275,7 @@
     </section>
   </main>
 
-  <!-- ========= Importação dos Scripts ========= -->
+  <!-- ========= All Javascript files linkup ========= -->
   <script src="assets/js/bootstrap.bundle.min.js"></script>
   <script src="assets/js/Chart.min.js"></script>
   <script src="assets/js/apexcharts.min.js"></script>
@@ -285,20 +288,20 @@
   <script src="assets/js/quill.min.js"></script>
   <script src="assets/js/datatable.js"></script>
   <script src="assets/js/Sortable.min.js"></script>
-  
+
   <!-- Importa o módulo da sidebar e inicializa a sidebar -->
   <script type="module">
     import { initAirlandPage } from './assets/js/sidebar.js';
     initAirlandPage();
   </script>
 
-  <!-- Importa o main.js -->
+  <!-- Importa main.js DEPOIS de inserir a sidebar -->
   <script src="./assets/js/main.js"></script>
 
   <!-- Scripts Inline para os formulários -->
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      // Função para transição para o Step 2 com validação das senhas
+      // Passo 1 -> Passo 2 (valida senhas)
       window.goToStep2 = function () {
         var password = document.getElementById('password').value;
         var confirmPassword = document.getElementById('confirm_password').value;
@@ -310,7 +313,7 @@
         document.getElementById('step2').classList.add('active');
       };
 
-      // Função para exibir/esconder campos de domínio conforme a resposta
+      // Exibe/esconde campos de domínio ou subdomínio
       window.toggleDomainFields = function () {
         var hasDomain = document.querySelector('input[name="has_domain"]:checked').value;
         if (hasDomain === 'sim') {
@@ -318,7 +321,7 @@
           document.getElementById('subdomainField').style.display = 'none';
           document.querySelector('input[name="domain"]').required = true;
           document.querySelector('input[name="subdomain"]').required = false;
-        } else if (hasDomain === 'nao') {
+        } else {
           document.getElementById('domainField').style.display = 'none';
           document.getElementById('subdomainField').style.display = 'block';
           document.querySelector('input[name="subdomain"]').required = true;
@@ -326,7 +329,7 @@
         }
       };
 
-      // Função para simular o envio dos formulários (Step 2 e depois Step 1)
+      // Simula o envio do Step 2 (afiliates) e depois Step 1 (users)
       window.submitForms = function () {
         var agencyName = document.querySelector('input[name="agency_name"]').value;
         var logoUrl = document.querySelector('input[name="logo_url"]').value;
@@ -346,7 +349,7 @@
             alert('Por favor, informe o domínio.');
             return;
           }
-        } else if (hasDomain === 'nao') {
+        } else {
           var subdomain = document.querySelector('input[name="subdomain"]').value;
           if (!subdomain) {
             alert('Por favor, confirme o subdomínio.');
@@ -354,15 +357,16 @@
           }
         }
 
-        // Simulação do envio dos dados da Agência para gerar o affiliate_id
+        // Exemplo: "Envia" step 2 e retorna um affiliateId
         var affiliateId = 'AFF' + Math.floor(Math.random() * 100000);
         document.getElementById('affiliate_id').value = affiliateId;
 
-        // Concatena primeiro e último nome para o campo name do usuário
+        // Concatena primeiro e último nome
         var primeiroNome = document.querySelector('input[name="primeiro_nome"]').value;
         var ultimoNome = document.querySelector('input[name="ultimo_nome"]').value;
         document.getElementById('name').value = primeiroNome + ' ' + ultimoNome;
 
+        // Dados da Agência
         var affiliateData = {
           agency_name: agencyName,
           has_domain: hasDomain,
@@ -377,6 +381,7 @@
         };
         console.log('Dados da Agência (Step 2):', affiliateData);
 
+        // Dados do Usuário
         var userData = {
           primeiro_nome: primeiroNome,
           ultimo_nome: ultimoNome,
