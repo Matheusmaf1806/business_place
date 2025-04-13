@@ -32,7 +32,7 @@
     <div class="spinner"></div>
   </div>
 
-  <!-- Main Wrapper -->
+  <!-- Main Wrapper: Formulário de Cadastro -->
   <main class="main-wrapper">
     <section class="signin-section">
       <div class="container-fluid">
@@ -293,10 +293,10 @@
   <script src="assets/js/Sortable.min.js"></script>
   <!-- Importa sidebar.js como módulo -->
   <script type="module" src="assets/js/sidebar.js"></script>
-  <!-- Importa main.js; certifique-se de que seu conteúdo utilize o DOMContentLoaded ou seja executado depois do carregamento do DOM -->
+  <!-- Importa main.js -->
   <script src="assets/js/main.js"></script>
 
-  <!-- Scripts Inline encapsulados no DOMContentLoaded -->
+  <!-- Scripts Inline encapsulados (já disponíveis para os formulários) -->
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       // Função para transição para o Step 2 com validação das senhas
@@ -329,7 +329,6 @@
 
       // Função para simular o envio dos formulários (Step 2 e depois Step 1)
       window.submitForms = function() {
-        // Validação do formulário de Agência
         var agencyName = document.querySelector('input[name="agency_name"]').value;
         var logoUrl = document.querySelector('input[name="logo_url"]').value;
         if (!agencyName || !logoUrl) {
@@ -356,7 +355,7 @@
           }
         }
 
-        // Simula o envio dos dados da Agência para gerar o affiliate_id
+        // Simulação do envio dos dados da Agência para gerar o affiliate_id
         var affiliateId = 'AFF' + Math.floor(Math.random() * 100000);
         document.getElementById('affiliate_id').value = affiliateId;
 
@@ -390,9 +389,6 @@
           name: document.getElementById('name').value
         };
         console.log('Dados do Usuário (Step 1):', userData);
-
-        // Aqui você pode implementar o envio dos dados via AJAX ou outro método,
-        // obedecendo à ordem: primeiro os dados da Agência (Step 2) e depois os do Usuário (Step 1).
 
         alert('Formulário enviado com sucesso! Affiliate ID gerado: ' + affiliateId);
       };
