@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="assets/css/datatable.css" />
   <link rel="stylesheet" href="assets/css/main.css" />
   <style>
-    /* Controle dos steps */
+    /* Controle dos Steps para o formulário */
     .step {
       display: none;
     }
@@ -27,8 +27,7 @@
   </style>
 </head>
 <body>
-
-  <!-- Preloader (apenas 1) -->
+  <!-- Preloader Único -->
   <div id="preloader">
     <div class="spinner"></div>
   </div>
@@ -58,7 +57,7 @@
             </div>
           </div>
         </div>
-        <!-- Fim título e Breadcrumb -->
+        <!-- Fim do Título e Breadcrumb -->
 
         <div class="row g-0 auth-row">
           <!-- Coluna Esquerda: Imagem Ilustrativa -->
@@ -67,9 +66,7 @@
               <div class="auth-cover">
                 <div class="title text-center">
                   <h1 class="text-primary mb-10">Bem-vindo!</h1>
-                  <p class="text-medium">
-                    Comece criando a melhor experiência para seus clientes.
-                  </p>
+                  <p class="text-medium">Comece criando a melhor experiência para seus clientes.</p>
                 </div>
                 <div class="cover-image">
                   <img src="assets/images/auth/signin-image.svg" alt="" />
@@ -275,7 +272,7 @@
     </section>
   </main>
 
-  <!-- ========= All Javascript files linkup ========= -->
+  <!-- ========= Importação dos Scripts ========= -->
   <script src="assets/js/bootstrap.bundle.min.js"></script>
   <script src="assets/js/Chart.min.js"></script>
   <script src="assets/js/apexcharts.min.js"></script>
@@ -295,13 +292,13 @@
     initAirlandPage();
   </script>
 
-  <!-- Importa main.js DEPOIS de inserir a sidebar -->
+  <!-- Importa main.js após a sidebar já estar inserida -->
   <script src="./assets/js/main.js"></script>
 
-  <!-- Scripts Inline para os formulários -->
+  <!-- Scripts Inline para funções do formulário -->
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      // Passo 1 -> Passo 2 (valida senhas)
+      // Transição do Step 1 para o Step 2 (validação de senhas)
       window.goToStep2 = function () {
         var password = document.getElementById('password').value;
         var confirmPassword = document.getElementById('confirm_password').value;
@@ -313,7 +310,7 @@
         document.getElementById('step2').classList.add('active');
       };
 
-      // Exibe/esconde campos de domínio ou subdomínio
+      // Exibe/esconde o campo de Domínio ou Subdomínio conforme a seleção
       window.toggleDomainFields = function () {
         var hasDomain = document.querySelector('input[name="has_domain"]:checked').value;
         if (hasDomain === 'sim') {
@@ -329,7 +326,7 @@
         }
       };
 
-      // Simula o envio do Step 2 (afiliates) e depois Step 1 (users)
+      // Função para simular o envio dos formulários (Step 2 seguido do Step 1)
       window.submitForms = function () {
         var agencyName = document.querySelector('input[name="agency_name"]').value;
         var logoUrl = document.querySelector('input[name="logo_url"]').value;
@@ -356,17 +353,16 @@
             return;
           }
         }
-
-        // Exemplo: "Envia" step 2 e retorna um affiliateId
+  
+        // Simula o envio dos dados da Agência e gera um affiliateId
         var affiliateId = 'AFF' + Math.floor(Math.random() * 100000);
         document.getElementById('affiliate_id').value = affiliateId;
-
-        // Concatena primeiro e último nome
+  
+        // Concatena primeiro e último nome para o campo "name" do usuário
         var primeiroNome = document.querySelector('input[name="primeiro_nome"]').value;
         var ultimoNome = document.querySelector('input[name="ultimo_nome"]').value;
         document.getElementById('name').value = primeiroNome + ' ' + ultimoNome;
-
-        // Dados da Agência
+  
         var affiliateData = {
           agency_name: agencyName,
           has_domain: hasDomain,
@@ -380,8 +376,7 @@
           button_hover: document.querySelector('input[name="button_hover"]').value
         };
         console.log('Dados da Agência (Step 2):', affiliateData);
-
-        // Dados do Usuário
+  
         var userData = {
           primeiro_nome: primeiroNome,
           ultimo_nome: ultimoNome,
@@ -393,7 +388,7 @@
           name: document.getElementById('name').value
         };
         console.log('Dados do Usuário (Step 1):', userData);
-
+  
         alert('Formulário enviado com sucesso! Affiliate ID gerado: ' + affiliateId);
       };
     });
