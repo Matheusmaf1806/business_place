@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt">
 
-  <!-- =============================================================
-       Cabeçalho: Metadados, CSS e inicialização
-       ============================================================= -->
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -21,22 +18,21 @@
   <link rel="stylesheet" href="assets/css/datatable.css" />
   <link rel="stylesheet" href="assets/css/main.css" />
 
-  <!-- Estilo para controle dos steps -->
+  <!-- Estilo para controle dos steps e layout -->
   <style>
-    .step { 
+    .step {
       display: none;
     }
-    .step.active { 
-      display: block; 
+    .step.active {
+      display: block;
     }
-    /* Estilos adicionais para espaçamento e layout */
-    .input-style-1 { margin-bottom: 15px; }
-    .button-group { margin-top: 20px; }
+    .input-style-1 {
+      margin-bottom: 15px;
+    }
+    .button-group {
+      margin-top: 20px;
+    }
   </style>
-
-  <!-- =============================================================
-       Fim do Cabeçalho
-       ============================================================= -->
 </head>
 
 <body>
@@ -237,11 +233,9 @@
     </header>
     <!-- =============================================================
          Fim do Header
-         ============================================================= -->
+          ============================================================= -->
 
-    <!-- =============================================================
-         Seção de Cadastro (Formulários dos Steps)
-         ============================================================= -->
+    <!-- Seção de Cadastro -->
     <section class="signin-section">
       <div class="container-fluid">
         <!-- Título e Breadcrumb -->
@@ -266,7 +260,7 @@
           </div>
         </div>
 
-        <!-- Área dos formulários (Steps) -->
+        <!-- Formulário em Steps -->
         <div class="row g-0 auth-row">
           <!-- Coluna ilustrativa -->
           <div class="col-lg-6">
@@ -285,9 +279,7 @@
               </div>
             </div>
           </div>
-          <!-- Fim da Coluna ilustrativa -->
-
-          <!-- Coluna dos formulários -->
+          <!-- Coluna do formulário -->
           <div class="col-lg-6">
             <div class="signup-wrapper">
               <div class="form-wrapper">
@@ -297,7 +289,6 @@
                   <p class="text-sm mb-25">Preencha os dados abaixo para criar sua conta.</p>
                   <form id="userForm">
                     <div class="row">
-                      <!-- Primeiro Nome e Último Nome -->
                       <div class="col-md-6">
                         <div class="input-style-1">
                           <label>Primeiro Nome *</label>
@@ -310,7 +301,6 @@
                           <input type="text" name="ultimo_nome" placeholder="Último Nome" required />
                         </div>
                       </div>
-                      <!-- Telefone e Email -->
                       <div class="col-md-6">
                         <div class="input-style-1">
                           <label>Telefone *</label>
@@ -323,14 +313,12 @@
                           <input type="email" name="email" placeholder="Email" required />
                         </div>
                       </div>
-                      <!-- Foto de Perfil -->
                       <div class="col-12">
                         <div class="input-style-1">
                           <label>Foto de Perfil</label>
                           <input type="file" name="fotodeperfil" accept="image/*" />
                         </div>
                       </div>
-                      <!-- Senha e Repetir Senha -->
                       <div class="col-md-6">
                         <div class="input-style-1">
                           <label>Senha *</label>
@@ -343,13 +331,12 @@
                           <input type="password" id="confirm_password" name="confirm_password" placeholder="Repetir Senha" required />
                         </div>
                       </div>
-                      <!-- Campos ocultos para dados complementares -->
                       <input type="hidden" name="affiliate_id" id="affiliate_id" />
                       <input type="hidden" name="name" id="name" />
-                      <!-- Botão para avançar para o Step 2 -->
                       <div class="col-12">
                         <div class="button-group d-flex justify-content-center flex-wrap">
-                          <button type="button" class="main-btn primary-btn btn-hover w-100 text-center" onclick="goToStep2()">Próximo</button>
+                          <!-- Atribuindo a função ao objeto window para que fique global -->
+                          <button type="button" class="main-btn primary-btn btn-hover w-100 text-center" onclick="window.goToStep2()">Próximo</button>
                         </div>
                       </div>
                     </div>
@@ -357,63 +344,55 @@
                 </div>
                 <!-- Fim do STEP 1 -->
 
-                <!-- =============================================================
-                     STEP 2: Dados da Agência
-                     ============================================================= -->
+                <!-- STEP 2: Dados da Agência -->
                 <div id="step2" class="step">
                   <h6 class="mb-15">Dados da Agência</h6>
                   <p class="text-sm mb-25">Preencha os dados da sua agência.</p>
                   <form id="affiliateForm">
                     <div class="row">
-                      <!-- Nome da Agência -->
                       <div class="col-12">
                         <div class="input-style-1">
                           <label>Nome da Agência *</label>
                           <input type="text" name="agency_name" placeholder="Nome da Agência" required />
                         </div>
                       </div>
-                      <!-- Domínio ou Subdomínio -->
                       <div class="col-12">
                         <div class="input-style-1">
                           <label>Você tem domínio próprio? *</label>
                           <div>
                             <div class="form-check form-check-inline">
-                              <input class="form-check-input" type="radio" name="has_domain" id="domainYes" value="sim" onclick="toggleDomainFields()" required>
+                              <input class="form-check-input" type="radio" name="has_domain" id="domainYes" value="sim" onclick="window.toggleDomainFields()" required>
                               <label class="form-check-label" for="domainYes">Sim</label>
                             </div>
                             <div class="form-check form-check-inline">
-                              <input class="form-check-input" type="radio" name="has_domain" id="domainNo" value="nao" onclick="toggleDomainFields()" required>
+                              <input class="form-check-input" type="radio" name="has_domain" id="domainNo" value="nao" onclick="window.toggleDomainFields()" required>
                               <label class="form-check-label" for="domainNo">Não</label>
                             </div>
                           </div>
                         </div>
                       </div>
-                      <!-- Campo para domínio (quando sim) -->
                       <div class="col-12" id="domainField" style="display:none;">
                         <div class="input-style-1">
                           <label>Domínio *</label>
                           <input type="text" name="domain" placeholder="seuagencia.com" />
                         </div>
                       </div>
-                      <!-- Campo para subdomínio (quando não) -->
                       <div class="col-12" id="subdomainField" style="display:none;">
                         <div class="input-style-1">
                           <label>Subdomínio *</label>
                           <div class="input-group">
-                            <input type="text" class="form-control" name="subdomain" id="subdomainInput" placeholder="lojadobreno" oninput="updateSubdomainPreview()" />
+                            <input type="text" class="form-control" name="subdomain" id="subdomainInput" placeholder="lojadobreno" oninput="window.updateSubdomainPreview()" />
                             <span class="input-group-text">.airland.com.br</span>
                           </div>
                           <p class="text-sm mt-2" id="subdomainPreview"></p>
                         </div>
                       </div>
-                      <!-- Upload da Logo -->
                       <div class="col-12">
                         <div class="input-style-1">
                           <label>Logo *</label>
                           <input type="file" name="logo_url" accept="image/*" required />
                         </div>
                       </div>
-                      <!-- Configurações de cores -->
                       <div class="col-md-6">
                         <div class="input-style-1">
                           <label>Cor Principal</label>
@@ -444,18 +423,15 @@
                           <input type="text" name="button_hover" placeholder="Ex: #CCCCCC" />
                         </div>
                       </div>
-                      <!-- Botão Final: Criar Loja -->
                       <div class="col-12">
                         <div class="button-group d-flex justify-content-center flex-wrap">
-                          <button type="button" class="main-btn primary-btn btn-hover w-100 text-center" onclick="submitForms()">Criar Loja</button>
+                          <button type="button" class="main-btn primary-btn btn-hover w-100 text-center" onclick="window.submitForms()">Criar Loja</button>
                         </div>
                       </div>
                     </div>
                   </form>
                 </div>
-                <!-- =============================================================
-                     Fim do STEP 2
-                     ============================================================= -->
+                <!-- Fim do STEP 2 -->
               </div>
             </div>
           </div>
@@ -463,18 +439,10 @@
         </div>
       </div>
     </section>
-    <!-- =============================================================
-         Fim da Seção de Cadastro
-         ============================================================= -->
+    <!-- Fim da Seção de Cadastro -->
   </main>
-  <!-- =============================================================
-       Fim do Main Wrapper
-       ============================================================= -->
 
-  <!-- =============================================================
-       Scripts: JS, Plugins e Código Principal
-       ============================================================= -->
-  <!-- (Inclua seus scripts de plugins/CSS padrão abaixo) -->
+  <!-- Scripts de plugins e principais -->
   <script src="assets/js/bootstrap.bundle.min.js"></script>
   <script src="assets/js/Chart.min.js"></script>
   <script src="assets/js/apexcharts.min.js"></script>
@@ -489,20 +457,10 @@
   <script src="assets/js/Sortable.min.js"></script>
   <script src="assets/js/main.js"></script>
 
-  <!-- =============================================================
-       Código JavaScript Principal com integração ao Supabase
-       Ajustado para importar o supabaseClient do arquivo supabaseClient.js
-       ============================================================= -->
+  <!-- Código JavaScript Principal com integração ao Supabase -->
   <script type="module">
     import { supabaseClient } from "./supabaseClient.js";
 
-    /***********************************************************************
-     * Função para upload de arquivo para o Supabase Storage
-     * Parâmetros:
-     *   bucketName: Nome do bucket (ex: 'logos', 'profile-images')
-     *   file: o objeto File selecionado
-     *   filePath: o caminho de destino (ex: 'logos/AFF123_nome.png')
-     ***********************************************************************/
     async function uploadFileToStorage(bucketName, file, filePath) {
       try {
         let { data, error } = await supabaseClient.storage.from(bucketName).upload(filePath, file);
@@ -522,9 +480,6 @@
       }
     }
 
-    /***********************************************************************
-     * Função para transitar entre os Steps (Usuário para Agência)
-     ***********************************************************************/
     function goToStep2() {
       var password = document.getElementById('password').value;
       var confirmPassword = document.getElementById('confirm_password').value;
@@ -536,9 +491,6 @@
       document.getElementById('step2').classList.add('active');
     }
 
-    /***********************************************************************
-     * Função para exibir ou ocultar os campos de Domínio/Subdomínio
-     ***********************************************************************/
     function toggleDomainFields() {
       var hasDomain = document.querySelector('input[name="has_domain"]:checked').value;
       if (hasDomain === 'sim') {
@@ -554,9 +506,6 @@
       }
     }
 
-    /***********************************************************************
-     * Função para atualizar a pré-visualização do subdomínio
-     ***********************************************************************/
     function updateSubdomainPreview() {
       var typedSubdomain = document.getElementById('subdomainInput').value.trim();
       var preview = document.getElementById('subdomainPreview');
@@ -567,15 +516,7 @@
       }
     }
 
-    /***********************************************************************
-     * Função principal para enviar os formulários e inserir dados no Supabase
-     * Realiza:
-     *   - Validação dos campos obrigatórios
-     *   - Upload dos arquivos (Logo e Foto de Perfil) para o Storage
-     *   - Inserção dos dados nas tabelas "affiliates" e "users"
-     ***********************************************************************/
     async function submitForms() {
-      // Validação dos campos obrigatórios do formulário da Agência (Step 2)
       var agencyName = document.querySelector('input[name="agency_name"]').value.trim();
       var logoInput = document.querySelector('input[name="logo_url"]');
       var logoFile = logoInput.files[0];
@@ -583,7 +524,6 @@
         alert('Por favor, preencha todos os campos obrigatórios da Agência (Nome e Logo).');
         return;
       }
-
       var hasDomainElem = document.querySelector('input[name="has_domain"]:checked');
       if (!hasDomainElem) {
         alert('Por favor, responda se possui domínio próprio.');
@@ -603,27 +543,19 @@
           return;
         }
       }
-
-      // Geração de um ID de afiliado (exemplo simples)
       var affiliateId = 'AFF' + Math.floor(Math.random() * 100000);
       document.getElementById('affiliate_id').value = affiliateId;
 
-      // Concatena primeiro e último nome para o campo "name"
       var primeiroNome = document.querySelector('input[name="primeiro_nome"]').value.trim();
       var ultimoNome = document.querySelector('input[name="ultimo_nome"]').value.trim();
       document.getElementById('name').value = primeiroNome + ' ' + ultimoNome;
 
-      /***********************************************************
-       * Upload dos arquivos para o Supabase Storage
-       ***********************************************************/
       var logoURL = "";
       var profileURL = "";
       try {
-        // Upload da Logo para o bucket "logos"
         var logoPath = "logos/" + affiliateId + "_" + logoFile.name;
         logoURL = await uploadFileToStorage("logos", logoFile, logoPath);
 
-        // Upload da Foto de Perfil, se houver
         var profileInput = document.querySelector('input[name="fotodeperfil"]');
         if (profileInput && profileInput.files.length > 0) {
           var profileFile = profileInput.files[0];
@@ -635,11 +567,6 @@
         return;
       }
       
-      /***********************************************************
-       * Monta os objetos de dados para inserção
-       ***********************************************************/
-      
-      // Dados para a tabela "affiliates"
       var affiliateData = {
         affiliate_id: affiliateId,
         agency_name: agencyName,
@@ -658,49 +585,38 @@
         button_hover: document.querySelector('input[name="button_hover"]').value.trim()
       };
 
-      // Dados para a tabela "users"
       var userData = {
         primeiro_nome: primeiroNome,
         ultimo_nome: ultimoNome,
         telefone: document.querySelector('input[name="telefone"]').value.trim(),
         email: document.querySelector('input[name="email"]').value.trim(),
-        fotodeperfil: profileURL,  // URL da foto de perfil (se houver)
+        fotodeperfil: profileURL,
         password: document.getElementById('password').value,
         affiliate_id: affiliateId,
         name: document.getElementById('name').value
       };
 
-      console.log('Dados da Agência (Step 2):', affiliateData);
-      console.log('Dados do Usuário (Step 1):', userData);
+      console.log('Dados da Agência:', affiliateData);
+      console.log('Dados do Usuário:', userData);
 
-      /***********************************************************
-       * Inserção dos dados nas tabelas via Supabase
-       ***********************************************************/
       try {
-        // Insere os dados na tabela "affiliates"
         let { data: affiliateInsert, error: affiliateError } = await supabaseClient
           .from('affiliates')
           .insert(affiliateData);
-
         if (affiliateError) {
           alert('Erro ao cadastrar agência: ' + affiliateError.message);
           console.error(affiliateError);
           return;
         }
-
-        // Insere os dados na tabela "users"
         let { data: userInsert, error: userError } = await supabaseClient
           .from('users')
           .insert(userData);
-
         if (userError) {
           alert('Erro ao cadastrar usuário: ' + userError.message);
           console.error(userError);
           return;
         }
-
         alert('Loja criada com sucesso! Affiliate ID: ' + affiliateId);
-        // Opcional: limpar os formulários e retornar ao Step 1
         clearForms();
       } catch (err) {
         console.error(err);
@@ -708,9 +624,6 @@
       }
     }
 
-    /***********************************************************************
-     * Função para limpar os formulários e retornar ao Step 1 (opcional)
-     ***********************************************************************/
     function clearForms() {
       document.getElementById('userForm').reset();
       document.getElementById('affiliateForm').reset();
@@ -719,24 +632,17 @@
       document.getElementById('step1').classList.add('active');
     }
 
-    /***********************************************************************
-     * Função para exibir/ocultar o spinner de carregamento (exemplo)
-     ***********************************************************************/
     function showSpinner(show) {
       var preloader = document.getElementById('preloader');
       preloader.style.display = show ? 'block' : 'none';
     }
-    /***********************************************************************
-     * Fim das funções adicionais
-     ***********************************************************************/
-  </script>
-  <!-- =============================================================
-       Fim do Código JavaScript Principal
-       ============================================================= -->
 
-  <!-- =============================================================
-       Espaço para scripts adicionais ou de plugins
-       ============================================================= -->
-  <!-- Aqui você pode incluir outros scripts, se necessário -->
+    // Torna as funções globais para serem usadas em atributos inline
+    window.goToStep2 = goToStep2;
+    window.toggleDomainFields = toggleDomainFields;
+    window.updateSubdomainPreview = updateSubdomainPreview;
+    window.submitForms = submitForms;
+  </script>
+
 </body>
 </html>
