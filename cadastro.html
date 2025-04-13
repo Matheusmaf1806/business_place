@@ -518,75 +518,85 @@
        <script type="module">
         import supabaseClient from "./supabaseClient.js";
       
-        // Função para sanitizar nomes de arquivos (remover espaços e caracteres inválidos)
+        // ----------------------------------------------------------------------------
+        // 1) Função para sanitizar nomes de arquivos (remove espaços e caracteres inválidos)
+        // ----------------------------------------------------------------------------
         function sanitizeFileName(fileName) {
+          // Substitui espaços por underscore e remove caracteres não permitidos
           return fileName.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_.-]/g, '');
         }
       
-        // Função para separar o nome base e a extensão do arquivo.
+        // ----------------------------------------------------------------------------
+        // 2) Função para separar o nome base e a extensão do arquivo
+        //    Ex: "foto.png" -> { base: "foto", ext: ".png" }
+        // ----------------------------------------------------------------------------
         function getFileNameParts(fileName) {
           const dotIndex = fileName.lastIndexOf('.');
           if (dotIndex === -1) {
+            // Não há extensão
             return { base: fileName, ext: "" };
           } else {
-            return { base: fileName.substring(0, dotIndex), ext: fileName.substring(dotIndex) };
+            return {
+              base: fileName.substring(0, dotIndex),
+              ext: fileName.substring(dotIndex),
+            };
           }
         }
       
-        /***********************************************************************
-         * Função para fazer upload garantindo um nome de arquivo único.
-         * Tenta fazer o upload e, se der conflito (409), incrementa um sufixo no nome.
-         *
-         * Parâmetros:
-         *   bucketName: Nome do bucket (ex: 'logos', 'profile-images')
-         *   file: o objeto File selecionado
-         *   initialFilePath: o caminho inicial (ex: 'AFF123_nome.png')
-         *
-         * Retorna: A URL pública do arquivo.
-         ***********************************************************************/
+        // ----------------------------------------------------------------------------
+        // 3) Função para upload de arquivo no Supabase Storage,
+        //    gerando um nome único se já existir um arquivo com aquele nome.
+        // ----------------------------------------------------------------------------
         async function uploadFileToStorageUnique(bucketName, file, initialFilePath) {
           let finalPath = initialFilePath;
           let counter = 1;
-          // Obtenha as partes do nome do arquivo para modificar em caso de duplicata.
+          // Separa o nome base e extensão para, em caso de conflito, incrementarmos
           const parts = getFileNameParts(initialFilePath);
-          
+      
           while (true) {
-            // Tente fazer o upload sem upsert (para não sobrescrever)
+            // Tenta o upload com 'upsert: false' para não sobrescrever arquivos existentes
             const { data, error } = await supabaseClient.storage
               .from(bucketName)
               .upload(finalPath, file, { upsert: false });
-            
+      
             if (!error) {
-              // Se o upload ocorreu com sucesso, obtenha e retorne a URL pública
+              // Upload bem-sucedido: pega a URL pública e retorna
               const { publicURL, error: urlError } = supabaseClient.storage
                 .from(bucketName)
                 .getPublicUrl(data.path);
-              if (urlError) {
-                throw urlError;
-              }
+              if (urlError) throw urlError;
               return publicURL;
             }
-            
-            // Se o erro for de duplicata (409), modifique o nome do arquivo.
-            if (error.statusCode === '409' || (error.message && error.message.includes("already exists"))) {
+      
+            // Se o erro for '409' (Duplicate) ou mensagem "already exists", incrementa o sufixo
+            if (
+              error.statusCode === '409' ||
+              (error.message && error.message.includes("already exists"))
+            ) {
+              // Modifica o nome do arquivo, colocando um número ao final
               finalPath = `${parts.base}${counter}${parts.ext}`;
               counter++;
             } else {
-              // Se for outro tipo de erro, lança-o
+              // Se for outro tipo de erro, simplesmente lança
               throw error;
             }
           }
         }
       
-        // Essa função pode continuar com o mesmo nome (apenas substituímos a chamada de upload por uploadFileToStorageUnique)
+        // ----------------------------------------------------------------------------
+        // 4) Aqui começa sua lógica principal de submit (ex: submitForms)
+        // ----------------------------------------------------------------------------
         async function submitForms() {
+          // Validações básicas
           const agencyName = document.querySelector('input[name="agency_name"]').value.trim();
           const logoInput = document.querySelector('input[name="logo_url"]');
           const logoFile = logoInput.files[0];
+      
           if (!agencyName || !logoFile) {
             alert('Por favor, preencha todos os campos obrigatórios da Agência (Nome e Logo).');
             return;
           }
+      
           const hasDomainElem = document.querySelector('input[name="has_domain"]:checked');
           if (!hasDomainElem) {
             alert('Por favor, responda se possui domínio próprio.');
@@ -607,17 +617,22 @@
             }
           }
       
+          // Coleta dados do Usuário
           const primeiroNome = document.querySelector('input[name="primeiro_nome"]').value.trim();
           const ultimoNome = document.querySelector('input[name="ultimo_nome"]').value.trim();
           document.getElementById("name").value = primeiroNome + " " + ultimoNome;
       
+          // Upload do Logo + Foto de Perfil
           let logoURL = "";
           let profileURL = "";
           try {
+            // 4.1) Sanitiza o nome do arquivo do LOGO e constrói o caminho
             const sanitizedLogoFileName = sanitizeFileName(logoFile.name);
             const logoPath = agencyName + "_" + sanitizedLogoFileName;
+            // Tenta o upload no bucket "logos", gerando nome único em caso de conflito
             logoURL = await uploadFileToStorageUnique("logos", logoFile, logoPath);
       
+            // 4.2) Caso tenha Foto de Perfil, faz o mesmo processo
             const profileInput = document.querySelector('input[name="fotodeperfil"]');
             if (profileInput && profileInput.files.length > 0) {
               const profileFile = profileInput.files[0];
@@ -630,8 +645,9 @@
             return;
           }
       
+          // Monta dados para inserir/atualizar na tabela "affiliates"
           const affiliateData = {
-            slug: agencyName,
+            slug: agencyName, // slug único
             name: agencyName,
             domain: hasDomain === "sim" ? document.querySelector('input[name="domain"]').value.trim() : "",
             subdomain: hasDomain === "nao" ? document.getElementById("subdomainInput").value.trim() + ".airland.com.br" : "",
@@ -643,21 +659,23 @@
             button_hover: document.querySelector('input[name="button_hover"]').value.trim()
           };
       
-          // Aqui, após o upsert, obtemos o id gerado (assumindo que a tabela affiliates tenha um campo "id" como primary key)
+          // Upsert na tabela "affiliates" – baseando-se em "slug" para evitar duplicidade
           let affiliateInsertResult = await supabaseClient
             .from("affiliates")
             .insert(affiliateData, { upsert: true, onConflict: "slug" })
             .select();
-          
+      
           if (affiliateInsertResult.error) {
             alert("Erro ao cadastrar agência: " + affiliateInsertResult.error.message);
             console.error(affiliateInsertResult.error);
             return;
           }
-          
-          // Recebe o ID numérico da agência
+      
+          // Pega o id (integer) do registro "affiliates" recém inserido ou atualizado
           const affiliateId = affiliateInsertResult.data[0].id;
       
+          // Monta dados para inserir na tabela "users"
+          // Vinculamos o usuário ao "affiliateId" numérico
           const userData = {
             primeiro_nome: primeiroNome,
             ultimo_nome: ultimoNome,
@@ -681,7 +699,8 @@
               console.error(userError);
               return;
             }
-            alert("Loja criada com sucesso!");
+      
+            alert("Loja criada com sucesso! Agência: " + agencyName);
             clearForms();
           } catch (err) {
             console.error(err);
@@ -689,6 +708,9 @@
           }
         }
       
+        // ----------------------------------------------------------------------------
+        // 5) Funções auxiliares (limpar forms, etc.)
+        // ----------------------------------------------------------------------------
         function clearForms() {
           document.getElementById("userForm").reset();
           document.getElementById("affiliateForm").reset();
@@ -702,7 +724,9 @@
           preloader.style.display = show ? "block" : "none";
         }
       
-        // Torna as funções globais para uso via atributos inline
+        // ----------------------------------------------------------------------------
+        // 6) Torna as funções globais para uso nos atributos inline (onclick, etc.)
+        // ----------------------------------------------------------------------------
         window.goToStep2 = goToStep2;
         window.toggleDomainFields = toggleDomainFields;
         window.updateSubdomainPreview = updateSubdomainPreview;
