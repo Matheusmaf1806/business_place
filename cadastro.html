@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="assets/css/datatable.css" />
   <link rel="stylesheet" href="assets/css/main.css" />
   <style>
-    /* Estilo para controle dos steps */
+    /* Controle dos steps */
     .step { display: none; }
     .step.active { display: block; }
   </style>
@@ -31,10 +31,9 @@
 
   <!-- ======== main-wrapper start =========== -->
   <main class="main-wrapper">
-    <!-- ========== signin-section start ========== -->
     <section class="signin-section">
       <div class="container-fluid">
-        <!-- ========== title-wrapper start ========== -->
+        <!-- Título e Breadcrumb -->
         <div class="title-wrapper pt-30">
           <div class="row align-items-center">
             <div class="col-md-6">
@@ -47,13 +46,9 @@
               <div class="breadcrumb-wrapper">
                 <nav aria-label="breadcrumb">
                   <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                      <a href="#0">Dashboard</a>
-                    </li>
+                    <li class="breadcrumb-item"><a href="#0">Dashboard</a></li>
                     <li class="breadcrumb-item"><a href="#0">Auth</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">
-                      Cadastro de Agências
-                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">Cadastro de Agências</li>
                   </ol>
                 </nav>
               </div>
@@ -62,7 +57,7 @@
           </div>
           <!-- end row -->
         </div>
-        <!-- ========== title-wrapper end ========== -->
+        <!-- Fim título e Breadcrumb -->
 
         <div class="row g-0 auth-row">
           <!-- Coluna esquerda com imagem ilustrativa -->
@@ -71,9 +66,7 @@
               <div class="auth-cover">
                 <div class="title text-center">
                   <h1 class="text-primary mb-10">Bem-vindo!</h1>
-                  <p class="text-medium">
-                    Comece criando a melhor experiência para seus clientes.
-                  </p>
+                  <p class="text-medium">Comece criando a melhor experiência para seus clientes.</p>
                 </div>
                 <div class="cover-image">
                   <img src="assets/images/auth/signin-image.svg" alt="" />
@@ -86,69 +79,66 @@
           </div>
           <!-- end col -->
 
-          <!-- Coluna direita com os formulários de cadastro -->
+          <!-- Coluna direita com os formulários -->
           <div class="col-lg-6">
             <div class="signup-wrapper">
               <div class="form-wrapper">
                 <!-- STEP 1: Dados do Usuário -->
                 <div id="step1" class="step active">
                   <h6 class="mb-15">Dados do Usuário</h6>
-                  <p class="text-sm mb-25">
-                    Preencha os dados abaixo para criar sua conta.
-                  </p>
+                  <p class="text-sm mb-25">Preencha os dados abaixo para criar sua conta.</p>
                   <form id="userForm">
                     <div class="row">
-                      <div class="col-12">
+                      <!-- Primeiro Nome e Último Nome em duas colunas -->
+                      <div class="col-md-6">
                         <div class="input-style-1">
                           <label>Primeiro Nome *</label>
                           <input type="text" name="primeiro_nome" placeholder="Primeiro Nome" required />
                         </div>
                       </div>
-                      <!-- end col -->
-                      <div class="col-12">
+                      <div class="col-md-6">
                         <div class="input-style-1">
                           <label>Último Nome *</label>
                           <input type="text" name="ultimo_nome" placeholder="Último Nome" required />
                         </div>
                       </div>
-                      <!-- end col -->
-                      <div class="col-12">
+                      <!-- Telefone e Email em duas colunas -->
+                      <div class="col-md-6">
                         <div class="input-style-1">
                           <label>Telefone *</label>
                           <input type="text" name="telefone" placeholder="Telefone" required />
                         </div>
                       </div>
-                      <!-- end col -->
-                      <div class="col-12">
+                      <div class="col-md-6">
                         <div class="input-style-1">
                           <label>Email *</label>
                           <input type="email" name="email" placeholder="Email" required />
                         </div>
                       </div>
-                      <!-- end col -->
+                      <!-- Foto de Perfil em linha única -->
                       <div class="col-12">
                         <div class="input-style-1">
                           <label>Foto de Perfil</label>
                           <input type="file" name="fotodeperfil" accept="image/*" />
                         </div>
                       </div>
-                      <!-- end col -->
-                      <div class="col-12">
+                      <!-- Senha e Repetir Senha em duas colunas -->
+                      <div class="col-md-6">
                         <div class="input-style-1">
                           <label>Senha *</label>
                           <input type="password" id="password" name="password" placeholder="Senha" required />
                         </div>
                       </div>
-                      <!-- end col -->
-                      <div class="col-12">
+                      <div class="col-md-6">
                         <div class="input-style-1">
                           <label>Repetir Senha *</label>
                           <input type="password" id="confirm_password" name="confirm_password" placeholder="Repetir Senha" required />
                         </div>
                       </div>
-                      <!-- Campos hidden (preenchidos via JS) -->
+                      <!-- Campos hidden -->
                       <input type="hidden" name="affiliate_id" id="affiliate_id" />
                       <input type="hidden" name="name" id="name" />
+                      <!-- Botão Próximo -->
                       <div class="col-12">
                         <div class="button-group d-flex justify-content-center flex-wrap">
                           <button type="button" class="main-btn primary-btn btn-hover w-100 text-center" onclick="goToStep2()">
@@ -165,18 +155,17 @@
                 <!-- STEP 2: Dados da Agência -->
                 <div id="step2" class="step">
                   <h6 class="mb-15">Dados da Agência</h6>
-                  <p class="text-sm mb-25">
-                    Preencha os dados da sua agência.
-                  </p>
+                  <p class="text-sm mb-25">Preencha os dados da sua agência.</p>
                   <form id="affiliateForm">
                     <div class="row">
+                      <!-- Nome da Agência em linha única -->
                       <div class="col-12">
                         <div class="input-style-1">
                           <label>Nome da Agência *</label>
                           <input type="text" name="agency_name" placeholder="Nome da Agência" required />
                         </div>
                       </div>
-                      <!-- Campo para domínio -->
+                      <!-- Domínio próprio -->
                       <div class="col-12">
                         <div class="input-style-1">
                           <label>Você tem domínio próprio? *</label>
@@ -192,58 +181,60 @@
                           </div>
                         </div>
                       </div>
-                      <!-- Exibe campo para domínio se “Sim” -->
+                      <!-- Campo para Domínio ou Subdomínio (linha única) -->
                       <div class="col-12" id="domainField" style="display:none;">
                         <div class="input-style-1">
                           <label>Domínio *</label>
                           <input type="text" name="domain" placeholder="seuagencia.com" />
                         </div>
                       </div>
-                      <!-- Exibe campo para subdomínio se “Não” -->
                       <div class="col-12" id="subdomainField" style="display:none;">
                         <div class="input-style-1">
                           <label>Subdomínio *</label>
                           <input type="text" name="subdomain" placeholder="airland.com.br" value="airland.com.br" readonly />
                         </div>
                       </div>
-                      <!-- Fim campos domínio/subdomínio -->
+                      <!-- Logo URL -->
                       <div class="col-12">
                         <div class="input-style-1">
                           <label>Logo URL *</label>
                           <input type="text" name="logo_url" placeholder="URL da Logo" required />
                         </div>
                       </div>
-                      <!-- Campos opcionais de cores -->
-                      <div class="col-12">
+                      <!-- Cores: Primary e Background em duas colunas -->
+                      <div class="col-md-6">
                         <div class="input-style-1">
                           <label>Cor Principal</label>
                           <input type="text" name="primary_color" placeholder="Ex: #000000" />
                         </div>
                       </div>
-                      <div class="col-12">
+                      <div class="col-md-6">
                         <div class="input-style-1">
                           <label>Cor Secundária</label>
                           <input type="text" name="background_color" placeholder="Ex: #FFFFFF" />
                         </div>
                       </div>
-                      <div class="col-12">
+                      <!-- Cores: Button e Button Text em duas colunas -->
+                      <div class="col-md-6">
                         <div class="input-style-1">
                           <label>Cor do Botão</label>
                           <input type="text" name="button_color" placeholder="Ex: #FF0000" />
                         </div>
                       </div>
-                      <div class="col-12">
+                      <div class="col-md-6">
                         <div class="input-style-1">
                           <label>Cor do Texto do Botão</label>
                           <input type="text" name="button_text_color" placeholder="Ex: #FFFFFF" />
                         </div>
                       </div>
+                      <!-- Botão Hover em linha única -->
                       <div class="col-12">
                         <div class="input-style-1">
                           <label>Cor do Botão ao Clicar</label>
                           <input type="text" name="button_hover" placeholder="Ex: #CCCCCC" />
                         </div>
                       </div>
+                      <!-- Botão Enviar -->
                       <div class="col-12">
                         <div class="button-group d-flex justify-content-center flex-wrap">
                           <button type="button" class="main-btn primary-btn btn-hover w-100 text-center" onclick="submitForms()">
@@ -258,9 +249,7 @@
                 <!-- FIM do STEP 2 -->
 
                 <div class="singup-option pt-40">
-                  <p class="text-sm text-medium text-center text-gray">
-                    Fácil cadastro com:
-                  </p>
+                  <p class="text-sm text-medium text-center text-gray">Fácil cadastro com:</p>
                   <div class="button-group pt-40 pb-40 d-flex justify-content-center flex-wrap">
                     <button class="main-btn primary-btn-outline m-2">
                       <i class="lni lni-facebook-fill mr-10"></i>
@@ -283,7 +272,6 @@
         <!-- end row -->
       </div>
     </section>
-    <!-- ========== signin-section end ========== -->
   </main>
   <!-- ======== main-wrapper end =========== -->
 
@@ -300,25 +288,20 @@
   <script src="assets/js/quill.min.js"></script>
   <script src="assets/js/datatable.js"></script>
   <script src="assets/js/Sortable.min.js"></script>
+  <script src="assets/js/sidebar.js"></script> <!-- Importação do módulo sidebar.js -->
   <script src="assets/js/main.js"></script>
   <script>
-    // Função para transição do Step 1 para o Step 2
     function goToStep2() {
-      // Verifica se as senhas batem
       var password = document.getElementById('password').value;
       var confirmPassword = document.getElementById('confirm_password').value;
       if (password !== confirmPassword) {
         alert('As senhas não coincidem!');
         return;
       }
-      // Se necessário, outras validações do Step 1 podem ser inseridas aqui
-
-      // Exibe o Step 2 e oculta o Step 1
       document.getElementById('step1').classList.remove('active');
       document.getElementById('step2').classList.add('active');
     }
-
-    // Função para exibir/esconder campos de domínio conforme a resposta
+  
     function toggleDomainFields() {
       var hasDomain = document.querySelector('input[name="has_domain"]:checked').value;
       if (hasDomain === 'sim') {
@@ -333,17 +316,15 @@
         document.querySelector('input[name="domain"]').required = false;
       }
     }
-
-    // Função para simular o envio dos dados dos dois steps
+  
     function submitForms() {
-      // Valida os campos obrigatórios do formulário de afiliado (Step 2)
       var agencyName = document.querySelector('input[name="agency_name"]').value;
       var logoUrl = document.querySelector('input[name="logo_url"]').value;
       if (!agencyName || !logoUrl) {
         alert('Por favor, preencha todos os campos obrigatórios da Agência.');
         return;
       }
-
+  
       var hasDomainElem = document.querySelector('input[name="has_domain"]:checked');
       if (!hasDomainElem) {
         alert('Por favor, responda se possui domínio próprio.');
@@ -363,17 +344,16 @@
           return;
         }
       }
-
-      // Simula o envio dos dados da agência para o banco e captura o affiliate_id gerado
+  
+      // Simulação do envio dos dados da Agência (Step 2) para obter o affiliate_id
       var affiliateId = 'AFF' + Math.floor(Math.random() * 100000);
       document.getElementById('affiliate_id').value = affiliateId;
-
+  
       // Concatena primeiro e último nome para o campo name do usuário
       var primeiroNome = document.querySelector('input[name="primeiro_nome"]').value;
       var ultimoNome = document.querySelector('input[name="ultimo_nome"]').value;
       document.getElementById('name').value = primeiroNome + ' ' + ultimoNome;
-
-      // Coleta os dados do formulário de afiliado (Step 2)
+  
       var affiliateData = {
         agency_name: agencyName,
         has_domain: hasDomain,
@@ -387,8 +367,7 @@
         button_hover: document.querySelector('input[name="button_hover"]').value
       };
       console.log('Dados da Agência (Step 2):', affiliateData);
-
-      // Coleta os dados do formulário de usuário (Step 1)
+  
       var userData = {
         primeiro_nome: primeiroNome,
         ultimo_nome: ultimoNome,
@@ -400,11 +379,11 @@
         name: document.getElementById('name').value
       };
       console.log('Dados do Usuário (Step 1):', userData);
-
-      // Aqui você deve implementar o envio via AJAX ou outra lógica, 
-      // obedecendo a ordem: enviar primeiro os dados do Step 2 (affiliates) para obter o ID 
-      // e, em seguida, enviar os dados do Step 1 (users) com o affiliate_id capturado.
-
+  
+      // Aqui você pode implementar a lógica de envio via AJAX ou outro método,
+      // obedecendo à ordem: enviar primeiro os dados de affiliates (Step 2)
+      // e depois enviar os dados de users (Step 1)
+  
       alert('Formulário enviado com sucesso! Affiliate ID gerado: ' + affiliateId);
     }
   </script>
