@@ -7,7 +7,7 @@
   <link rel="shortcut icon" href="assets/images/favicon.svg" type="image/x-icon" />
   <title>Cadastro de Agências</title>
 
-  <!-- ========== All CSS files linkup ========= -->
+  <!-- ========== CSS files ========== -->
   <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
   <link rel="stylesheet" href="assets/css/lineicons.css" />
   <link rel="stylesheet" href="assets/css/quill/bubble.css" />
@@ -16,21 +16,46 @@
   <link rel="stylesheet" href="assets/css/morris.css" />
   <link rel="stylesheet" href="assets/css/datatable.css" />
   <link rel="stylesheet" href="assets/css/main.css" />
+
   <style>
-    /* Estilos para o conteúdo do cadastro, considerando que o header e a sidebar serão injetados */
+    /* Layout Geral: Ajuste para Dashboard com Sidebar */
+    /* A sidebar fixa terá 260px de largura */
     .main-wrapper {
-      margin-left: 260px; /* Largura da sidebar fixa, conforme injetada pelo sidebar.js */
+      margin-left: 260px; /* Espaço para a sidebar */
       padding: 20px;
       min-height: 100vh;
       background-color: #f8f9fa;
     }
-    /* Se o header for fixo, adicione margin-top para não ficar escondido */
+    /* Header fixo do Dashboard */
+    .header {
+      background: #fff;
+      border-bottom: 1px solid #ddd;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      position: fixed;
+      left: 260px;
+      right: 0;
+      top: 0;
+      z-index: 998;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+    /* Container do cadastro: afastado do header fixo */
     .cadastro-container {
       margin-top: 80px;
     }
-    /* Controle dos Steps do Formulário */
-    .step { display: none; }
-    .step.active { display: block; }
+    /* Steps do formulário */
+    .step {
+      display: none;
+    }
+    .step.active {
+      display: block;
+    }
+    /* Se for necessário, ajustes adicionais para compatibilizar com a sidebar */
   </style>
 </head>
 <body>
@@ -39,140 +64,186 @@
     <div class="spinner"></div>
   </div>
 
-  <!-- O módulo sidebar.js injetará o header, a sidebar e a overlay abaixo no body -->
-  
-  <!-- Main Content: Formulário de Cadastro (estilo checkout) -->
+  <!-- Importa e inicializa a sidebar através do módulo -->
+  <script type="module">
+    // Certifique-se de que o caminho está correto em relação a este arquivo.
+    import { initAirlandPage } from './assets/js/sidebar.js';
+    initAirlandPage();
+  </script>
+
+  <!-- Header do Dashboard -->
+  <header class="header">
+    <h1>Dashboard Airland</h1>
+    <!-- Aqui você pode incluir botões de perfil, notificações, etc. -->
+  </header>
+
+  <!-- Main Wrapper: Conteúdo do Dashboard -->
   <main class="main-wrapper">
     <div class="cadastro-container container-fluid">
       <div class="row">
         <div class="col-12">
           <h2>Cadastro de Agências</h2>
-          <p>Preencha os dados para efetuar o cadastro.</p>
-          <!-- STEP 1: Dados do Usuário -->
+          <p>Aqui você cadastra sua agência. Siga os passos abaixo:</p>
+          
+          <!-- Step 1: Dados do Usuário -->
           <div id="step1" class="step active">
-            <h5>Dados do Usuário</h5>
+            <h5>Step 1 – Dados do Usuário</h5>
             <form id="userForm">
               <div class="row">
                 <!-- Primeiro Nome e Último Nome -->
-                <div class="col-md-6 mb-3">
-                  <label for="primeiro_nome" class="form-label">Primeiro Nome *</label>
-                  <input type="text" class="form-control" name="primeiro_nome" id="primeiro_nome" placeholder="Primeiro Nome" required />
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Primeiro Nome *</label>
+                    <input type="text" name="primeiro_nome" class="form-control" placeholder="Primeiro Nome" required />
+                  </div>
                 </div>
-                <div class="col-md-6 mb-3">
-                  <label for="ultimo_nome" class="form-label">Último Nome *</label>
-                  <input type="text" class="form-control" name="ultimo_nome" id="ultimo_nome" placeholder="Último Nome" required />
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Último Nome *</label>
+                    <input type="text" name="ultimo_nome" class="form-control" placeholder="Último Nome" required />
+                  </div>
                 </div>
                 <!-- Telefone e Email -->
-                <div class="col-md-6 mb-3">
-                  <label for="telefone" class="form-label">Telefone *</label>
-                  <input type="text" class="form-control" name="telefone" id="telefone" placeholder="Telefone" required />
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Telefone *</label>
+                    <input type="text" name="telefone" class="form-control" placeholder="Telefone" required />
+                  </div>
                 </div>
-                <div class="col-md-6 mb-3">
-                  <label for="email" class="form-label">Email *</label>
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Email" required />
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Email *</label>
+                    <input type="email" name="email" class="form-control" placeholder="Email" required />
+                  </div>
                 </div>
                 <!-- Foto de Perfil -->
-                <div class="col-12 mb-3">
-                  <label for="fotodeperfil" class="form-label">Foto de Perfil</label>
-                  <input type="file" class="form-control" name="fotodeperfil" id="fotodeperfil" accept="image/*" />
+                <div class="col-12">
+                  <div class="mb-3">
+                    <label class="form-label">Foto de Perfil</label>
+                    <input type="file" name="fotodeperfil" class="form-control" accept="image/*" />
+                  </div>
                 </div>
-                <!-- Senhas -->
-                <div class="col-md-6 mb-3">
-                  <label for="password" class="form-label">Senha *</label>
-                  <input type="password" class="form-control" id="password" name="password" placeholder="Senha" required />
+                <!-- Senha e Repetir Senha -->
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Senha *</label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Senha" required />
+                  </div>
                 </div>
-                <div class="col-md-6 mb-3">
-                  <label for="confirm_password" class="form-label">Repetir Senha *</label>
-                  <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Repetir Senha" required />
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Repetir Senha *</label>
+                    <input type="password" id="confirm_password" name="confirm_password" class="form-control" placeholder="Repetir Senha" required />
+                  </div>
                 </div>
                 <!-- Campos Hidden -->
                 <input type="hidden" name="affiliate_id" id="affiliate_id" />
                 <input type="hidden" name="name" id="name" />
                 <!-- Botão Próximo -->
-                <div class="col-12 mt-3">
+                <div class="col-12">
                   <button type="button" class="btn btn-primary w-100" onclick="goToStep2(event)">Próximo</button>
                 </div>
               </div>
             </form>
           </div>
-          <!-- Fim do STEP 1 -->
+          <!-- Fim do Step 1 -->
 
-          <!-- STEP 2: Dados da Agência -->
+          <!-- Step 2: Dados da Agência -->
           <div id="step2" class="step">
-            <h5>Dados da Agência</h5>
+            <h5>Step 2 – Dados da Agência</h5>
             <form id="affiliateForm">
               <div class="row">
                 <!-- Nome da Agência -->
-                <div class="col-12 mb-3">
-                  <label for="agency_name" class="form-label">Nome da Agência *</label>
-                  <input type="text" class="form-control" name="agency_name" id="agency_name" placeholder="Nome da Agência" required />
+                <div class="col-12">
+                  <div class="mb-3">
+                    <label class="form-label">Nome da Agência *</label>
+                    <input type="text" name="agency_name" class="form-control" placeholder="Nome da Agência" required />
+                  </div>
                 </div>
                 <!-- Domínio Próprio -->
-                <div class="col-12 mb-3">
-                  <label class="form-label">Você tem domínio próprio? *</label>
-                  <div>
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="has_domain" id="domainYes" value="sim" onclick="toggleDomainFields()" required>
-                      <label class="form-check-label" for="domainYes">Sim</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio" name="has_domain" id="domainNo" value="nao" onclick="toggleDomainFields()" required>
-                      <label class="form-check-label" for="domainNo">Não</label>
+                <div class="col-12">
+                  <div class="mb-3">
+                    <label class="form-label">Você tem domínio próprio? *</label>
+                    <div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="has_domain" id="domainYes" value="sim" onclick="toggleDomainFields()" required>
+                        <label class="form-check-label" for="domainYes">Sim</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="has_domain" id="domainNo" value="nao" onclick="toggleDomainFields()" required>
+                        <label class="form-check-label" for="domainNo">Não</label>
+                      </div>
                     </div>
                   </div>
                 </div>
                 <!-- Campo para Domínio (quando sim) -->
-                <div class="col-12 mb-3" id="domainField" style="display: none;">
-                  <label for="domain" class="form-label">Domínio *</label>
-                  <input type="text" class="form-control" name="domain" id="domain" placeholder="seuagencia.com" />
+                <div class="col-12" id="domainField" style="display: none;">
+                  <div class="mb-3">
+                    <label class="form-label">Domínio *</label>
+                    <input type="text" name="domain" class="form-control" placeholder="seuagencia.com" />
+                  </div>
                 </div>
                 <!-- Campo para Subdomínio (quando não) -->
-                <div class="col-12 mb-3" id="subdomainField" style="display: none;">
-                  <label for="subdomain" class="form-label">Subdomínio *</label>
-                  <input type="text" class="form-control" name="subdomain" id="subdomain" placeholder="airland.com.br" value="airland.com.br" readonly />
+                <div class="col-12" id="subdomainField" style="display: none;">
+                  <div class="mb-3">
+                    <label class="form-label">Subdomínio *</label>
+                    <input type="text" name="subdomain" class="form-control" placeholder="airland.com.br" value="airland.com.br" readonly />
+                  </div>
                 </div>
                 <!-- Logo URL -->
-                <div class="col-12 mb-3">
-                  <label for="logo_url" class="form-label">Logo URL *</label>
-                  <input type="text" class="form-control" name="logo_url" id="logo_url" placeholder="URL da Logo" required />
+                <div class="col-12">
+                  <div class="mb-3">
+                    <label class="form-label">Logo URL *</label>
+                    <input type="text" name="logo_url" class="form-control" placeholder="URL da Logo" required />
+                  </div>
                 </div>
                 <!-- Cores: Primary e Background -->
-                <div class="col-md-6 mb-3">
-                  <label for="primary_color" class="form-label">Cor Principal</label>
-                  <input type="text" class="form-control" name="primary_color" id="primary_color" placeholder="Ex: #000000" />
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Cor Principal</label>
+                    <input type="text" name="primary_color" class="form-control" placeholder="Ex: #000000" />
+                  </div>
                 </div>
-                <div class="col-md-6 mb-3">
-                  <label for="background_color" class="form-label">Cor Secundária</label>
-                  <input type="text" class="form-control" name="background_color" id="background_color" placeholder="Ex: #FFFFFF" />
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Cor Secundária</label>
+                    <input type="text" name="background_color" class="form-control" placeholder="Ex: #FFFFFF" />
+                  </div>
                 </div>
                 <!-- Cores: Button e Button Text -->
-                <div class="col-md-6 mb-3">
-                  <label for="button_color" class="form-label">Cor do Botão</label>
-                  <input type="text" class="form-control" name="button_color" id="button_color" placeholder="Ex: #FF0000" />
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Cor do Botão</label>
+                    <input type="text" name="button_color" class="form-control" placeholder="Ex: #FF0000" />
+                  </div>
                 </div>
-                <div class="col-md-6 mb-3">
-                  <label for="button_text_color" class="form-label">Cor do Texto do Botão</label>
-                  <input type="text" class="form-control" name="button_text_color" id="button_text_color" placeholder="Ex: #FFFFFF" />
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Cor do Texto do Botão</label>
+                    <input type="text" name="button_text_color" class="form-control" placeholder="Ex: #FFFFFF" />
+                  </div>
                 </div>
                 <!-- Cor do Botão ao Clicar -->
-                <div class="col-12 mb-3">
-                  <label for="button_hover" class="form-label">Cor do Botão ao Clicar</label>
-                  <input type="text" class="form-control" name="button_hover" id="button_hover" placeholder="Ex: #CCCCCC" />
+                <div class="col-12">
+                  <div class="mb-3">
+                    <label class="form-label">Cor do Botão ao Clicar</label>
+                    <input type="text" name="button_hover" class="form-control" placeholder="Ex: #CCCCCC" />
+                  </div>
                 </div>
                 <!-- Botão Enviar -->
-                <div class="col-12 mt-3">
-                  <button type="button" class="btn btn-success w-100" onclick="submitForms(event)">Enviar</button>
+                <div class="col-12">
+                  <button type="button" class="btn btn-success w-100" onclick="submitAll(event)">Enviar</button>
                 </div>
               </div>
             </form>
           </div>
-          <!-- Fim do STEP 2 -->
+          <!-- Fim do Step 2 -->
         </div>
       </div>
     </div>
   </main>
 
-  <!-- ========= Importação dos Scripts ========= -->
+  <!-- ========= JS Files ========= -->
   <script src="assets/js/bootstrap.bundle.min.js"></script>
   <script src="assets/js/Chart.min.js"></script>
   <script src="assets/js/apexcharts.min.js"></script>
@@ -185,114 +256,102 @@
   <script src="assets/js/quill.min.js"></script>
   <script src="assets/js/datatable.js"></script>
   <script src="assets/js/Sortable.min.js"></script>
-  
-  <!-- Importa o módulo da sidebar, que injeta o <header>, a sidebar e a overlay -->
-  <script type="module">
-    import { initAirlandPage } from './assets/js/sidebar.js';
-    initAirlandPage();
-  </script>
-
-  <!-- Importa o main.js para outras funcionalidades de layout -->
+  <!-- Importa o main.js (depois da sidebar ter sido inserida) -->
   <script src="./assets/js/main.js"></script>
 
-  <!-- Script Inline para controlar os Steps e simulação de envio -->
+  <!-- Scripts Inline: Funções para os formulários -->
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      window.goToStep2 = function (e) {
-        e.preventDefault();
-        // Validação simples das senhas (adicione validação adicional conforme necessário)
-        var password = document.getElementById('password').value;
-        var confirmPassword = document.getElementById('confirm_password').value;
-        if(password !== confirmPassword) {
-          alert('As senhas não coincidem!');
+    // Transição do Step 1 para o Step 2 (validação das senhas)
+    function goToStep2(e) {
+      e.preventDefault();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirm_password').value;
+      if (password !== confirmPassword) {
+        alert('As senhas não coincidem!');
+        return;
+      }
+      document.getElementById('step1').classList.remove('active');
+      document.getElementById('step2').classList.add('active');
+    }
+    // Exibe/esconde campo de domínio ou subdomínio
+    function toggleDomainFields() {
+      const hasDomain = document.querySelector('input[name="has_domain"]:checked').value;
+      if (hasDomain === 'sim') {
+        document.getElementById('domainField').style.display = 'block';
+        document.getElementById('subdomainField').style.display = 'none';
+        document.querySelector('input[name="domain"]').required = true;
+        document.querySelector('input[name="subdomain"]').required = false;
+      } else {
+        document.getElementById('domainField').style.display = 'none';
+        document.getElementById('subdomainField').style.display = 'block';
+        document.querySelector('input[name="subdomain"]').required = true;
+        document.querySelector('input[name="domain"]').required = false;
+      }
+    }
+    // Simula o envio dos formulários (Step 2 e depois Step 1)
+    function submitAll(e) {
+      e.preventDefault();
+      const agencyName = document.querySelector('input[name="agency_name"]').value;
+      const logoUrl = document.querySelector('input[name="logo_url"]').value;
+      if (!agencyName || !logoUrl) {
+        alert('Por favor, preencha todos os campos obrigatórios da Agência.');
+        return;
+      }
+      const hasDomainElem = document.querySelector('input[name="has_domain"]:checked');
+      if (!hasDomainElem) {
+        alert('Por favor, responda se possui domínio próprio.');
+        return;
+      }
+      const hasDomain = hasDomainElem.value;
+      if (hasDomain === 'sim') {
+        const domain = document.querySelector('input[name="domain"]').value;
+        if (!domain) {
+          alert('Por favor, informe o domínio.');
           return;
         }
-        document.getElementById('step1').classList.remove('active');
-        document.getElementById('step2').classList.add('active');
-      };
+      } else {
+        const subdomain = document.querySelector('input[name="subdomain"]').value;
+        if (!subdomain) {
+          alert('Por favor, confirme o subdomínio.');
+          return;
+        }
+      }
+      // Simulação: Gera um affiliateId
+      const affiliateId = 'AFF' + Math.floor(Math.random() * 100000);
+      document.getElementById('affiliate_id').value = affiliateId;
+      // Concatena primeiro e último nome
+      const primeiroNome = document.querySelector('input[name="primeiro_nome"]').value;
+      const ultimoNome = document.querySelector('input[name="ultimo_nome"]').value;
+      document.getElementById('name').value = primeiroNome + ' ' + ultimoNome;
 
-      window.toggleDomainFields = function () {
-        var selected = document.querySelector('input[name="has_domain"]:checked');
-        if(!selected) return;
-        if(selected.value === 'sim') {
-          document.getElementById('domainField').style.display = 'block';
-          document.getElementById('subdomainField').style.display = 'none';
-          document.querySelector('input[name="domain"]').required = true;
-          document.querySelector('input[name="subdomain"]').required = false;
-        } else {
-          document.getElementById('domainField').style.display = 'none';
-          document.getElementById('subdomainField').style.display = 'block';
-          document.querySelector('input[name="subdomain"]').required = true;
-          document.querySelector('input[name="domain"]').required = false;
-        }
+      const affiliateData = {
+        agency_name: agencyName,
+        has_domain: hasDomain,
+        domain: hasDomain === 'sim' ? document.querySelector('input[name="domain"]').value : '',
+        subdomain: hasDomain === 'nao' ? document.querySelector('input[name="subdomain"]').value : '',
+        logo_url: logoUrl,
+        primary_color: document.querySelector('input[name="primary_color"]').value,
+        background_color: document.querySelector('input[name="background_color"]').value,
+        button_color: document.querySelector('input[name="button_color"]').value,
+        button_text_color: document.querySelector('input[name="button_text_color"]').value,
+        button_hover: document.querySelector('input[name="button_hover"]').value
       };
-
-      window.submitForms = function (e) {
-        e.preventDefault();
-        var agencyName = document.querySelector('input[name="agency_name"]').value;
-        var logoUrl = document.querySelector('input[name="logo_url"]').value;
-        if(!agencyName || !logoUrl) {
-          alert('Por favor, preencha todos os campos obrigatórios da Agência.');
-          return;
-        }
-        var hasDomainElem = document.querySelector('input[name="has_domain"]:checked');
-        if(!hasDomainElem) {
-          alert('Por favor, responda se possui domínio próprio.');
-          return;
-        }
-        var hasDomain = hasDomainElem.value;
-        if(hasDomain === 'sim') {
-          var domain = document.querySelector('input[name="domain"]').value;
-          if(!domain) {
-            alert('Por favor, informe o domínio.');
-            return;
-          }
-        } else {
-          var subdomain = document.querySelector('input[name="subdomain"]').value;
-          if(!subdomain) {
-            alert('Por favor, confirme o subdomínio.');
-            return;
-          }
-        }
+      console.log('Dados da Agência (Step 2):', affiliateData);
   
-        // Simula o envio dos dados e gera um affiliate ID
-        var affiliateId = 'AFF' + Math.floor(Math.random()*100000);
-        document.getElementById('affiliate_id').value = affiliateId;
-  
-        // Concatena nome do usuário (primeiro + último nome)
-        var primeiroNome = document.querySelector('input[name="primeiro_nome"]').value;
-        var ultimoNome = document.querySelector('input[name="ultimo_nome"]').value;
-        document.getElementById('name').value = primeiroNome + ' ' + ultimoNome;
-  
-        var affiliateData = {
-          agency_name: agencyName,
-          has_domain: hasDomain,
-          domain: hasDomain === 'sim' ? document.querySelector('input[name="domain"]').value : '',
-          subdomain: hasDomain === 'nao' ? document.querySelector('input[name="subdomain"]').value : '',
-          logo_url: logoUrl,
-          primary_color: document.querySelector('input[name="primary_color"]').value,
-          background_color: document.querySelector('input[name="background_color"]').value,
-          button_color: document.querySelector('input[name="button_color"]').value,
-          button_text_color: document.querySelector('input[name="button_text_color"]').value,
-          button_hover: document.querySelector('input[name="button_hover"]').value
-        };
-        console.log('Dados da Agência (Step 2):', affiliateData);
-  
-        var userData = {
-          primeiro_nome: primeiroNome,
-          ultimo_nome: ultimoNome,
-          telefone: document.querySelector('input[name="telefone"]').value,
-          email: document.querySelector('input[name="email"]').value,
-          fotodeperfil: document.querySelector('input[name="fotodeperfil"]').files[0],
-          password: document.getElementById('password').value,
-          affiliate_id: affiliateId,
-          name: document.getElementById('name').value
-        };
-        console.log('Dados do Usuário (Step 1):', userData);
-  
-        alert('Formulário enviado com sucesso! Affiliate ID gerado: ' + affiliateId);
+      const userData = {
+        primeiro_nome: primeiroNome,
+        ultimo_nome: ultimoNome,
+        telefone: document.querySelector('input[name="telefone"]').value,
+        email: document.querySelector('input[name="email"]').value,
+        fotodeperfil: document.querySelector('input[name="fotodeperfil"]').files[0],
+        password: document.getElementById('password').value,
+        affiliate_id: affiliateId,
+        name: document.getElementById('name').value
       };
-    });
+      console.log('Dados do Usuário (Step 1):', userData);
+  
+      alert('Formulário enviado com sucesso! Affiliate ID gerado: ' + affiliateId);
+    }
   </script>
 </body>
 </html>
