@@ -504,9 +504,9 @@
      * Inicialização do Supabase Client
      * Substitua os placeholders com suas credenciais (URL e KEY)
      ***********************************************************************/
-    const SUPABASE_URL = 'https://YOUR-SUPABASE-PROJECT.supabase.co';
-    const SUPABASE_KEY = 'YOUR-SUPABASE-KEY'; // chave anônima, se for pública
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    const supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
 
     /***********************************************************************
      * Função para upload de arquivo para o Supabase Storage
