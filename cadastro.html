@@ -504,9 +504,9 @@
      * Inicialização do Supabase Client
      * Substitua os placeholders com suas credenciais (URL e KEY)
      ***********************************************************************/
-    const supabaseUrl = https://qiblwjpijwhtlmylrlxl.supabase.co;
-    const supabaseAnonKey = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFpYmx3anBpandodGxteWxybHhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE4Nzk2MzcsImV4cCI6MjA1NzQ1NTYzN30.WyNSVoxb3y0-2wJooTJUsqPdzCpkpGjb3Xr2YyDazVQ;
-    const supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
+    const supabaseUrl = "https://qiblwjpijwhtlmylrlxl.supabase.co";
+    const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFpYmx3anBpandodGxteWxybHhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE4Nzk2MzcsImV4cCI6MjA1NzQ1NTYzN30.WyNSVoxb3y0-2wJooTJUsqPdzCpkpGjb3Xr2YyDazVQ";
+    const supabaseClient = supabase.createClient(supabaseUrl, supabaseAnonKey);
 
     /***********************************************************************
      * Função para upload de arquivo para o Supabase Storage
