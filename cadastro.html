@@ -66,9 +66,7 @@
               <div class="auth-cover">
                 <div class="title text-center">
                   <h1 class="text-primary mb-10">Bem-vindo!</h1>
-                  <p class="text-medium">
-                    Comece criando a melhor experiência para seus clientes.
-                  </p>
+                  <p class="text-medium">Comece criando a melhor experiência para seus clientes.</p>
                 </div>
                 <div class="cover-image">
                   <img src="assets/images/auth/signin-image.svg" alt="" />
@@ -88,9 +86,7 @@
                 <!-- STEP 1: Dados do Usuário -->
                 <div id="step1" class="step active">
                   <h6 class="mb-15">Dados do Usuário</h6>
-                  <p class="text-sm mb-25">
-                    Preencha os dados abaixo para criar sua conta.
-                  </p>
+                  <p class="text-sm mb-25">Preencha os dados abaixo para criar sua conta.</p>
                   <form id="userForm">
                     <div class="row">
                       <!-- Primeiro Nome e Último Nome -->
@@ -158,9 +154,7 @@
                 <!-- STEP 2: Dados da Agência -->
                 <div id="step2" class="step">
                   <h6 class="mb-15">Dados da Agência</h6>
-                  <p class="text-sm mb-25">
-                    Preencha os dados da sua agência.
-                  </p>
+                  <p class="text-sm mb-25">Preencha os dados da sua agência.</p>
                   <form id="affiliateForm">
                     <div class="row">
                       <!-- Nome da Agência -->
@@ -278,7 +272,7 @@
     </section>
   </main>
 
-  <!-- ========= All Javascript files linkup ========= -->
+  <!-- ========= Importação dos Scripts ========= -->
   <script src="assets/js/bootstrap.bundle.min.js"></script>
   <script src="assets/js/Chart.min.js"></script>
   <script src="assets/js/apexcharts.min.js"></script>
@@ -291,19 +285,21 @@
   <script src="assets/js/quill.min.js"></script>
   <script src="assets/js/datatable.js"></script>
   <script src="assets/js/Sortable.min.js"></script>
-  <!-- Importa sidebar.js como módulo e chama a função para carregar a sidebar -->
+  
+  <!-- Importa o módulo da sidebar e inicializa a sidebar -->
   <script type="module">
-    import { initAirlandPage } from 'assets/js/sidebar.js';
+    import { initAirlandPage } from './assets/js/sidebar.js';
     initAirlandPage();
   </script>
-  <!-- Importa main.js -->
-  <script src="assets/js/main.js"></script>
 
-  <!-- Scripts Inline encapsulados (já disponíveis para os formulários) -->
+  <!-- Importa o main.js -->
+  <script src="./assets/js/main.js"></script>
+
+  <!-- Scripts Inline para os formulários -->
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       // Função para transição para o Step 2 com validação das senhas
-      window.goToStep2 = function() {
+      window.goToStep2 = function () {
         var password = document.getElementById('password').value;
         var confirmPassword = document.getElementById('confirm_password').value;
         if (password !== confirmPassword) {
@@ -315,7 +311,7 @@
       };
 
       // Função para exibir/esconder campos de domínio conforme a resposta
-      window.toggleDomainFields = function() {
+      window.toggleDomainFields = function () {
         var hasDomain = document.querySelector('input[name="has_domain"]:checked').value;
         if (hasDomain === 'sim') {
           document.getElementById('domainField').style.display = 'block';
@@ -331,7 +327,7 @@
       };
 
       // Função para simular o envio dos formulários (Step 2 e depois Step 1)
-      window.submitForms = function() {
+      window.submitForms = function () {
         var agencyName = document.querySelector('input[name="agency_name"]').value;
         var logoUrl = document.querySelector('input[name="logo_url"]').value;
         if (!agencyName || !logoUrl) {
