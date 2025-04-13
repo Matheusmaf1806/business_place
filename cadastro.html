@@ -518,6 +518,11 @@
   <script type="module">
   import supabaseClient from "./supabaseClient.js";
 
+  // Função para sanitizar nomes de arquivos
+  function sanitizeFileName(fileName) {
+    return fileName.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_.-]/g, '');
+  }
+
   /***********************************************************************
    * Função para upload de arquivo para o Supabase Storage.
    * Parâmetros:
@@ -534,7 +539,6 @@
         console.error("Erro no upload:", error);
         throw error;
       }
-      // Obtém a URL pública a partir do caminho
       const { publicURL, error: urlError } =
         supabaseClient.storage.from(bucketName).getPublicUrl(data.path);
       if (urlError) {
@@ -636,14 +640,17 @@
     let logoURL = "";
     let profileURL = "";
     try {
-      // Construa o caminho sem incluir o bucket, pois ele já é determinado pelo método .from()
-      const logoPath = affiliateId + "_" + logoFile.name;
+      // Sanitiza o nome do arquivo para evitar caracteres inválidos
+      const sanitizedLogoFileName = sanitizeFileName(logoFile.name);
+      // Construa o caminho sem repetir o nome do bucket (o bucket já é definido no método .from)
+      const logoPath = affiliateId + "_" + sanitizedLogoFileName;
       logoURL = await uploadFileToStorage("logos", logoFile, logoPath);
 
       const profileInput = document.querySelector('input[name="fotodeperfil"]');
       if (profileInput && profileInput.files.length > 0) {
         const profileFile = profileInput.files[0];
-        const profilePath = affiliateId + "_" + profileFile.name;
+        const sanitizedProfileFileName = sanitizeFileName(profileFile.name);
+        const profilePath = affiliateId + "_" + sanitizedProfileFileName;
         profileURL = await uploadFileToStorage("profile-images", profileFile, profilePath);
       }
     } catch (uploadError) {
