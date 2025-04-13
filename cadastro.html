@@ -68,56 +68,64 @@
                   </p>
                   <form id="userForm">
                     <div class="row">
-                      <!-- Row 1: Primeiro Nome e Último Nome -->
-                      <div class="col-md-6 col-12">
+                      <!-- Primeira linha: Primeiro Nome + Último Nome -->
+                      <div class="col-12 col-md-6">
                         <div class="input-style-1">
                           <label>Primeiro Nome *</label>
                           <input type="text" name="primeiro_nome" placeholder="Primeiro Nome" required />
                         </div>
                       </div>
-                      <div class="col-md-6 col-12">
+                      <div class="col-12 col-md-6">
                         <div class="input-style-1">
                           <label>Último Nome *</label>
                           <input type="text" name="ultimo_nome" placeholder="Último Nome" required />
                         </div>
                       </div>
-                      <!-- Row 2: Telefone e Email -->
-                      <div class="col-md-6 col-12">
+                      <!-- end row -->
+
+                      <!-- Segunda linha: Telefone + Email -->
+                      <div class="col-12 col-md-6">
                         <div class="input-style-1">
                           <label>Telefone *</label>
                           <input type="text" name="telefone" placeholder="Telefone" required />
                         </div>
                       </div>
-                      <div class="col-md-6 col-12">
+                      <div class="col-12 col-md-6">
                         <div class="input-style-1">
                           <label>Email *</label>
                           <input type="email" name="email" placeholder="Email" required />
                         </div>
                       </div>
-                      <!-- Row 3: Senha e Repetir Senha -->
-                      <div class="col-md-6 col-12">
-                        <div class="input-style-1">
-                          <label>Senha *</label>
-                          <input type="password" id="password" name="password" placeholder="Senha" required />
-                        </div>
-                      </div>
-                      <div class="col-md-6 col-12">
-                        <div class="input-style-1">
-                          <label>Repetir Senha *</label>
-                          <input type="password" id="confirm_password" name="confirm_password" placeholder="Repetir Senha" required />
-                        </div>
-                      </div>
-                      <!-- Row 4: Foto de Perfil -->
-                      <div class="col-md-6 col-12">
+                      <!-- end row -->
+
+                      <!-- Terceira linha: Foto de Perfil + Senha -->
+                      <div class="col-12 col-md-6">
                         <div class="input-style-1">
                           <label>Foto de Perfil</label>
                           <input type="file" name="fotodeperfil" accept="image/*" />
                         </div>
                       </div>
+                      <div class="col-12 col-md-6">
+                        <div class="input-style-1">
+                          <label>Senha *</label>
+                          <input type="password" id="password" name="password" placeholder="Senha" required />
+                        </div>
+                      </div>
+                      <!-- end row -->
+
+                      <!-- Quarta linha: Repetir Senha -->
+                      <div class="col-12 col-md-6">
+                        <div class="input-style-1">
+                          <label>Repetir Senha *</label>
+                          <input type="password" id="confirm_password" name="confirm_password" placeholder="Repetir Senha" required />
+                        </div>
+                      </div>
+                      <!-- end row -->
+
                       <!-- Campos hidden (preenchidos via JS) -->
                       <input type="hidden" name="affiliate_id" id="affiliate_id" />
                       <input type="hidden" name="name" id="name" />
-                      <!-- Row 5: Botão Próximo (em full width) -->
+
                       <div class="col-12">
                         <div class="button-group d-flex justify-content-center flex-wrap">
                           <button type="button" class="main-btn primary-btn btn-hover w-100 text-center" onclick="goToStep2()">
@@ -126,6 +134,7 @@
                         </div>
                       </div>
                     </div>
+                    <!-- end row -->
                   </form>
                 </div>
                 <!-- FIM do STEP 1 -->
@@ -138,15 +147,14 @@
                   </p>
                   <form id="affiliateForm">
                     <div class="row">
-                      <!-- Row 1: Nome da Agência (full width) -->
-                      <div class="col-12">
+                      <!-- Primeira linha: Nome da Agência + "Você tem domínio próprio?" -->
+                      <div class="col-12 col-md-6">
                         <div class="input-style-1">
                           <label>Nome da Agência *</label>
                           <input type="text" name="agency_name" placeholder="Nome da Agência" required />
                         </div>
                       </div>
-                      <!-- Row 2: Domínio próprio (radio) -->
-                      <div class="col-12">
+                      <div class="col-12 col-md-6">
                         <div class="input-style-1">
                           <label>Você tem domínio próprio? *</label>
                           <div>
@@ -161,60 +169,68 @@
                           </div>
                         </div>
                       </div>
-                      <!-- Row 3: Domínio e Subdomínio (apenas exibidos conforme a resposta) -->
-                      <div class="col-md-6 col-12" id="domainField" style="display:none;">
+                      <!-- end row -->
+
+                      <!-- Segunda linha: Domínio e Subdomínio, exibidos condicionalmente -->
+                      <div class="col-12 col-md-6" id="domainField" style="display:none;">
                         <div class="input-style-1">
                           <label>Domínio *</label>
                           <input type="text" name="domain" placeholder="seuagencia.com" />
                         </div>
                       </div>
-                      <div class="col-md-6 col-12" id="subdomainField" style="display:none;">
+                      <div class="col-12 col-md-6" id="subdomainField" style="display:none;">
                         <div class="input-style-1">
                           <label>Subdomínio *</label>
                           <input type="text" name="subdomain" placeholder="airland.com.br" value="airland.com.br" readonly />
                         </div>
                       </div>
-                      <!-- Row 4: Logo URL (full width) -->
-                      <div class="col-12">
+                      <!-- end row -->
+
+                      <!-- Terceira linha: Logo URL + Cor Principal -->
+                      <div class="col-12 col-md-6">
                         <div class="input-style-1">
                           <label>Logo URL *</label>
                           <input type="text" name="logo_url" placeholder="URL da Logo" required />
                         </div>
                       </div>
-                      <!-- Row 5: Cores Principais e Secundárias -->
-                      <div class="col-md-6 col-12">
+                      <div class="col-12 col-md-6">
                         <div class="input-style-1">
                           <label>Cor Principal</label>
                           <input type="text" name="primary_color" placeholder="Ex: #000000" />
                         </div>
                       </div>
-                      <div class="col-md-6 col-12">
+                      <!-- end row -->
+
+                      <!-- Quarta linha: Cor Secundária + Cor do Botão -->
+                      <div class="col-12 col-md-6">
                         <div class="input-style-1">
                           <label>Cor Secundária</label>
                           <input type="text" name="background_color" placeholder="Ex: #FFFFFF" />
                         </div>
                       </div>
-                      <!-- Row 6: Cores do Botão e Texto do Botão -->
-                      <div class="col-md-6 col-12">
+                      <div class="col-12 col-md-6">
                         <div class="input-style-1">
                           <label>Cor do Botão</label>
                           <input type="text" name="button_color" placeholder="Ex: #FF0000" />
                         </div>
                       </div>
-                      <div class="col-md-6 col-12">
+                      <!-- end row -->
+
+                      <!-- Quinta linha: Cor do Texto do Botão + Cor do Botão ao clicar -->
+                      <div class="col-12 col-md-6">
                         <div class="input-style-1">
                           <label>Cor do Texto do Botão</label>
                           <input type="text" name="button_text_color" placeholder="Ex: #FFFFFF" />
                         </div>
                       </div>
-                      <!-- Row 7: Cor do Botão ao Clicar -->
-                      <div class="col-md-6 col-12">
+                      <div class="col-12 col-md-6">
                         <div class="input-style-1">
                           <label>Cor do Botão ao Clicar</label>
                           <input type="text" name="button_hover" placeholder="Ex: #CCCCCC" />
                         </div>
                       </div>
-                      <!-- Row 8: Botão Enviar (full width) -->
+                      <!-- end row -->
+
                       <div class="col-12">
                         <div class="button-group d-flex justify-content-center flex-wrap">
                           <button type="button" class="main-btn primary-btn btn-hover w-100 text-center" onclick="submitForms()">
@@ -223,6 +239,7 @@
                         </div>
                       </div>
                     </div>
+                    <!-- end row -->
                   </form>
                 </div>
                 <!-- FIM do STEP 2 -->
@@ -252,9 +269,9 @@
   <script src="assets/js/datatable.js"></script>
   <script src="assets/js/Sortable.min.js"></script>
   <script src="assets/js/main.js"></script>
-  <!-- Inclusão do sidebar.js (importado como module) -->
-  <script type="module" src="assets/js/sidebar.js"></script>
-  
+  <!-- ADIÇÃO DO NOVO SCRIPT (2ª alteração) -->
+  <script src="assets/js/sidebar.js"></script>
+
   <script>
     // Função para transição do Step 1 para o Step 2
     function goToStep2() {
