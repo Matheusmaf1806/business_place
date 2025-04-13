@@ -518,17 +518,16 @@
   <script type="module">
   import supabaseClient from "./supabaseClient.js";
 
-  // Função para sanitizar nomes de arquivos
+  // Função para sanitizar nomes de arquivos (opcional, mas recomendado)
   function sanitizeFileName(fileName) {
     return fileName.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_.-]/g, '');
   }
 
   /***********************************************************************
    * Função para upload de arquivo para o Supabase Storage.
-   * Parâmetros:
-   *   bucketName: Nome do bucket (ex: 'logos', 'profile-images')
-   *   file: o objeto File selecionado
-   *   filePath: o caminho relativo de destino (ex: 'AFF123_nome.png')
+   * bucketName: Nome do bucket (ex: 'logos', 'profile-images')
+   * file: o objeto File selecionado
+   * filePath: caminho relativo de destino (ex: 'AFF123_nome.png')
    ***********************************************************************/
   async function uploadFileToStorage(bucketName, file, filePath) {
     try {
@@ -566,7 +565,7 @@
   }
 
   /***********************************************************************
-   * Função para exibir ou ocultar os campos de Domínio/Subdomínio
+   * Função para exibir/ocultar os campos de Domínio/Subdomínio
    ***********************************************************************/
   function toggleDomainFields() {
     const hasDomain = document.querySelector('input[name="has_domain"]:checked').value;
@@ -602,8 +601,12 @@
    *  - Validação dos campos obrigatórios
    *  - Upload dos arquivos (Logo e Foto de Perfil) para o Storage
    *  - Inserção dos dados nas tabelas "affiliates" e "users"
+   *
+   * Usamos upsert na tabela "affiliates" com base no campo "slug",
+   * para evitar conflitos caso já exista uma agência com o mesmo slug.
    ***********************************************************************/
   async function submitForms() {
+    // Validação dos campos obrigatórios do formulário da Agência (Step 2)
     const agencyName = document.querySelector('input[name="agency_name"]').value.trim();
     const logoInput = document.querySelector('input[name="logo_url"]');
     const logoFile = logoInput.files[0];
@@ -630,27 +633,31 @@
         return;
       }
     }
-    const affiliateId = "AFF" + Math.floor(Math.random() * 100000);
-    document.getElementById("affiliate_id").value = affiliateId;
 
+    // Gera um identificador único para o afiliado se ainda não existir – aqui usamos o slug diretamente.
+    // Se necessário, você pode gerar um UUID.
+    // Nesse exemplo, usamos o valor do nome (slug) para realizar o upsert.
+    // OBS.: Certifique-se de que o campo "slug" seja único na tabela "affiliates".
+    // Se já existir um registro com esse slug, o upsert atualizará o registro existente.
+    
+    // Captura os dados do usuário
     const primeiroNome = document.querySelector('input[name="primeiro_nome"]').value.trim();
     const ultimoNome = document.querySelector('input[name="ultimo_nome"]').value.trim();
     document.getElementById("name").value = primeiroNome + " " + ultimoNome;
 
+    // Upload de arquivos
     let logoURL = "";
     let profileURL = "";
     try {
-      // Sanitiza o nome do arquivo para evitar caracteres inválidos
       const sanitizedLogoFileName = sanitizeFileName(logoFile.name);
-      // Construa o caminho sem repetir o nome do bucket (o bucket já é definido no método .from)
-      const logoPath = affiliateId + "_" + sanitizedLogoFileName;
+      const logoPath = agencyName + "_" + sanitizedLogoFileName;
       logoURL = await uploadFileToStorage("logos", logoFile, logoPath);
 
       const profileInput = document.querySelector('input[name="fotodeperfil"]');
       if (profileInput && profileInput.files.length > 0) {
         const profileFile = profileInput.files[0];
         const sanitizedProfileFileName = sanitizeFileName(profileFile.name);
-        const profilePath = affiliateId + "_" + sanitizedProfileFileName;
+        const profilePath = agencyName + "_" + sanitizedProfileFileName;
         profileURL = await uploadFileToStorage("profile-images", profileFile, profilePath);
       }
     } catch (uploadError) {
@@ -658,9 +665,10 @@
       return;
     }
 
+    // Monta o objeto de dados para a tabela "affiliates"
     const affiliateData = {
-      slug: agencyName,          // preenche ambas as colunas 'slug' e 'name'
-      name: agencyName,
+      slug: agencyName, // Usado para identificar a agência; campo único
+      name: agencyName, // Nome da agência
       domain: hasDomain === "sim" ? document.querySelector('input[name="domain"]').value.trim() : "",
       subdomain: hasDomain === "nao" ? document.getElementById("subdomainInput").value.trim() + ".airland.com.br" : "",
       logo_url: logoURL,
@@ -670,7 +678,9 @@
       button_text_color: document.querySelector('input[name="button_text_color"]').value.trim(),
       button_hover: document.querySelector('input[name="button_hover"]').value.trim()
     };
-    
+
+    // Monta o objeto de dados para a tabela "users"
+    // Aqui, você vincula o usuário com a agência através do slug (ou outro identificador que desejar)
     const userData = {
       primeiro_nome: primeiroNome,
       ultimo_nome: ultimoNome,
@@ -678,7 +688,7 @@
       email: document.querySelector('input[name="email"]').value.trim(),
       fotodeperfil: profileURL,
       password: document.getElementById("password").value,
-      affiliate_id: affiliateId,
+      affiliate_id: agencyName, // Usando o slug da agência para vincular – ajuste conforme seu schema
       name: document.getElementById("name").value
     };
 
@@ -686,15 +696,17 @@
     console.log("Dados do Usuário:", userData);
 
     try {
+      // Faz upsert na tabela "affiliates" com base no campo "slug"
       let { data: affiliateInsert, error: affiliateError } = await supabaseClient
         .from("affiliates")
-        .insert(affiliateData);
+        .insert(affiliateData, { upsert: true, onConflict: "slug" });
       if (affiliateError) {
         alert("Erro ao cadastrar agência: " + affiliateError.message);
         console.error(affiliateError);
         return;
       }
 
+      // Insere os dados na tabela "users"
       let { data: userInsert, error: userError } = await supabaseClient
         .from("users")
         .insert(userData);
@@ -704,7 +716,7 @@
         return;
       }
 
-      alert("Loja criada com sucesso! Affiliate ID: " + affiliateId);
+      alert("Loja criada com sucesso! Agência: " + agencyName);
       clearForms();
     } catch (err) {
       console.error(err);
