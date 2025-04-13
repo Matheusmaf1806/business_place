@@ -606,14 +606,17 @@
          * Usamos upsert na tabela "affiliates" com base no campo "slug",
          * para evitar conflitos caso já exista uma agência com o mesmo slug.
          ***********************************************************************/
+        // Função principal para enviar os formulários e inserir dados no Supabase.
         async function submitForms() {
           const agencyName = document.querySelector('input[name="agency_name"]').value.trim();
           const logoInput = document.querySelector('input[name="logo_url"]');
           const logoFile = logoInput.files[0];
+
           if (!agencyName || !logoFile) {
             alert('Por favor, preencha todos os campos obrigatórios da Agência (Nome e Logo).');
             return;
           }
+
           const hasDomainElem = document.querySelector('input[name="has_domain"]:checked');
           if (!hasDomainElem) {
             alert('Por favor, responda se possui domínio próprio.');
@@ -633,37 +636,40 @@
               return;
             }
           }
-      
+
           // Captura os dados do usuário
           const primeiroNome = document.querySelector('input[name="primeiro_nome"]').value.trim();
           const ultimoNome = document.querySelector('input[name="ultimo_nome"]').value.trim();
+          const telefone = document.querySelector('input[name="telefone"]').value.trim();
+          const email = document.querySelector('input[name="email"]').value.trim();
           document.getElementById("name").value = primeiroNome + " " + ultimoNome;
-      
+
           let logoURL = "";
           let profileURL = "";
           try {
             const sanitizedLogoFileName = sanitizeFileName(logoFile.name);
-            // Construa o caminho para o logo
             const logoPath = agencyName + "_" + sanitizedLogoFileName;
             logoURL = await uploadFileToStorage("logos", logoFile, logoPath);
-      
-            // Se houver foto de perfil, realiza o upload e transforma em link público
+            console.log("Logo URL:", logoURL);  // Debug
+
+            // Upload da foto de perfil, se houver
             const profileInput = document.querySelector('input[name="fotodeperfil"]');
             if (profileInput && profileInput.files.length > 0) {
               const profileFile = profileInput.files[0];
               const sanitizedProfileFileName = sanitizeFileName(profileFile.name);
               const profilePath = agencyName + "_" + sanitizedProfileFileName;
               profileURL = await uploadFileToStorage("profile-images", profileFile, profilePath);
+              console.log("Profile URL:", profileURL);  // Debug
             }
           } catch (uploadError) {
             alert("Erro no upload dos arquivos: " + uploadError.message);
             return;
           }
-      
-          // Monta o objeto de dados para a tabela "affiliates"
+
+          // Monta o objeto para a tabela "affiliates"
           const affiliateData = {
-            slug: agencyName, // campo único para identificar a agência
-            name: agencyName, // o nome da agência
+            slug: agencyName,
+            name: agencyName,
             domain: hasDomain === "sim" ? document.querySelector('input[name="domain"]').value.trim() : "",
             subdomain: hasDomain === "nao" ? document.getElementById("subdomainInput").value.trim() + ".airland.com.br" : "",
             logo_url: logoURL,
@@ -673,53 +679,45 @@
             button_text_color: document.querySelector('input[name="button_text_color"]').value.trim(),
             button_hover: document.querySelector('input[name="button_hover"]').value.trim()
           };
-      
-          // Insere (ou atualiza) a agência na tabela "affiliates" via upsert baseado no campo slug
+
+          // Insere ou atualiza a agência na tabela "affiliates"
           let affiliateInsertResult = await supabaseClient
             .from("affiliates")
             .insert(affiliateData, { upsert: true, onConflict: "slug" })
             .select();
-      
+            
           if (affiliateInsertResult.error) {
             alert("Erro ao cadastrar agência: " + affiliateInsertResult.error.message);
             console.error(affiliateInsertResult.error);
             return;
           }
-      
-          // Recupera o ID da agência (coluna id do registro, que é um inteiro)
           const affiliateId = affiliateInsertResult.data[0].id;
-      
-          // Monta o objeto de dados para a tabela "users"
-          const userData = {
-            primeiro_nome: primeiroNome,
-            ultimo_nome: ultimoNome,
-            telefone: document.querySelector('input[name="telefone"]').value.trim(),
-            email: document.querySelector('input[name="email"]').value.trim(),
-            fotodeperfil: profileURL, // Link público da foto de perfil
-            password: document.getElementById("password").value,
-            affiliate_id: affiliateId,  // Utiliza o ID numérico da agência
-            name: document.getElementById("name").value
-          };
-      
-          console.log("Dados da Agência:", affiliateData);
-          console.log("Dados do Usuário:", userData);
-      
-          try {
-            let { data: userInsert, error: userError } = await supabaseClient
-              .from("users")
-              .insert(userData);
-            if (userError) {
-              alert("Erro ao cadastrar usuário: " + userError.message);
-              console.error(userError);
-              return;
+
+          // Aqui utilizamos o método signUp do Supabase Auth para cadastrar o usuário
+          const password = document.getElementById("password").value;
+          const { data: authData, error: authError } = await supabaseClient.auth.signUp({
+            email: email,
+            password: password,
+            options: {
+              data: {
+                primeiro_nome: primeiroNome,
+                ultimo_nome: ultimoNome,
+                telefone: telefone,
+                fotodeperfil: profileURL,  // Link da foto de perfil
+                affiliate_id: affiliateId,
+                name: document.getElementById("name").value
+              }
             }
-      
-            alert("Loja criada com sucesso! Agência: " + agencyName);
-            clearForms();
-          } catch (err) {
-            console.error(err);
-            alert("Erro ao enviar o formulário. Verifique o console para mais detalhes.");
+          });
+
+          if (authError) {
+            alert("Erro ao cadastrar usuário (auth): " + authError.message);
+            console.error(authError);
+            return;
           }
+
+          alert("Loja criada com sucesso! Agência: " + agencyName);
+          clearForms();
         }
       
         /***********************************************************************
