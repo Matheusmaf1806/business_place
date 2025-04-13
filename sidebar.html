@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="shortcut icon" href="assets/images/favicon.svg" type="image/x-icon" />
-  <title>Reset Password | Airland Demo</title>
+  <title>Airland</title>
 
   <!-- ========== All CSS files linkup ========= -->
   <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
@@ -17,6 +17,22 @@
   <link rel="stylesheet" href="assets/css/morris.css" />
   <link rel="stylesheet" href="assets/css/datatable.css" />
   <link rel="stylesheet" href="assets/css/main.css" />
+
+  <style>
+    /* Estilização dos ícones de seta nos subitens */
+    .sub-arrow {
+      float: right;
+      font-size: 12px;
+      margin-top: 3px;
+      color: #fff;
+    }
+    
+    /* Se desejar ajustar o espaçamento dos textos nos subitens */
+    .dropdown-nav li a {
+      position: relative;
+      padding-right: 25px; /* espaço para o ícone */
+    }
+  </style>
 </head>
 
 <body>
@@ -35,15 +51,13 @@
     </div>
     <nav class="sidebar-nav">
       <ul>
-        <!-- Painel de Vendas: sem seta (sem funcionalidade de collapse) -->
+        <!-- Painel de Vendas: sem seta -->
         <li class="nav-item">
           <a href="painel-vendas.html">
             <span class="icon">
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M8.74999 18.3333C12.2376 18.3333 15.1364 15.8128 15.7244 12.4941C15.8448 11.8143 15.2737 11.25 14.5833 11.25H9.99999C9.30966 11.25 8.74999 10.6903 8.74999 10V5.41666C8.74999 4.7263 8.18563 4.15512 7.50586 4.27556C4.18711 4.86357 1.66666 7.76243 1.66666 11.25C1.66666 15.162 4.83797 18.3333 8.74999 18.3333Z" />
-                <path
-                  d="M17.0833 10C17.7737 10 18.3432 9.43708 18.2408 8.75433C17.7005 5.14918 14.8508 2.29947 11.2457 1.75912C10.5629 1.6568 10 2.2263 10 2.91665V9.16666C10 9.62691 10.3731 10 10.8333 10H17.0833Z" />
+                <path d="M8.74999 18.3333C12.2376 18.3333 15.1364 15.8128 15.7244 12.4941C15.8448 11.8143 15.2737 11.25 14.5833 11.25H9.99999C9.30966 11.25 8.74999 10.6903 8.74999 10V5.41666C8.74999 4.7263 8.18563 4.15512 7.50586 4.27556C4.18711 4.86357 1.66666 7.76243 1.66666 11.25C1.66666 15.162 4.83797 18.3333 8.74999 18.3333Z" />
+                <path d="M17.0833 10C17.7737 10 18.3432 9.43708 18.2408 8.75433C17.7005 5.14918 14.8508 2.29947 11.2457 1.75912C10.5629 1.6568 10 2.2263 10 2.91665V9.16666C10 9.62691 10.3731 10 10.8333 10H17.0833Z" />
               </svg>
             </span>
             <span class="text">Painel de Vendas</span>
@@ -55,28 +69,20 @@
             aria-expanded="false" aria-label="Toggle navigation">
             <span class="icon">
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M2.49999 3.33333C2.03976 3.33333 1.66666 3.70643 1.66666 4.16666V7.49999C1.66666 7.96023 2.03976 8.33333 2.49999 8.33333H5.83332C6.29356 8.33333 6.66666 7.96023 6.66666 7.49999V4.16666C6.66666 3.70643 6.29356 3.33333 5.83332 3.33333H2.49999Z" />
-                <path
-                  d="M2.49999 11.6667C2.03976 11.6667 1.66666 12.0398 1.66666 12.5V15.8333C1.66666 16.2936 2.03976 16.6667 2.49999 16.6667H5.83332C6.29356 16.6667 6.66666 16.2936 6.66666 15.8333V12.5C6.66666 12.0398 6.29356 11.6667 5.83332 11.6667H2.49999Z" />
-                <path
-                  d="M8.33334 4.16667C8.33334 3.8215 8.61318 3.54167 8.95834 3.54167H17.7083C18.0535 3.54167 18.3333 3.8215 18.3333 4.16667C18.3333 4.51185 18.0535 4.79167 17.7083 4.79167H8.95834C8.61318 4.79167 8.33334 4.51185 8.33334 4.16667Z" />
-                <path
-                  d="M8.33334 7.5C8.33334 7.15483 8.61318 6.875 8.95834 6.875H14.7917C15.1368 6.875 15.4167 7.15483 15.4167 7.5C15.4167 7.84517 15.1368 8.125 14.7917 8.125H8.95834C8.61318 8.125 8.33334 7.84517 8.33334 7.5Z" />
-                <path
-                  d="M8.95834 11.875C8.61318 11.875 8.33334 12.1548 8.33334 12.5C8.33334 12.8452 8.61318 13.125 8.95834 13.125H17.7083C18.0535 13.125 18.3333 12.8452 18.3333 12.5C18.3333 12.1548 18.0535 11.875 17.7083 11.875H8.95834Z" />
-                <path
-                  d="M8.95834 15.2083C8.61318 15.2083 8.33334 15.4882 8.33334 15.8333C8.33334 16.1785 8.61318 16.4583 8.95834 16.4583H14.7917C15.1368 16.4583 15.4167 16.1785 15.4167 15.8333C15.4167 15.4882 15.1368 15.2083 14.7917 15.2083H8.95834Z" />
+                <path d="M2.49999 3.33333C2.03976 3.33333 1.66666 3.70643 1.66666 4.16666V7.49999C1.66666 7.96023 2.03976 8.33333 2.49999 8.33333H5.83332C6.29356 8.33333 6.66666 7.96023 6.66666 7.49999V4.16666C6.66666 3.70643 6.29356 3.33333 5.83332 3.33333H2.49999Z" />
+                <path d="M2.49999 11.6667C2.03976 11.6667 1.66666 12.0398 1.66666 12.5V15.8333C1.66666 16.2936 2.03976 16.6667 2.49999 16.6667H5.83332C6.29356 16.6667 6.66666 16.2936 6.66666 15.8333V12.5C6.66666 12.0398 6.29356 11.6667 5.83332 11.6667H2.49999Z" />
+                <path d="M8.33334 4.16667C8.33334 3.8215 8.61318 3.54167 8.95834 3.54167H17.7083C18.0535 3.54167 18.3333 3.8215 18.3333 4.16667C18.3333 4.51185 18.0535 4.79167 17.7083 4.79167H8.95834C8.61318 4.79167 8.33334 4.51185 8.33334 4.16667Z" />
+                <path d="M8.33334 7.5C8.33334 7.15483 8.61318 6.875 8.95834 6.875H14.7917C15.1368 6.875 15.4167 7.15483 15.4167 7.5C15.4167 7.84517 15.1368 8.125 14.7917 8.125H8.95834C8.61318 8.125 8.33334 7.84517 8.33334 7.5Z" />
               </svg>
             </span>
             <span class="text">Vendas</span>
           </a>
           <ul id="ddmenu_2" class="collapse dropdown-nav">
             <li>
-              <a href="pedidos.html">Pedidos</a>
+              <a href="pedidos.html">Pedidos <span class="sub-arrow"><i class="lni lni-chevron-right"></i></span></a>
             </li>
             <li>
-              <a href="clientes.html">Clientes</a>
+              <a href="clientes.html">Clientes <span class="sub-arrow"><i class="lni lni-chevron-right"></i></span></a>
             </li>
           </ul>
         </li>
@@ -85,66 +91,57 @@
           <a href="orcamentos.html">
             <span class="icon">
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M3.33334 3.35442C3.33334 2.4223 4.07954 1.66666 5.00001 1.66666H15C15.9205 1.66666 16.6667 2.4223 16.6667 3.35442V16.8565C16.6667 17.5519 15.8827 17.9489 15.3333 17.5317L13.8333 16.3924C13.537 16.1673 13.1297 16.1673 12.8333 16.3924L10.5 18.1646C10.2037 18.3896 9.79634 18.3896 9.50001 18.1646L7.16668 16.3924C6.87038 16.1673 6.46298 16.1673 6.16668 16.3924L4.66668 17.5317C4.11731 17.9489 3.33334 17.5519 3.33334 16.8565V3.35442Z" />
+                <path d="M3.33334 3.35442C3.33334 2.4223 4.07954 1.66666 5.00001 1.66666H15C15.9205 1.66666 16.6667 2.4223 16.6667 3.35442V16.8565C16.6667 17.5519 15.8827 17.9489 15.3333 17.5317L13.8333 16.3924C13.537 16.1673 13.1297 16.1673 12.8333 16.3924L10.5 18.1646C10.2037 18.3896 9.79634 18.3896 9.50001 18.1646L7.16668 16.3924C6.87038 16.1673 6.46298 16.1673 6.16668 16.3924L4.66668 17.5317C4.11731 17.9489 3.33334 17.5519 3.33334 16.8565V3.35442Z" />
               </svg>
             </span>
             <span class="text">Orçamentos</span>
           </a>
         </li>
-        <!-- Personalize -->
+        <!-- Personalize com submenu -->
         <li class="nav-item nav-item-has-children">
-          <a href="#0" class="" data-bs-toggle="collapse" data-bs-target="#ddmenu_3" aria-controls="ddmenu_3"
+          <a href="#0" data-bs-toggle="collapse" data-bs-target="#ddmenu_3" aria-controls="ddmenu_3"
             aria-expanded="true" aria-label="Toggle navigation">
             <span class="icon">
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M4.16666 4.16675C4.16666 2.78604 6.77833 1.66675 9.99999 1.66675C13.2217 1.66675 15.8333 2.78604 15.8333 4.16675V4.57073C15.8027 4.60316 15.7678 4.637 15.7282 4.6722C15.4683 4.90251 15.0568 5.13848 14.4946 5.34931C13.3747 5.76924 11.7858 6.04175 9.99999 6.04175C8.21415 6.04175 6.62521 5.76924 5.5054 5.34931C4.94318 5.13848 4.53162 4.90251 4.27185 4.6722C4.23215 4.637 4.19726 4.60316 4.16666 4.57073V4.16675Z" />
-                <path
-                  d="M4.16666 6.10992V8.73742C4.19726 8.76983 4.23215 8.80367 4.27185 8.83883C4.53162 9.06917 4.94318 9.30517 5.5054 9.516C6.62521 9.93592 8.21415 10.2084 9.99999 10.2084C11.7858 10.2084 13.3747 9.93592 14.4946 9.516C15.0568 9.30517 15.4683 9.06917 15.7282 8.83883C15.7678 8.80367 15.8027 8.76983 15.8333 8.73742V6.10992C15.5592 6.26222 15.2563 6.39865 14.9335 6.51972C13.6404 7.00462 11.8961 7.29175 9.99999 7.29175C8.10394 7.29175 6.35954 7.00462 5.06649 6.51972C4.74364 6.39865 4.44074 6.26222 4.16666 6.10992Z" />
-                <path
-                  d="M15.8333 10.2766C15.5592 10.4289 15.2563 10.5653 14.9335 10.6864C13.6404 11.1712 11.8961 11.4584 9.99999 11.4584C8.10394 11.4584 6.35954 11.1712 5.06649 10.6864C4.74364 10.5653 4.44074 10.4289 4.16666 10.2766V12.904C4.19726 12.9365 4.23215 12.9703 4.27185 13.0055C4.53162 13.2358 4.94318 13.4718 5.5054 13.6826C6.62521 14.1025 8.21415 14.375 9.99999 14.375C11.7858 14.375 13.3747 14.1025 14.4946 13.6826C15.0568 13.4718 15.4683 13.2358 15.7282 13.0055C15.7678 12.9703 15.8027 12.9365 15.8333 12.904V10.2766Z" />
-                <path
-                  d="M15.8333 14.4432C15.5592 14.5956 15.2563 14.732 14.9335 14.8531C13.6404 15.3379 11.8961 15.6251 9.99999 15.6251C8.10394 15.6251 6.35954 15.3379 5.06649 14.8531C4.74364 14.732 4.44074 14.5956 4.16666 14.4432V15.8334C4.16666 17.2142 6.77833 18.3334 9.99999 18.3334C13.2217 18.3334 15.8333 17.2142 15.8333 15.8334V14.4432Z" />
+                <path d="M4.16666 4.16675C4.16666 2.78604 6.77833 1.66675 9.99999 1.66675C13.2217 1.66675 15.8333 2.78604 15.8333 4.16675V4.57073C15.8027 4.60316 15.7678 4.637 15.7282 4.6722C15.4683 4.90251 15.0568 5.13848 14.4946 5.34931C13.3747 5.76924 11.7858 6.04175 9.99999 6.04175C8.21415 6.04175 6.62521 5.76924 5.5054 5.34931C4.94318 5.13848 4.53162 4.90251 4.27185 4.6722C4.23215 4.637 4.19726 4.60316 4.16666 4.57073V4.16675Z" />
+                <path d="M4.16666 6.10992V8.73742C4.19726 8.76983 4.23215 8.80367 4.27185 8.83883C4.53162 9.06917 4.94318 9.30517 5.5054 9.516C6.62521 9.93592 8.21415 10.2084 9.99999 10.2084C11.7858 10.2084 13.3747 9.93592 14.4946 9.516C15.0568 9.30517 15.4683 9.06917 15.7282 8.83883C15.7678 8.80367 15.8027 8.76983 15.8333 8.73742V6.10992C15.5592 6.26222 15.2563 6.39865 14.9335 6.51972C13.6404 7.00462 11.8961 7.29175 9.99999 7.29175C8.10394 7.29175 6.35954 7.00462 5.06649 6.51972C4.74364 6.39865 4.44074 6.26222 4.16666 6.10992Z" />
               </svg>
             </span>
             <span class="text">Personalize</span>
           </a>
-          <ul id="ddmenu_3" class="collapsed show dropdown-nav">
+          <ul id="ddmenu_3" class="collapse show dropdown-nav">
             <li>
-              <a href="design.html#idvisual">Identidade Visual</a>
+              <a href="design.html#idvisual">Identidade Visual <span class="sub-arrow"><i class="lni lni-chevron-right"></i></span></a>
             </li>
             <li>
-              <a href="design.html#paleta">Paleta de Cores</a>
+              <a href="design.html#paleta">Paleta de Cores <span class="sub-arrow"><i class="lni lni-chevron-right"></i></span></a>
             </li>
             <li>
-              <a href="design.html#banner">Banner</a>
+              <a href="design.html#banner">Banner <span class="sub-arrow"><i class="lni lni-chevron-right"></i></span></a>
             </li>
             <li>
-              <a href="design.html/#footer">Rodapé</a>
+              <a href="design.html/#footer">Rodapé <span class="sub-arrow"><i class="lni lni-chevron-right"></i></span></a>
             </li>
           </ul>
         </li>
-        <!-- Usuários -->
+        <!-- Usuários com submenu -->
         <li class="nav-item nav-item-has-children">
-          <a href="#0" class="" data-bs-toggle="collapse" data-bs-target="#ddmenu_usuarios" aria-controls="ddmenu_usuarios"
+          <a href="#0" data-bs-toggle="collapse" data-bs-target="#ddmenu_usuarios" aria-controls="ddmenu_usuarios"
             aria-expanded="true" aria-label="Toggle navigation">
             <span class="icon">
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M14.9211 10.1294C15.1652 9.88534 15.1652 9.48967 14.9211 9.24559L10.7544 5.0789C10.5103 4.83482 10.1147 4.83482 9.87057 5.0789C9.62649 5.32297 9.62649 5.71871 9.87057 5.96278L12.9702 9.06251H1.97916C1.63398 9.06251 1.35416 9.34234 1.35416 9.68751C1.35416 10.0327 1.63398 10.3125 1.97916 10.3125H12.9702L9.87057 13.4123C9.62649 13.6563 9.62649 14.052 9.87057 14.2961C10.1147 14.5402 10.5103 14.5402 10.7544 14.2961L14.9211 10.1294Z" />
-                <path
-                  d="M11.6383 15.18L15.805 11.0133C16.5373 10.2811 16.5373 9.09391 15.805 8.36166L11.6383 4.195C11.2722 3.82888 10.7923 3.64582 10.3125 3.64582V3.02082C10.3125 2.10035 11.0587 1.35416 11.9792 1.35416H16.9792C17.8997 1.35416 18.6458 2.10035 18.6458 3.02082V16.3542C18.6458 17.2747 17.8997 18.0208 16.9792 18.0208H11.9792C11.0587 18.0208 10.3125 17.2747 10.3125 16.3542V15.7292C10.7923 15.7292 11.2722 15.5461 11.6383 15.18Z" />
+                <path d="M14.9211 10.1294C15.1652 9.88534 15.1652 9.48967 14.9211 9.24559L10.7544 5.0789C10.5103 4.83482 10.1147 4.83482 9.87057 5.0789C9.62649 5.32297 9.62649 5.71871 9.87057 5.96278L12.9702 9.06251H1.97916C1.63398 9.06251 1.35416 9.34234 1.35416 9.68751C1.35416 10.0327 1.63398 10.3125 1.97916 10.3125H12.9702L9.87057 13.4123C9.62649 13.6563 9.62649 14.052 9.87057 14.2961C10.1147 14.5402 10.5103 14.5402 10.7544 14.2961L14.9211 10.1294Z" />
+                <path d="M11.6383 15.18L15.805 11.0133C16.5373 10.2811 16.5373 9.09391 15.805 8.36166L11.6383 4.195C11.2722 3.82888 10.7923 3.64582 10.3125 3.64582V3.02082C10.3125 2.10035 11.0587 1.35416 11.9792 1.35416H16.9792C17.8997 1.35416 18.6458 2.10035 18.6458 3.02082V16.3542C18.6458 17.2747 17.8997 18.0208 16.9792 18.0208H11.9792C11.0587 18.0208 10.3125 17.2747 10.3125 16.3542V15.7292C10.7923 15.7292 11.2722 15.5461 11.6383 15.18Z" />
               </svg>
             </span>
             <span class="text">Usuários</span>
           </a>
-          <ul id="ddmenu_usuarios" class="collapsed show dropdown-nav">
+          <ul id="ddmenu_usuarios" class="collapse show dropdown-nav">
             <li>
-              <a href="createuser.html">Criar acesso</a>
+              <a href="createuser.html">Criar acesso <span class="sub-arrow"><i class="lni lni-chevron-right"></i></span></a>
             </li>
             <li>
-              <a href="users.html">Gerenciar usuários</a>
+              <a href="users.html">Gerenciar usuários <span class="sub-arrow"><i class="lni lni-chevron-right"></i></span></a>
             </li>
           </ul>
         </li>
@@ -183,15 +180,10 @@
             <div class="header-right">
               <!-- notification start -->
               <div class="notification-box ml-15 d-none d-md-flex">
-                <button class="dropdown-toggle" type="button" id="notification" data-bs-toggle="dropdown"
-                  aria-expanded="false">
+                <button class="dropdown-toggle" type="button" id="notification" data-bs-toggle="dropdown" aria-expanded="false">
                   <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M11 20.1667C9.88317 20.1667 8.88718 19.63 8.23901 18.7917H13.761C13.113 19.63 12.1169 20.1667 11 20.1667Z"
-                      fill="" />
-                    <path
-                      d="M10.1157 2.74999C10.1157 2.24374 10.5117 1.83333 11 1.83333C11.4883 1.83333 11.8842 2.24374 11.8842 2.74999V2.82604C14.3932 3.26245 16.3051 5.52474 16.3051 8.24999V14.287C16.3051 14.5301 16.3982 14.7633 16.564 14.9352L18.2029 16.6342C18.4814 16.9229 18.2842 17.4167 17.8903 17.4167H4.10961C3.71574 17.4167 3.5185 16.9229 3.797 16.6342L5.43589 14.9352C5.6017 14.7633 5.69485 14.5301 5.69485 14.287V8.24999C5.69485 5.52474 7.60672 3.26245 10.1157 2.82604V2.74999Z"
-                      fill="" />
+                    <path d="M11 20.1667C9.88317 20.1667 8.88718 19.63 8.23901 18.7917H13.761C13.113 19.63 12.1169 20.1667 11 20.1667Z" fill=""/>
+                    <path d="M10.1157 2.74999C10.1157 2.24374 10.5117 1.83333 11 1.83333C11.4883 1.83333 11.8842 2.24374 11.8842 2.74999V2.82604C14.3932 3.26245 16.3051 5.52474 16.3051 8.24999V14.287C16.3051 14.5301 16.3982 14.7633 16.564 14.9352L18.2029 16.6342C18.4814 16.9229 18.2842 17.4167 17.8903 17.4167H4.10961C3.71574 17.4167 3.5185 16.9229 3.797 16.6342L5.43589 14.9352C5.6017 14.7633 5.69485 14.5301 5.69485 14.287V8.24999C5.69485 5.52474 7.60672 3.26245 10.1157 2.82604V2.74999Z" fill=""/>
                   </svg>
                   <span></span>
                 </button>
@@ -204,14 +196,9 @@
                       <div class="content">
                         <h6>
                           John Doe
-                          <span class="text-regular">
-                            comment on a product.
-                          </span>
+                          <span class="text-regular">comment on a product.</span>
                         </h6>
-                        <p>
-                          Lorem ipsum dolor sit amet, consect etur adipiscing
-                          elit Vivamus tortor.
-                        </p>
+                        <p>Lorem ipsum dolor sit amet, consect etur adipiscing elit Vivamus tortor.</p>
                         <span>10 mins ago</span>
                       </div>
                     </a>
@@ -224,14 +211,9 @@
                       <div class="content">
                         <h6>
                           Jonathon
-                          <span class="text-regular">
-                            like on a product.
-                          </span>
+                          <span class="text-regular">like on a product.</span>
                         </h6>
-                        <p>
-                          Lorem ipsum dolor sit amet, consect etur adipiscing
-                          elit Vivamus tortor.
-                        </p>
+                        <p>Lorem ipsum dolor sit amet, consect etur adipiscing elit Vivamus tortor.</p>
                         <span>10 mins ago</span>
                       </div>
                     </a>
@@ -241,8 +223,7 @@
               <!-- notification end -->
               <!-- profile start -->
               <div class="profile-box ml-15">
-                <button class="dropdown-toggle bg-transparent border-0" type="button" id="profile"
-                  data-bs-toggle="dropdown" aria-expanded="false">
+                <button class="dropdown-toggle bg-transparent border-0" type="button" id="profile" data-bs-toggle="dropdown" aria-expanded="false">
                   <div class="profile-info">
                     <div class="info">
                       <div class="image">
@@ -263,31 +244,26 @@
                       </div>
                       <div class="content">
                         <h4 class="text-sm">Adam Joe</h4>
-                        <a class="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white text-xs"
-                          href="#">Email@gmail.com</a>
+                        <a class="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white text-xs" href="#">Email@gmail.com</a>
                       </div>
                     </div>
                   </li>
                   <li class="divider"></li>
                   <li>
-                    <a href="#0">
-                      <i class="lni lni-user"></i> View Profile
-                    </a>
+                    <a href="#0"><i class="lni lni-user"></i> View Profile</a>
                   </li>
                   <li>
-                    <a href="#0">
-                      <i class="lni lni-alarm"></i> Notifications
-                    </a>
+                    <a href="#0"><i class="lni lni-alarm"></i> Notifications</a>
                   </li>
                   <li>
-                    <a href="#0"> <i class="lni lni-inbox"></i> Messages </a>
+                    <a href="#0"><i class="lni lni-inbox"></i> Messages</a>
                   </li>
                   <li>
-                    <a href="#0"> <i class="lni lni-cog"></i> Settings </a>
+                    <a href="#0"><i class="lni lni-cog"></i> Settings</a>
                   </li>
                   <li class="divider"></li>
                   <li>
-                    <a href="#0"> <i class="lni lni-exit"></i> Sign Out </a>
+                    <a href="#0"><i class="lni lni-exit"></i> Sign Out</a>
                   </li>
                 </ul>
               </div>
@@ -297,9 +273,9 @@
         </div>
       </div>
     </header>
-    <!-- ========== header end ========== -->
+    <!-- header end -->
 
-    <!-- ========== footer start =========== -->
+    <!-- footer start -->
     <footer class="footer">
       <div class="container-fluid">
         <div class="row">
@@ -307,23 +283,18 @@
             <div class="copyright text-center text-md-start">
               <p class="text-sm">
                 Designed and Developed by
-                <a href="https://airland.com.br" rel="nofollow" target="_blank">
-                  Airland
-                </a>
+                <a href="https://airland.com.br" rel="nofollow" target="_blank">Airland</a>
               </p>
             </div>
           </div>
-          <!-- end col-->
         </div>
-        <!-- end row -->
       </div>
-      <!-- end container -->
     </footer>
-    <!-- ========== footer end =========== -->
+    <!-- footer end -->
   </main>
-  <!-- ======== main-wrapper end =========== -->
+  <!-- main-wrapper end -->
 
-  <!-- ============ Theme Option Start ============= -->
+  <!-- Theme Option Start -->
   <button class="option-btn">
     <i class="lni lni-cog"></i>
   </button>
@@ -344,9 +315,7 @@
     <h6 class="mb-10">Tema</h6>
     <ul class="d-flex flex-wrap align-items-center">
       <li>
-        <button class="lightThemeButton active">
-          Tema Claro + Barra Lateral 1
-        </button>
+        <button class="lightThemeButton active">Tema Claro + Barra Lateral 1</button>
       </li>
       <li>
         <button class="darkThemeButton">Tema Escuro + Barra Lateral 1</button>
@@ -359,12 +328,10 @@
       </div>
       <h3>Atualize para PRO</h3>
       <p>Melhore seu processo de desenvolvimento e comece a fazer mais com o Airland PRO!</p>
-      <a href="https://Airland.com/pro" target="_blank" rel="nofollow" class="main-btn primary-btn btn-hover">
-        Atualize para PRO
-      </a>
+      <a href="https://Airland.com/pro" target="_blank" rel="nofollow" class="main-btn primary-btn btn-hover">Atualize para PRO</a>
     </div>
   </div>
-  <!-- ============ Theme Option End ============= -->
+  <!-- Theme Option End -->
 
   <!-- ========= All Javascript files linkup ======== -->
   <script src="assets/js/bootstrap.bundle.min.js"></script>
