@@ -1,27 +1,42 @@
-// sidebar.js
+// airlandModule.js
 export function initAirlandPage() {
-  // Cria e insere o CSS customizado (incluindo estilo para seta e variáveis para tema)
+  // Insere as tags <link> para os CSS externos se ainda não estiverem presentes.
+  // (Caso seu projeto já os tenha no head, você pode omitir esta parte.)
+  const cssFiles = [
+    "assets/css/bootstrap.min.css",
+    "assets/css/lineicons.css",
+    "assets/css/quill/bubble.css",
+    "assets/css/quill/snow.css",
+    "assets/css/fullcalendar.css",
+    "assets/css/morris.css",
+    "assets/css/datatable.css",
+    "assets/css/main.css"
+  ];
+  cssFiles.forEach((href) => {
+    if (!document.querySelector(`link[href="${href}"]`)) {
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = href;
+      document.head.appendChild(link);
+    }
+  });
+
+  // Cria e insere o CSS customizado (incluindo variáveis para tema claro/escuro e a seta antes dos subitens)
   const style = document.createElement("style");
   style.textContent = `
-    /* Variáveis de cor para a seta */
+    /* Variáveis de cor para a seta: no tema claro, seta com cor escura; no dark, branca */
     :root {
-      --arrow-color: #444; /* cor para tema claro */
+      --arrow-color: #444;
     }
     body.dark-theme {
-      --arrow-color: #fff; /* cor para tema escuro */
+      --arrow-color: #fff;
     }
-    /* Estilização da seta que aparece antes dos subitens */
     .arrow-icon {
       margin-right: 6px;
       color: var(--arrow-color);
       font-weight: bold;
     }
-    /* Ajusta o espaçamento para os links dos subitens */
-    .dropdown-nav li a {
-      position: relative;
-      padding-left: 25px;
-    }
-    /* Estilização padrão dos links do menu */
+    /* Estilização do menu (ajustes conforme seu layout original) */
     .sidebar-nav a {
       display: block;
       padding: 10px 15px;
@@ -34,28 +49,27 @@ export function initAirlandPage() {
     .sidebar-nav a:hover {
       background-color: #2c3e50;
     }
-    /* Estilização do submenu */
     .dropdown-nav {
       background-color: #3c4e65;
       padding-left: 0;
     }
     .dropdown-nav li a {
       color: #fff;
+      position: relative;
+      padding-left: 25px;
     }
-    /* Para os elementos de perfil que serão atualizados via API */
-    #userName, #userNameDropdown { font-weight: bold; }
-    #userEmail { font-size: 0.9rem; }
   `;
   document.head.appendChild(style);
 
-  // Cria o container principal e insere a estrutura HTML
-  const container = document.createElement("div");
-  container.innerHTML = `
-    <!-- Preloader -->
+  // Define o HTML que será injetado (corresponde ao conteúdo do <body> do layout fornecido)
+  const htmlContent = `
+    <!-- ======== Preloader =========== -->
     <div id="preloader">
       <div class="spinner"></div>
     </div>
-    <!-- Sidebar Navigation -->
+    <!-- ======== Preloader =========== -->
+
+    <!-- ======== sidebar-nav start =========== -->
     <aside class="sidebar-nav-wrapper">
       <div class="navbar-logo">
         <a href="index.html">
@@ -64,19 +78,22 @@ export function initAirlandPage() {
       </div>
       <nav class="sidebar-nav">
         <ul>
-          <!-- Painel de Vendas -->
+          <!-- Painel de Vendas: sem seta -->
           <li class="nav-item">
             <a href="painel-vendas.html">
               <span class="icon">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
                   xmlns="http://www.w3.org/2000/svg">
-                  <path d="M8.74999 18.3333C12.2376 18.3333 15.1364 15.8128 15.7244 12.4941C15.8448 11.8143 15.2737 11.25 14.5833 11.25H9.99999C9.30966 11.25 8.74999 10.6903 8.74999 10V5.41666C8.74999 4.7263 8.18563 4.15512 7.50586 4.27556C4.18711 4.86357 1.66666 7.76243 1.66666 11.25C1.66666 15.162 4.83797 18.3333 8.74999 18.3333Z" />
-                  <path d="M17.0833 10C17.7737 10 18.3432 9.43708 18.2408 8.75433C17.7005 5.14918 14.8508 2.29947 11.2457 1.75912C10.5629 1.6568 10 2.2263 10 2.91665V9.16666C10 9.62691 10.3731 10 10.8333 10H17.0833Z" />
+                  <path
+                    d="M8.74999 18.3333C12.2376 18.3333 15.1364 15.8128 15.7244 12.4941C15.8448 11.8143 15.2737 11.25 14.5833 11.25H9.99999C9.30966 11.25 8.74999 10.6903 8.74999 10V5.41666C8.74999 4.7263 8.18563 4.15512 7.50586 4.27556C4.18711 4.86357 1.66666 7.76243 1.66666 11.25C1.66666 15.162 4.83797 18.3333 8.74999 18.3333Z" />
+                  <path
+                    d="M17.0833 10C17.7737 10 18.3432 9.43708 18.2408 8.75433C17.7005 5.14918 14.8508 2.29947 11.2457 1.75912C10.5629 1.6568 10 2.2263 10 2.91665V9.16666C10 9.62691 10.3731 10 10.8333 10H17.0833Z" />
                 </svg>
               </span>
               <span class="text">Painel de Vendas</span>
             </a>
           </li>
+
           <!-- Vendas com submenu -->
           <li class="nav-item nav-item-has-children">
             <a href="#0" class="collapsed" data-bs-toggle="collapse"
@@ -85,10 +102,14 @@ export function initAirlandPage() {
               <span class="icon">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
                   xmlns="http://www.w3.org/2000/svg">
-                  <path d="M2.49999 3.33333C2.03976 3.33333 1.66666 3.70643 1.66666 4.16666V7.49999C1.66666 7.96023 2.03976 8.33333 2.49999 8.33333H5.83332C6.29356 8.33333 6.66666 7.96023 6.66666 7.49999V4.16666C6.66666 3.70643 6.29356 3.33333 5.83332 3.33333H2.49999Z" />
-                  <path d="M2.49999 11.6667C2.03976 11.6667 1.66666 12.0398 1.66666 12.5V15.8333C1.66666 16.2936 2.03976 16.6667 2.49999 16.6667H5.83332C6.29356 16.6667 6.66666 16.2936 6.66666 15.8333V12.5C6.66666 12.0398 6.29356 11.6667 5.83332 11.6667H2.49999Z" />
-                  <path d="M8.33334 4.16667C8.33334 3.8215 8.61318 3.54167 8.95834 3.54167H17.7083C18.0535 3.54167 18.3333 3.8215 18.3333 4.16667C18.3333 4.51185 18.0535 4.79167 17.7083 4.79167H8.95834C8.61318 4.79167 8.33334 4.51185 8.33334 4.16667Z" />
-                  <path d="M8.33334 7.5C8.33334 7.15483 8.61318 6.875 8.95834 6.875H14.7917C15.1368 6.875 15.4167 7.15483 15.4167 7.5C15.4167 7.84517 15.1368 8.125 14.7917 8.125H8.95834C8.61318 8.125 8.33334 7.84517 8.33334 7.5Z" />
+                  <path
+                    d="M2.49999 3.33333C2.03976 3.33333 1.66666 3.70643 1.66666 4.16666V7.49999C1.66666 7.96023 2.03976 8.33333 2.49999 8.33333H5.83332C6.29356 8.33333 6.66666 7.96023 6.66666 7.49999V4.16666C6.66666 3.70643 6.29356 3.33333 5.83332 3.33333H2.49999Z" />
+                  <path
+                    d="M2.49999 11.6667C2.03976 11.6667 1.66666 12.0398 1.66666 12.5V15.8333C1.66666 16.2936 2.03976 16.6667 2.49999 16.6667H5.83332C6.29356 16.6667 6.66666 16.2936 6.66666 15.8333V12.5C6.66666 12.0398 6.29356 11.6667 5.83332 11.6667H2.49999Z" />
+                  <path
+                    d="M8.33334 4.16667C8.33334 3.8215 8.61318 3.54167 8.95834 3.54167H17.7083C18.0535 3.54167 18.3333 3.8215 18.3333 4.16667C18.3333 4.51185 18.0535 4.79167 17.7083 4.79167H8.95834C8.61318 4.79167 8.33334 4.51185 8.33334 4.16667Z" />
+                  <path
+                    d="M8.33334 7.5C8.33334 7.15483 8.61318 6.875 8.95834 6.875H14.7917C15.1368 6.875 15.4167 7.15483 15.4167 7.5C15.4167 7.84517 15.1368 8.125 14.7917 8.125H8.95834C8.61318 8.125 8.33334 7.84517 8.33334 7.5Z" />
                 </svg>
               </span>
               <span class="text">Vendas</span>
@@ -106,18 +127,21 @@ export function initAirlandPage() {
               </li>
             </ul>
           </li>
-          <!-- Orçamentos -->
+
+          <!-- Orçamentos (sem submenu) -->
           <li class="nav-item">
             <a href="orcamentos.html">
               <span class="icon">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
                   xmlns="http://www.w3.org/2000/svg">
-                  <path d="M3.33334 3.35442C3.33334 2.4223 4.07954 1.66666 5.00001 1.66666H15C15.9205 1.66666 16.6667 2.4223 16.6667 3.35442V16.8565C16.6667 17.5519 15.8827 17.9489 15.3333 17.5317L13.8333 16.3924C13.537 16.1673 13.1297 16.1673 12.8333 16.3924L10.5 18.1646C10.2037 18.3896 9.79634 18.3896 9.50001 18.1646L7.16668 16.3924C6.87038 16.1673 6.46298 16.1673 6.16668 16.3924L4.66668 17.5317C4.11731 17.9489 3.33334 17.5519 3.33334 16.8565V3.35442Z" />
+                  <path
+                    d="M3.33334 3.35442C3.33334 2.4223 4.07954 1.66666 5.00001 1.66666H15C15.9205 1.66666 16.6667 2.4223 16.6667 3.35442V16.8565C16.6667 17.5519 15.8827 17.9489 15.3333 17.5317L13.8333 16.3924C13.537 16.1673 13.1297 16.1673 12.8333 16.3924L10.5 18.1646C10.2037 18.3896 9.79634 18.3896 9.50001 18.1646L7.16668 16.3924C6.87038 16.1673 6.46298 16.1673 6.16668 16.3924L4.66668 17.5317C4.11731 17.9489 3.33334 17.5519 3.33334 16.8565V3.35442Z" />
                 </svg>
               </span>
               <span class="text">Orçamentos</span>
             </a>
           </li>
+
           <!-- Personalize com submenu -->
           <li class="nav-item nav-item-has-children">
             <a href="#0" data-bs-toggle="collapse" data-bs-target="#ddmenu_3" aria-controls="ddmenu_3"
@@ -125,8 +149,10 @@ export function initAirlandPage() {
               <span class="icon">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
                   xmlns="http://www.w3.org/2000/svg">
-                  <path d="M4.16666 4.16675C4.16666 2.78604 6.77833 1.66675 9.99999 1.66675C13.2217 1.66675 15.8333 2.78604 15.8333 4.16675V4.57073C15.8027 4.60316 15.7678 4.637 15.7282 4.6722C15.4683 4.90251 15.0568 5.13848 14.4946 5.34931C13.3747 5.76924 11.7858 6.04175 9.99999 6.04175C8.21415 6.04175 6.62521 5.76924 5.5054 5.34931C4.94318 5.13848 4.53162 4.90251 4.27185 4.6722C4.23215 4.637 4.19726 4.60316 4.16666 4.57073V4.16675Z" />
-                  <path d="M4.16666 6.10992V8.73742C4.19726 8.76983 4.23215 8.80367 4.27185 8.83883C4.53162 9.06917 4.94318 9.30517 5.5054 9.516C6.62521 9.93592 8.21415 10.2084 9.99999 10.2084C11.7858 10.2084 13.3747 9.93592 14.4946 9.516C15.0568 9.30517 15.4683 9.06917 15.7282 8.83883C15.7678 8.80367 15.8027 8.76983 15.8333 8.73742V6.10992C15.5592 6.26222 15.2563 6.39865 14.9335 6.51972C13.6404 7.00462 11.8961 7.29175 9.99999 7.29175C8.10394 7.29175 6.35954 7.00462 5.06649 6.51972C4.74364 6.39865 4.44074 6.26222 4.16666 6.10992Z" />
+                  <path
+                    d="M4.16666 4.16675C4.16666 2.78604 6.77833 1.66675 9.99999 1.66675C13.2217 1.66675 15.8333 2.78604 15.8333 4.16675V4.57073C15.8027 4.60316 15.7678 4.637 15.7282 4.6722C15.4683 4.90251 15.0568 5.13848 14.4946 5.34931C13.3747 5.76924 11.7858 6.04175 9.99999 6.04175C8.21415 6.04175 6.62521 5.76924 5.5054 5.34931C4.94318 5.13848 4.53162 4.90251 4.27185 4.6722C4.23215 4.637 4.19726 4.60316 4.16666 4.57073V4.16675Z" />
+                  <path
+                    d="M4.16666 6.10992V8.73742C4.19726 8.76983 4.23215 8.80367 4.27185 8.83883C4.53162 9.06917 4.94318 9.30517 5.5054 9.516C6.62521 9.93592 8.21415 10.2084 9.99999 10.2084C11.7858 10.2084 13.3747 9.93592 14.4946 9.516C15.0568 9.30517 15.4683 9.06917 15.7282 8.83883C15.7678 8.80367 15.8027 8.76983 15.8333 8.73742V6.10992C15.5592 6.26222 15.2563 6.39865 14.9335 6.51972C13.6404 7.00462 11.8961 7.29175 9.99999 7.29175C8.10394 7.29175 6.35954 7.00462 5.06649 6.51972C4.74364 6.39865 4.44074 6.26222 4.16666 6.10992Z" />
                 </svg>
               </span>
               <span class="text">Personalize</span>
@@ -154,6 +180,7 @@ export function initAirlandPage() {
               </li>
             </ul>
           </li>
+
           <!-- Usuários com submenu -->
           <li class="nav-item nav-item-has-children">
             <a href="#0" data-bs-toggle="collapse" data-bs-target="#ddmenu_usuarios" aria-controls="ddmenu_usuarios"
@@ -161,8 +188,10 @@ export function initAirlandPage() {
               <span class="icon">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
                   xmlns="http://www.w3.org/2000/svg">
-                  <path d="M14.9211 10.1294C15.1652 9.88534 15.1652 9.48967 14.9211 9.24559L10.7544 5.0789C10.5103 4.83482 10.1147 4.83482 9.87057 5.0789C9.62649 5.32297 9.62649 5.71871 9.87057 5.96278L12.9702 9.06251H1.97916C1.63398 9.06251 1.35416 9.34234 1.35416 9.68751C1.35416 10.0327 1.63398 10.3125 1.97916 10.3125H12.9702L9.87057 13.4123C9.62649 13.6563 9.62649 14.052 9.87057 14.2961C10.1147 14.5402 10.5103 14.5402 10.7544 14.2961L14.9211 10.1294Z" />
-                  <path d="M11.6383 15.18L15.805 11.0133C16.5373 10.2811 16.5373 9.09391 15.805 8.36166L11.6383 4.195C11.2722 3.82888 10.7923 3.64582 10.3125 3.64582V3.02082C10.3125 2.10035 11.0587 1.35416 11.9792 1.35416H16.9792C17.8997 1.35416 18.6458 2.10035 18.6458 3.02082V16.3542C18.6458 17.2747 17.8997 18.0208 16.9792 18.0208H11.9792C11.0587 18.0208 10.3125 17.2747 10.3125 16.3542V15.7292C10.7923 15.7292 11.2722 15.5461 11.6383 15.18Z" />
+                  <path
+                    d="M14.9211 10.1294C15.1652 9.88534 15.1652 9.48967 14.9211 9.24559L10.7544 5.0789C10.5103 4.83482 10.1147 4.83482 9.87057 5.0789C9.62649 5.32297 9.62649 5.71871 9.87057 5.96278L12.9702 9.06251H1.97916C1.63398 9.06251 1.35416 9.34234 1.35416 9.68751C1.35416 10.0327 1.63398 10.3125 1.97916 10.3125H12.9702L9.87057 13.4123C9.62649 13.6563 9.62649 14.052 9.87057 14.2961C10.1147 14.5402 10.5103 14.5402 10.7544 14.2961L14.9211 10.1294Z" />
+                  <path
+                    d="M11.6383 15.18L15.805 11.0133C16.5373 10.2811 16.5373 9.09391 15.805 8.36166L11.6383 4.195C11.2722 3.82888 10.7923 3.64582 10.3125 3.64582V3.02082C10.3125 2.10035 11.0587 1.35416 11.9792 1.35416H16.9792C17.8997 1.35416 18.6458 2.10035 18.6458 3.02082V16.3542C18.6458 17.2747 17.8997 18.0208 16.9792 18.0208H11.9792C11.0587 18.0208 10.3125 17.2747 10.3125 16.3542V15.7292C10.7923 15.7292 11.2722 15.5461 11.6383 15.18Z" />
                 </svg>
               </span>
               <span class="text">Usuários</span>
@@ -188,10 +217,15 @@ export function initAirlandPage() {
         </div>
         <h3 id="promoName">(AQUI TEM QUE PUXAR O NOME DA PESSOA)</h3>
         <p>Improve your development process and start doing more with Airland PRO!</p>
+        <a href="https://Airland.com/pro" target="_blank" rel="nofollow" class="main-btn primary-btn btn-hover">
+          Upgrade to PRO
+        </a>
       </div>
     </aside>
     <div class="overlay"></div>
-    <!-- Main Wrapper -->
+    <!-- ======== sidebar-nav end =========== -->
+
+    <!-- ======== main-wrapper start =========== -->
     <main class="main-wrapper">
       <header class="header">
         <div class="container-fluid">
@@ -260,11 +294,11 @@ export function initAirlandPage() {
                     <div class="profile-info">
                       <div class="info">
                         <div class="image">
-                          <img id="profilePic" src="assets/images/profile/profile-image.png" alt="Profile"/>
+                          <img id="profilePic" src="assets/images/profile/profile-image.png" alt=""/>
                         </div>
                         <div>
-                          <h6 id="userName" class="fw-500">(AQUI TEM QUE PUXAR O NOME DO CARA)</h6>
-                          <p id="agencyName">(AQUI TEM QUE COLOCAR O NOME DA AGENCIA)</p>
+                          <h6 id="userName" class="fw-500">Adam Joe</h6>
+                          <p id="agencyName">Admin</p>
                         </div>
                       </div>
                     </div>
@@ -273,12 +307,12 @@ export function initAirlandPage() {
                     <li>
                       <div class="author-info flex items-center !p-1">
                         <div class="image">
-                          <img id="profilePicDropdown" src="assets/images/profile/profile-image.png" alt="Profile">
+                          <img id="profilePicDropdown" src="assets/images/profile/profile-image.png" alt="image">
                         </div>
                         <div class="content">
-                          <h4 id="userNameDropdown" class="text-sm">(AQUI TEM QUE PUXAR O NOME DO CARA)</h4>
+                          <h4 id="userNameDropdown" class="text-sm">Adam Joe</h4>
                           <a id="userEmail" class="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white text-xs"
-                            href="#">(AQUI TEM QUE COLOCAR O EMAIL DO USUARIO)</a>
+                            href="#">Email@gmail.com</a>
                         </div>
                       </div>
                     </li>
@@ -297,7 +331,9 @@ export function initAirlandPage() {
         </div>
       </div>
     </header>
-    <!-- Footer -->
+    <!-- ========== header end ========== -->
+
+    <!-- ========== footer start =========== -->
     <footer class="footer">
       <div class="container-fluid">
         <div class="row">
@@ -312,7 +348,11 @@ export function initAirlandPage() {
         </div>
       </div>
     </footer>
-    <!-- Theme Option -->
+    <!-- ========== footer end =========== -->
+    
+    <!-- ======== main-wrapper end =========== -->
+
+    <!-- ============ Theme Option Start ============= -->
     <button class="option-btn">
       <i class="lni lni-cog"></i>
     </button>
@@ -346,46 +386,66 @@ export function initAirlandPage() {
         <p>Improve your development process and start doing more with Airland PRO!</p>
       </div>
     </div>
-    <!-- End Theme Option -->
+    <!-- ============ Theme Option End ============= -->
   `;
-  document.body.appendChild(container);
+  
+  // Substitui o conteúdo atual do <body> pelo layout definido
+  document.body.innerHTML = htmlContent;
+
+  // Carrega dinamicamente os scripts externos
+  const scriptSrcList = [
+    "assets/js/bootstrap.bundle.min.js",
+    "assets/js/Chart.min.js",
+    "assets/js/apexcharts.min.js",
+    "assets/js/dynamic-pie-chart.js",
+    "assets/js/moment.min.js",
+    "assets/js/fullcalendar.js",
+    "assets/js/jvectormap.min.js",
+    "assets/js/world-merc.js",
+    "assets/js/polyfill.js",
+    "assets/js/quill.min.js",
+    "assets/js/datatable.js",
+    "assets/js/Sortable.min.js",
+    "assets/js/main.js"
+  ];
+  scriptSrcList.forEach(src => {
+    const script = document.createElement("script");
+    script.src = src;
+    document.body.appendChild(script);
+  });
 
   // Configura os botões de alternância de tema
   const darkThemeButton = document.querySelector(".darkThemeButton");
   const lightThemeButton = document.querySelector(".lightThemeButton");
   if (darkThemeButton && lightThemeButton) {
-    darkThemeButton.addEventListener("click", function () {
+    darkThemeButton.addEventListener("click", () => {
       document.body.classList.add("dark-theme");
     });
-    lightThemeButton.addEventListener("click", function () {
+    lightThemeButton.addEventListener("click", () => {
       document.body.classList.remove("dark-theme");
     });
   }
 
-  // Realiza a requisição para obter os dados do usuário e atualiza os elementos
+  // Requisição para buscar os dados do usuário e atualizar os placeholders
   fetch("https://airland.com.br/affiliatesacess/login_api.php/check")
     .then(response => response.json())
     .then(data => {
       if (data.logged_in && data.user_data) {
         const user = data.user_data;
         const fullName = user.primeiro_nome + " " + user.ultimo_nome;
-        // Atualiza os elementos com os dados retornados
         const profilePic = document.getElementById("profilePic");
         const profilePicDropdown = document.getElementById("profilePicDropdown");
         const userName = document.getElementById("userName");
         const userNameDropdown = document.getElementById("userNameDropdown");
         const userEmail = document.getElementById("userEmail");
         const promoName = document.getElementById("promoName");
-        // Se os elementos existirem, atualiza-os
         if (profilePic) profilePic.src = user.fotodeperfil;
         if (profilePicDropdown) profilePicDropdown.src = user.fotodeperfil;
         if (userName) userName.textContent = fullName;
         if (userNameDropdown) userNameDropdown.textContent = fullName;
         if (userEmail) userEmail.textContent = user.email;
         if (promoName) promoName.textContent = fullName;
-        // Se desejar atualizar o nome da agência, caso a API forneça essa informação
-        const agencyName = document.getElementById("agencyName");
-        if (agencyName) agencyName.textContent = "Agência Airland"; // exemplo fixo ou proveniente de outro endpoint
+        // Se necessário, atualize também o nome da agência ou outros dados
       }
     })
     .catch(error => {
