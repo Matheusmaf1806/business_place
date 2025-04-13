@@ -18,26 +18,26 @@
   <link rel="stylesheet" href="assets/css/main.css" />
   <style>
     /* Controle dos steps */
-    .step {
-      display: none;
-    }
-    .step.active {
-      display: block;
-    }
+    .step { display: none; }
+    .step.active { display: block; }
   </style>
 </head>
 <body>
-
-  <!-- Preloader (apenas 1) -->
+  <!-- ======== Preloader =========== -->
   <div id="preloader">
     <div class="spinner"></div>
   </div>
+  <!-- ======== Preloader =========== -->
 
-  <!-- Main Wrapper: Formulário de Cadastro -->
+  <!-- ========= Importação do Sidebar ========= -->
+  <?php include('/sidebar.html'); ?>
+
+  <!-- ======== main-wrapper start =========== -->
   <main class="main-wrapper">
+    <!-- ========== signin-section start ========== -->
     <section class="signin-section">
       <div class="container-fluid">
-        <!-- Título e Breadcrumb -->
+        <!-- ========== title-wrapper start ========== -->
         <div class="title-wrapper pt-30">
           <div class="row align-items-center">
             <div class="col-md-6">
@@ -45,23 +45,30 @@
                 <h2>Cadastro de Agências</h2>
               </div>
             </div>
+            <!-- end col -->
             <div class="col-md-6">
               <div class="breadcrumb-wrapper">
                 <nav aria-label="breadcrumb">
                   <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#0">Dashboard</a></li>
+                    <li class="breadcrumb-item">
+                      <a href="#0">Dashboard</a>
+                    </li>
                     <li class="breadcrumb-item"><a href="#0">Auth</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Cadastro de Agências</li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                      Cadastro de Agências
+                    </li>
                   </ol>
                 </nav>
               </div>
             </div>
+            <!-- end col -->
           </div>
+          <!-- end row -->
         </div>
-        <!-- Fim título e Breadcrumb -->
+        <!-- ========== title-wrapper end ========== -->
 
         <div class="row g-0 auth-row">
-          <!-- Coluna Esquerda: Imagem Ilustrativa -->
+          <!-- Coluna esquerda com imagem ilustrativa -->
           <div class="col-lg-6">
             <div class="auth-cover-wrapper bg-primary-100">
               <div class="auth-cover">
@@ -80,19 +87,21 @@
               </div>
             </div>
           </div>
-          <!-- Fim Coluna Esquerda -->
+          <!-- end col -->
 
-          <!-- Coluna Direita: Formulários -->
+          <!-- Coluna direita com os formulários de cadastro -->
           <div class="col-lg-6">
             <div class="signup-wrapper">
               <div class="form-wrapper">
                 <!-- STEP 1: Dados do Usuário -->
                 <div id="step1" class="step active">
                   <h6 class="mb-15">Dados do Usuário</h6>
-                  <p class="text-sm mb-25">Preencha os dados abaixo para criar sua conta.</p>
+                  <p class="text-sm mb-25">
+                    Preencha os dados abaixo para criar sua conta.
+                  </p>
                   <form id="userForm">
                     <div class="row">
-                      <!-- Primeiro Nome e Último Nome -->
+                      <!-- Linha 1: Primeiro Nome e Último Nome -->
                       <div class="col-md-6">
                         <div class="input-style-1">
                           <label>Primeiro Nome *</label>
@@ -105,7 +114,7 @@
                           <input type="text" name="ultimo_nome" placeholder="Último Nome" required />
                         </div>
                       </div>
-                      <!-- Telefone e Email -->
+                      <!-- Linha 2: Telefone e Email -->
                       <div class="col-md-6">
                         <div class="input-style-1">
                           <label>Telefone *</label>
@@ -118,14 +127,14 @@
                           <input type="email" name="email" placeholder="Email" required />
                         </div>
                       </div>
-                      <!-- Foto de Perfil -->
+                      <!-- Linha 3: Foto de Perfil -->
                       <div class="col-12">
                         <div class="input-style-1">
                           <label>Foto de Perfil</label>
                           <input type="file" name="fotodeperfil" accept="image/*" />
                         </div>
                       </div>
-                      <!-- Senha e Repetir Senha -->
+                      <!-- Linha 4: Senha e Repetir Senha -->
                       <div class="col-md-6">
                         <div class="input-style-1">
                           <label>Senha *</label>
@@ -138,10 +147,10 @@
                           <input type="password" id="confirm_password" name="confirm_password" placeholder="Repetir Senha" required />
                         </div>
                       </div>
-                      <!-- Campos Hidden -->
+                      <!-- Campos hidden (preenchidos via JS) -->
                       <input type="hidden" name="affiliate_id" id="affiliate_id" />
                       <input type="hidden" name="name" id="name" />
-                      <!-- Botão Próximo -->
+                      <!-- Botão para avançar para o Step 2 -->
                       <div class="col-12">
                         <div class="button-group d-flex justify-content-center flex-wrap">
                           <button type="button" class="main-btn primary-btn btn-hover w-100 text-center" onclick="goToStep2()">
@@ -152,22 +161,24 @@
                     </div>
                   </form>
                 </div>
-                <!-- Fim do STEP 1 -->
+                <!-- FIM do STEP 1 -->
 
                 <!-- STEP 2: Dados da Agência -->
                 <div id="step2" class="step">
                   <h6 class="mb-15">Dados da Agência</h6>
-                  <p class="text-sm mb-25">Preencha os dados da sua agência.</p>
+                  <p class="text-sm mb-25">
+                    Preencha os dados da sua agência.
+                  </p>
                   <form id="affiliateForm">
                     <div class="row">
-                      <!-- Nome da Agência -->
+                      <!-- Linha 1: Nome da Agência (full width) -->
                       <div class="col-12">
                         <div class="input-style-1">
                           <label>Nome da Agência *</label>
                           <input type="text" name="agency_name" placeholder="Nome da Agência" required />
                         </div>
                       </div>
-                      <!-- Domínio Próprio -->
+                      <!-- Linha 2: Pergunta sobre domínio próprio -->
                       <div class="col-12">
                         <div class="input-style-1">
                           <label>Você tem domínio próprio? *</label>
@@ -183,28 +194,27 @@
                           </div>
                         </div>
                       </div>
-                      <!-- Campo para Domínio (quando sim) -->
-                      <div class="col-12" id="domainField" style="display: none;">
+                      <!-- Linha 3: Campo para domínio ou subdomínio -->
+                      <div class="col-12" id="domainField" style="display:none;">
                         <div class="input-style-1">
                           <label>Domínio *</label>
                           <input type="text" name="domain" placeholder="seuagencia.com" />
                         </div>
                       </div>
-                      <!-- Campo para Subdomínio (quando não) -->
-                      <div class="col-12" id="subdomainField" style="display: none;">
+                      <div class="col-12" id="subdomainField" style="display:none;">
                         <div class="input-style-1">
                           <label>Subdomínio *</label>
                           <input type="text" name="subdomain" placeholder="airland.com.br" value="airland.com.br" readonly />
                         </div>
                       </div>
-                      <!-- Logo URL -->
+                      <!-- Linha 4: Logo URL -->
                       <div class="col-12">
                         <div class="input-style-1">
                           <label>Logo URL *</label>
                           <input type="text" name="logo_url" placeholder="URL da Logo" required />
                         </div>
                       </div>
-                      <!-- Cores: Primary e Background -->
+                      <!-- Linha 5: Cores - Cor Principal e Cor Secundária -->
                       <div class="col-md-6">
                         <div class="input-style-1">
                           <label>Cor Principal</label>
@@ -217,7 +227,7 @@
                           <input type="text" name="background_color" placeholder="Ex: #FFFFFF" />
                         </div>
                       </div>
-                      <!-- Cores: Button e Button Text -->
+                      <!-- Linha 6: Cores - Cor do Botão e Cor do Texto do Botão -->
                       <div class="col-md-6">
                         <div class="input-style-1">
                           <label>Cor do Botão</label>
@@ -230,14 +240,14 @@
                           <input type="text" name="button_text_color" placeholder="Ex: #FFFFFF" />
                         </div>
                       </div>
-                      <!-- Cor do Botão ao Clicar -->
+                      <!-- Linha 7: Cor do Botão ao Clicar (full width) -->
                       <div class="col-12">
                         <div class="input-style-1">
                           <label>Cor do Botão ao Clicar</label>
                           <input type="text" name="button_hover" placeholder="Ex: #CCCCCC" />
                         </div>
                       </div>
-                      <!-- Botão Enviar -->
+                      <!-- Botão para envio -->
                       <div class="col-12">
                         <div class="button-group d-flex justify-content-center flex-wrap">
                           <button type="button" class="main-btn primary-btn btn-hover w-100 text-center" onclick="submitForms()">
@@ -248,10 +258,12 @@
                     </div>
                   </form>
                 </div>
-                <!-- Fim do STEP 2 -->
+                <!-- FIM do STEP 2 -->
 
                 <div class="singup-option pt-40">
-                  <p class="text-sm text-medium text-center text-gray">Fácil cadastro com:</p>
+                  <p class="text-sm text-medium text-center text-gray">
+                    Fácil cadastro com:
+                  </p>
                   <div class="button-group pt-40 pb-40 d-flex justify-content-center flex-wrap">
                     <button class="main-btn primary-btn-outline m-2">
                       <i class="lni lni-facebook-fill mr-10"></i>
@@ -269,13 +281,16 @@
               </div>
             </div>
           </div>
-          <!-- Fim Coluna Direita -->
+          <!-- end col -->
         </div>
+        <!-- end row -->
       </div>
     </section>
+    <!-- ========== signin-section end ========== -->
   </main>
+  <!-- ======== main-wrapper end =========== -->
 
-  <!-- ========= All Javascript files linkup ========= -->
+  <!-- ========= All Javascript files linkup ======== -->
   <script src="assets/js/bootstrap.bundle.min.js"></script>
   <script src="assets/js/Chart.min.js"></script>
   <script src="assets/js/apexcharts.min.js"></script>
@@ -288,115 +303,109 @@
   <script src="assets/js/quill.min.js"></script>
   <script src="assets/js/datatable.js"></script>
   <script src="assets/js/Sortable.min.js"></script>
-
-  <!-- Importa o módulo da sidebar e inicializa a sidebar -->
-  <script type="module">
-    import { initAirlandPage } from './assets/js/sidebar.js';
-    initAirlandPage();
-  </script>
-
-  <!-- Importa main.js DEPOIS de inserir a sidebar -->
-  <script src="./assets/js/main.js"></script>
-
-  <!-- Scripts Inline para os formulários -->
+  <script src="assets/js/main.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      // Passo 1 -> Passo 2 (valida senhas)
-      window.goToStep2 = function () {
-        var password = document.getElementById('password').value;
-        var confirmPassword = document.getElementById('confirm_password').value;
-        if (password !== confirmPassword) {
-          alert('As senhas não coincidem!');
+    // Transição do Step 1 para o Step 2 com verificação de senha
+    function goToStep2() {
+      var password = document.getElementById('password').value;
+      var confirmPassword = document.getElementById('confirm_password').value;
+      if (password !== confirmPassword) {
+        alert('As senhas não coincidem!');
+        return;
+      }
+      document.getElementById('step1').classList.remove('active');
+      document.getElementById('step2').classList.add('active');
+    }
+
+    // Exibe ou esconde os campos de domínio de acordo com a resposta
+    function toggleDomainFields() {
+      var hasDomain = document.querySelector('input[name="has_domain"]:checked').value;
+      if (hasDomain === 'sim') {
+        document.getElementById('domainField').style.display = 'block';
+        document.getElementById('subdomainField').style.display = 'none';
+        document.querySelector('input[name="domain"]').required = true;
+        document.querySelector('input[name="subdomain"]').required = false;
+      } else if (hasDomain === 'nao') {
+        document.getElementById('domainField').style.display = 'none';
+        document.getElementById('subdomainField').style.display = 'block';
+        document.querySelector('input[name="subdomain"]').required = true;
+        document.querySelector('input[name="domain"]').required = false;
+      }
+    }
+
+    // Simulação de envio dos dados dos dois steps
+    function submitForms() {
+      // Validação dos campos obrigatórios do formulário da Agência (Step 2)
+      var agencyName = document.querySelector('input[name="agency_name"]').value;
+      var logoUrl = document.querySelector('input[name="logo_url"]').value;
+      if (!agencyName || !logoUrl) {
+        alert('Por favor, preencha todos os campos obrigatórios da Agência.');
+        return;
+      }
+
+      var hasDomainElem = document.querySelector('input[name="has_domain"]:checked');
+      if (!hasDomainElem) {
+        alert('Por favor, responda se possui domínio próprio.');
+        return;
+      }
+      var hasDomain = hasDomainElem.value;
+      if (hasDomain === 'sim') {
+        var domain = document.querySelector('input[name="domain"]').value;
+        if (!domain) {
+          alert('Por favor, informe o domínio.');
           return;
         }
-        document.getElementById('step1').classList.remove('active');
-        document.getElementById('step2').classList.add('active');
-      };
-
-      // Exibe/esconde campos de domínio ou subdomínio
-      window.toggleDomainFields = function () {
-        var hasDomain = document.querySelector('input[name="has_domain"]:checked').value;
-        if (hasDomain === 'sim') {
-          document.getElementById('domainField').style.display = 'block';
-          document.getElementById('subdomainField').style.display = 'none';
-          document.querySelector('input[name="domain"]').required = true;
-          document.querySelector('input[name="subdomain"]').required = false;
-        } else {
-          document.getElementById('domainField').style.display = 'none';
-          document.getElementById('subdomainField').style.display = 'block';
-          document.querySelector('input[name="subdomain"]').required = true;
-          document.querySelector('input[name="domain"]').required = false;
-        }
-      };
-
-      // Simula o envio do Step 2 (afiliates) e depois Step 1 (users)
-      window.submitForms = function () {
-        var agencyName = document.querySelector('input[name="agency_name"]').value;
-        var logoUrl = document.querySelector('input[name="logo_url"]').value;
-        if (!agencyName || !logoUrl) {
-          alert('Por favor, preencha todos os campos obrigatórios da Agência.');
+      } else if (hasDomain === 'nao') {
+        var subdomain = document.querySelector('input[name="subdomain"]').value;
+        if (!subdomain) {
+          alert('Por favor, confirme o subdomínio.');
           return;
         }
-        var hasDomainElem = document.querySelector('input[name="has_domain"]:checked');
-        if (!hasDomainElem) {
-          alert('Por favor, responda se possui domínio próprio.');
-          return;
-        }
-        var hasDomain = hasDomainElem.value;
-        if (hasDomain === 'sim') {
-          var domain = document.querySelector('input[name="domain"]').value;
-          if (!domain) {
-            alert('Por favor, informe o domínio.');
-            return;
-          }
-        } else {
-          var subdomain = document.querySelector('input[name="subdomain"]').value;
-          if (!subdomain) {
-            alert('Por favor, confirme o subdomínio.');
-            return;
-          }
-        }
+      }
 
-        // Exemplo: "Envia" step 2 e retorna um affiliateId
-        var affiliateId = 'AFF' + Math.floor(Math.random() * 100000);
-        document.getElementById('affiliate_id').value = affiliateId;
+      // Simula o envio dos dados da Agência para obter o affiliate_id gerado
+      var affiliateId = 'AFF' + Math.floor(Math.random() * 100000);
+      document.getElementById('affiliate_id').value = affiliateId;
 
-        // Concatena primeiro e último nome
-        var primeiroNome = document.querySelector('input[name="primeiro_nome"]').value;
-        var ultimoNome = document.querySelector('input[name="ultimo_nome"]').value;
-        document.getElementById('name').value = primeiroNome + ' ' + ultimoNome;
+      // Concatena primeiro e último nome para o campo name do usuário
+      var primeiroNome = document.querySelector('input[name="primeiro_nome"]').value;
+      var ultimoNome = document.querySelector('input[name="ultimo_nome"]').value;
+      document.getElementById('name').value = primeiroNome + ' ' + ultimoNome;
 
-        // Dados da Agência
-        var affiliateData = {
-          agency_name: agencyName,
-          has_domain: hasDomain,
-          domain: hasDomain === 'sim' ? document.querySelector('input[name="domain"]').value : '',
-          subdomain: hasDomain === 'nao' ? document.querySelector('input[name="subdomain"]').value : '',
-          logo_url: logoUrl,
-          primary_color: document.querySelector('input[name="primary_color"]').value,
-          background_color: document.querySelector('input[name="background_color"]').value,
-          button_color: document.querySelector('input[name="button_color"]').value,
-          button_text_color: document.querySelector('input[name="button_text_color"]').value,
-          button_hover: document.querySelector('input[name="button_hover"]').value
-        };
-        console.log('Dados da Agência (Step 2):', affiliateData);
-
-        // Dados do Usuário
-        var userData = {
-          primeiro_nome: primeiroNome,
-          ultimo_nome: ultimoNome,
-          telefone: document.querySelector('input[name="telefone"]').value,
-          email: document.querySelector('input[name="email"]').value,
-          fotodeperfil: document.querySelector('input[name="fotodeperfil"]').files[0],
-          password: document.getElementById('password').value,
-          affiliate_id: affiliateId,
-          name: document.getElementById('name').value
-        };
-        console.log('Dados do Usuário (Step 1):', userData);
-
-        alert('Formulário enviado com sucesso! Affiliate ID gerado: ' + affiliateId);
+      // Coleta dos dados do formulário da Agência (Step 2)
+      var affiliateData = {
+        agency_name: agencyName,
+        has_domain: hasDomain,
+        domain: hasDomain === 'sim' ? document.querySelector('input[name="domain"]').value : '',
+        subdomain: hasDomain === 'nao' ? document.querySelector('input[name="subdomain"]').value : '',
+        logo_url: logoUrl,
+        primary_color: document.querySelector('input[name="primary_color"]').value,
+        background_color: document.querySelector('input[name="background_color"]').value,
+        button_color: document.querySelector('input[name="button_color"]').value,
+        button_text_color: document.querySelector('input[name="button_text_color"]').value,
+        button_hover: document.querySelector('input[name="button_hover"]').value
       };
-    });
+      console.log('Dados da Agência (Step 2):', affiliateData);
+
+      // Coleta dos dados do formulário do Usuário (Step 1)
+      var userData = {
+        primeiro_nome: primeiroNome,
+        ultimo_nome: ultimoNome,
+        telefone: document.querySelector('input[name="telefone"]').value,
+        email: document.querySelector('input[name="email"]').value,
+        fotodeperfil: document.querySelector('input[name="fotodeperfil"]').files[0],
+        password: document.getElementById('password').value,
+        affiliate_id: affiliateId,
+        name: document.getElementById('name').value
+      };
+      console.log('Dados do Usuário (Step 1):', userData);
+
+      // Aqui você deve implementar o envio via AJAX ou outra lógica, obedecendo a ordem:
+      // 1. Enviar primeiro os dados do Step 2 (affiliates) para obter o ID.
+      // 2. Em seguida, enviar os dados do Step 1 (users) com o affiliate_id capturado.
+
+      alert('Formulário enviado com sucesso! Affiliate ID gerado: ' + affiliateId);
+    }
   </script>
 </body>
 </html>
