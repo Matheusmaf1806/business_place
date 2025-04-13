@@ -291,8 +291,11 @@
   <script src="assets/js/quill.min.js"></script>
   <script src="assets/js/datatable.js"></script>
   <script src="assets/js/Sortable.min.js"></script>
-  <!-- Importa sidebar.js como módulo -->
-  <script type="module" src="assets/js/sidebar.js"></script>
+  <!-- Importa sidebar.js como módulo e chama a função para carregar a sidebar -->
+  <script type="module">
+    import { initAirlandPage } from 'assets/js/sidebar.js';
+    initAirlandPage();
+  </script>
   <!-- Importa main.js -->
   <script src="assets/js/main.js"></script>
 
