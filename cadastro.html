@@ -659,15 +659,15 @@
     }
 
     const affiliateData = {
-      id: affiliateId, // use o nome correto da coluna, se for "id"
-      agency_name: agencyName,
+      id: affiliateId,  // Se você utiliza um id customizado; caso contrário, remova e deixe o banco gerar
+      slug: agencyName, // Preenche a coluna slug
+      name: agencyName, // Preenche a coluna name
       has_domain: hasDomain,
-      domain: (hasDomain === "sim")
-        ? document.querySelector('input[name="domain"]').value.trim()
-        : "",
-      subdomain: (hasDomain === "nao")
-        ? document.getElementById("subdomainInput").value.trim() + ".airland.com.br"
-        : "",
+      domain: hasDomain === "sim" ? document.querySelector('input[name="domain"]').value.trim() : "",
+      subdomain:
+        hasDomain === "nao"
+          ? document.getElementById("subdomainInput").value.trim() + ".airland.com.br"
+          : "",
       logo_url: logoURL,
       primary_color: document.querySelector('input[name="primary_color"]').value.trim(),
       background_color: document.querySelector('input[name="background_color"]').value.trim(),
