@@ -524,12 +524,12 @@
       }
 
       // Função para upload de arquivo para o Supabase Storage.
-      // Parâmetros:
-      //   bucketName: Nome do bucket (ex: 'logos' ou 'profile-images')
-      //   file: o objeto File selecionado
-      //   filePath: caminho/destino relativo (ex: 'Agencia_nome.png')
+      // bucketName: Nome do bucket (ex: 'logos' ou 'profile-images')
+      // file: Objeto File selecionado
+      // filePath: Caminho/destino relativo (ex: 'Agencia_nome.png')
       async function uploadFileToStorage(bucketName, file, filePath) {
         try {
+          // Realiza o upload do arquivo
           let { data, error } = await supabaseClient.storage
             .from(bucketName)
             .upload(filePath, file);
@@ -539,21 +539,22 @@
             throw error;
           }
 
-          const { publicURL, error: urlError } = supabaseClient.storage
-            .from(bucketName)
-            .getPublicUrl(data.path);
+          // Recupera a URL pública do arquivo — OBS: utilize "publicUrl" (camelCase)
+          const { publicUrl, error: urlError } =
+            supabaseClient.storage.from(bucketName).getPublicUrl(data.path);
 
           if (urlError) {
             throw urlError;
           }
-          return publicURL;
+
+          return publicUrl;
         } catch (err) {
           console.error("Upload falhou:", err);
           throw err;
         }
       }
 
-      // Função para transitar do STEP 1 para o STEP 2 (validação das senhas)
+      // Transita do STEP 1 para o STEP 2 (valida as senhas)
       function goToStep2() {
         const password = document.getElementById("password").value;
         const confirmPassword = document.getElementById("confirm_password").value;
@@ -566,7 +567,7 @@
         document.getElementById("step2").classList.add("active");
       }
 
-      // Função para exibir/ocultar os campos de Domínio/Subdomínio
+      // Exibe ou oculta os campos de Domínio/Subdomínio
       function toggleDomainFields() {
         const hasDomain = document.querySelector('input[name="has_domain"]:checked').value;
         if (hasDomain === "sim") {
@@ -582,7 +583,7 @@
         }
       }
 
-      // Função para atualizar a pré-visualização do subdomínio
+      // Atualiza a pré-visualização do subdomínio
       function updateSubdomainPreview() {
         const typedSubdomain = document.getElementById("subdomainInput").value.trim();
         const preview = document.getElementById("subdomainPreview");
@@ -594,7 +595,7 @@
       }
 
       // Função principal para enviar os formulários e inserir dados no Supabase.
-      // Executa:
+      // Processa:
       //  - Validação dos campos obrigatórios
       //  - Upload dos arquivos (Logo e Foto de Perfil) para o Storage
       //  - Inserção dos dados nas tabelas "affiliates" e "users"
@@ -695,7 +696,7 @@
           ultimo_nome: ultimoNome,
           telefone: telefone,
           email: email,
-          fotodeperfil: profileURL, // Atenção: use o nome exato definido no banco ("fotodeperfil")
+          fotodeperfil: profileURL, // Atenção: campo "fotodeperfil" conforme definido na tabela
           password: document.getElementById("password").value,
           affiliate_id: affiliateId,
           name: document.getElementById("name").value
@@ -705,7 +706,7 @@
         console.log("Dados do Usuário:", userData);
 
         try {
-          // Inserção direta na tabela "users" (certifique-se de que as políticas RLS permitam esta operação)
+          // Inserção direta na tabela "users" – certifique-se de que as políticas RLS permitam esta operação
           let { data: userInsert, error: userError } = await supabaseClient
             .from("users")
             .insert(userData)
@@ -716,6 +717,7 @@
             console.error(userError);
             return;
           }
+
           console.log("Registro inserido em users:", userInsert);
           alert("Loja criada com sucesso! Agência: " + agencyName);
           clearForms();
