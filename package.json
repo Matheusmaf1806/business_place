@@ -41,5 +41,5 @@
     "crypto": "0.0.3",
     "dayjs": "^1.11.9",
     "malga": "latest"
-  },
+  }
 }
