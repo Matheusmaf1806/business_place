@@ -518,105 +518,75 @@
        <script type="module">
         import supabaseClient from "./supabaseClient.js";
       
-        // Função para sanitizar nomes de arquivos (opcional, mas recomendado)
+        // Função para sanitizar nomes de arquivos (remover espaços e caracteres inválidos)
         function sanitizeFileName(fileName) {
           return fileName.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_.-]/g, '');
         }
       
+        // Função para separar o nome base e a extensão do arquivo.
+        function getFileNameParts(fileName) {
+          const dotIndex = fileName.lastIndexOf('.');
+          if (dotIndex === -1) {
+            return { base: fileName, ext: "" };
+          } else {
+            return { base: fileName.substring(0, dotIndex), ext: fileName.substring(dotIndex) };
+          }
+        }
+      
         /***********************************************************************
-         * Função para upload de arquivo para o Supabase Storage.
-         * bucketName: Nome do bucket (ex: 'logos', 'profile-images')
-         * file: o objeto File selecionado
-         * filePath: caminho relativo de destino (ex: 'AFF123_nome.png')
+         * Função para fazer upload garantindo um nome de arquivo único.
+         * Tenta fazer o upload e, se der conflito (409), incrementa um sufixo no nome.
+         *
+         * Parâmetros:
+         *   bucketName: Nome do bucket (ex: 'logos', 'profile-images')
+         *   file: o objeto File selecionado
+         *   initialFilePath: o caminho inicial (ex: 'AFF123_nome.png')
+         *
+         * Retorna: A URL pública do arquivo.
          ***********************************************************************/
-        async function uploadFileToStorage(bucketName, file, filePath) {
-          try {
-            let { data, error } = await supabaseClient.storage
+        async function uploadFileToStorageUnique(bucketName, file, initialFilePath) {
+          let finalPath = initialFilePath;
+          let counter = 1;
+          // Obtenha as partes do nome do arquivo para modificar em caso de duplicata.
+          const parts = getFileNameParts(initialFilePath);
+          
+          while (true) {
+            // Tente fazer o upload sem upsert (para não sobrescrever)
+            const { data, error } = await supabaseClient.storage
               .from(bucketName)
-              .upload(filePath, file);
-            if (error) {
-              console.error("Erro no upload:", error);
+              .upload(finalPath, file, { upsert: false });
+            
+            if (!error) {
+              // Se o upload ocorreu com sucesso, obtenha e retorne a URL pública
+              const { publicURL, error: urlError } = supabaseClient.storage
+                .from(bucketName)
+                .getPublicUrl(data.path);
+              if (urlError) {
+                throw urlError;
+              }
+              return publicURL;
+            }
+            
+            // Se o erro for de duplicata (409), modifique o nome do arquivo.
+            if (error.statusCode === '409' || (error.message && error.message.includes("already exists"))) {
+              finalPath = `${parts.base}${counter}${parts.ext}`;
+              counter++;
+            } else {
+              // Se for outro tipo de erro, lança-o
               throw error;
             }
-            const { publicURL, error: urlError } =
-              supabaseClient.storage.from(bucketName).getPublicUrl(data.path);
-            if (urlError) {
-              throw urlError;
-            }
-            return publicURL;
-          } catch (err) {
-            console.error("Upload falhou:", err);
-            throw err;
           }
         }
       
-        /***********************************************************************
-         * Função para transitar do STEP 1 para o STEP 2 (valida senhas)
-         ***********************************************************************/
-        function goToStep2() {
-          const password = document.getElementById("password").value;
-          const confirmPassword = document.getElementById("confirm_password").value;
-          if (password !== confirmPassword) {
-            alert("As senhas não coincidem!");
-            return;
-          }
-          document.getElementById("step1").classList.remove("active");
-          document.getElementById("step2").classList.add("active");
-        }
-      
-        /***********************************************************************
-         * Função para exibir/ocultar os campos de Domínio/Subdomínio
-         ***********************************************************************/
-        function toggleDomainFields() {
-          const hasDomain = document.querySelector('input[name="has_domain"]:checked').value;
-          if (hasDomain === "sim") {
-            document.getElementById("domainField").style.display = "block";
-            document.getElementById("subdomainField").style.display = "none";
-            document.querySelector('input[name="domain"]').required = true;
-            document.querySelector('input[name="subdomain"]').required = false;
-          } else if (hasDomain === "nao") {
-            document.getElementById("domainField").style.display = "none";
-            document.getElementById("subdomainField").style.display = "block";
-            document.querySelector('input[name="subdomain"]').required = true;
-            document.querySelector('input[name="domain"]').required = false;
-          }
-        }
-      
-        /***********************************************************************
-         * Função para atualizar a pré-visualização do subdomínio.
-         ***********************************************************************/
-        function updateSubdomainPreview() {
-          const typedSubdomain = document.getElementById("subdomainInput").value.trim();
-          const preview = document.getElementById("subdomainPreview");
-          if (typedSubdomain) {
-            preview.textContent = "Sua loja ficará: " + typedSubdomain + ".airland.com.br";
-          } else {
-            preview.textContent = "";
-          }
-        }
-      
-        /***********************************************************************
-         * Função principal para enviar os formulários e inserir dados no Supabase.
-         * Realiza:
-         *  - Validação dos campos obrigatórios
-         *  - Upload dos arquivos (Logo e Foto de Perfil) para o Storage,
-         *    transformando-os em links públicos
-         *  - Inserção dos dados nas tabelas "affiliates" e "users"
-         *
-         * Usamos upsert na tabela "affiliates" com base no campo "slug",
-         * para evitar conflitos caso já exista uma agência com o mesmo slug.
-         ***********************************************************************/
-        // Função principal para enviar os formulários e inserir dados no Supabase.
+        // Essa função pode continuar com o mesmo nome (apenas substituímos a chamada de upload por uploadFileToStorageUnique)
         async function submitForms() {
           const agencyName = document.querySelector('input[name="agency_name"]').value.trim();
           const logoInput = document.querySelector('input[name="logo_url"]');
           const logoFile = logoInput.files[0];
-
           if (!agencyName || !logoFile) {
             alert('Por favor, preencha todos os campos obrigatórios da Agência (Nome e Logo).');
             return;
           }
-
           const hasDomainElem = document.querySelector('input[name="has_domain"]:checked');
           if (!hasDomainElem) {
             alert('Por favor, responda se possui domínio próprio.');
@@ -636,37 +606,30 @@
               return;
             }
           }
-
-          // Captura os dados do usuário
+      
           const primeiroNome = document.querySelector('input[name="primeiro_nome"]').value.trim();
           const ultimoNome = document.querySelector('input[name="ultimo_nome"]').value.trim();
-          const telefone = document.querySelector('input[name="telefone"]').value.trim();
-          const email = document.querySelector('input[name="email"]').value.trim();
           document.getElementById("name").value = primeiroNome + " " + ultimoNome;
-
+      
           let logoURL = "";
           let profileURL = "";
           try {
             const sanitizedLogoFileName = sanitizeFileName(logoFile.name);
             const logoPath = agencyName + "_" + sanitizedLogoFileName;
-            logoURL = await uploadFileToStorage("logos", logoFile, logoPath);
-            console.log("Logo URL:", logoURL);  // Debug
-
-            // Upload da foto de perfil, se houver
+            logoURL = await uploadFileToStorageUnique("logos", logoFile, logoPath);
+      
             const profileInput = document.querySelector('input[name="fotodeperfil"]');
             if (profileInput && profileInput.files.length > 0) {
               const profileFile = profileInput.files[0];
               const sanitizedProfileFileName = sanitizeFileName(profileFile.name);
               const profilePath = agencyName + "_" + sanitizedProfileFileName;
-              profileURL = await uploadFileToStorage("profile-images", profileFile, profilePath);
-              console.log("Profile URL:", profileURL);  // Debug
+              profileURL = await uploadFileToStorageUnique("profile-images", profileFile, profilePath);
             }
           } catch (uploadError) {
             alert("Erro no upload dos arquivos: " + uploadError.message);
             return;
           }
-
-          // Monta o objeto para a tabela "affiliates"
+      
           const affiliateData = {
             slug: agencyName,
             name: agencyName,
@@ -679,50 +642,53 @@
             button_text_color: document.querySelector('input[name="button_text_color"]').value.trim(),
             button_hover: document.querySelector('input[name="button_hover"]').value.trim()
           };
-
-          // Insere ou atualiza a agência na tabela "affiliates"
+      
+          // Aqui, após o upsert, obtemos o id gerado (assumindo que a tabela affiliates tenha um campo "id" como primary key)
           let affiliateInsertResult = await supabaseClient
             .from("affiliates")
             .insert(affiliateData, { upsert: true, onConflict: "slug" })
             .select();
-            
+          
           if (affiliateInsertResult.error) {
             alert("Erro ao cadastrar agência: " + affiliateInsertResult.error.message);
             console.error(affiliateInsertResult.error);
             return;
           }
+          
+          // Recebe o ID numérico da agência
           const affiliateId = affiliateInsertResult.data[0].id;
-
-          // Aqui utilizamos o método signUp do Supabase Auth para cadastrar o usuário
-          const password = document.getElementById("password").value;
-          const { data: authData, error: authError } = await supabaseClient.auth.signUp({
-            email: email,
-            password: password,
-            options: {
-              data: {
-                primeiro_nome: primeiroNome,
-                ultimo_nome: ultimoNome,
-                telefone: telefone,
-                fotodeperfil: profileURL,  // Link da foto de perfil
-                affiliate_id: affiliateId,
-                name: document.getElementById("name").value
-              }
+      
+          const userData = {
+            primeiro_nome: primeiroNome,
+            ultimo_nome: ultimoNome,
+            telefone: document.querySelector('input[name="telefone"]').value.trim(),
+            email: document.querySelector('input[name="email"]').value.trim(),
+            fotodeperfil: profileURL,
+            password: document.getElementById("password").value,
+            affiliate_id: affiliateId,
+            name: document.getElementById("name").value
+          };
+      
+          console.log("Dados da Agência:", affiliateData);
+          console.log("Dados do Usuário:", userData);
+      
+          try {
+            let { data: userInsert, error: userError } = await supabaseClient
+              .from("users")
+              .insert(userData);
+            if (userError) {
+              alert("Erro ao cadastrar usuário: " + userError.message);
+              console.error(userError);
+              return;
             }
-          });
-
-          if (authError) {
-            alert("Erro ao cadastrar usuário (auth): " + authError.message);
-            console.error(authError);
-            return;
+            alert("Loja criada com sucesso!");
+            clearForms();
+          } catch (err) {
+            console.error(err);
+            alert("Erro ao enviar o formulário. Verifique o console para mais detalhes.");
           }
-
-          alert("Loja criada com sucesso! Agência: " + agencyName);
-          clearForms();
         }
       
-        /***********************************************************************
-         * Função para limpar os formulários e retornar ao Step 1 (opcional)
-         ***********************************************************************/
         function clearForms() {
           document.getElementById("userForm").reset();
           document.getElementById("affiliateForm").reset();
@@ -731,9 +697,6 @@
           document.getElementById("step1").classList.add("active");
         }
       
-        /***********************************************************************
-         * Função para exibir/ocultar o spinner de carregamento (exemplo)
-         ***********************************************************************/
         function showSpinner(show) {
           const preloader = document.getElementById("preloader");
           preloader.style.display = show ? "block" : "none";
@@ -744,6 +707,6 @@
         window.toggleDomainFields = toggleDomainFields;
         window.updateSubdomainPreview = updateSubdomainPreview;
         window.submitForms = submitForms;
-    </script>
+      </script>      
 </body>
 </html>
