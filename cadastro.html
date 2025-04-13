@@ -494,6 +494,7 @@
        Ajustado para importar o supabaseClient do arquivo supabaseClient.js
        ============================================================= -->
   <script type="module">
+  // Importa a instância do Supabase Client do arquivo supabaseClient.js.
   import supabaseClient from "./supabaseClient.js";
 
   /***********************************************************************
@@ -505,13 +506,16 @@
    ***********************************************************************/
   async function uploadFileToStorage(bucketName, file, filePath) {
     try {
-      let { data, error } = await supabaseClient.storage.from(bucketName).upload(filePath, file);
+      let { data, error } = await supabaseClient.storage
+        .from(bucketName)
+        .upload(filePath, file);
       if (error) {
         console.error("Erro no upload:", error);
         throw error;
       }
       // Obtém a URL pública a partir do caminho
-      const { publicURL, error: urlError } = supabaseClient.storage.from(bucketName).getPublicUrl(data.path);
+      const { publicURL, error: urlError } =
+        supabaseClient.storage.from(bucketName).getPublicUrl(data.path);
       if (urlError) {
         throw urlError;
       }
@@ -523,7 +527,7 @@
   }
 
   /***********************************************************************
-   * Função para transitar do STEP 1 para o STEP 2 (valida senhas)
+   * Função para transitar entre os Steps (Usuário para Agência)
    ***********************************************************************/
   function goToStep2() {
     const password = document.getElementById("password").value;
@@ -540,7 +544,9 @@
    * Função para exibir ou ocultar os campos de Domínio/Subdomínio
    ***********************************************************************/
   function toggleDomainFields() {
-    const hasDomain = document.querySelector('input[name="has_domain"]:checked').value;
+    const hasDomain = document.querySelector(
+      'input[name="has_domain"]:checked'
+    ).value;
     if (hasDomain === "sim") {
       document.getElementById("domainField").style.display = "block";
       document.getElementById("subdomainField").style.display = "none";
@@ -555,13 +561,14 @@
   }
 
   /***********************************************************************
-   * Função para atualizar a pré-visualização do subdomínio.
+   * Função para atualizar a pré-visualização do subdomínio
    ***********************************************************************/
   function updateSubdomainPreview() {
     const typedSubdomain = document.getElementById("subdomainInput").value.trim();
     const preview = document.getElementById("subdomainPreview");
     if (typedSubdomain) {
-      preview.textContent = "Sua loja ficará: " + typedSubdomain + ".airland.com.br";
+      preview.textContent =
+        "Sua loja ficará: " + typedSubdomain + ".airland.com.br";
     } else {
       preview.textContent = "";
     }
@@ -705,7 +712,7 @@
     preloader.style.display = show ? "block" : "none";
   }
 
-  // Torna as funções globais para que os atributos inline funcionem
+  // Torna as funções globais para uso nos atributos inline
   window.goToStep2 = goToStep2;
   window.toggleDomainFields = toggleDomainFields;
   window.updateSubdomainPreview = updateSubdomainPreview;
