@@ -41,9 +41,7 @@
               <div class="auth-cover">
                 <div class="title text-center">
                   <h1 class="text-primary mb-10">Bem-vindo!</h1>
-                  <p class="text-medium">
-                    Comece criando a melhor experiência para seus clientes.
-                  </p>
+                  <p class="text-medium">Comece criando a melhor experiência para seus clientes.</p>
                 </div>
                 <div class="cover-image">
                   <img src="assets/images/auth/signin-image.svg" alt="" />
@@ -63,12 +61,10 @@
                 <!-- STEP 1: Dados do Usuário -->
                 <div id="step1" class="step active">
                   <h6 class="mb-15">Dados do Usuário</h6>
-                  <p class="text-sm mb-25">
-                    Preencha os dados abaixo para criar sua conta.
-                  </p>
+                  <p class="text-sm mb-25">Preencha os dados abaixo para criar sua conta.</p>
                   <form id="userForm">
                     <div class="row">
-                      <!-- Primeira linha: Primeiro Nome + Último Nome -->
+                      <!-- Linha 1: Primeiro e Último Nome -->
                       <div class="col-12 col-md-6">
                         <div class="input-style-1">
                           <label>Primeiro Nome *</label>
@@ -81,9 +77,8 @@
                           <input type="text" name="ultimo_nome" placeholder="Último Nome" required />
                         </div>
                       </div>
-                      <!-- end row -->
 
-                      <!-- Segunda linha: Telefone + Email -->
+                      <!-- Linha 2: Telefone e Email -->
                       <div class="col-12 col-md-6">
                         <div class="input-style-1">
                           <label>Telefone *</label>
@@ -96,9 +91,8 @@
                           <input type="email" name="email" placeholder="Email" required />
                         </div>
                       </div>
-                      <!-- end row -->
 
-                      <!-- Terceira linha: Foto de Perfil + Senha -->
+                      <!-- Linha 3: Foto de Perfil e Senha -->
                       <div class="col-12 col-md-6">
                         <div class="input-style-1">
                           <label>Foto de Perfil</label>
@@ -111,18 +105,16 @@
                           <input type="password" id="password" name="password" placeholder="Senha" required />
                         </div>
                       </div>
-                      <!-- end row -->
 
-                      <!-- Quarta linha: Repetir Senha -->
+                      <!-- Linha 4: Repetir Senha -->
                       <div class="col-12 col-md-6">
                         <div class="input-style-1">
                           <label>Repetir Senha *</label>
                           <input type="password" id="confirm_password" name="confirm_password" placeholder="Repetir Senha" required />
                         </div>
                       </div>
-                      <!-- end row -->
 
-                      <!-- Campos hidden (preenchidos via JS) -->
+                      <!-- Campos hidden preenchidos via JS -->
                       <input type="hidden" name="affiliate_id" id="affiliate_id" />
                       <input type="hidden" name="name" id="name" />
 
@@ -134,7 +126,6 @@
                         </div>
                       </div>
                     </div>
-                    <!-- end row -->
                   </form>
                 </div>
                 <!-- FIM do STEP 1 -->
@@ -142,12 +133,10 @@
                 <!-- STEP 2: Dados da Agência -->
                 <div id="step2" class="step">
                   <h6 class="mb-15">Dados da Agência</h6>
-                  <p class="text-sm mb-25">
-                    Preencha os dados da sua agência.
-                  </p>
+                  <p class="text-sm mb-25">Preencha os dados da sua agência.</p>
                   <form id="affiliateForm">
                     <div class="row">
-                      <!-- Primeira linha: Nome da Agência + "Você tem domínio próprio?" -->
+                      <!-- Linha 1: Nome da Agência e Domínio Próprio -->
                       <div class="col-12 col-md-6">
                         <div class="input-style-1">
                           <label>Nome da Agência *</label>
@@ -169,9 +158,8 @@
                           </div>
                         </div>
                       </div>
-                      <!-- end row -->
 
-                      <!-- Segunda linha: Domínio e Subdomínio, exibidos condicionalmente -->
+                      <!-- Linha 2: Domínio/Subdomínio (exibidos condicionalmente) -->
                       <div class="col-12 col-md-6" id="domainField" style="display:none;">
                         <div class="input-style-1">
                           <label>Domínio *</label>
@@ -184,9 +172,8 @@
                           <input type="text" name="subdomain" placeholder="airland.com.br" value="airland.com.br" readonly />
                         </div>
                       </div>
-                      <!-- end row -->
 
-                      <!-- Terceira linha: Logo URL + Cor Principal -->
+                      <!-- Linha 3: Logo URL e Cor Principal -->
                       <div class="col-12 col-md-6">
                         <div class="input-style-1">
                           <label>Logo URL *</label>
@@ -199,9 +186,8 @@
                           <input type="text" name="primary_color" placeholder="Ex: #000000" />
                         </div>
                       </div>
-                      <!-- end row -->
 
-                      <!-- Quarta linha: Cor Secundária + Cor do Botão -->
+                      <!-- Linha 4: Cor Secundária e Cor do Botão -->
                       <div class="col-12 col-md-6">
                         <div class="input-style-1">
                           <label>Cor Secundária</label>
@@ -214,9 +200,8 @@
                           <input type="text" name="button_color" placeholder="Ex: #FF0000" />
                         </div>
                       </div>
-                      <!-- end row -->
 
-                      <!-- Quinta linha: Cor do Texto do Botão + Cor do Botão ao clicar -->
+                      <!-- Linha 5: Cor do Texto do Botão e Cor do Botão ao Clicar -->
                       <div class="col-12 col-md-6">
                         <div class="input-style-1">
                           <label>Cor do Texto do Botão</label>
@@ -229,7 +214,6 @@
                           <input type="text" name="button_hover" placeholder="Ex: #CCCCCC" />
                         </div>
                       </div>
-                      <!-- end row -->
 
                       <div class="col-12">
                         <div class="button-group d-flex justify-content-center flex-wrap">
@@ -239,7 +223,6 @@
                         </div>
                       </div>
                     </div>
-                    <!-- end row -->
                   </form>
                 </div>
                 <!-- FIM do STEP 2 -->
@@ -248,7 +231,6 @@
           </div>
           <!-- end col -->
         </div>
-        <!-- end row -->
       </div>
     </section>
     <!-- ========== signin-section end ========== -->
@@ -269,27 +251,24 @@
   <script src="assets/js/datatable.js"></script>
   <script src="assets/js/Sortable.min.js"></script>
   <script src="assets/js/main.js"></script>
-  <!-- ADIÇÃO DO NOVO SCRIPT (2ª alteração) -->
+  <!-- Importa o script do sidebar como módulo para reconhecer "export" -->
   <script type="module" src="assets/js/sidebar.js"></script>
-
+  
   <script>
     // Função para transição do Step 1 para o Step 2
     function goToStep2() {
-      // Verifica se as senhas batem
       var password = document.getElementById('password').value;
       var confirmPassword = document.getElementById('confirm_password').value;
       if (password !== confirmPassword) {
         alert('As senhas não coincidem!');
         return;
       }
-      // Se necessário, outras validações do Step 1 podem ser inseridas aqui
-
       // Exibe o Step 2 e oculta o Step 1
       document.getElementById('step1').classList.remove('active');
       document.getElementById('step2').classList.add('active');
     }
 
-    // Função para exibir/esconder campos de domínio conforme a resposta
+    // Função para exibir/esconder os campos de domínio conforme a resposta
     function toggleDomainFields() {
       var hasDomain = document.querySelector('input[name="has_domain"]:checked').value;
       if (hasDomain === 'sim') {
@@ -305,16 +284,14 @@
       }
     }
 
-    // Função para simular o envio dos dados dos dois steps
+    // Função para simular o envio dos formulários
     function submitForms() {
-      // Valida os campos obrigatórios do formulário de afiliado (Step 2)
       var agencyName = document.querySelector('input[name="agency_name"]').value;
       var logoUrl = document.querySelector('input[name="logo_url"]').value;
       if (!agencyName || !logoUrl) {
         alert('Por favor, preencha todos os campos obrigatórios da Agência.');
         return;
       }
-
       var hasDomainElem = document.querySelector('input[name="has_domain"]:checked');
       if (!hasDomainElem) {
         alert('Por favor, responda se possui domínio próprio.');
@@ -335,16 +312,14 @@
         }
       }
 
-      // Simula o envio dos dados da agência para o banco e captura o affiliate_id gerado
+      // Simula a geração do affiliate_id
       var affiliateId = 'AFF' + Math.floor(Math.random() * 100000);
       document.getElementById('affiliate_id').value = affiliateId;
 
-      // Concatena primeiro e último nome para o campo name do usuário
       var primeiroNome = document.querySelector('input[name="primeiro_nome"]').value;
       var ultimoNome = document.querySelector('input[name="ultimo_nome"]').value;
       document.getElementById('name').value = primeiroNome + ' ' + ultimoNome;
 
-      // Coleta os dados do formulário de afiliado (Step 2)
       var affiliateData = {
         agency_name: agencyName,
         has_domain: hasDomain,
@@ -359,7 +334,6 @@
       };
       console.log('Dados da Agência (Step 2):', affiliateData);
 
-      // Coleta os dados do formulário de usuário (Step 1)
       var userData = {
         primeiro_nome: primeiroNome,
         ultimo_nome: ultimoNome,
@@ -372,10 +346,7 @@
       };
       console.log('Dados do Usuário (Step 1):', userData);
 
-      // Aqui você deve implementar o envio via AJAX ou outra lógica, 
-      // obedecendo a ordem: enviar primeiro os dados do Step 2 (affiliates) para obter o ID 
-      // e, em seguida, enviar os dados do Step 1 (users) com o affiliate_id capturado.
-
+      // Aqui você pode implementar o envio via AJAX, obedecendo a ordem desejada.
       alert('Formulário enviado com sucesso! Affiliate ID gerado: ' + affiliateId);
     }
   </script>
