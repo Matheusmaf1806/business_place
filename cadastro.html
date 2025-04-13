@@ -1,4 +1,4 @@
-`<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt">
 
   <!-- =============================================================
@@ -605,8 +605,7 @@
    * Usamos upsert na tabela "affiliates" com base no campo "slug",
    * para evitar conflitos caso já exista uma agência com o mesmo slug.
    ***********************************************************************/
-  async function submitForms() {
-    // Validação dos campos obrigatórios do formulário da Agência (Step 2)
+   async function submitForms() {
     const agencyName = document.querySelector('input[name="agency_name"]').value.trim();
     const logoInput = document.querySelector('input[name="logo_url"]');
     const logoFile = logoInput.files[0];
@@ -634,22 +633,16 @@
       }
     }
 
-    // Gera um identificador único para o afiliado se ainda não existir – aqui usamos o slug diretamente.
-    // Se necessário, você pode gerar um UUID.
-    // Nesse exemplo, usamos o valor do nome (slug) para realizar o upsert.
-    // OBS.: Certifique-se de que o campo "slug" seja único na tabela "affiliates".
-    // Se já existir um registro com esse slug, o upsert atualizará o registro existente.
-    
     // Captura os dados do usuário
     const primeiroNome = document.querySelector('input[name="primeiro_nome"]').value.trim();
     const ultimoNome = document.querySelector('input[name="ultimo_nome"]').value.trim();
     document.getElementById("name").value = primeiroNome + " " + ultimoNome;
 
-    // Upload de arquivos
     let logoURL = "";
     let profileURL = "";
     try {
       const sanitizedLogoFileName = sanitizeFileName(logoFile.name);
+      // Construa o caminho sem repetir o nome do bucket (o bucket já está definido no método .from)
       const logoPath = agencyName + "_" + sanitizedLogoFileName;
       logoURL = await uploadFileToStorage("logos", logoFile, logoPath);
 
@@ -667,8 +660,8 @@
 
     // Monta o objeto de dados para a tabela "affiliates"
     const affiliateData = {
-      slug: agencyName, // Usado para identificar a agência; campo único
-      name: agencyName, // Nome da agência
+      slug: agencyName, // campo único para identificar a agência
+      name: agencyName, // o nome da agência
       domain: hasDomain === "sim" ? document.querySelector('input[name="domain"]').value.trim() : "",
       subdomain: hasDomain === "nao" ? document.getElementById("subdomainInput").value.trim() + ".airland.com.br" : "",
       logo_url: logoURL,
@@ -679,8 +672,23 @@
       button_hover: document.querySelector('input[name="button_hover"]').value.trim()
     };
 
+    // Em vez de gerar o affiliate_id manualmente, vamos obter o id inserido na tabela affiliates.
+    // Utilize upsert (com onConflict) para inserir ou atualizar com base no campo "slug".
+    let affiliateInsertResult = await supabaseClient
+      .from("affiliates")
+      .insert(affiliateData, { upsert: true, onConflict: "slug" })
+      .select(); // Seleciona os dados inseridos/atualizados
+
+    if (affiliateInsertResult.error) {
+      alert("Erro ao cadastrar agência: " + affiliateInsertResult.error.message);
+      console.error(affiliateInsertResult.error);
+      return;
+    }
+
+    // Recupera o ID da agência (coluna id do registro, que é um inteiro)
+    const affiliateId = affiliateInsertResult.data[0].id;
+
     // Monta o objeto de dados para a tabela "users"
-    // Aqui, você vincula o usuário com a agência através do slug (ou outro identificador que desejar)
     const userData = {
       primeiro_nome: primeiroNome,
       ultimo_nome: ultimoNome,
@@ -688,7 +696,7 @@
       email: document.querySelector('input[name="email"]').value.trim(),
       fotodeperfil: profileURL,
       password: document.getElementById("password").value,
-      affiliate_id: agencyName, // Usando o slug da agência para vincular – ajuste conforme seu schema
+      affiliate_id: affiliateId,  // Usar o ID numérico da agência
       name: document.getElementById("name").value
     };
 
@@ -696,17 +704,6 @@
     console.log("Dados do Usuário:", userData);
 
     try {
-      // Faz upsert na tabela "affiliates" com base no campo "slug"
-      let { data: affiliateInsert, error: affiliateError } = await supabaseClient
-        .from("affiliates")
-        .insert(affiliateData, { upsert: true, onConflict: "slug" });
-      if (affiliateError) {
-        alert("Erro ao cadastrar agência: " + affiliateError.message);
-        console.error(affiliateError);
-        return;
-      }
-
-      // Insere os dados na tabela "users"
       let { data: userInsert, error: userError } = await supabaseClient
         .from("users")
         .insert(userData);
