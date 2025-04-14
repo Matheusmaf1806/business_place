@@ -394,7 +394,7 @@
             const promoIconImg = document.querySelector('.promo-box .promo-icon img');
             if (promoIconImg) {
               promoIconImg.src = user.fotodeperfil;
-              promoIconImg.style.cssText = 'width: 75px; height: 75px; display: block; margin: 0 auto; border-radius: 100%;';
+              promoIconImg.style.cssText = 'width: 75px; height: 75px; display: block; margin: 0 auto; border-radius: 100%; object-fit: cover;';
             }
             const promoName = document.querySelector('.promo-box .promo-name');
             if (promoName) promoName.textContent = user.primeiro_nome;
