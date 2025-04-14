@@ -417,7 +417,7 @@
             </div>
             <div class="card-style mb-30">
                 <div class="title d-flex justify-content-between align-items-center">
-                  <h6 class="mb-10">Current Statistic</h6>
+                  <h6 class="mb-10">Revenue By Device</h6>
                   <div class="more-btn-wrapper mb-10">
                     <button class="more-btn dropdown-toggle" id="moreAction" data-bs-toggle="dropdown"
                       aria-expanded="false">
@@ -438,25 +438,26 @@
                   <div class="doughnutChart-legend">
                     <ul>
                       <li class="primary">
-                        <span class="left">Income</span>
+                        <span class="left">Desktop</span>
                         <span class="right">49%</span>
                       </li>
                       <li class="orange">
-                        <span class="left">Installment </span>
+                        <span class="left">Tablet</span>
                         <span class="right">19%</span>
                       </li>
                       <li class="danger">
-                        <span class="left">Spends </span>
+                        <span class="left">Mobile</span>
                         <span class="right">30%</span>
                       </li>
                       <li class="warning">
-                        <span class="left">Invest </span>
+                        <span class="left">Others</span>
                         <span class="right">5%</span>
                       </li>
                     </ul>
                   </div>
                 </div>
-            </div>
+              </div>
+          </div>
           <!-- Pedidos por Região -->
           <div class="col-lg-6">
             <div class="card-style mb-30">
@@ -835,6 +836,27 @@
     });
     // =========== chart four end
 
+    //============ doughnutChart1 start
+    const doughnutChart1 = new ApexCharts(document.querySelector("#doughnutChart1"), {
+      series: [83, 67, 55, 44],
+      chart: { height: 350, type: "radialBar" },
+      plotOptions: {
+        radialBar: {
+          dataLabels: {
+            name: { fontSize: "22px" },
+            value: { fontSize: "16px" },
+          },
+          hollow: { size: "40%" },
+          track: { strokeWidth: "100%", margin: 10 },
+        },
+      },
+      stroke: { lineCap: "round" },
+      labels: ["Desktop", "Tablet", "Mobile", "Others"],
+      colors: ["#4a6cf7", "#f2994a", "#d50100", "#f7c800"],
+    });
+    doughnutChart1.render();
+    //============ doughnutChart1 end
+
     // =========== referralsCtx1 start
     const referralsCtx1 = document.getElementById("referralsChart1").getContext("2d");
     const referralsChart1 = new Chart(referralsCtx1, {
@@ -1037,43 +1059,34 @@
       applyThemeColors(lightThemeColors);
     });
 
+    document.addEventListener('DOMContentLoaded', () => {
     const doughnutChart1 = new ApexCharts(
-      document.querySelector("#doughnutChart1"),
-      (options = {
+        document.querySelector("#doughnutChart1"),
+        {
         series: [83, 67, 55, 44],
         chart: {
-          height: 350,
-          type: "radialBar",
+            height: 350,
+            type: "radialBar",
         },
-
         plotOptions: {
-          radialBar: {
+            radialBar: {
             dataLabels: {
-              name: {
-                fontSize: "22px",
-              },
-              value: {
-                fontSize: "16px",
-              },
+                name: { fontSize: "22px" },
+                value: { fontSize: "16px" },
             },
-            hollow: {
-              size: "40%",
+            hollow: { size: "40%" },
+            track: { strokeWidth: "100%", margin: 10 },
             },
-            track: {
-              strokeWidth: "100%",
-              margin: 10,
-            },
-          },
         },
-        stroke: {
-          lineCap: "round",
-        },
-        labels: ["Income", "Installment", "Spends", "Invest"],
+        stroke: { lineCap: "round" },
+        labels: ["Desktop", "Tablet", "Mobile", "Others"],
         colors: ["#4a6cf7", "#f2994a", "#d50100", "#f7c800"],
-      })
+        }
     );
     doughnutChart1.render();
+    });
 
   </script>
 </body>
+
 </html>
