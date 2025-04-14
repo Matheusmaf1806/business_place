@@ -21,7 +21,7 @@ export function createCalendarComponent() {
 
   const selectYear = document.createElement("select");
   selectYear.id = "calendar__year";
-  // Apenas os anos 2025 e 2026
+  // Apenas os anos 2025 e 2026 (exemplo)
   [2025, 2026].forEach(y => {
     const opt = document.createElement("option");
     opt.value = y;
@@ -75,6 +75,7 @@ export function createCalendarComponent() {
   }
 
   function getWeekDayIndex(date) {
+    // Ajuste para que segunda seja índice 0 e domingo seja índice 6
     return (date.getDay() + 6) % 7;
   }
 
@@ -84,13 +85,14 @@ export function createCalendarComponent() {
   function buildCalendar(year, month) {
     datesEl.innerHTML = "";
     globalClickableDates = [];
+
     const totalDaysCurrent = getDaysInMonth(year, month);
     const firstDay = new Date(year, month, 1);
     const startWeekIndex = getWeekDayIndex(firstDay);
     const totalCells = 42; // 6 linhas x 7 colunas
     let daysArray = [];
 
-    // Dias do mês anterior (se o primeiro dia não for segunda)
+    // Dias do mês anterior
     if (startWeekIndex > 0) {
       let prevMonth = month - 1;
       let prevYear = year;
@@ -136,81 +138,90 @@ export function createCalendarComponent() {
       }
     }
 
-    // Define referência de amanhã (para não permitir seleção de datas anteriores a amanhã)
-    let today = new Date();
-    today.setHours(0, 0, 0, 0);
-    let tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-
-    // Renderiza as células
+    // Renderiza as células do calendário
     daysArray.forEach(obj => {
       const cell = document.createElement("div");
       cell.classList.add("calendar__date");
+      
+      // Se não é do mês atual, marca como "grey" (mas ainda clicável)
       if (!obj.inCurrent) {
         cell.classList.add("calendar__date--grey");
       }
-      // Se a data for anterior a amanhã, marca como desabilitada (cinza)
-      if (obj.date < tomorrow) {
-        cell.classList.add("calendar__date--grey");
-      }
-      
-      // Cria o container para dia e preço
-      const container = document.createElement("div");
-      container.classList.add("date-content");
-      const daySpan = document.createElement("span");
-      daySpan.textContent = obj.day;
-      // Exemplo de cálculo de preço
-      let rawPrice = 30 + obj.day;
-      const priceSpan = document.createElement("span");
-      priceSpan.classList.add("calendar__price");
-      priceSpan.textContent = rawPrice.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-      
-      container.appendChild(daySpan);
-      container.appendChild(priceSpan);
-      cell.appendChild(container);
 
-      // Torna a célula clicável se a data for >= tomorrow (mesmo que não seja do mês corrente)
-      if (obj.date >= tomorrow) {
-        globalClickableDates.push(cell);
-        cell.addEventListener("click", function() {
-          handleDateClick(cell, globalClickableDates);
-        });
-      }
-      
+      // Apenas exibe o dia (sem preço)
+      const daySpan = document.createElement("span");
+      daySpan.textContent = obj.day.toString();
+
+      // Insere o dia na célula
+      cell.appendChild(daySpan);
+
+      // Adiciona a célula na lista de clicáveis
+      globalClickableDates.push(cell);
+      cell.addEventListener("click", function() {
+        handleDateClick(cell, globalClickableDates);
+      });
+
       datesEl.appendChild(cell);
     });
   }
 
   function clearRange(clickableDates) {
     clickableDates.forEach(el => {
-      el.classList.remove("calendar__date--selected", "calendar__date--first-date", "calendar__date--range-start", "calendar__date--last-date", "calendar__date--range-end");
+      el.classList.remove(
+        "calendar__date--selected",
+        "calendar__date--first-date",
+        "calendar__date--range-start",
+        "calendar__date--last-date",
+        "calendar__date--range-end"
+      );
     });
     startSelected = null;
     endSelected = null;
   }
 
   function handleDateClick(clickedEl, clickableDates) {
+    // Se já havia um intervalo selecionado, limpa tudo e inicia novamente
     if (startSelected !== null && endSelected !== null) {
       clearRange(clickableDates);
     }
     const index = clickableDates.indexOf(clickedEl);
+
+    // Se não há data inicial, marca a primeira
     if (startSelected === null) {
       startSelected = index;
-      clickedEl.classList.add("calendar__date--selected", "calendar__date--first-date", "calendar__date--range-start");
+      clickedEl.classList.add(
+        "calendar__date--selected",
+        "calendar__date--first-date",
+        "calendar__date--range-start"
+      );
     } else if (startSelected !== null && endSelected === null) {
+      // Se o usuário clicou de novo na mesma célula, desfaz a seleção
       if (index === startSelected) {
-        clickedEl.classList.remove("calendar__date--selected", "calendar__date--first-date", "calendar__date--range-start");
+        clickedEl.classList.remove(
+          "calendar__date--selected",
+          "calendar__date--first-date",
+          "calendar__date--range-start"
+        );
         startSelected = null;
         return;
       }
+      // Define a data final
       endSelected = index;
       const startPos = Math.min(startSelected, endSelected);
       const endPos = Math.max(startSelected, endSelected);
       clickableDates.forEach((el, i) => {
         if (i === startPos) {
-          el.classList.add("calendar__date--selected", "calendar__date--first-date", "calendar__date--range-start");
+          el.classList.add(
+            "calendar__date--selected",
+            "calendar__date--first-date",
+            "calendar__date--range-start"
+          );
         } else if (i === endPos) {
-          el.classList.add("calendar__date--selected", "calendar__date--last-date", "calendar__date--range-end");
+          el.classList.add(
+            "calendar__date--selected",
+            "calendar__date--last-date",
+            "calendar__date--range-end"
+          );
         } else if (i > startPos && i < endPos) {
           el.classList.add("calendar__date--selected");
         }
@@ -218,35 +229,23 @@ export function createCalendarComponent() {
     }
   }
 
+  // Atualiza o calendário ao mudar mês/ano
   function onChangeMonthYear() {
     const year = parseInt(selectYear.value, 10);
     const month = parseInt(selectMonth.value, 10);
+    // Limpa qualquer seleção anterior
     startSelected = null;
     endSelected = null;
     buildCalendar(year, month);
-    
-    // Se o calendário exibido for do mesmo mês/ano de amanhã, pré-seleciona a célula de amanhã
-    let today = new Date();
-    today.setHours(0, 0, 0, 0);
-    let tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    if (year === tomorrow.getFullYear() && month === tomorrow.getMonth()) {
-      for (let i = 0; i < globalClickableDates.length; i++) {
-        const cell = globalClickableDates[i];
-        const cellDay = parseInt(cell.querySelector(".date-content span").textContent, 10);
-        if (cellDay === tomorrow.getDate()) {
-          cell.classList.add("calendar__date--selected", "calendar__date--first-date", "calendar__date--range-start");
-          startSelected = i;
-          break;
-        }
-      }
-    }
   }
 
+  // Listeners para as selects de mês e ano
   selectMonth.addEventListener("change", onChangeMonthYear);
   selectYear.addEventListener("change", onChangeMonthYear);
+
+  // Chama uma vez ao montar
   onChangeMonthYear();
 
-  // Retorna o componente para que ele possa ser inserido na página
+  // Retorna o elemento raiz do calendário para ser inserido na página
   return calendarEl;
 }
