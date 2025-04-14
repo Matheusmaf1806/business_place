@@ -292,6 +292,8 @@
                   <table class="table">
                     <thead>
                       <tr>
+                        <!-- Nova coluna "ID" adicionada -->
+                        <th><h6>ID</h6></th>
                         <th><h6>Nome</h6></th>
                         <th><h6>Forma de Pagamento</h6></th>
                         <th><h6>Valor</h6></th>
@@ -302,9 +304,10 @@
                     <tbody>
                       <!-- As linhas serão atualizadas dinamicamente via fetchSupplierPedidos() -->
                       <tr>
-                        <td class="min-width"><p>Exemplo</p></td>
-                        <td class="min-width"><p>Exemplo</p></td>
-                        <td class="min-width"><p>Exemplo</p></td>
+                        <td class="min-width"><p>Exemplo ID</p></td>
+                        <td class="min-width"><p>Exemplo Nome</p></td>
+                        <td class="min-width"><p>Exemplo Meio</p></td>
+                        <td class="min-width"><p>Exemplo Valor</p></td>
                         <td class="min-width"><span class="status-btn active-btn">Active</span></td>
                         <td>
                           <div class="action">
@@ -451,10 +454,11 @@
       let filterStartDate = null;
       let filterEndDate = null;
 
-      // Função para buscar os pedidos da API, usando cache disabled
+      // Função para buscar os pedidos da API, usando cache disabled.
+      // Foi adicionada a coluna "id" e a API deverá retornar os campos: id, nome, meio_pgto, valor_venda e status.
       async function fetchSupplierPedidos() {
         try {
-          // URL da API – altere conforme o seu endpoint
+          // URL da API – ajuste conforme seu endpoint
           const url = new URL("https://airland.com.br/api/supplier_pedidos.php");
           if (filterStartDate && filterEndDate) {
             url.searchParams.append("start", filterStartDate);
@@ -467,6 +471,7 @@
           data.forEach(item => {
             const tr = document.createElement("tr");
             tr.innerHTML = `
+              <td class="min-width"><p>${item.id}</p></td>
               <td class="min-width"><p>${item.nome}</p></td>
               <td class="min-width"><p>${item.meio_pgto}</p></td>
               <td class="min-width"><p>${item.valor_venda}</p></td>
@@ -484,9 +489,10 @@
         }
       }
 
-      // Expor a função openCalendar globalmente
+      // Expor a função openCalendar globalmente.
+      // Utilize caminho relativo "./assets/js/calendarComponent.js"
       window.openCalendar = function () {
-        import("assets/js/calendarComponent.js")
+        import("./assets/js/calendarComponent.js")
           .then(module => {
             // Cria o componente do calendário
             const calendarComponent = module.createCalendarComponent();
@@ -516,10 +522,10 @@
                 const selectMonth = calendarContainer.querySelector("#calendar__month");
                 const selectYear = calendarContainer.querySelector("#calendar__year");
                 // Define o início do mês selecionado
-                filterStartDate = `${selectYear.value}-${String(parseInt(selectMonth.value) + 1).padStart(2, '0')}-01`;
+                filterStartDate = `${selectYear.value}-${String(parseInt(selectMonth.value) + 1).padStart(2, "0")}-01`;
                 // Calcula o número de dias no mês
                 const daysInMonth = new Date(selectYear.value, parseInt(selectMonth.value) + 1, 0).getDate();
-                filterEndDate = `${selectYear.value}-${String(parseInt(selectMonth.value) + 1).padStart(2, '0')}-${daysInMonth}`;
+                filterEndDate = `${selectYear.value}-${String(parseInt(selectMonth.value) + 1).padStart(2, "0")}-${daysInMonth}`;
                 // Esconde o calendário e atualiza os pedidos filtrados
                 calendarContainer.style.display = "none";
                 fetchSupplierPedidos();
