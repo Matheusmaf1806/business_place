@@ -28,7 +28,7 @@
       .sidebar-nav a {
         color: #5d657b;
       }
-      /* Para itens de submenu, o link pai não recebe destaque automaticamente */
+      /* Para itens de submenu, o link pai não recebe destaque automático */
       .sidebar-nav .nav-item.nav-item-has-children > a {
         color: #5d657b;
       }
@@ -39,27 +39,22 @@
         color: #365CF5 !important;
         fill: #365CF5 !important;
       }
-
-      /* A promo-box ficará empurrada para o final */
-      /* O aside ocupará toda a altura da tela */
+      /* Configuração para que o aside ocupe toda a altura da tela e organize o conteúdo */
       aside.sidebar-nav-wrapper {
         display: flex;
         flex-direction: column;
-        height: 100vh; /* ou 100% se for um pai que já é 100% */
+        height: 100vh;
       }
-      
-      /* O nav expande para ocupar o espaço vertical */
+      /* O nav expande e dá espaço no final para não esconder itens por causa da promo-box */
       aside.sidebar-nav-wrapper nav.sidebar-nav {
         flex: 1;
-        /* Se quiser que o menu role */
         overflow-y: auto;
-        margin-bottom: 50px;
+        padding-bottom: 80px; /* ajuste conforme o tamanho da promo-box */
       }
-      
-      /* A promo-box vai para o rodapé graças ao margin-top: auto */
+      /* A promo-box fica no rodapé */
       aside.sidebar-nav-wrapper .promo-box {
-        margin-top: auto; 
-        margin-bottom: 1rem; /* se quiser um espaçamento do fim */
+        margin-top: auto;
+        margin-bottom: 1rem;
         z-index: 1000;
       }
     </style>
@@ -136,7 +131,7 @@
               </span>
               <span class="text">Personalize</span>
             </a>
-            <ul id="ddmenu_3" class="collapsed show dropdown-nav">
+            <ul id="ddmenu_3" class="collapse dropdown-nav">
               <li><a href="design.html#idvisual"><span class="arrow-icon">→</span> Identidade Visual</a></li>
               <li><a href="design.html#paleta"><span class="arrow-icon">→</span> Paleta de Cores</a></li>
               <li><a href="design.html#banner"><span class="arrow-icon">→</span> Banner</a></li>
@@ -153,7 +148,7 @@
               </span>
               <span class="text">Usuários</span>
             </a>
-            <ul id="ddmenu_usuarios" class="collapsed show dropdown-nav">
+            <ul id="ddmenu_usuarios" class="collapse dropdown-nav">
               <li><a href="createuser.html"><span class="arrow-icon">→</span> Criar acesso</a></li>
               <li><a href="users.html"><span class="arrow-icon">→</span> Gerenciar usuários</a></li>
             </ul>
@@ -163,7 +158,7 @@
       <!-- Caixa promocional do afiliado -->
       <div class="promo-box">
         <div class="promo-icon">
-          <!-- A imagem do afiliado (logo) será atualizada via JS, com o style solicitado -->
+          <!-- A imagem do afiliado (logo) será atualizada via JS e terá estilo fixo -->
           <img class="mx-auto" src="assets/images/logo/logo-icon-big.svg" alt="Logo" />
         </div>
         <h3 class="promo-name">Adam Joe</h3>
@@ -306,121 +301,8 @@
                         <th><h6>Ação</h6></th>
                       </tr>
                     </thead>
-                    <tbody>
-                      <tr>
-                        <td class="min-width">
-                          <p>Esther Howard</p>
-                        </td>
-                        <td class="min-width">
-                          <p><a href="#0">yourmail@gmail.com</a></p>
-                        </td>
-                        <td class="min-width">
-                          <p>Admin Dashboard Design</p>
-                        </td>
-                        <td class="min-width">
-                          <span class="status-btn active-btn">Active</span>
-                        </td>
-                        <td>
-                          <div class="action">
-                            <button style="color: #5d657b;"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="min-width">
-                          <p>D. Jonathon</p>
-                        </td>
-                        <td class="min-width">
-                          <p><a href="#0">yourmail@gmail.com</a></p>
-                        </td>
-                        <td class="min-width">
-                          <p>React Dashboard</p>
-                        </td>
-                        <td class="min-width">
-                          <span class="status-btn active-btn">Active</span>
-                        </td>
-                        <td>
-                          <div class="action">
-                            <button style="color: #5d657b;"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <p>John Doe</p>
-                        </td>
-                        <td>
-                          <p><a href="#0">yourmail@gmail.com</a></p>
-                        </td>
-                        <td>
-                          <p>Bootstrap Template</p>
-                        </td>
-                        <td>
-                          <span class="status-btn success-btn">Done</span>
-                        </td>
-                        <td>
-                          <div class="action">
-                            <button style="color: #5d657b;"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <p>Rayhan Jamil</p>
-                        </td>
-                        <td>
-                          <p><a href="#0">yourmail@gmail.com</a></p>
-                        </td>
-                        <td>
-                          <p>Css Grid Template</p>
-                        </td>
-                        <td>
-                          <span class="status-btn info-btn">Pending</span>
-                        </td>
-                        <td>
-                          <div class="action">
-                            <button style="color: #5d657b;"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <p>Esther Howard</p>
-                        </td>
-                        <td>
-                          <p><a href="#0">yourmail@gmail.com</a></p>
-                        </td>
-                        <td>
-                          <p>Admin Dashboard Design</p>
-                        </td>
-                        <td>
-                          <span class="status-btn close-btn">Close</span>
-                        </td>
-                        <td>
-                          <div class="action">
-                            <button style="color: #5d657b;"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <p>Anee Doe</p>
-                        </td>
-                        <td>
-                          <p><a href="#0">yourmail@gmail.com</a></p>
-                        </td>
-                        <td>
-                          <p>Space Template Update</p>
-                        </td>
-                        <td>
-                          <span class="status-btn active-btn">Active</span>
-                        </td>
-                        <td>
-                          <div class="action">
-                            <button style="color: #5d657b;"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
-                          </div>
-                        </td>
-                      </tr>
+                    <tbody id="pedidosTableBody">
+                      <!-- Os dados da API serão inseridos aqui -->
                     </tbody>
                   </table>
                   <!-- Fim da tabela -->
@@ -439,7 +321,10 @@
           <div class="row">
             <div class="col-md-6 order-last order-md-first">
               <div class="copyright text-center text-md-start">
-                <p class="text-sm">Designed and Developed by <a href="https://Airland.com" rel="nofollow" target="_blank">Airland</a></p>
+                <p class="text-sm">
+                  Designed and Developed by 
+                  <a href="https://Airland.com" rel="nofollow" target="_blank">Airland</a>
+                </p>
               </div>
             </div>
           </div>
@@ -482,7 +367,6 @@
           if (result.logged_in) {
             // Exibe o conteúdo removendo o display: none
             document.body.style.display = "block";
-            // Atualiza os dados do usuário logado
             const user = result.user_data;
             // Atualiza o perfil no header
             const profileImages = document.querySelectorAll('.profile-box .profile-image');
@@ -496,11 +380,11 @@
             if(profileFirstnameDropdown) profileFirstnameDropdown.textContent = user.primeiro_nome;
             const profileEmail = document.querySelector('.profile-box .profile-email');
             if(profileEmail) profileEmail.textContent = user.email;
-            // Atualiza o promo-box na sidebar
+            // Atualiza o promo-box na sidebar com a foto e nome do usuário
             const promoIconImg = document.querySelector('.promo-box .promo-icon img');
             if(promoIconImg) {
               promoIconImg.src = user.fotodeperfil;
-              promoIconImg.style.cssText = 'width: 75px; height: 75px; display: block; margin: 0px auto; border-radius: 100%;';
+              promoIconImg.style.cssText = 'width: 75px; height: 75px; display: block; margin: 0 auto; border-radius: 100%;';
             }
             const promoName = document.querySelector('.promo-box .promo-name');
             if(promoName) promoName.textContent = user.primeiro_nome;
@@ -513,6 +397,68 @@
         }
       }
       document.addEventListener("DOMContentLoaded", checkSession);
+    </script>
+
+    <!-- Importa o arquivo JS do componente do calendário -->
+    <script src="assets/js/calendarComponent.js"></script>
+
+    <!-- Lógica para buscar os pedidos da tabela supplier_pedidos -->
+    <script>
+      // Função para buscar pedidos filtrados por data (usa cache: 'no-store' para limpar o cache)
+      async function fetchSupplierPedidos(dateRange) {
+        try {
+          // Exemplo: substitua esta URL pela sua API que retorna os registros filtrados
+          const response = await fetch("https://airland.com.br/api/supplier_pedidos?date_range=" + encodeURIComponent(dateRange), {
+            cache: 'no-store'
+          });
+          const pedidos = await response.json();
+          renderPedidosTable(pedidos);
+        } catch (error) {
+          console.error("Erro ao buscar os pedidos:", error);
+        }
+      }
+
+      // Função para renderizar a tabela com os dados dos pedidos
+      function renderPedidosTable(pedidos) {
+        const tbody = document.getElementById("pedidosTableBody");
+        tbody.innerHTML = ""; // Limpa os registros antigos
+        pedidos.forEach(pedido => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td class="min-width"><p>${pedido.nome}</p></td>
+            <td class="min-width"><p><a href="#0">${pedido.meio_pgto}</a></p></td>
+            <td class="min-width"><p>${pedido.valor_venda}</p></td>
+            <td class="min-width"><span class="status-btn">${pedido.status}</span></td>
+            <td>
+              <div class="action">
+                <button style="color: #5d657b;"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
+              </div>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      // Configura o botão para abrir o calendário
+      document.getElementById("openCalendarBtn").addEventListener("click", function() {
+        // Supondo que a função openCalendar seja definida em calendarComponent.js
+        // Ela deve receber uma callback no fechamento, com a data selecionada (ex: "2025-04-14")
+        openCalendar({
+          onClose: function(selectedDates) {
+            // Atualiza o span com as datas selecionadas
+            document.getElementById("selectedDates").textContent = selectedDates;
+            // Busca os pedidos filtrados pela data selecionada
+            fetchSupplierPedidos(selectedDates);
+          }
+        });
+      });
+
+      // Ao carregar a página, busca os pedidos com a data de hoje
+      document.addEventListener("DOMContentLoaded", function() {
+        let today = new Date().toISOString().split("T")[0];
+        document.getElementById("selectedDates").textContent = today;
+        fetchSupplierPedidos(today);
+      });
     </script>
 
     <!-- Lógica para identificar e destacar a página ativa -->
