@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -1060,41 +1059,33 @@
       applyThemeColors(lightThemeColors);
     });
 
+    document.addEventListener('DOMContentLoaded', () => {
     const doughnutChart1 = new ApexCharts(
-    document.querySelector("#doughnutChart1"),
-    {
-      series: [83, 67, 55, 44],
-      chart: {
-        height: 350,
-        type: "radialBar",
-      },
-      plotOptions: {
-        radialBar: {
-          dataLabels: {
-            name: {
-              fontSize: "22px",
-            },
-            value: {
-              fontSize: "16px",
-            },
-          },
-          hollow: {
-            size: "40%",
-          },
-          track: {
-            strokeWidth: "100%",
-            margin: 10,
-          },
+        document.querySelector("#doughnutChart1"),
+        {
+        series: [83, 67, 55, 44],
+        chart: {
+            height: 350,
+            type: "radialBar",
         },
-      },
-      stroke: {
-        lineCap: "round",
-      },
-      labels: ["Desktop", "Tablet", "Mobile", "Others"],
-      colors: ["#4a6cf7", "#f2994a", "#d50100", "#f7c800"],
-    }
-  );
-  doughnutChart1.render();
+        plotOptions: {
+            radialBar: {
+            dataLabels: {
+                name: { fontSize: "22px" },
+                value: { fontSize: "16px" },
+            },
+            hollow: { size: "40%" },
+            track: { strokeWidth: "100%", margin: 10 },
+            },
+        },
+        stroke: { lineCap: "round" },
+        labels: ["Desktop", "Tablet", "Mobile", "Others"],
+        colors: ["#4a6cf7", "#f2994a", "#d50100", "#f7c800"],
+        }
+    );
+    doughnutChart1.render();
+    });
+
   </script>
 </body>
 
