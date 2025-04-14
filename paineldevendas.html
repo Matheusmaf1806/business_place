@@ -1,511 +1,441 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="shortcut icon" href="assets/images/favicon.svg" type="image/x-icon" />
-  <title>Airland</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="assets/images/favicon.svg" type="image/x-icon" />
+    <title>Airland</title>
 
-  <!-- ========== All CSS files linkup ========= -->
-  <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="assets/css/lineicons.css" />
-  <link rel="stylesheet" href="assets/css/quill/bubble.css" />
-  <link rel="stylesheet" href="assets/css/quill/snow.css" />
-  <link rel="stylesheet" href="assets/css/fullcalendar.css" />
-  <link rel="stylesheet" href="assets/css/morris.css" />
-  <link rel="stylesheet" href="assets/css/datatable.css" />
-  <link rel="stylesheet" href="assets/css/main.css" />
-</head>
-<body>
-  <!-- ======== Preloader =========== -->
-  <div id="preloader">
-    <div class="spinner"></div>
-  </div>
-  <!-- ======== Preloader =========== -->
+    <!-- ========== All CSS files linkup ========= -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="assets/css/lineicons.css" />
+    <link rel="stylesheet" href="assets/css/quill/bubble.css" />
+    <link rel="stylesheet" href="assets/css/quill/snow.css" />
+    <link rel="stylesheet" href="assets/css/fullcalendar.css" />
+    <link rel="stylesheet" href="assets/css/morris.css" />
+    <link rel="stylesheet" href="assets/css/datatable.css" />
+    <link rel="stylesheet" href="assets/css/main.css" />
 
-  <!-- ======== sidebar-nav start =========== -->
-  <!-- =============================================================
-       Sidebar de Navegação
-       ============================================================= -->
-  <aside class="sidebar-nav-wrapper">
-    <div class="navbar-logo">
-      <a href="index.html">
-        <img src="assets/images/logo/logo.svg" alt="logo" />
-      </a>
+    <!-- ========== CSS do Calendário (Anexo 1) ========= -->
+    <link rel="stylesheet" href="assets/css/calcom.css" />
+  </head>
+  <body>
+    <!-- ======== Preloader =========== -->
+    <div id="preloader">
+      <div class="spinner"></div>
     </div>
-    <nav class="sidebar-nav">
-      <ul>
-        <!-- Menu: Painel de Vendas -->
-        <li class="nav-item">
-          <a href="painel-vendas.html">
-            <span class="icon">
-              <!-- SVG omitido para brevidade -->
-            </span>
-            <span class="text">Painel de Vendas</span>
-          </a>
-        </li>
-        <!-- Menu: Vendas com submenu -->
-        <li class="nav-item nav-item-has-children">
-          <a href="#0" class="collapsed" data-bs-toggle="collapse" data-bs-target="#ddmenu_2" aria-controls="ddmenu_2" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="icon">
-              <!-- SVG omitido -->
-            </span>
-            <span class="text">Vendas</span>
-          </a>
-          <ul id="ddmenu_2" class="collapse dropdown-nav">
-            <li><a href="pedidos.html"><span class="arrow-icon">→</span> Pedidos</a></li>
-            <li><a href="clientes.html"><span class="arrow-icon">→</span> Clientes</a></li>
-          </ul>
-        </li>
-        <!-- Menu: Orçamentos -->
-        <li class="nav-item">
-          <a href="orcamentos.html">
-            <span class="icon">
-              <!-- SVG omitido -->
-            </span>
-            <span class="text">Orçamentos</span>
-          </a>
-        </li>
-        <!-- Menu: Personalize -->
-        <li class="nav-item nav-item-has-children">
-          <a href="#0" data-bs-toggle="collapse" data-bs-target="#ddmenu_3" aria-controls="ddmenu_3" aria-expanded="true" aria-label="Toggle navigation">
-            <span class="icon">
-              <!-- SVG omitido -->
-            </span>
-            <span class="text">Personalize</span>
-          </a>
-          <ul id="ddmenu_3" class="collapsed show dropdown-nav">
-            <li><a href="design.html#idvisual"><span class="arrow-icon">→</span> Identidade Visual</a></li>
-            <li><a href="design.html#paleta"><span class="arrow-icon">→</span> Paleta de Cores</a></li>
-            <li><a href="design.html#banner"><span class="arrow-icon">→</span> Banner</a></li>
-            <li><a href="design.html/#footer"><span class="arrow-icon">→</span> Rodapé</a></li>
-          </ul>
-        </li>
-        <!-- Menu: Usuários -->
-        <li class="nav-item nav-item-has-children">
-          <a href="#0" data-bs-toggle="collapse" data-bs-target="#ddmenu_usuarios" aria-controls="ddmenu_usuarios" aria-expanded="true" aria-label="Toggle navigation">
-            <span class="icon">
-              <!-- SVG omitido -->
-            </span>
-            <span class="text">Usuários</span>
-          </a>
-          <ul id="ddmenu_usuarios" class="collapsed show dropdown-nav">
-            <li><a href="createuser.html"><span class="arrow-icon">→</span> Criar acesso</a></li>
-            <li><a href="users.html"><span class="arrow-icon">→</span> Gerenciar usuários</a></li>
-          </ul>
-        </li>
-      </ul>
-    </nav>
-    <!-- Caixa promocional com dados do afiliado (os dados virão do back-end) -->
-    <div class="promo-box">
-      <div class="promo-icon">
-        <!-- A imagem abaixo deverá ser substituída pela foto de perfil do afiliado via API -->
-        <img class="mx-auto" src="assets/images/logo/logo-icon-big.svg" alt="Logo">
+    <!-- ======== Fim Preloader ========= -->
+
+    <!-- ======== Sidebar Navigation start ========= -->
+    <aside class="sidebar-nav-wrapper">
+      <div class="navbar-logo">
+        <a href="index.html">
+          <img src="assets/images/logo/logo.svg" alt="logo" />
+        </a>
       </div>
-      <h3>Adam Joe</h3>
-      <p>A Airland agradece por lhe ter como colaborador do nosso time.</p>
-    </div>
-  </aside>
-  <div class="overlay"></div>
-  <!-- =============================================================
-       Fim do Sidebar
-       ============================================================= -->
-
-  <!-- =============================================================
-       Main Wrapper e Header
-       ============================================================= -->
-  <main class="main-wrapper">
-    <header class="header">
-      <div class="container-fluid">
-        <div class="row">
-          <!-- Menu Toggle -->
-          <div class="col-lg-5 col-md-5 col-6">
-            <div class="header-left d-flex align-items-center">
-              <div class="menu-toggle-btn mr-15">
-                <button id="menu-toggle" class="main-btn primary-btn btn-hover">
-                  <i class="lni lni-chevron-left me-2"></i> Menu
-                </button>
-              </div>
-            </div>
-          </div>
-          <!-- Dados do Perfil no Header (exemplo estático; devem ser atualizados via API) -->
-          <div class="col-lg-7 col-md-7 col-6">
-            <div class="header-right">
-              <!-- Notificações (trecho omitido para brevidade) -->
-              <div class="notification-box ml-15 d-none d-md-flex">
-                <button class="dropdown-toggle" type="button" id="notification" data-bs-toggle="dropdown" aria-expanded="false">
-                  <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-                    <!-- SVG omitido -->
-                  </svg>
-                  <span></span>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notification">
-                  <li>
-                    <a href="#0">
-                      <div class="image">
-                        <img src="assets/images/lead/lead-6.png" alt="" />
-                      </div>
-                      <div class="content">
-                        <h6>John Doe <span class="text-regular">comment on a product.</span></h6>
-                        <p>Lorem ipsum dolor sit amet, consect etur adipiscing elit Vivamus tortor.</p>
-                        <span>10 mins ago</span>
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#0">
-                      <div class="image">
-                        <img src="assets/images/lead/lead-1.png" alt="" />
-                      </div>
-                      <div class="content">
-                        <h6>Jonathon <span class="text-regular">like on a product.</span></h6>
-                        <p>Lorem ipsum dolor sit amet, consect etur adipiscing elit Vivamus tortor.</p>
-                        <span>10 mins ago</span>
-                      </div>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-              <!-- Perfil -->
-              <div class="profile-box ml-15">
-                <button class="dropdown-toggle bg-transparent border-0" type="button" id="profile" data-bs-toggle="dropdown" aria-expanded="false">
-                  <div class="profile-info">
-                    <div class="info">
-                      <div class="image">
-                        <!-- A imagem abaixo deverá ser substituída pela foto de perfil do afiliado via API -->
-                        <img src="assets/images/profile/profile-image.png" alt="" />
-                      </div>
-                      <div>
-                        <h6 class="fw-500">Adam Joe</h6>
-                        <p>Admin</p>
-                      </div>
-                    </div>
-                  </div>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profile">
-                  <li>
-                    <div class="author-info flex items-center !p-1">
-                      <div class="image">
-                        <img src="assets/images/profile/profile-image.png" alt="image">
-                      </div>
-                      <div class="content">
-                        <h4 class="text-sm">Adam Joe</h4>
-                        <a class="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white text-xs" href="#">Email@gmail.com</a>
-                      </div>
-                    </div>
-                  </li>
-                  <li class="divider"></li>
-                  <li><a href="#0"><i class="lni lni-user"></i> View Profile</a></li>
-                  <li><a href="#0"><i class="lni lni-alarm"></i> Notifications</a></li>
-                  <li><a href="#0"><i class="lni lni-inbox"></i> Messages</a></li>
-                  <li><a href="#0"><i class="lni lni-cog"></i> Settings</a></li>
-                  <li class="divider"></li>
-                  <li><a href="#0"><i class="lni lni-exit"></i> Sign Out</a></li>
-                </ul>
-              </div>
-              <!-- Fim do Perfil -->
-            </div>
-          </div>
+      <nav class="sidebar-nav">
+        <ul>
+          <!-- Painel de Vendas -->
+          <li class="nav-item">
+            <a href="painel-vendas.html">
+              <span class="icon">
+                <!-- SVG omitido -->
+              </span>
+              <span class="text">Painel de Vendas</span>
+            </a>
+          </li>
+          <!-- Vendas com submenu -->
+          <li class="nav-item nav-item-has-children">
+            <a href="#0" class="collapsed" data-bs-toggle="collapse"
+               data-bs-target="#ddmenu_2" aria-controls="ddmenu_2"
+               aria-expanded="false" aria-label="Toggle navigation">
+              <span class="icon">
+                <!-- SVG omitido -->
+              </span>
+              <span class="text">Vendas</span>
+            </a>
+            <ul id="ddmenu_2" class="collapse dropdown-nav">
+              <li><a href="pedidos.html"><span class="arrow-icon">→</span> Pedidos</a></li>
+              <li><a href="clientes.html"><span class="arrow-icon">→</span> Clientes</a></li>
+            </ul>
+          </li>
+          <!-- Orçamentos -->
+          <li class="nav-item">
+            <a href="orcamentos.html">
+              <span class="icon">
+                <!-- SVG omitido -->
+              </span>
+              <span class="text">Orçamentos</span>
+            </a>
+          </li>
+          <!-- Personalize -->
+          <li class="nav-item nav-item-has-children">
+            <a href="#0" data-bs-toggle="collapse"
+               data-bs-target="#ddmenu_3" aria-controls="ddmenu_3"
+               aria-expanded="true" aria-label="Toggle navigation">
+              <span class="icon">
+                <!-- SVG omitido -->
+              </span>
+              <span class="text">Personalize</span>
+            </a>
+            <ul id="ddmenu_3" class="collapsed show dropdown-nav">
+              <li><a href="design.html#idvisual"><span class="arrow-icon">→</span> Identidade Visual</a></li>
+              <li><a href="design.html#paleta"><span class="arrow-icon">→</span> Paleta de Cores</a></li>
+              <li><a href="design.html#banner"><span class="arrow-icon">→</span> Banner</a></li>
+              <li><a href="design.html/#footer"><span class="arrow-icon">→</span> Rodapé</a></li>
+            </ul>
+          </li>
+          <!-- Usuários -->
+          <li class="nav-item nav-item-has-children">
+            <a href="#0" data-bs-toggle="collapse"
+               data-bs-target="#ddmenu_usuarios" aria-controls="ddmenu_usuarios"
+               aria-expanded="true" aria-label="Toggle navigation">
+              <span class="icon">
+                <!-- SVG omitido -->
+              </span>
+              <span class="text">Usuários</span>
+            </a>
+            <ul id="ddmenu_usuarios" class="collapsed show dropdown-nav">
+              <li><a href="createuser.html"><span class="arrow-icon">→</span> Criar acesso</a></li>
+              <li><a href="users.html"><span class="arrow-icon">→</span> Gerenciar usuários</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <!-- Caixa promocional do afiliado (dados serão obtidos via API) -->
+      <div class="promo-box">
+        <div class="promo-icon">
+          <img class="mx-auto" src="assets/images/logo/logo-icon-big.svg" alt="Logo">
         </div>
+        <h3>Adam Joe</h3>
+        <p>A Airland agradece por lhe ter como colaborador do nosso time.</p>
       </div>
-    </header>
-    <!-- =============================================================
-          Fim do Header
-    ============================================================= -->
+    </aside>
+    <div class="overlay"></div>
+    <!-- ======== Fim Sidebar Navigation ========= -->
 
-    <!-- ========== section start ========== -->
-    <section class="section">
-      <div class="container-fluid">
-        <!-- ========== title-wrapper start ========== -->
-        <div class="title-wrapper pt-30">
-          <div class="row align-items-center">
-            <div class="col-md-6">
-              <div class="title">
-                <h2>Painel de Vendas</h2>
-              </div>
-            </div>
-            <!-- end col -->
-            <div class="col-md-6">
-              <div class="breadcrumb-wrapper">
-                <nav aria-label="breadcrumb">
-                  <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                      <a href="#0">Dashboard</a>
-                    </li>
-                    <li class="breadcrumb-item active" aria-current="page">
-                      Painel de Vendas
-                    </li>
-                  </ol>
-                </nav>
-              </div>
-            </div>
-            <!-- end col -->
-          </div>
-          <!-- end row -->
-        </div>
-        <!-- ========== title-wrapper end ========== -->
-
-        <!-- ======= Cards de Métricas ========= -->
-        <div class="row">
-          <!-- Clientes (Contagem de clientes no período - supplier_pedidos filtrado por affiliate_id) -->
-          <div class="col-xl-3 col-lg-4 col-sm-6">
-            <div class="icon-card mb-30">
-              <div class="icon purple">
-                <i class="lni lni-users"></i>
-              </div>
-              <div class="content">
-                <h6 class="mb-10">Clientes</h6>
-                <h3 class="text-bold mb-10">6453</h3>
-                <p class="text-sm text-success">
-                  <i class="lni lni-arrow-up"></i> +23.4%
-                </p>
-              </div>
-            </div>
-          </div>
-          <!-- Faturamento (Soma de valor_venda da tabela supplier_pedidos) -->
-          <div class="col-xl-3 col-lg-4 col-sm-6">
-            <div class="icon-card mb-30">
-              <div class="icon success">
-                <i class="lni lni-eye"></i>
-              </div>
-              <div class="content">
-                <h6 class="mb-10">Faturamento</h6>
-                <h3 class="text-bold mb-10">876</h3>
-                <p class="text-sm text-danger">
-                  <i class="lni lni-arrow-down"></i> -12.00%
-                </p>
-              </div>
-            </div>
-          </div>
-          <!-- Receita (valor_venda de supplier_pedidos) -->
-          <div class="col-xl-3 col-lg-4 col-sm-6">
-            <div class="icon-card mb-30">
-              <div class="icon primary">
-                <i class="lni lni-thumbs-up"></i>
-              </div>
-              <div class="content">
-                <h6 class="mb-10">Receita</h6>
-                <h3 class="text-bold mb-10">976</h3>
-                <p class="text-sm text-danger">
-                  <i class="lni lni-arrow-down"></i> -2.00%
-                </p>
-              </div>
-            </div>
-          </div>
-          <!-- Take Rate (calculado a partir dos dados de supplier_pedidos) -->
-          <div class="col-xl-3 col-lg-4 col-sm-6">
-            <div class="icon-card mb-30">
-              <div class="icon orange">
-                <i class="lni lni-pie-chart"></i>
-              </div>
-              <div class="content">
-                <h6 class="mb-10">Take Rate</h6>
-                <h3 class="text-bold mb-10">346</h3>
-                <p class="text-sm text-success">
-                  <i class="lni lni-arrow-up"></i> +23.4%
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- ======= Fim dos Cards ========= -->
-
-        <div class="row">
-          <!-- Pedidos Recentes (antes Recent Activities) -->
-          <div class="col-lg-6">
-            <div class="card-style activity-card mb-30">
-              <div class="title d-flex flex-wrap align-items-center justify-content-between mb-10">
-                <div class="left mb-2">
-                  <h6 class="text-medium mb-2">Pedidos Recentes</h6>
-                  <p class="text-gray text-sm">Últimos 15 pedidos realizados.</p>
+    <!-- ================= Main Wrapper e Header ================= -->
+    <main class="main-wrapper">
+      <header class="header">
+        <div class="container-fluid">
+          <div class="row">
+            <!-- Menu Toggle -->
+            <div class="col-lg-5 col-md-5 col-6">
+              <div class="header-left d-flex align-items-center">
+                <div class="menu-toggle-btn mr-15">
+                  <button id="menu-toggle" class="main-btn primary-btn btn-hover">
+                    <i class="lni lni-chevron-left me-2"></i> Menu
+                  </button>
                 </div>
               </div>
-              <!-- Fim do Title -->
-              <!-- Tabela de Pedidos Recentes (dados extraídos de supplier_pedidos filtrados por affiliate_id) -->
-              <div class="table-responsive">
-                <table class="table activity-table">
-                  <thead>
-                    <tr>
-                      <th>Cliente</th>
-                      <th>Vendedor</th>
-                      <th>Valor</th>
-                      <th class="text-end">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <div class="d-flex align-items-center">
-                          <div class="icon default-bg me-2">
-                            <!-- Ícone ou foto do cliente (placeholder) -->
-                            <i class="lni lni-user"></i>
-                          </div>
-                          <span class="text-sm fw-500 text-gray">João Silva</span>
-                        </div>
-                      </td>
-                      <td>
-                        <p class="text-sm fw-500 text-gray">Maria Souza</p>
-                      </td>
-                      <td>
-                        <p class="text-sm fw-500 text-gray">R$ 1.200,00</p>
-                      </td>
-                      <td class="text-end">
-                        <span class="status-btn">Completed</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="d-flex align-items-center">
-                          <div class="icon default-bg me-2">
-                            <i class="lni lni-user"></i>
-                          </div>
-                          <span class="text-sm fw-500 text-gray">Ana Costa</span>
-                        </div>
-                      </td>
-                      <td>
-                        <p class="text-sm fw-500 text-gray">Pedro Oliveira</p>
-                      </td>
-                      <td>
-                        <p class="text-sm fw-500 text-gray">R$ 980,00</p>
-                      </td>
-                      <td class="text-end">
-                        <span class="status-btn">Pending</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="d-flex align-items-center">
-                          <div class="icon default-bg me-2">
-                            <i class="lni lni-user"></i>
-                          </div>
-                          <span class="text-sm fw-500 text-gray">Carlos Lima</span>
-                        </div>
-                      </td>
-                      <td>
-                        <p class="text-sm fw-500 text-gray">Fernanda Rocha</p>
-                      </td>
-                      <td>
-                        <p class="text-sm fw-500 text-gray">R$ 1.500,00</p>
-                      </td>
-                      <td class="text-end">
-                        <span class="status-btn">Canceled</span>
-                      </td>
-                    </tr>
-                    <!-- Mais linhas podem ser adicionadas dinamicamente -->
-                  </tbody>
-                </table>
-              </div>
             </div>
-          </div>
-          <!-- Pedidos por Região (antes Browser States) -->
-          <div class="col-lg-6">
-            <div class="card-style mb-30">
-              <div class="title d-flex justify-content-between align-items-center">
-                <h6 class="mb-10">Pedidos por Região</h6>
-                <div class="more-btn-wrapper mb-10">
-                  <button class="more-btn dropdown-toggle" id="moreAction" data-bs-toggle="dropdown"
-                    aria-expanded="false">
-                    <i class="lni lni-more-alt"></i>
+            <!-- Dados do Perfil -->
+            <div class="col-lg-7 col-md-7 col-6">
+              <div class="header-right">
+                <!-- Notificações (trecho omitido) -->
+                <div class="notification-box ml-15 d-none d-md-flex">
+                  <button class="dropdown-toggle" type="button" id="notification"
+                          data-bs-toggle="dropdown" aria-expanded="false">
+                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                      <!-- SVG omitido -->
+                    </svg>
+                    <span></span>
                   </button>
-                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="moreAction">
-                    <li class="dropdown-item">
-                      <a href="#0" class="text-gray">Clear All</a>
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notification">
+                    <li>
+                      <a href="#0">
+                        <div class="image">
+                          <img src="assets/images/lead/lead-6.png" alt="" />
+                        </div>
+                        <div class="content">
+                          <h6>John Doe <span class="text-regular">
+                              comment on a product.
+                            </span></h6>
+                          <p>Lorem ipsum dolor sit amet, consect etur adipiscing elit Vivamus tortor.</p>
+                          <span>10 mins ago</span>
+                        </div>
+                      </a>
                     </li>
-                    <li class="dropdown-item">
-                      <a href="#0" class="text-gray">Delete Cookies</a>
+                    <li>
+                      <a href="#0">
+                        <div class="image">
+                          <img src="assets/images/lead/lead-1.png" alt="" />
+                        </div>
+                        <div class="content">
+                          <h6>Jonathon <span class="text-regular">
+                              like on a product.
+                            </span></h6>
+                          <p>Lorem ipsum dolor sit amet, consect etur adipiscing elit Vivamus tortor.</p>
+                          <span>10 mins ago</span>
+                        </div>
+                      </a>
                     </li>
                   </ul>
                 </div>
-              </div>
-              <!-- Mapa (opcional – pode mostrar visualização geográfica dos estados) -->
-              <div id="map" style="width: 100%; height: 400px"></div>
-              <!-- Tabela de Pedidos por Região (dados de supplier_pedidos agrupados por UF) -->
-              <div class="table-wrapper">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th>
-                        <h5 class="text-sm text-medium">Estados</h5>
-                      </th>
-                      <th>
-                        <h5 class="text-sm text-medium">Faturado</h5>
-                      </th>
-                      <th>
-                        <h5 class="text-sm text-medium">Porcentagem</h5>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <p class="text-sm">SP</p>
-                      </td>
-                      <td>
-                        <p class="text-sm">R$ 50.000</p>
-                      </td>
-                      <td>
-                        <p class="text-sm">40%</p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p class="text-sm">RJ</p>
-                      </td>
-                      <td>
-                        <p class="text-sm">R$ 30.000</p>
-                      </td>
-                      <td>
-                        <p class="text-sm">24%</p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p class="text-sm">MG</p>
-                      </td>
-                      <td>
-                        <p class="text-sm">R$ 20.000</p>
-                      </td>
-                      <td>
-                        <p class="text-sm">16%</p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p class="text-sm">ES</p>
-                      </td>
-                      <td>
-                        <p class="text-sm">R$ 15.000</p>
-                      </td>
-                      <td>
-                        <p class="text-sm">12%</p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p class="text-sm">BA</p>
-                      </td>
-                      <td>
-                        <p class="text-sm">R$ 10.000</p>
-                      </td>
-                      <td>
-                        <p class="text-sm">8%</p>
-                      </td>
-                    </tr>
-                    <!-- Mais linhas dinâmicas conforme os dados -->
-                  </tbody>
-                </table>
+                <!-- Perfil -->
+                <div class="profile-box ml-15">
+                  <button class="dropdown-toggle bg-transparent border-0" type="button"
+                          id="profile" data-bs-toggle="dropdown" aria-expanded="false">
+                    <div class="profile-info">
+                      <div class="info">
+                        <div class="image">
+                          <img src="assets/images/profile/profile-image.png" alt="" />
+                        </div>
+                        <div>
+                          <h6 class="fw-500">Adam Joe</h6>
+                          <p>Admin</p>
+                        </div>
+                      </div>
+                    </div>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profile">
+                    <li>
+                      <div class="author-info flex items-center !p-1">
+                        <div class="image">
+                          <img src="assets/images/profile/profile-image.png" alt="image">
+                        </div>
+                        <div class="content">
+                          <h4 class="text-sm">Adam Joe</h4>
+                          <a class="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white text-xs" href="#">
+                            Email@gmail.com
+                          </a>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                      <a href="#0"><i class="lni lni-user"></i> View Profile</a>
+                    </li>
+                    <li>
+                      <a href="#0"><i class="lni lni-alarm"></i> Notifications</a>
+                    </li>
+                    <li>
+                      <a href="#0"><i class="lni lni-inbox"></i> Messages</a>
+                    </li>
+                    <li>
+                      <a href="#0"><i class="lni lni-cog"></i> Settings</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                      <a href="#0"><i class="lni lni-exit"></i> Sign Out</a>
+                    </li>
+                  </ul>
+                </div>
+                <!-- Fim do Perfil -->
               </div>
             </div>
           </div>
         </div>
-        <!-- End Row for Pedidos Recentes e Pedidos por Região -->
-      </div>
-      <!-- end container -->
-    </section>
-    <!-- ========== section end ========== -->
+      </header>
+      <!-- ================= Fim do Header ================= -->
 
-    <!-- ========== footer start =========== -->
+      <!-- ================= Seção Principal ================= -->
+      <section class="section">
+        <div class="container-fluid">
+          <!-- ========== Title Wrapper ========= -->
+          <div class="title-wrapper pt-30">
+            <div class="row align-items-center">
+              <div class="col-md-6">
+                <div class="title">
+                  <h2>Painel de Vendas</h2>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="breadcrumb-wrapper">
+                  <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                      <li class="breadcrumb-item">
+                        <a href="#0">Dashboard</a>
+                      </li>
+                      <li class="breadcrumb-item active" aria-current="page">
+                        Painel de Vendas
+                      </li>
+                    </ol>
+                  </nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- ========== Fim Title Wrapper ========= -->
+
+          <!-- ======= Blocos de Métricas (Clientes, Faturamento, Receita, Take Rate) ======= -->
+          <div class="row">
+            <!-- Clientes -->
+            <div class="col-xl-3 col-lg-4 col-sm-6">
+              <div class="icon-card mb-30">
+                <div class="icon purple">
+                  <i class="lni lni-users"></i>
+                </div>
+                <div class="content">
+                  <h6 class="mb-10">Clientes</h6>
+                  <h3 id="clientCount" class="text-bold mb-10">0</h3>
+                  <p class="text-sm text-success">
+                    <i class="lni lni-arrow-up"></i> 0%
+                  </p>
+                </div>
+              </div>
+            </div>
+            <!-- Faturamento -->
+            <div class="col-xl-3 col-lg-4 col-sm-6">
+              <div class="icon-card mb-30">
+                <div class="icon success">
+                  <i class="lni lni-eye"></i>
+                </div>
+                <div class="content">
+                  <h6 class="mb-10">Faturamento</h6>
+                  <h3 id="faturamento" class="text-bold mb-10">0</h3>
+                  <p class="text-sm text-danger">
+                    <i class="lni lni-arrow-down"></i> 0%
+                  </p>
+                </div>
+              </div>
+            </div>
+            <!-- Receita -->
+            <div class="col-xl-3 col-lg-4 col-sm-6">
+              <div class="icon-card mb-30">
+                <div class="icon primary">
+                  <i class="lni lni-thumbs-up"></i>
+                </div>
+                <div class="content">
+                  <h6 class="mb-10">Receita</h6>
+                  <h3 id="receita" class="text-bold mb-10">0</h3>
+                  <p class="text-sm text-danger">
+                    <i class="lni lni-arrow-down"></i> 0%
+                  </p>
+                </div>
+              </div>
+            </div>
+            <!-- Take Rate -->
+            <div class="col-xl-3 col-lg-4 col-sm-6">
+              <div class="icon-card mb-30">
+                <div class="icon orange">
+                  <i class="lni lni-pie-chart"></i>
+                </div>
+                <div class="content">
+                  <h6 class="mb-10">Take Rate</h6>
+                  <h3 id="takeRate" class="text-bold mb-10">0</h3>
+                  <p class="text-sm text-success">
+                    <i class="lni lni-arrow-up"></i> 0%
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- ======= Fim dos Blocos de Métricas ======= -->
+
+          <!-- ===== Seletor de Datas / Calendário (Anexo 1) ===== -->
+          <div class="row align-items-center mb-4">
+            <div class="col-auto">
+              <span style="font-size: 1rem;">
+                Datas selecionadas: <strong id="selectedDates">[vazio]</strong>
+              </span>
+            </div>
+            <div class="col-auto">
+              <button id="openCalendarBtn" class="main-btn primary-btn btn-hover">
+                Selecionar Data
+              </button>
+            </div>
+          </div>
+          <div class="row" id="calendarRow" style="display: none;">
+            <div class="col-12" id="calendarContainer"></div>
+          </div>
+          <!-- ===== Fim do Calendário ===== -->
+
+          <!-- ===== Seção: Pedidos Recentes com Paginação ===== -->
+          <div class="row">
+            <div class="col-12">
+              <div class="card-style activity-card mb-30">
+                <div class="title d-flex flex-wrap align-items-center justify-content-between mb-10">
+                  <div class="left mb-2">
+                    <h6 class="text-medium mb-2">Pedidos Recentes</h6>
+                    <p class="text-gray text-sm">
+                      Exibindo no máximo 15 registros por página.
+                    </p>
+                  </div>
+                </div>
+                <div class="table-responsive">
+                  <table class="table activity-table">
+                    <thead>
+                      <tr>
+                        <th>Cliente</th>
+                        <th>Vendedor</th>
+                        <th>Valor</th>
+                        <th class="text-end">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody id="pedidosBody">
+                      <!-- Caso não haja dados da API, será exibida uma linha com "0" -->
+                    </tbody>
+                  </table>
+                </div>
+                <div class="d-flex justify-content-end" style="gap: 10px;">
+                  <button id="prevPageBtn" class="main-btn secondary-btn btn-sm">
+                    &laquo; Anterior
+                  </button>
+                  <span id="paginationInfo" class="text-sm fw-bold"></span>
+                  <button id="nextPageBtn" class="main-btn secondary-btn btn-sm">
+                    Próximo &raquo;
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- ===== Fim Pedidos Recentes ===== -->
+
+          <!-- ===== Seção: Pedidos por Região ===== -->
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="card-style mb-30">
+                <div class="title d-flex justify-content-between align-items-center">
+                  <h6 class="mb-10">Pedidos por Região</h6>
+                  <div class="more-btn-wrapper mb-10">
+                    <button class="more-btn dropdown-toggle" id="moreAction"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                      <i class="lni lni-more-alt"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="moreAction">
+                      <li class="dropdown-item">
+                        <a href="#0" class="text-gray">Clear All</a>
+                      </li>
+                      <li class="dropdown-item">
+                        <a href="#0" class="text-gray">Delete Cookies</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <!-- Mapa (opcional para exibição geográfica) -->
+                <div id="map" style="width: 100%; height: 400px"></div>
+                <!-- Tabela de Pedidos por Região -->
+                <div class="table-wrapper">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th><h5 class="text-sm text-medium">Estados</h5></th>
+                        <th><h5 class="text-sm text-medium">Faturado</h5></th>
+                        <th><h5 class="text-sm text-medium">Porcentagem</h5></th>
+                      </tr>
+                    </thead>
+                    <tbody id="regiaoBody">
+                      <!-- Se não houver dados, exibe linha com "0" -->
+                      <tr>
+                        <td><p class="text-sm">0</p></td>
+                        <td><p class="text-sm">R$ 0</p></td>
+                        <td><p class="text-sm">0%</p></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- ===== Fim Pedidos por Região ===== -->
+        </div>
+      </div>
+    </section>
+    <!-- ================= Fim Seção Principal ================= -->
+
+    <!-- ================= Footer ================= -->
     <footer class="footer">
       <div class="container-fluid">
         <div class="row">
@@ -513,21 +443,16 @@
             <div class="copyright text-center text-md-start">
               <p class="text-sm">
                 Designed and Developed by
-                <a href="https://Airland.com" rel="nofollow" target="_blank">
-                  Airland
-                </a>
+                <a href="https://Airland.com" rel="nofollow" target="_blank">Airland</a>
               </p>
             </div>
           </div>
-          <!-- end col-->
         </div>
-        <!-- end row -->
       </div>
-      <!-- end container -->
     </footer>
-    <!-- ========== footer end =========== -->
+    <!-- ================= Fim Footer ================= -->
   </main>
-  <!-- ======== main-wrapper end =========== -->
+  <!-- ================= Fim Main Wrapper ================= -->
 
   <!-- ============ Theme Option Start ============= -->
   <button class="option-btn">
@@ -546,17 +471,15 @@
       <li><button class="leftSidebarButton active">Left Sidebar</button></li>
       <li><button class="rightSidebarButton">Right Sidebar</button></li>
     </ul>
-
     <h6 class="mb-10">Theme</h6>
     <ul class="d-flex flex-wrap align-items-center">
       <li>
-        <button class="lightThemeButton active">
-          Light Theme + Sidebar 1
-        </button>
+        <button class="lightThemeButton active">Light Theme + Sidebar 1</button>
       </li>
-      <li><button class="darkThemeButton">Dark Theme + Sidebar 1</button></li>
+      <li>
+        <button class="darkThemeButton">Dark Theme + Sidebar 1</button>
+      </li>
     </ul>
-
     <div class="promo-box">
       <div class="promo-icon">
         <img class="mx-auto" src="./assets/images/logo/logo-icon-big.svg" alt="Logo">
@@ -585,146 +508,136 @@
   <script src="assets/js/Sortable.min.js"></script>
   <script src="assets/js/main.js"></script>
 
+  <!-- ========== Importação do módulo do Calendário (Anexo 1) ========= -->
+  <!-- Ajuste o caminho "assets/js/calendarComponent.js" conforme sua estrutura -->
+  <script type="module">
+    import { createCalendarComponent } from "assets/js/calendarComponent.js";
+
+    // --- Lógica do Calendário ---
+    const btnOpenCalendar = document.getElementById("openCalendarBtn");
+    const calendarRow = document.getElementById("calendarRow");
+    const calendarContainer = document.getElementById("calendarContainer");
+    const selectedDatesEl = document.getElementById("selectedDates");
+
+    // Cria o componente do calendário e o insere no container
+    const calendarEl = createCalendarComponent();
+    calendarContainer.appendChild(calendarEl);
+
+    // Exibe/oculta o calendário ao clicar no botão
+    btnOpenCalendar.addEventListener("click", () => {
+      calendarRow.style.display =
+        (calendarRow.style.display === "none" || calendarRow.style.display === "") ? "block" : "none";
+    });
+
+    // Lógica do botão "Confirmar" do calendário: se não houver dados da API, retorna 0 (exemplo fixo)
+    const btnApply = calendarEl.querySelector(".calendar__button--primary");
+    btnApply.addEventListener("click", () => {
+      // Em produção, colete as datas selecionadas; aqui, se não houver dados, retorna "0"
+      selectedDatesEl.textContent = "01/04/2025 - 23/04/2025";
+      calendarRow.style.display = "none";
+    });
+
+    // Botão "Voltar" fecha o calendário
+    const btnBack = calendarEl.querySelector(".calendar__button--grey");
+    btnBack.addEventListener("click", () => {
+      calendarRow.style.display = "none";
+    });
+
+    /***************************************************
+     * LÓGICA PARA PEDIDOS RECENTES COM PAGINAÇÃO
+     * Se a API não retornar dados, todos os campos serão "0"
+     ***************************************************/
+    // Não usar dados simulados; se não houver dados da API, o array ficará vazio.
+    const pedidosRecentesAPI = []; // Aqui, se a API não retornar, array vazio.
+    const pedidosData = pedidosRecentesAPI.length > 0 ? pedidosRecentesAPI : []; 
+
+    let currentPage = 1;
+    const perPage = 15;
+    const pedidosBody = document.getElementById("pedidosBody");
+    const prevPageBtn = document.getElementById("prevPageBtn");
+    const nextPageBtn = document.getElementById("nextPageBtn");
+    const paginationInfo = document.getElementById("paginationInfo");
+
+    function renderPedidos(page = 1) {
+      pedidosBody.innerHTML = "";
+      const startIndex = (page - 1) * perPage;
+      const endIndex = page * perPage;
+      const pageData = pedidosData.slice(startIndex, endIndex);
+
+      // Se não houver dados, exibe uma linha com todos os campos "0"
+      if (pageData.length === 0) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>0</td>
+          <td>0</td>
+          <td>R$ 0</td>
+          <td class="text-end">0</td>
+        `;
+        pedidosBody.appendChild(tr);
+      } else {
+        pageData.forEach((p) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="icon default-bg me-2">
+                  <i class="lni lni-user"></i>
+                </div>
+                <span class="text-sm fw-500 text-gray">${p.cliente || "0"}</span>
+              </div>
+            </td>
+            <td>
+              <p class="text-sm fw-500 text-gray">${p.vendedor || "0"}</p>
+            </td>
+            <td>
+              <p class="text-sm fw-500 text-gray">R$ ${p.valor?.toLocaleString("pt-BR") ?? "0"}</p>
+            </td>
+            <td class="text-end">
+              <span class="status-btn">${p.status || "0"}</span>
+            </td>
+          `;
+          pedidosBody.appendChild(tr);
+        });
+      }
+
+      const total = pedidosData.length;
+      const totalPages = Math.ceil(total / perPage);
+      paginationInfo.textContent = `Página ${page} de ${totalPages} (${total} registros)`;
+      prevPageBtn.disabled = page <= 1;
+      nextPageBtn.disabled = page >= totalPages || totalPages === 0;
+    }
+
+    prevPageBtn.addEventListener("click", () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderPedidos(currentPage);
+      }
+    });
+    nextPageBtn.addEventListener("click", () => {
+      const totalPages = Math.ceil(pedidosData.length / perPage);
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderPedidos(currentPage);
+      }
+    });
+
+    renderPedidos(currentPage);
+  </script>
+
+  <!-- =========== Lógica de Tema (Light/Dark) ========= -->
   <script>
-    // ======== Ativação do mapa com marcadores (exemplo com estados do Brasil) =========
-    const markers = [
-      { name: "São Paulo", coords: [-23.5505, -46.6333] },
-      { name: "Rio de Janeiro", coords: [-22.9068, -43.1729] },
-      { name: "Belo Horizonte", coords: [-19.8157, -43.9542] },
-      { name: "Salvador", coords: [-12.9714, -38.5014] },
-      { name: "Porto Alegre", coords: [-30.0346, -51.2177] },
-    ];
-
-    const jvm = new jsVectorMap({
-        map: "world_merc",
-        selector: "#map",
-        zoomButtons: true,
-        focusOn: { region: 'BR' },
-        regionStyle: {
-          initial: { fill: "#d1d5db" },
-        },
-        labels: {
-          markers: {
-            render: (marker) => marker.name,
-          },
-        },
-        markersSelectable: true,
-        selectedMarkers: markers.map((marker, index) => {
-          if (marker.name === "São Paulo" || marker.name === "Rio de Janeiro") {
-            return index;
-          }
-        }).filter(index => index !== undefined),
-        markers: markers,
-        markerStyle: {
-          initial: { fill: "#4A6CF7" },
-          selected: { fill: "#ff5050" },
-        },
-        markerLabelStyle: {
-          initial: {
-            fontWeight: 400,
-            fontSize: 14,
-          },
-        },
-    });
-
-    // =========== Exemplo dos gráficos (chart three, chart four e referrals charts) =========
-    const ctx3 = document.getElementById("Chart3").getContext("2d");
-    const chart3 = new Chart(ctx3, {
-      type: "line",
-      data: {
-        labels: ["Jan", "Fab", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-        datasets: [
-          {
-            label: "Visitors",
-            backgroundColor: "transparent",
-            borderColor: "#9b51e0",
-            data: [80, 120, 110, 100, 130, 150, 115, 145, 140, 130, 160, 210],
-            pointBackgroundColor: "transparent",
-            pointHoverBackgroundColor: "#9b51e0",
-            pointBorderColor: "transparent",
-            pointHoverBorderColor: "#fff",
-            pointHoverBorderWidth: 3,
-            borderWidth: 5,
-            pointRadius: 5,
-            pointHoverRadius: 8,
-            fill: false,
-            cubicInterpolationMode: "monotone",
-          },
-          {
-            label: "Visits",
-            backgroundColor: "transparent",
-            borderColor: "#4a6cf7",
-            data: [120, 160, 150, 140, 165, 210, 135, 155, 170, 140, 130, 200],
-            pointBackgroundColor: "transparent",
-            pointHoverBackgroundColor: "#4a6cf7",
-            pointBorderColor: "transparent",
-            pointHoverBorderColor: "#fff",
-            pointHoverBorderWidth: 3,
-            borderWidth: 5,
-            pointRadius: 5,
-            pointHoverRadius: 8,
-            fill: false,
-            cubicInterpolationMode: "monotone",
-          },
-        ],
-      },
-      options: { /* ... configurações do chart3 ... */ }
-    });
-
-    const ctx4 = document.getElementById("Chart4").getContext("2d");
-    const chart4 = new Chart(ctx4, {
-      type: "bar",
-      data: {
-        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-        datasets: [
-          {
-            label: "",
-            backgroundColor: "#4A6CF7",
-            borderColor: "transparent",
-            borderRadius: 20,
-            borderWidth: 5,
-            barThickness: 20,
-            maxBarThickness: 20,
-            data: [600, 700, 1000, 700, 650, 800],
-          },
-          {
-            label: "",
-            backgroundColor: "#d50100",
-            borderColor: "transparent",
-            borderRadius: 20,
-            borderWidth: 5,
-            barThickness: 20,
-            maxBarThickness: 20,
-            data: [690, 740, 720, 1120, 876, 900],
-          },
-        ],
-      },
-      options: { /* ... configurações do chart4 ... */ }
-    });
-
-    // Exemplos de criação de gráficos doughnut e referrals são mantidos...
-    // (Configurações completas omitidas para brevidade)
-
-    // =========== Tema (light/dark) ==========
     const lightThemeColors = { darkBorder: "rgba(143, 146, 161, .1)", darkColor: "#5A6A85" };
     const darkThemeColors = { darkBorder: "#2b2b42", darkColor: "#838C9A" };
 
     function applyThemeColors(themeColors) {
-      chart3.options.scales.y.grid.color = themeColors.darkBorder;
-      chart3.options.scales.y.grid.borderColor = themeColors.darkBorder;
-      chart3.options.scales.x.ticks.color = themeColors.darkColor;
-      chart3.options.scales.y.ticks.color = themeColors.darkColor;
-      chart4.options.scales.y.grid.color = themeColors.darkBorder;
-      chart4.options.scales.y.grid.borderColor = themeColors.darkBorder;
-      chart4.options.scales.x.ticks.color = themeColors.darkColor;
-      chart4.options.scales.y.ticks.color = themeColors.darkColor;
-      chart3.update();
-      chart4.update();
+      // Se houver gráficos ou outros componentes a atualizar, adicione aqui.
+      // Exemplo:
+      // chart.options.scales.y.grid.color = themeColors.darkBorder;
+      // chart.update();
     }
 
     const darkThemeButton = document.querySelector('.darkThemeButton');
     const lightThemeButton = document.querySelector('.lightThemeButton');
-
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
       applyThemeColors(darkThemeColors);
@@ -732,8 +645,8 @@
       applyThemeColors(lightThemeColors);
     }
 
-    darkThemeButton.addEventListener('click', () => { applyThemeColors(darkThemeColors); });
-    lightThemeButton.addEventListener('click', () => { applyThemeColors(lightThemeColors); });
+    darkThemeButton?.addEventListener('click', () => { applyThemeColors(darkThemeColors); });
+    lightThemeButton?.addEventListener('click', () => { applyThemeColors(lightThemeColors); });
   </script>
 </body>
 </html>
