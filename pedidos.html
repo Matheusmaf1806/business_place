@@ -41,8 +41,24 @@
       }
 
       /* A promo-box ficará empurrada para o final */
-      .promo-box {
-        margin-top: auto;
+      /* O aside ocupará toda a altura da tela */
+      aside.sidebar-nav-wrapper {
+        display: flex;
+        flex-direction: column;
+        height: 100vh; /* ou 100% se for um pai que já é 100% */
+      }
+      
+      /* O nav expande para ocupar o espaço vertical */
+      aside.sidebar-nav-wrapper nav.sidebar-nav {
+        flex: 1;
+        /* Se quiser que o menu role */
+        overflow-y: auto;
+      }
+      
+      /* A promo-box vai para o rodapé graças ao margin-top: auto */
+      aside.sidebar-nav-wrapper .promo-box {
+        margin-top: auto; 
+        margin-bottom: 1rem; /* se quiser um espaçamento do fim */
       }
     </style>
   </head>
