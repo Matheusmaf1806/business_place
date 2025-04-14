@@ -20,10 +20,7 @@
     <link rel="stylesheet" href="assets/css/calcom.css" />
 
     <!-- ========== Font Awesome (v6.2.0 via jsDelivr) ========= -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"
-    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css" />
 
     <!-- Estilos customizados para a barra lateral -->
     <style>
@@ -31,7 +28,7 @@
       .sidebar-nav a {
         color: #5d657b;
       }
-      /* Para itens de submenu, o link pai não será destacado automaticamente */
+      /* Para itens de submenu, o link pai não recebe destaque automaticamente */
       .sidebar-nav .nav-item.nav-item-has-children > a {
         color: #5d657b;
       }
@@ -44,7 +41,7 @@
       }
     </style>
   </head>
-  <body>
+  <body style="display:none;">
     <!-- ======== Preloader ========= -->
     <div id="preloader">
       <div class="spinner"></div>
@@ -55,7 +52,6 @@
     <aside class="sidebar-nav-wrapper">
       <div class="navbar-logo">
         <a href="index.html">
-          <!-- No logo, o src será atualizado com fotodeperfil do usuário -->
           <img src="assets/images/logo/logo.svg" alt="logo" />
         </a>
       </div>
@@ -75,8 +71,7 @@
           </li>
           <!-- Menu: Vendas com submenu -->
           <li class="nav-item nav-item-has-children">
-            <a href="#0" class="collapsed" data-bs-toggle="collapse" data-bs-target="#ddmenu_2" 
-               aria-controls="ddmenu_2" aria-expanded="false" aria-label="Toggle navigation">
+            <a href="#0" class="collapsed" data-bs-toggle="collapse" data-bs-target="#ddmenu_2" aria-controls="ddmenu_2" aria-expanded="false" aria-label="Toggle navigation">
               <span class="icon">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M2.49999 3.33333C2.03976 3.33333 1.66666 3.70643 1.66666 4.16666V7.49999C1.66666 7.96023 2.03976 8.33333 2.49999 8.33333H5.83332C6.29356 8.33333 6.66666 7.96023 6.66666 7.49999V4.16666C6.66666 3.70643 6.29356 3.33333 5.83332 3.33333H2.49999Z" />
@@ -107,23 +102,18 @@
           </li>
           <!-- Menu: Personalize -->
           <li class="nav-item nav-item-has-children">
-            <a href="#0" data-bs-toggle="collapse" data-bs-target="#ddmenu_3" 
-               aria-controls="ddmenu_3" aria-expanded="true" aria-label="Toggle navigation">
+            <a href="#0" data-bs-toggle="collapse" data-bs-target="#ddmenu_3" aria-controls="ddmenu_3" aria-expanded="true" aria-label="Toggle navigation">
               <span class="icon">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M4.16666 4.16675C4.16666 2.78604 6.77833 1.66675 9.99999 1.66675C13.2217 1.66675 15.8333 2.78604 15.8333 4.16675V4.57073C15.8027 4.60316 15.7678 4.637 15.7282 4.6722C15.4683 4.90251 15.0568 5.13848 14.4946 5.34931C13.3747 5.76924 11.7858 6.04175 9.99999 6.04175C8.21415 6.04175 6.62521 5.76924 5.5054 5.34931C4.94318 5.13848 4.53162 4.90251 4.27185 4.6722C4.23215 4.637 4.19726 4.60316 4.16666 4.57073V4.16675Z" />
-                  <path
-                    d="M4.16666 6.10992V8.73742C4.19726 8.76983 4.23215 8.80367 4.27185 8.83883C4.53162 9.06917 4.94318 9.30517 5.5054 9.516C6.62521 9.93592 8.21415 10.2084 9.99999 10.2084C11.7858 10.2084 13.3747 9.93592 14.4946 9.516C15.0568 9.30517 15.4683 9.06917 15.7282 8.83883C15.7678 8.80367 15.8027 8.76983 15.8333 8.73742V6.10992C15.5592 6.26222 15.2563 6.39865 14.9335 6.51972C13.6404 7.00462 11.8961 7.29175 9.99999 7.29175C8.10394 7.29175 6.35954 7.00462 5.06649 6.51972C4.74364 6.39865 4.44074 6.26222 4.16666 6.10992Z" />
-                  <path
-                    d="M15.8333 10.2766C15.5592 10.4289 15.2563 10.5653 14.9335 10.6864C13.6404 11.1712 11.8961 11.4584 9.99999 11.4584C8.10394 11.4584 6.35954 11.1712 5.06649 10.6864C4.74364 10.5653 4.44074 10.4289 4.16666 10.2766V12.904C4.19726 12.9365 4.23215 12.9703 4.27185 13.0055C4.53162 13.2358 4.94318 13.4718 5.5054 13.6826C6.62521 14.1025 8.21415 14.375 9.99999 14.375C11.7858 14.375 13.3747 14.1025 14.4946 13.6826C15.0568 13.4718 15.4683 13.2358 15.7282 13.0055C15.7678 12.9703 15.8027 12.9365 15.8333 12.904V10.2766Z" />
-                  <path
-                    d="M15.8333 14.4432C15.5592 14.5956 15.2563 14.732 14.9335 14.8531C13.6404 15.3379 11.8961 15.6251 9.99999 15.6251C8.10394 15.6251 6.35954 15.3379 5.06649 14.8531C4.74364 14.732 4.44074 14.5956 4.16666 14.4432V15.8334C4.16666 17.2142 6.77833 18.3334 9.99999 18.3334C13.2217 18.3334 15.8333 17.2142 15.8333 15.8334V14.4432Z" />
+                  <path d="M4.16666 4.16675C4.16666 2.78604 6.77833 1.66675 9.99999 1.66675C13.2217 1.66675 15.8333 2.78604 15.8333 4.16675V4.57073C15.8027 4.60316 15.7678 4.637 15.7282 4.6722C15.4683 4.90251 15.0568 5.13848 14.4946 5.34931C13.3747 5.76924 11.7858 6.04175 9.99999 6.04175C8.21415 6.04175 6.62521 5.76924 5.5054 5.34931C4.94318 5.13848 4.53162 4.90251 4.27185 4.6722C4.23215 4.637 4.19726 4.60316 4.16666 4.57073V4.16675Z" />
+                  <path d="M4.16666 6.10992V8.73742C4.19726 8.76983 4.23215 8.80367 4.27185 8.83883C4.53162 9.06917 4.94318 9.30517 5.5054 9.516C6.62521 9.93592 8.21415 10.2084 9.99999 10.2084C11.7858 10.2084 13.3747 9.93592 14.4946 9.516C15.0568 9.30517 15.4683 9.06917 15.7282 8.83883C15.7678 8.80367 15.8027 8.76983 15.8333 8.73742V6.10992C15.5592 6.26222 15.2563 6.39865 14.9335 6.51972C13.6404 7.00462 11.8961 7.29175 9.99999 7.29175C8.10394 7.29175 6.35954 7.00462 5.06649 6.51972C4.74364 6.39865 4.44074 6.26222 4.16666 6.10992Z" />
+                  <path d="M15.8333 10.2766C15.5592 10.4289 15.2563 10.5653 14.9335 10.6864C13.6404 11.1712 11.8961 11.4584 9.99999 11.4584C8.10394 11.4584 6.35954 11.1712 5.06649 10.6864C4.74364 10.5653 4.44074 10.4289 4.16666 10.2766V12.904C4.19726 12.9365 4.23215 12.9703 4.27185 13.0055C4.53162 13.2358 4.94318 13.4718 5.5054 13.6826C6.62521 14.1025 8.21415 14.375 9.99999 14.375C11.7858 14.375 13.3747 14.1025 14.4946 13.6826C15.0568 13.4718 15.4683 13.2358 15.7282 13.0055C15.7678 12.9703 15.8027 12.9365 15.8333 12.904V10.2766Z" />
+                  <path d="M15.8333 14.4432C15.5592 14.5956 15.2563 14.732 14.9335 14.8531C13.6404 15.3379 11.8961 15.6251 9.99999 15.6251C8.10394 15.6251 6.35954 15.3379 5.06649 14.8531C4.74364 14.732 4.44074 14.5956 4.16666 14.4432V15.8334C4.16666 17.2142 6.77833 18.3334 9.99999 18.3334C13.2217 18.3334 15.8333 17.2142 15.8333 15.8334V14.4432Z" />
                 </svg>
               </span>
               <span class="text">Personalize</span>
             </a>
-            <ul id="ddmenu_3" class="collapse dropdown-nav">
+            <ul id="ddmenu_3" class="collapsed show dropdown-nav">
               <li><a href="design.html#idvisual"><span class="arrow-icon">→</span> Identidade Visual</a></li>
               <li><a href="design.html#paleta"><span class="arrow-icon">→</span> Paleta de Cores</a></li>
               <li><a href="design.html#banner"><span class="arrow-icon">→</span> Banner</a></li>
@@ -132,8 +122,7 @@
           </li>
           <!-- Menu: Usuários -->
           <li class="nav-item nav-item-has-children">
-            <a href="#0" data-bs-toggle="collapse" data-bs-target="#ddmenu_usuarios" 
-               aria-controls="ddmenu_usuarios" aria-expanded="true" aria-label="Toggle navigation">
+            <a href="#0" data-bs-toggle="collapse" data-bs-target="#ddmenu_usuarios" aria-controls="ddmenu_usuarios" aria-expanded="true" aria-label="Toggle navigation">
               <span class="icon">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M14.9211 10.1294C15.1652 9.88534 15.1652 9.48967 14.9211 9.24559L10.7544 5.0789C10.5103 4.83482 10.1147 4.83482 9.87057 5.0789C9.62649 5.32297 9.62649 5.71871 9.87057 5.96278L12.9702 9.06251H1.97916C1.63398 9.06251 1.35416 9.34234 1.35416 9.68751C1.35416 10.0327 1.63398 10.3125 1.97916 10.3125H12.9702L9.87057 13.4123C9.62649 13.6563 9.62649 14.052 9.87057 14.2961C10.1147 14.5402 10.5103 14.5402 10.7544 14.2961L14.9211 10.1294Z" />
@@ -151,11 +140,10 @@
       <!-- Caixa promocional do afiliado -->
       <div class="promo-box">
         <div class="promo-icon">
-          <!-- O src aqui será atualizado para o fotodeperfil do usuário -->
+          <!-- A imagem do afiliado (logo) será atualizada via JS, com o style solicitado -->
           <img class="mx-auto" src="assets/images/logo/logo-icon-big.svg" alt="Logo" />
         </div>
-        <!-- O nome aqui será atualizado para o primeiro_nome do usuário -->
-        <h3>Adam Joe</h3>
+        <h3 class="promo-name">Adam Joe</h3>
         <p>A Airland agradece por lhe ter como colaborador do nosso time.</p>
       </div>
     </aside>
@@ -182,9 +170,7 @@
               <div class="header-right">
                 <!-- Notificações -->
                 <div class="notification-box ml-15 d-none d-md-flex">
-                  <button class="dropdown-toggle" type="button" id="notification" 
-                          data-bs-toggle="dropdown" aria-expanded="false">
-                    <!-- Ícone do Sino na Notificação -->
+                  <button class="dropdown-toggle" type="button" id="notification" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fa-solid fa-bell"></i>
                     <span></span>
                   </button>
@@ -217,18 +203,15 @@
                 </div>
                 <!-- Perfil -->
                 <div class="profile-box ml-15">
-                  <button class="dropdown-toggle bg-transparent border-0" type="button" 
-                          id="profile" data-bs-toggle="dropdown" aria-expanded="false">
+                  <button class="dropdown-toggle bg-transparent border-0" type="button" id="profile" data-bs-toggle="dropdown" aria-expanded="false">
                     <div class="profile-info">
                       <div class="info">
                         <div class="image">
-                          <!-- Será atualizado para fotodeperfil -->
-                          <img src="assets/images/profile/profile-image.png" alt="" />
+                          <img class="profile-image" src="assets/images/profile/profile-image.png" alt="" />
                         </div>
                         <div>
-                          <!-- Nome atualizado para primeiro_nome e função para ultimo_nome -->
-                          <h6 class="fw-500">Adam Joe</h6>
-                          <p>Admin</p>
+                          <h6 class="profile-firstname">Adam Joe</h6>
+                          <p class="profile-lastname">Admin</p>
                         </div>
                       </div>
                     </div>
@@ -237,15 +220,11 @@
                     <li>
                       <div class="author-info flex items-center !p-1">
                         <div class="image">
-                          <!-- Atualizado para fotodeperfil -->
-                          <img src="assets/images/profile/profile-image.png" alt="image" />
+                          <img class="profile-image" src="assets/images/profile/profile-image.png" alt="image" />
                         </div>
                         <div class="content">
-                          <!-- Atualizado para primeiro_nome -->
-                          <h4 class="text-sm">Adam Joe</h4>
-                          <!-- Atualizado para email -->
-                          <a class="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white text-xs" 
-                             href="#">Email@gmail.com</a>
+                          <h4 class="profile-firstname-dropdown">Adam Joe</h4>
+                          <a class="profile-email text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white text-xs" href="#">Email@gmail.com</a>
                         </div>
                       </div>
                     </li>
@@ -282,9 +261,7 @@
                   <span style="font-size: 1rem; margin-right: 15px;">
                     Datas selecionadas: <strong id="selectedDates">[vazio]</strong>
                   </span>
-                  <button id="openCalendarBtn" class="main-btn primary-btn btn-hover" style="margin-bottom: 20px;">
-                    Selecionar Data
-                  </button>
+                  <button id="openCalendarBtn" class="main-btn primary-btn btn-hover" style="margin-bottom: 20px;">Selecionar Data</button>
                 </div>
               </div>
             </div>
@@ -294,9 +271,7 @@
             <div class="col-lg-12">
               <div class="card-style mb-30">
                 <h6 class="mb-10">Pedidos Recentes</h6>
-                <p class="text-sm mb-20">
-                  Abaixo você encontra os seus pedidos recentes.
-                </p>
+                <p class="text-sm mb-20">Abaixo você encontra os seus pedidos recentes.</p>
                 <div class="table-wrapper table-responsive">
                   <table class="table">
                     <thead>
@@ -310,80 +285,116 @@
                     </thead>
                     <tbody>
                       <tr>
-                        <td class="min-width"><p>Esther Howard</p></td>
-                        <td class="min-width"><p><a href="#0">yourmail@gmail.com</a></p></td>
-                        <td class="min-width"><p>Admin Dashboard Design</p></td>
-                        <td class="min-width"><span class="status-btn active-btn">Active</span></td>
+                        <td class="min-width">
+                          <p>Esther Howard</p>
+                        </td>
+                        <td class="min-width">
+                          <p><a href="#0">yourmail@gmail.com</a></p>
+                        </td>
+                        <td class="min-width">
+                          <p>Admin Dashboard Design</p>
+                        </td>
+                        <td class="min-width">
+                          <span class="status-btn active-btn">Active</span>
+                        </td>
                         <td>
                           <div class="action">
-                            <button style="color: #5d657b;">
-                              <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                            </button>
+                            <button style="color: #5d657b;"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
                           </div>
                         </td>
                       </tr>
                       <tr>
-                        <td class="min-width"><p>D. Jonathon</p></td>
-                        <td class="min-width"><p><a href="#0">yourmail@gmail.com</a></p></td>
-                        <td class="min-width"><p>React Dashboard</p></td>
-                        <td class="min-width"><span class="status-btn active-btn">Active</span></td>
+                        <td class="min-width">
+                          <p>D. Jonathon</p>
+                        </td>
+                        <td class="min-width">
+                          <p><a href="#0">yourmail@gmail.com</a></p>
+                        </td>
+                        <td class="min-width">
+                          <p>React Dashboard</p>
+                        </td>
+                        <td class="min-width">
+                          <span class="status-btn active-btn">Active</span>
+                        </td>
                         <td>
                           <div class="action">
-                            <button style="color: #5d657b;">
-                              <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                            </button>
+                            <button style="color: #5d657b;"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
                           </div>
                         </td>
                       </tr>
                       <tr>
-                        <td><p>John Doe</p></td>
-                        <td><p><a href="#0">yourmail@gmail.com</a></p></td>
-                        <td><p>Bootstrap Template</p></td>
-                        <td><span class="status-btn success-btn">Done</span></td>
+                        <td>
+                          <p>John Doe</p>
+                        </td>
+                        <td>
+                          <p><a href="#0">yourmail@gmail.com</a></p>
+                        </td>
+                        <td>
+                          <p>Bootstrap Template</p>
+                        </td>
+                        <td>
+                          <span class="status-btn success-btn">Done</span>
+                        </td>
                         <td>
                           <div class="action">
-                            <button style="color: #5d657b;">
-                              <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                            </button>
+                            <button style="color: #5d657b;"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
                           </div>
                         </td>
                       </tr>
                       <tr>
-                        <td><p>Rayhan Jamil</p></td>
-                        <td><p><a href="#0">yourmail@gmail.com</a></p></td>
-                        <td><p>Css Grid Template</p></td>
-                        <td><span class="status-btn info-btn">Pending</span></td>
+                        <td>
+                          <p>Rayhan Jamil</p>
+                        </td>
+                        <td>
+                          <p><a href="#0">yourmail@gmail.com</a></p>
+                        </td>
+                        <td>
+                          <p>Css Grid Template</p>
+                        </td>
+                        <td>
+                          <span class="status-btn info-btn">Pending</span>
+                        </td>
                         <td>
                           <div class="action">
-                            <button style="color: #5d657b;">
-                              <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                            </button>
+                            <button style="color: #5d657b;"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
                           </div>
                         </td>
                       </tr>
                       <tr>
-                        <td><p>Esther Howard</p></td>
-                        <td><p><a href="#0">yourmail@gmail.com</a></p></td>
-                        <td><p>Admin Dashboard Design</p></td>
-                        <td><span class="status-btn close-btn">Close</span></td>
+                        <td>
+                          <p>Esther Howard</p>
+                        </td>
+                        <td>
+                          <p><a href="#0">yourmail@gmail.com</a></p>
+                        </td>
+                        <td>
+                          <p>Admin Dashboard Design</p>
+                        </td>
+                        <td>
+                          <span class="status-btn close-btn">Close</span>
+                        </td>
                         <td>
                           <div class="action">
-                            <button style="color: #5d657b;">
-                              <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                            </button>
+                            <button style="color: #5d657b;"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
                           </div>
                         </td>
                       </tr>
                       <tr>
-                        <td><p>Anee Doe</p></td>
-                        <td><p><a href="#0">yourmail@gmail.com</a></p></td>
-                        <td><p>Space Template Update</p></td>
-                        <td><span class="status-btn active-btn">Active</span></td>
+                        <td>
+                          <p>Anee Doe</p>
+                        </td>
+                        <td>
+                          <p><a href="#0">yourmail@gmail.com</a></p>
+                        </td>
+                        <td>
+                          <p>Space Template Update</p>
+                        </td>
+                        <td>
+                          <span class="status-btn active-btn">Active</span>
+                        </td>
                         <td>
                           <div class="action">
-                            <button style="color: #5d657b;">
-                              <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                            </button>
+                            <button style="color: #5d657b;"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
                           </div>
                         </td>
                       </tr>
@@ -405,10 +416,7 @@
           <div class="row">
             <div class="col-md-6 order-last order-md-first">
               <div class="copyright text-center text-md-start">
-                <p class="text-sm">
-                  Designed and Developed by
-                  <a href="https://Airland.com" rel="nofollow" target="_blank">Airland</a>
-                </p>
+                <p class="text-sm">Designed and Developed by <a href="https://Airland.com" rel="nofollow" target="_blank">Airland</a></p>
               </div>
             </div>
           </div>
@@ -419,16 +427,12 @@
     <!-- ================= Fim Main Wrapper ================= -->
 
     <!-- ============ Theme Option Start ============= -->
-    <button class="option-btn">
-      <i class="lni lni-cog"></i>
-    </button>
+    <button class="option-btn"><i class="lni lni-cog"></i></button>
     <div class="option-overlay"></div>
     <div class="option-box">
       <div class="option-header">
         <h5>Settings</h5>
-        <button class="option-btn-close text-gray">
-          <i class="lni lni-close"></i>
-        </button>
+        <button class="option-btn-close text-gray"><i class="lni lni-close"></i></button>
       </div>
       <h6 class="mb-10">Layout</h6>
       <ul class="mb-30">
@@ -443,85 +447,65 @@
     </div>
     <!-- ============ Theme Option End ============= -->
 
-    <!-- Lógica para identificar e destacar apenas o link ativo -->
+    <!-- Lógica para checar a sessão e atualizar os dados do usuário -->
     <script>
-    // Função para checar a sessão via API e atualizar dados do usuário
-    async function checkSession() {
-      try {
-        const response = await fetch("https://airland.com.br/affiliatesacess/login_api.php/check", {
-          credentials: 'include',
-        });
-        const result = await response.json();
-        console.log("Resposta da Sessão:", result);
-    
-        if (result.logged_in) {
-          const user = result.user_data;
-    
-          // Atualiza a imagem de perfil no header
-          const profileImg = document.querySelector('.profile-box .profile-info .image img');
-          if (profileImg) {
-            profileImg.src = user.fotodeperfil;
+      async function checkSession() {
+        try {
+          const response = await fetch("https://airland.com.br/affiliatesacess/login_api.php/check", {
+            credentials: 'include'
+          });
+          const result = await response.json();
+          console.log("Resposta da Sessão:", result);
+          if (result.logged_in) {
+            // Exibe o conteúdo removendo o display: none
+            document.body.style.display = "block";
+            // Atualiza os dados do usuário logado
+            const user = result.user_data;
+            // Atualiza o perfil no header
+            const profileImages = document.querySelectorAll('.profile-box .profile-image');
+            profileImages.forEach(img => img.src = user.fotodeperfil);
+            const profileFirstname = document.querySelector('.profile-box .profile-firstname');
+            if(profileFirstname) profileFirstname.textContent = user.primeiro_nome;
+            const profileLastname = document.querySelector('.profile-box .profile-lastname');
+            if(profileLastname) profileLastname.textContent = user.ultimo_nome;
+            // No dropdown do perfil
+            const profileFirstnameDropdown = document.querySelector('.profile-box .profile-firstname-dropdown');
+            if(profileFirstnameDropdown) profileFirstnameDropdown.textContent = user.primeiro_nome;
+            const profileEmail = document.querySelector('.profile-box .profile-email');
+            if(profileEmail) profileEmail.textContent = user.email;
+            // Atualiza o promo-box na sidebar
+            const promoIconImg = document.querySelector('.promo-box .promo-icon img');
+            if(promoIconImg) {
+              promoIconImg.src = user.fotodeperfil;
+              promoIconImg.style.cssText = 'width: 75px; height: 75px; display: block; margin: 0px auto; border-radius: 100%;';
+            }
+            const promoName = document.querySelector('.promo-box .promo-name');
+            if(promoName) promoName.textContent = user.primeiro_nome;
+          } else {
+            window.location.replace("https://businessplace.airland.com.br/signin.html");
           }
-    
-          // Atualiza o nome e "cargo" (último nome) no header
-          const profileUserName = document.getElementById('profileUserName');
-          const profileUserRole = document.getElementById('profileUserRole');
-          if (profileUserName) profileUserName.textContent = user.primeiro_nome;
-          if (profileUserRole) profileUserRole.textContent = user.ultimo_nome;
-    
-          // Atualiza o dropdown de perfil
-          const dropdownUserName = document.getElementById('dropdownUserName');
-          const dropdownUserEmail = document.getElementById('dropdownUserEmail');
-          if (dropdownUserName) dropdownUserName.textContent = user.primeiro_nome;
-          if (dropdownUserEmail) dropdownUserEmail.textContent = user.email;
-    
-          // Atualiza a imagem promocional (sidebar) para 100x100 e centralizada
-          const promoImg = document.querySelector('.promo-box .promo-icon img');
-          if (promoImg) {
-            promoImg.src = user.fotodeperfil;
-            promoImg.style.width = "100px";
-            promoImg.style.height = "100px";
-            promoImg.style.display = "block";
-            promoImg.style.margin = "0 auto";
-            promoImg.style.borderRadius = "100%";
-          }
-    
-          // Atualiza opcionalmente o nome exibido na caixa promocional
-          const promoUserName = document.getElementById('promoUserName');
-          if (promoUserName) {
-            promoUserName.textContent = user.primeiro_nome;
-          }
-    
-          // Exibe o conteúdo da página
-          document.body.style.display = "block";
-        } else {
-          // Redireciona se não estiver logado
+        } catch (error) {
+          console.error("Erro ao verificar a sessão:", error);
           window.location.replace("https://businessplace.airland.com.br/signin.html");
         }
-      } catch (error) {
-        console.error("Erro ao verificar a sessão:", error);
-        window.location.replace("https://businessplace.airland.com.br/signin.html");
       }
-    }
-    
-    // Lógica para destacar apenas o link ativo na sidebar
-    function highlightActiveLink() {
-      const currentPath = window.location.pathname;
-      // Seleciona todos os links que possuem um HREF diferente de "#0"
-      const allLinks = document.querySelectorAll('.sidebar-nav a[href]:not([href="#0"])');
-      allLinks.forEach(link => {
-        const linkUrl = new URL(link.getAttribute('href'), window.location.origin);
-        if (currentPath === linkUrl.pathname) {
-          link.classList.add('active-menu');
-        }
+      document.addEventListener("DOMContentLoaded", checkSession);
+    </script>
+
+    <!-- Lógica para identificar e destacar a página ativa -->
+    <script>
+      window.addEventListener('DOMContentLoaded', function() {
+        const currentPath = window.location.pathname;
+        // Seleciona apenas os links que possuem um href válido (ignorando "#0")
+        const allLinks = document.querySelectorAll('.sidebar-nav a[href]:not([href="#0"])');
+        allLinks.forEach(link => {
+          const linkUrl = new URL(link.getAttribute('href'), window.location.origin);
+          // Se o pathname do link for igual ao da URL atual, adiciona a classe "active-menu"
+          if (currentPath === linkUrl.pathname) {
+            link.classList.add('active-menu');
+          }
+        });
       });
-    }
-    
-    // Executa a verificação de sessão e a marcação do link ativo
-    document.addEventListener("DOMContentLoaded", () => {
-      checkSession();
-      highlightActiveLink();
-    });
     </script>
 
     <!-- ========= All Javascript files linkup ======== -->
