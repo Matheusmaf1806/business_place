@@ -445,67 +445,45 @@
 
     <!-- Lógica para identificar e destacar apenas o link ativo -->
     <script>
-      window.addEventListener('DOMContentLoaded', function() {
-        const currentPath = window.location.pathname;
-        // Seleciona apenas os links que possuem um href válido (ignorando "#0")
-        const allLinks = document.querySelectorAll('.sidebar-nav a[href]:not([href="#0"])');
-        allLinks.forEach(link => {
-          const linkUrl = new URL(link.getAttribute('href'), window.location.origin);
-          // Compara somente o pathname (ignorando hashes)
-          if (currentPath === linkUrl.pathname) {
-            link.classList.add('active-menu');
-          }
-        });
-      });
-    </script>
-
-    <!-- Lógica para checar a sessão e atualizar os dados do usuário -->
-    <script>
       async function checkSession() {
         try {
           const response = await fetch("https://airland.com.br/affiliatesacess/login_api.php/check", {
-            credentials: "include"
+            credentials: 'include'
           });
           const result = await response.json();
           console.log("Resposta da Sessão:", result);
           if (result.logged_in) {
             const user = result.user_data;
-            // Atualiza as imagens de perfil (header e dropdown)
-            document.querySelectorAll(".profile-box .profile-info .image img").forEach(img => {
-              img.src = user.fotodeperfil;
-            });
-            document.querySelectorAll(".dropdown-menu .author-info .image img").forEach(img => {
-              img.src = user.fotodeperfil;
-            });
-            // Atualiza os textos do perfil (primeiro_nome e ultimo_nome)
-            const profileName = document.querySelector(".profile-box .profile-info .info > div > h6");
-            if (profileName) {
-              profileName.innerText = user.primeiro_nome;
+
+            // Atualiza a imagem de perfil no header
+            const profileImg = document.querySelector('.profile-box .profile-info .image img');
+            if (profileImg) profileImg.src = user.fotodeperfil;
+
+            // Atualiza o nome e "cargo" (último nome) no header
+            const profileUserName = document.getElementById('profileUserName');
+            const profileUserRole = document.getElementById('profileUserRole');
+            if (profileUserName) profileUserName.textContent = user.primeiro_nome;
+            if (profileUserRole) profileUserRole.textContent = user.ultimo_nome;
+
+            // Atualiza o dropdown de perfil
+            const dropdownUserName = document.getElementById('dropdownUserName');
+            const dropdownUserEmail = document.getElementById('dropdownUserEmail');
+            if (dropdownUserName) dropdownUserName.textContent = user.primeiro_nome;
+            if (dropdownUserEmail) dropdownUserEmail.textContent = user.email;
+
+            // Atualiza a imagem promocional na sidebar (faixa inferior)
+            const promoImg = document.querySelector('.promo-box .promo-icon img');
+            if (promoImg) {
+              promoImg.src = user.fotodeperfil;
+              promoImg.style.width = "150px";
+              promoImg.style.height = "150px";
+              promoImg.style.borderRadius = "100%";
             }
-            const profileRole = document.querySelector(".profile-box .profile-info .info > div > p");
-            if (profileRole) {
-              profileRole.innerText = user.ultimo_nome;
-            }
-            // Atualiza os dados no dropdown do perfil
-            const dropdownProfileName = document.querySelector(".dropdown-menu .author-info .content h4");
-            if (dropdownProfileName) {
-              dropdownProfileName.innerText = user.primeiro_nome;
-            }
-            const dropdownProfileEmail = document.querySelector(".dropdown-menu .author-info .content a");
-            if (dropdownProfileEmail) {
-              dropdownProfileEmail.innerText = user.email;
-              dropdownProfileEmail.href = "mailto:" + user.email;
-            }
-            // Atualiza a promo-box (imagem e nome)
-            const promoBoxImage = document.querySelector(".promo-box .promo-icon img");
-            if (promoBoxImage) {
-              promoBoxImage.src = user.fotodeperfil;
-            }
-            const promoBoxName = document.querySelector(".promo-box h3");
-            if (promoBoxName) {
-              promoBoxName.innerText = user.primeiro_nome;
-            }
-            // Exibe o conteúdo da página
+
+            // Opcional: Atualiza o nome exibido na caixa promocional se desejado
+            const promoUserName = document.getElementById('promoUserName');
+            if (promoUserName) promoUserName.textContent = user.primeiro_nome;
+
             document.body.style.display = "block";
           } else {
             window.location.replace("https://businessplace.airland.com.br/signin.html");
@@ -516,6 +494,21 @@
         }
       }
       document.addEventListener("DOMContentLoaded", checkSession);
+    </script>
+
+    <!-- Lógica para identificar e destacar apenas o link ativo -->
+    <script>
+      window.addEventListener('DOMContentLoaded', function() {
+        const currentPath = window.location.pathname;
+        // Seleciona links de primeiro nível (excluindo links com href "#0")
+        const allLinks = document.querySelectorAll('.sidebar-nav a[href]:not([href="#0"])');
+        allLinks.forEach(link => {
+          const linkUrl = new URL(link.getAttribute('href'), window.location.origin);
+          if (currentPath === linkUrl.pathname) {
+            link.classList.add('active-menu');
+          }
+        });
+      });
     </script>
 
     <!-- ========= All Javascript files linkup ======== -->
