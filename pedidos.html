@@ -449,16 +449,13 @@
     <script src="assets/js/main.js"></script>
 
     <!-- Script module: Expondo openCalendar e função para buscar os pedidos -->
+    <!-- Script module: Expondo openCalendar e função para buscar os pedidos -->
     <script type="module">
-      // Variáveis globais para filtro de data (inicialmente sem filtro)
       let filterStartDate = null;
       let filterEndDate = null;
 
-      // Função para buscar os pedidos da API, usando cache disabled.
-      // Foi adicionada a coluna "id" e a API deverá retornar os campos: id, nome, meio_pgto, valor_venda e status.
       async function fetchSupplierPedidos() {
         try {
-          // URL da API – ajuste conforme seu endpoint
           const url = new URL("https://airland.com.br/api/supplier_pedidos.php");
           if (filterStartDate && filterEndDate) {
             url.searchParams.append("start", filterStartDate);
@@ -490,17 +487,15 @@
       }
 
       // Expor a função openCalendar globalmente.
-      // Utilize caminho relativo "./assets/js/calendarComponent.js"
       window.openCalendar = function () {
         import("./assets/js/calendarComponent.js")
           .then(module => {
-            // Cria o componente do calendário
             const calendarComponent = module.createCalendarComponent();
             let calendarContainer = document.getElementById("calendarContainer");
             if (!calendarContainer) {
               calendarContainer = document.createElement("div");
               calendarContainer.id = "calendarContainer";
-              // Define estilos para posicioná-lo dentro das margens da tela
+              // Ajustes para não ficar cortado
               calendarContainer.style.position = "fixed";
               calendarContainer.style.top = "70px";
               calendarContainer.style.right = "20px";
@@ -508,6 +503,8 @@
               calendarContainer.style.border = "1px solid #ccc";
               calendarContainer.style.zIndex = "1050";
               calendarContainer.style.maxWidth = "300px";
+              calendarContainer.style.maxHeight = "80vh"; /* EVITA O CORTE */
+              calendarContainer.style.overflow = "auto";  /* ROLAGEM SE ULTRAPASSAR */
               calendarContainer.style.boxShadow = "0 0 10px rgba(0,0,0,0.1)";
               document.body.appendChild(calendarContainer);
             }
@@ -515,19 +512,34 @@
             calendarContainer.appendChild(calendarComponent);
             calendarContainer.style.display = "block";
 
-            // Obtém o botão "Confirmar" do calendário
+            // Botão "Voltar"
+            const btnBack = calendarContainer.querySelector(".calendar__button.calendar__button--grey");
+            if (btnBack) {
+              btnBack.addEventListener("click", () => {
+                calendarContainer.style.display = "none";
+              });
+            }
+
+            // Botão "Confirmar"
             const btnApply = calendarContainer.querySelector(".calendar__button--primary");
             if (btnApply) {
               btnApply.addEventListener("click", function () {
+                // Exemplo simples: definindo o filtro por MÊS (início e fim)
+                // Se quiser a lógica de clique dia a dia (startSelected/endSelected), exporte do createCalendarComponent.
                 const selectMonth = calendarContainer.querySelector("#calendar__month");
                 const selectYear = calendarContainer.querySelector("#calendar__year");
-                // Define o início do mês selecionado
                 filterStartDate = `${selectYear.value}-${String(parseInt(selectMonth.value) + 1).padStart(2, "0")}-01`;
-                // Calcula o número de dias no mês
                 const daysInMonth = new Date(selectYear.value, parseInt(selectMonth.value) + 1, 0).getDate();
                 filterEndDate = `${selectYear.value}-${String(parseInt(selectMonth.value) + 1).padStart(2, "0")}-${daysInMonth}`;
-                // Esconde o calendário e atualiza os pedidos filtrados
+                
+                // Fecha o calendário
                 calendarContainer.style.display = "none";
+
+                // Atualiza texto "Datas selecionadas"
+                const datasSelecionadasSpan = document.getElementById("selectedDates");
+                datasSelecionadasSpan.textContent = `[${filterStartDate} ~ ${filterEndDate}]`;
+
+                // Recarrega pedidos filtrados
                 fetchSupplierPedidos();
               });
             }
@@ -535,7 +547,7 @@
           .catch(err => console.error("Erro ao importar o calendário:", err));
       };
 
-      // Ao carregar a página, garante a nova busca dos pedidos
+      // Ao carregar a página, busca pedidos
       document.addEventListener("DOMContentLoaded", () => {
         fetchSupplierPedidos();
       });
