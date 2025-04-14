@@ -656,9 +656,28 @@
     
     // Função para posicionar o calendário próximo ao botão
     function positionCalendar() {
-      const rect = btnOpenCalendar.getBoundingClientRect();
-      calendarEl.style.top = rect.bottom + window.scrollY + "px";
-      calendarEl.style.left = rect.left + window.scrollX + "px";
+    const rect = btnOpenCalendar.getBoundingClientRect();
+
+    // Posição inicial
+    calendarEl.style.top = (rect.bottom + window.scrollY) + "px";
+    calendarEl.style.left = (rect.left + window.scrollX) + "px";
+
+    // Ajuste para não sair da tela
+    requestAnimationFrame(() => {
+        const calendarRect = calendarEl.getBoundingClientRect();
+
+        // Se passar da margem direita
+        if (calendarRect.right > window.innerWidth) {
+        const shiftX = calendarRect.right - window.innerWidth + 10;
+        calendarEl.style.left = (parseFloat(calendarEl.style.left) - shiftX) + "px";
+        }
+
+        // Se passar da margem inferior
+        if (calendarRect.bottom > window.innerHeight) {
+        const shiftY = calendarRect.bottom - window.innerHeight + 10;
+        calendarEl.style.top = (parseFloat(calendarEl.style.top) - shiftY) + "px";
+        }
+    });
     }
     
     // Exibir o calendário em modo hover ao passar o mouse sobre o botão
