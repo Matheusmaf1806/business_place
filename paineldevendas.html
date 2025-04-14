@@ -417,14 +417,19 @@
             </div>
             <div class="card-style mb-30">
                 <div class="title d-flex justify-content-between align-items-center">
-                  <h6 class="mb-10">Revenue By Device</h6>
+                  <h6 class="mb-10">Current Statistic</h6>
                   <div class="more-btn-wrapper mb-10">
-                    <button class="more-btn dropdown-toggle" id="moreAction" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="more-btn dropdown-toggle" id="moreAction" data-bs-toggle="dropdown"
+                      aria-expanded="false">
                       <i class="lni lni-more-alt"></i>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="moreAction">
-                      <li class="dropdown-item"><a href="#0" class="text-gray">Add All</a></li>
-                      <li class="dropdown-item"><a href="#0" class="text-gray">Remove All</a></li>
+                      <li class="dropdown-item">
+                        <a href="#0" class="text-gray">Add All</a>
+                      </li>
+                      <li class="dropdown-item">
+                        <a href="#0" class="text-gray">Remove All</a>
+                      </li>
                     </ul>
                   </div>
                 </div>
@@ -432,10 +437,22 @@
                   <div id="doughnutChart1" style="width: 100%; height: 350px"></div>
                   <div class="doughnutChart-legend">
                     <ul>
-                      <li class="primary"><span class="left">Desktop</span><span class="right">49%</span></li>
-                      <li class="orange"><span class="left">Tablet</span><span class="right">19%</span></li>
-                      <li class="danger"><span class="left">Mobile</span><span class="right">30%</span></li>
-                      <li class="warning"><span class="left">Others</span><span class="right">5%</span></li>
+                      <li class="primary">
+                        <span class="left">Income</span>
+                        <span class="right">49%</span>
+                      </li>
+                      <li class="orange">
+                        <span class="left">Installment </span>
+                        <span class="right">19%</span>
+                      </li>
+                      <li class="danger">
+                        <span class="left">Spends </span>
+                        <span class="right">30%</span>
+                      </li>
+                      <li class="warning">
+                        <span class="left">Invest </span>
+                        <span class="right">5%</span>
+                      </li>
                     </ul>
                   </div>
                 </div>
@@ -1020,37 +1037,42 @@
       applyThemeColors(lightThemeColors);
     });
 
-    document.addEventListener('DOMContentLoaded', () => {
-      // Verifica se o elemento existe:
-      const chartElement = document.querySelector("#doughnutChart1");
-      if (!chartElement) {
-        console.error("Elemento #doughnutChart1 não encontrado!");
-        return;
-      }
-
-      const doughnutChart1 = new ApexCharts(chartElement, {
+    const doughnutChart1 = new ApexCharts(
+      document.querySelector("#doughnutChart1"),
+      (options = {
         series: [83, 67, 55, 44],
         chart: {
           height: 350,
           type: "radialBar",
         },
+
         plotOptions: {
           radialBar: {
             dataLabels: {
-              name: { fontSize: "22px" },
-              value: { fontSize: "16px" },
+              name: {
+                fontSize: "22px",
+              },
+              value: {
+                fontSize: "16px",
+              },
             },
-            hollow: { size: "40%" },
-            track: { strokeWidth: "100%", margin: 10 },
+            hollow: {
+              size: "40%",
+            },
+            track: {
+              strokeWidth: "100%",
+              margin: 10,
+            },
           },
         },
-        stroke: { lineCap: "round" },
-        labels: ["Desktop", "Tablet", "Mobile", "Others"],
+        stroke: {
+          lineCap: "round",
+        },
+        labels: ["Income", "Installment", "Spends", "Invest"],
         colors: ["#4a6cf7", "#f2994a", "#d50100", "#f7c800"],
-      });
-
-      doughnutChart1.render();
-    });
+      })
+    );
+    doughnutChart1.render();
 
   </script>
 </body>
