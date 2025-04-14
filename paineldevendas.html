@@ -471,332 +471,333 @@
      * 1. Ativação do Mapa (jsVectorMap)
      **********************************/
     const markers = [
-      { name: "São Paulo", coords: [-23.5505, -46.6333] },
-      { name: "Rio de Janeiro", coords: [-22.9068, -43.1729] },
-      { name: "Belo Horizonte", coords: [-19.8157, -43.9542] },
-      { name: "Salvador", coords: [-12.9714, -38.5014] },
-      { name: "Porto Alegre", coords: [-30.0346, -51.2177] },
+    { name: "São Paulo", coords: [-23.5505, -46.6333] },
+    { name: "Rio de Janeiro", coords: [-22.9068, -43.1729] },
+    { name: "Belo Horizonte", coords: [-19.8157, -43.9542] },
+    { name: "Salvador", coords: [-12.9714, -38.5014] },
+    { name: "Porto Alegre", coords: [-30.0346, -51.2177] },
     ];
-    
+
     const jvm = new jsVectorMap({
-      map: "world_merc",
-      selector: "#map",
-      zoomButtons: true,
-      focusOn: { region: 'BR' },
-      regionStyle: {
+    map: "world_merc",
+    selector: "#map",
+    zoomButtons: true,
+    focusOn: { region: "BR" },
+    regionStyle: {
         initial: { fill: "#d1d5db" },
-      },
-      labels: {
+    },
+    labels: {
         markers: {
-          render: (marker) => marker.name,
+        render: (marker) => marker.name,
         },
-      },
-      markersSelectable: true,
-      selectedMarkers: markers.map((marker, index) => {
-        if (marker.name === "São Paulo" || marker.name === "Rio de Janeiro") {
-          return index;
-        }
-      }).filter(index => index !== undefined),
-      markers: markers,
-      markerStyle: {
+    },
+    markersSelectable: true,
+    // Nenhum marker é selecionado inicialmente; após carregar os dados da API,
+    // utilize jvm.setSelectedMarkers([...]) para atualizar conforme necessário.
+    selectedMarkers: [],
+    markers: markers,
+    markerStyle: {
         initial: { fill: "#4A6CF7" },
         selected: { fill: "#ff5050" },
-      },
-      markerLabelStyle: {
+    },
+    markerLabelStyle: {
         initial: {
-          fontWeight: 400,
-          fontSize: 14,
+        fontWeight: 400,
+        fontSize: 14,
         },
-      },
+    },
     });
-    
+
     /**********************************
      * 2. Inicialização dos Gráficos (Chart.js)
      **********************************/
     const ctx3 = document.getElementById("Chart3")?.getContext("2d");
     if (ctx3) {
-      var chart3 = new Chart(ctx3, {
+    var chart3 = new Chart(ctx3, {
         type: "line",
         data: {
-          labels: ["Jan", "Fab", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-          datasets: [
+        labels: [
+            "Jan", "Fab", "Mar", "Apr", "May", "Jun",
+            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+        ],
+        datasets: [
             {
-              label: "Visitors",
-              backgroundColor: "transparent",
-              borderColor: "#9b51e0",
-              data: [80, 120, 110, 100, 130, 150, 115, 145, 140, 130, 160, 210],
-              pointBackgroundColor: "transparent",
-              pointHoverBackgroundColor: "#9b51e0",
-              pointBorderColor: "transparent",
-              pointHoverBorderColor: "#fff",
-              pointHoverBorderWidth: 3,
-              borderWidth: 5,
-              pointRadius: 5,
-              pointHoverRadius: 8,
-              fill: false,
-              cubicInterpolationMode: "monotone",
+            label: "Visitors",
+            backgroundColor: "transparent",
+            borderColor: "#9b51e0",
+            data: [80, 120, 110, 100, 130, 150, 115, 145, 140, 130, 160, 210],
+            pointBackgroundColor: "transparent",
+            pointHoverBackgroundColor: "#9b51e0",
+            pointBorderColor: "transparent",
+            pointHoverBorderColor: "#fff",
+            pointHoverBorderWidth: 3,
+            borderWidth: 5,
+            pointRadius: 5,
+            pointHoverRadius: 8,
+            fill: false,
+            cubicInterpolationMode: "monotone",
             },
             {
-              label: "Visits",
-              backgroundColor: "transparent",
-              borderColor: "#4a6cf7",
-              data: [120, 160, 150, 140, 165, 210, 135, 155, 170, 140, 130, 200],
-              pointBackgroundColor: "transparent",
-              pointHoverBackgroundColor: "#4a6cf7",
-              pointBorderColor: "transparent",
-              pointHoverBorderColor: "#fff",
-              pointHoverBorderWidth: 3,
-              borderWidth: 5,
-              pointRadius: 5,
-              pointHoverRadius: 8,
-              fill: false,
-              cubicInterpolationMode: "monotone",
+            label: "Visits",
+            backgroundColor: "transparent",
+            borderColor: "#4a6cf7",
+            data: [120, 160, 150, 140, 165, 210, 135, 155, 170, 140, 130, 200],
+            pointBackgroundColor: "transparent",
+            pointHoverBackgroundColor: "#4a6cf7",
+            pointBorderColor: "transparent",
+            pointHoverBorderColor: "#fff",
+            pointHoverBorderWidth: 3,
+            borderWidth: 5,
+            pointRadius: 5,
+            pointHoverRadius: 8,
+            fill: false,
+            cubicInterpolationMode: "monotone",
             },
-          ],
+        ],
         },
         options: {
-          // Insira configurações dos gráficos conforme necessário
-        }
-      });
+        // Ajuste as configurações conforme necessário
+        },
+    });
     }
-    
+
     const ctx4 = document.getElementById("Chart4")?.getContext("2d");
     if (ctx4) {
-      var chart4 = new Chart(ctx4, {
+    var chart4 = new Chart(ctx4, {
         type: "bar",
         data: {
-          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-          datasets: [
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+        datasets: [
             {
-              label: "",
-              backgroundColor: "#4A6CF7",
-              borderColor: "transparent",
-              borderRadius: 20,
-              borderWidth: 5,
-              barThickness: 20,
-              maxBarThickness: 20,
-              data: [600, 700, 1000, 700, 650, 800],
+            label: "",
+            backgroundColor: "#4A6CF7",
+            borderColor: "transparent",
+            borderRadius: 20,
+            borderWidth: 5,
+            barThickness: 20,
+            maxBarThickness: 20,
+            data: [600, 700, 1000, 700, 650, 800],
             },
             {
-              label: "",
-              backgroundColor: "#d50100",
-              borderColor: "transparent",
-              borderRadius: 20,
-              borderWidth: 5,
-              barThickness: 20,
-              maxBarThickness: 20,
-              data: [690, 740, 720, 1120, 876, 900],
+            label: "",
+            backgroundColor: "#d50100",
+            borderColor: "transparent",
+            borderRadius: 20,
+            borderWidth: 5,
+            barThickness: 20,
+            maxBarThickness: 20,
+            data: [690, 740, 720, 1120, 876, 900],
             },
-          ],
+        ],
         },
         options: {
-          // Insira configurações dos gráficos conforme necessário
-        }
-      });
+        // Ajuste as configurações conforme necessário
+        },
+    });
     }
-    
+
     /**********************************
      * 3. Lógica do Tema (Light/Dark)
      **********************************/
-    const lightThemeColors = { darkBorder: "rgba(143, 146, 161, .1)", darkColor: "#5A6A85" };
+    const lightThemeColors = {
+    darkBorder: "rgba(143, 146, 161, .1)",
+    darkColor: "#5A6A85",
+    };
     const darkThemeColors = { darkBorder: "#2b2b42", darkColor: "#838C9A" };
-    
+
     function applyThemeColors(themeColors) {
-      if (window.chart3 && chart3.options && chart3.update) {
+    if (window.chart3 && chart3.options && chart3.update) {
         chart3.options.scales.y.grid.color = themeColors.darkBorder;
         chart3.options.scales.y.grid.borderColor = themeColors.darkBorder;
         chart3.options.scales.x.ticks.color = themeColors.darkColor;
         chart3.options.scales.y.ticks.color = themeColors.darkColor;
         chart3.update();
-      }
-      if (window.chart4 && chart4.options && chart4.update) {
+    }
+    if (window.chart4 && chart4.options && chart4.update) {
         chart4.options.scales.y.grid.color = themeColors.darkBorder;
         chart4.options.scales.y.grid.borderColor = themeColors.darkBorder;
         chart4.options.scales.x.ticks.color = themeColors.darkColor;
         chart4.options.scales.y.ticks.color = themeColors.darkColor;
         chart4.update();
-      }
     }
-    
-    const darkThemeButton = document.querySelector('.darkThemeButton');
-    const lightThemeButton = document.querySelector('.lightThemeButton');
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      applyThemeColors(darkThemeColors);
+    }
+
+    const darkThemeButton = document.querySelector(".darkThemeButton");
+    const lightThemeButton = document.querySelector(".lightThemeButton");
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+    applyThemeColors(darkThemeColors);
     } else {
-      applyThemeColors(lightThemeColors);
+    applyThemeColors(lightThemeColors);
     }
-    
-    darkThemeButton?.addEventListener('click', () => { applyThemeColors(darkThemeColors); });
-    lightThemeButton?.addEventListener('click', () => { applyThemeColors(lightThemeColors); });
-    
+
+    darkThemeButton?.addEventListener("click", () => {
+    applyThemeColors(darkThemeColors);
+    });
+    lightThemeButton?.addEventListener("click", () => {
+    applyThemeColors(lightThemeColors);
+    });
+
     /**********************************
      * 4. Lógica do Calendário e Filtro por Data
      **********************************/
     // Importa o componente do calendário (ajuste o caminho conforme sua estrutura)
     import { createCalendarComponent } from "./assets/js/calendarComponent.js";
-    
+
     // Obter os elementos do calendário e do botão
     const btnOpenCalendar = document.getElementById("openCalendarBtn");
+    // Adiciona margin-bottom de 20px ao botão "Selecionar Data"
+    btnOpenCalendar.style.marginBottom = "20px";
+
     const calendarContainer = document.getElementById("calendarContainer");
+    // O bloco "Datas selecionadas:" ficará oculto até a busca efetivada
     const selectedDatesEl = document.getElementById("selectedDates");
-    
-    // Inicialmente, o campo "Datas selecionadas:" fica oculto
     selectedDatesEl.style.display = "none";
-    
+
     // Cria o componente do calendário
     const calendarEl = createCalendarComponent();
-    // O calendário agora será um elemento hover: posiciona-o de forma absoluta
+    // Configura o calendário para atuar como tooltip (hover)
     calendarEl.style.position = "absolute";
     calendarEl.style.display = "none";
     calendarEl.style.zIndex = "1000";
-    
-    // Anexa o calendário à página (fora do fluxo normal para atuar como tooltip)
+    // Anexa o calendário ao body fora do fluxo normal
     document.body.appendChild(calendarEl);
-    
-    // Função para posicionar o calendário próximo ao botão
+
+    // Função para posicionar o calendário próximo ao botão, garantindo que fique dentro da tela
     function positionCalendar() {
     const rect = btnOpenCalendar.getBoundingClientRect();
-
-    // Posição inicial
     calendarEl.style.top = (rect.bottom + window.scrollY) + "px";
     calendarEl.style.left = (rect.left + window.scrollX) + "px";
 
-    // Ajuste para não sair da tela
     requestAnimationFrame(() => {
         const calendarRect = calendarEl.getBoundingClientRect();
-
-        // Se passar da margem direita
         if (calendarRect.right > window.innerWidth) {
         const shiftX = calendarRect.right - window.innerWidth + 10;
         calendarEl.style.left = (parseFloat(calendarEl.style.left) - shiftX) + "px";
         }
-
-        // Se passar da margem inferior
         if (calendarRect.bottom > window.innerHeight) {
         const shiftY = calendarRect.bottom - window.innerHeight + 10;
         calendarEl.style.top = (parseFloat(calendarEl.style.top) - shiftY) + "px";
         }
     });
     }
-    
-    // Exibir o calendário em modo hover ao passar o mouse sobre o botão
+
+    // Exibe o calendário como hover quando o mouse entra no botão
     btnOpenCalendar.addEventListener("mouseenter", () => {
-      positionCalendar();
-      calendarEl.style.display = "block";
+    positionCalendar();
+    calendarEl.style.display = "block";
     });
-    
-    // Fechar o calendário quando o mouse sair do botão e do calendário
+
+    // Fecha o calendário quando o mouse sai do botão e do calendário
     btnOpenCalendar.addEventListener("mouseleave", () => {
-      setTimeout(() => {
+    setTimeout(() => {
         if (!calendarEl.matches(":hover")) {
-          calendarEl.style.display = "none";
+        calendarEl.style.display = "none";
         }
-      }, 200);
+    }, 200);
     });
     calendarEl.addEventListener("mouseleave", () => {
-      calendarEl.style.display = "none";
+    calendarEl.style.display = "none";
     });
-    
-    // Ao confirmar a seleção no calendário, atualize o campo e invoque o filtro
+
+    // Ao confirmar a seleção no calendário, atualize o bloco de "Datas selecionadas" e invoque a filtragem dos dados
     const btnApply = calendarEl.querySelector(".calendar__button--primary");
     btnApply.addEventListener("click", () => {
-      // Aqui, capture as datas selecionadas pelo usuário. Exemplo fixo:
-      const datasSelecionadas = "01/04/2025 - 23/04/2025";
-      selectedDatesEl.textContent = datasSelecionadas;
-      // Torne o elemento visível
-      selectedDatesEl.style.display = "inline";
-      
-      // Aqui, invoque sua função de filtragem dos dados, passando as datas capturadas.
-      // Exemplo: filterDataByDate(startDate, endDate);
-      
-      calendarEl.style.display = "none";
-    });
+    // Capture as datas selecionadas (exemplo fixo)
+    const datasSelecionadas = "01/04/2025 - 23/04/2025";
+    selectedDatesEl.textContent = datasSelecionadas;
+    // Torne o bloco "Datas selecionadas:" visível
+    selectedDatesEl.style.display = "inline";
     
+    // Aqui, invoque sua função para filtrar os dados conforme as datas capturadas.
+    // Ex.: filterDataByDate(startDate, endDate);
+    
+    calendarEl.style.display = "none";
+    });
+
     // Botão "Voltar" fecha o calendário sem confirmar a seleção
     const btnBack = calendarEl.querySelector(".calendar__button--grey");
     btnBack.addEventListener("click", () => {
-      calendarEl.style.display = "none";
+    calendarEl.style.display = "none";
     });
-    
+
     /**********************************
      * 5. Lógica de Pedidos Recentes com Paginação
      **********************************/
-    // Se a API não retornar dados, o array fica vazio.
-    const pedidosRecentesAPI = []; // Aqui você deve realizar a chamada real à API
+    // Se a API não retornar dados, o array permanece vazio.
+    const pedidosRecentesAPI = []; // Aqui você fará a chamada real à API.
     const pedidosData = pedidosRecentesAPI.length > 0 ? pedidosRecentesAPI : [];
-    
+
     let currentPage = 1;
     const perPage = 15;
     const pedidosBody = document.getElementById("pedidosBody");
     const prevPageBtn = document.getElementById("prevPageBtn");
     const nextPageBtn = document.getElementById("nextPageBtn");
     const paginationInfo = document.getElementById("paginationInfo");
-    
+
     function renderPedidos(page = 1) {
-      pedidosBody.innerHTML = "";
-      const startIndex = (page - 1) * perPage;
-      const endIndex = page * perPage;
-      const pageData = pedidosData.slice(startIndex, endIndex);
-    
-      if (pageData.length === 0) {
-        // Se não houver dados, exibe uma linha padrão com "0"
+    pedidosBody.innerHTML = "";
+    const startIndex = (page - 1) * perPage;
+    const endIndex = page * perPage;
+    const pageData = pedidosData.slice(startIndex, endIndex);
+
+    if (pageData.length === 0) {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td>0</td>
-          <td>0</td>
-          <td>R$ 0</td>
-          <td class="text-end">0</td>
+        <td>0</td>
+        <td>0</td>
+        <td>R$ 0</td>
+        <td class="text-end">0</td>
         `;
         pedidosBody.appendChild(tr);
-      } else {
+    } else {
         pageData.forEach((p) => {
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
             <td>
-              <div class="d-flex align-items-center">
+            <div class="d-flex align-items-center">
                 <div class="icon default-bg me-2">
-                  <i class="lni lni-user"></i>
+                <i class="lni lni-user"></i>
                 </div>
                 <span class="text-sm fw-500 text-gray">${p.cliente || "0"}</span>
-              </div>
+            </div>
             </td>
             <td>
-              <p class="text-sm fw-500 text-gray">${p.vendedor || "0"}</p>
+            <p class="text-sm fw-500 text-gray">${p.vendedor || "0"}</p>
             </td>
             <td>
-              <p class="text-sm fw-500 text-gray">R$ ${p.valor?.toLocaleString("pt-BR") ?? "0"}</p>
+            <p class="text-sm fw-500 text-gray">R$ ${p.valor?.toLocaleString("pt-BR") ?? "0"}</p>
             </td>
             <td class="text-end">
-              <span class="status-btn">${p.status || "0"}</span>
+            <span class="status-btn">${p.status || "0"}</span>
             </td>
-          `;
-          pedidosBody.appendChild(tr);
+        `;
+        pedidosBody.appendChild(tr);
         });
-      }
-    
-      const total = pedidosData.length;
-      const totalPages = Math.ceil(total / perPage);
-      paginationInfo.textContent = `Página ${page} de ${totalPages} (${total} registros)`;
-      prevPageBtn.disabled = (page <= 1);
-      nextPageBtn.disabled = (page >= totalPages || totalPages === 0);
     }
-    
+
+    const total = pedidosData.length;
+    const totalPages = Math.ceil(total / perPage);
+    paginationInfo.textContent = `Página ${page} de ${totalPages} (${total} registros)`;
+    prevPageBtn.disabled = (page <= 1);
+    nextPageBtn.disabled = (page >= totalPages || totalPages === 0);
+    }
+
     prevPageBtn.addEventListener("click", () => {
-      if (currentPage > 1) {
+    if (currentPage > 1) {
         currentPage--;
         renderPedidos(currentPage);
-      }
+    }
     });
-    
+
     nextPageBtn.addEventListener("click", () => {
-      const totalPages = Math.ceil(pedidosData.length / perPage);
-      if (currentPage < totalPages) {
+    const totalPages = Math.ceil(pedidosData.length / perPage);
+    if (currentPage < totalPages) {
         currentPage++;
         renderPedidos(currentPage);
-      }
+    }
     });
-    
+
     // Renderiza a primeira página de pedidos
     renderPedidos(currentPage);
   </script>
