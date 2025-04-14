@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="assets/css/morris.css" />
     <link rel="stylesheet" href="assets/css/datatable.css" />
     <link rel="stylesheet" href="assets/css/main.css" />
-
+    
     <!-- ========== CSS do Calendário (Anexo 1) ========= -->
     <link rel="stylesheet" href="assets/css/calcom.css" />
   </head>
@@ -146,8 +146,7 @@
                           <img src="assets/images/lead/lead-6.png" alt="" />
                         </div>
                         <div class="content">
-                          <h6>John Doe <span class="text-regular">
-                              comment on a product.</span></h6>
+                          <h6>John Doe <span class="text-regular">comment on a product.</span></h6>
                           <p>Lorem ipsum dolor sit amet, consect etur adipiscing elit Vivamus tortor.</p>
                           <span>10 mins ago</span>
                         </div>
@@ -159,8 +158,7 @@
                           <img src="assets/images/lead/lead-1.png" alt="" />
                         </div>
                         <div class="content">
-                          <h6>Jonathon <span class="text-regular">
-                              like on a product.</span></h6>
+                          <h6>Jonathon <span class="text-regular">like on a product.</span></h6>
                           <p>Lorem ipsum dolor sit amet, consect etur adipiscing elit Vivamus tortor.</p>
                           <span>10 mins ago</span>
                         </div>
@@ -217,7 +215,7 @@
       <!-- ================= Seção Principal ================= -->
       <section class="section">
         <div class="container-fluid">
-          <!-- ===== Title Wrapper - Título à esquerda e botão de Selecionar Data à direita ===== -->
+          <!-- ===== Title Wrapper: Título à esquerda e botão "Selecionar Data" à direita ===== -->
           <div class="title-wrapper pt-30">
             <div class="row align-items-center">
               <div class="col-md-6">
@@ -226,7 +224,6 @@
                 </div>
               </div>
               <div class="col-md-6">
-                <!-- Substituição do breadcrumb pelo botão "Selecionar Data" -->
                 <div class="d-flex justify-content-end align-items-center">
                   <span style="font-size: 1rem; margin-right: 15px;">
                     Datas selecionadas: <strong id="selectedDates">[vazio]</strong>
@@ -306,21 +303,19 @@
           <!-- ===== Fim dos Blocos de Métricas ===== -->
 
           <!-- ===== Seção: Calendário Interativo ===== -->
-          <!-- O calendário é importado do módulo em assets/js/calendarComponent.js -->
           <div class="row" id="calendarRow" style="display: none;">
             <div class="col-12" id="calendarContainer"></div>
           </div>
 
-          <!-- ===== Seção: Pedidos Recentes com Paginação (máx. 15 registros) ===== -->
+          <!-- ===== Seção: Pedidos Recentes e Pedidos por Região (lado a lado) ===== -->
           <div class="row">
-            <div class="col-12">
+            <!-- Pedidos Recentes (coluna da esquerda) -->
+            <div class="col-lg-6">
               <div class="card-style activity-card mb-30">
                 <div class="title d-flex flex-wrap align-items-center justify-content-between mb-10">
                   <div class="left mb-2">
                     <h6 class="text-medium mb-2">Pedidos Recentes</h6>
-                    <p class="text-gray text-sm">
-                      Exibindo no máximo 15 registros por página.
-                    </p>
+                    <p class="text-gray text-sm">Exibindo no máximo 15 registros por página.</p>
                   </div>
                 </div>
                 <div class="table-responsive">
@@ -334,7 +329,7 @@
                       </tr>
                     </thead>
                     <tbody id="pedidosBody">
-                      <!-- Caso não haja dados da API, será exibida uma linha com "0" -->
+                      <!-- Se não houver dados da API, será exibida uma linha com "0" -->
                     </tbody>
                   </table>
                 </div>
@@ -349,11 +344,7 @@
                 </div>
               </div>
             </div>
-          </div>
-          <!-- ===== Fim Pedidos Recentes ===== -->
-
-          <!-- ===== Seção: Pedidos por Região ===== -->
-          <div class="row">
+            <!-- Pedidos por Região (coluna da direita) -->
             <div class="col-lg-6">
               <div class="card-style mb-30">
                 <div class="title d-flex justify-content-between align-items-center">
@@ -373,7 +364,7 @@
                     </ul>
                   </div>
                 </div>
-                <!-- Mapa (opcional - visualização geográfica) -->
+                <!-- Mapa (mantido conforme o layout original) -->
                 <div id="map" style="width: 100%; height: 400px"></div>
                 <!-- Tabela de Pedidos por Região -->
                 <div class="table-wrapper">
@@ -386,7 +377,7 @@
                       </tr>
                     </thead>
                     <tbody id="regiaoBody">
-                      <!-- Se não houver dados, exibe linha padrão -->
+                      <!-- Se não houver dados, exibe uma linha padrão -->
                       <tr>
                         <td><p class="text-sm">0</p></td>
                         <td><p class="text-sm">R$ 0</p></td>
@@ -398,7 +389,7 @@
               </div>
             </div>
           </div>
-          <!-- ===== Fim Pedidos por Região ===== -->
+          <!-- ===== Fim dos Blocos: Pedidos Recentes e Pedidos por Região ===== -->
         </div>
       </div>
     </section>
@@ -474,291 +465,161 @@
   <script src="assets/js/main.js"></script>
 
   <!-- ========== Importação do módulo do Calendário (Anexo 1) ========= -->
-  <!-- Ajuste o caminho "assets/js/calendarComponent.js" conforme a sua estrutura -->
+  <!-- Ajuste o caminho "assets/js/calendarComponent.js" conforme sua estrutura -->
   <script type="module">
     /**********************************
-     * 1. Ativação do mapa com marcadores
+     * 1. Lógica do Calendário e Filtro por Data
      **********************************/
-    const markers = [
-    { name: "São Paulo", coords: [-23.5505, -46.6333] },
-    { name: "Rio de Janeiro", coords: [-22.9068, -43.1729] },
-    { name: "Belo Horizonte", coords: [-19.8157, -43.9542] },
-    { name: "Salvador", coords: [-12.9714, -38.5014] },
-    { name: "Porto Alegre", coords: [-30.0346, -51.2177] },
-    ];
-
-    const jvm = new jsVectorMap({
-    map: "world_merc",
-    selector: "#map",
-    zoomButtons: true,
-    focusOn: { region: 'BR' },
-    regionStyle: {
-        initial: { fill: "#d1d5db" },
-    },
-    labels: {
-        markers: {
-        render: (marker) => marker.name,
-        },
-    },
-    markersSelectable: true,
-    selectedMarkers: markers.map((marker, index) => {
-        if (marker.name === "São Paulo" || marker.name === "Rio de Janeiro") {
-        return index;
-        }
-    }).filter(index => index !== undefined),
-    markers: markers,
-    markerStyle: {
-        initial: { fill: "#4A6CF7" },
-        selected: { fill: "#ff5050" },
-    },
-    markerLabelStyle: {
-        initial: {
-        fontWeight: 400,
-        fontSize: 14,
-        },
-    },
-    });
-
-    /**********************************
-     * 2. Inicialização dos Gráficos (Chart.js)
-     **********************************/
-    const ctx3 = document.getElementById("Chart3")?.getContext("2d");
-    if(ctx3){
-    const chart3 = new Chart(ctx3, {
-        type: "line",
-        data: {
-        labels: ["Jan", "Fab", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-        datasets: [
-            {
-            label: "Visitors",
-            backgroundColor: "transparent",
-            borderColor: "#9b51e0",
-            data: [80, 120, 110, 100, 130, 150, 115, 145, 140, 130, 160, 210],
-            pointBackgroundColor: "transparent",
-            pointHoverBackgroundColor: "#9b51e0",
-            pointBorderColor: "transparent",
-            pointHoverBorderColor: "#fff",
-            pointHoverBorderWidth: 3,
-            borderWidth: 5,
-            pointRadius: 5,
-            pointHoverRadius: 8,
-            fill: false,
-            cubicInterpolationMode: "monotone",
-            },
-            {
-            label: "Visits",
-            backgroundColor: "transparent",
-            borderColor: "#4a6cf7",
-            data: [120, 160, 150, 140, 165, 210, 135, 155, 170, 140, 130, 200],
-            pointBackgroundColor: "transparent",
-            pointHoverBackgroundColor: "#4a6cf7",
-            pointBorderColor: "transparent",
-            pointHoverBorderColor: "#fff",
-            pointHoverBorderWidth: 3,
-            borderWidth: 5,
-            pointRadius: 5,
-            pointHoverRadius: 8,
-            fill: false,
-            cubicInterpolationMode: "monotone",
-            },
-        ],
-        },
-        options: {
-        // Configure conforme necessário
-        }
-    });
-    }
-
-    const ctx4 = document.getElementById("Chart4")?.getContext("2d");
-    if(ctx4){
-    const chart4 = new Chart(ctx4, {
-        type: "bar",
-        data: {
-        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-        datasets: [
-            {
-            label: "",
-            backgroundColor: "#4A6CF7",
-            borderColor: "transparent",
-            borderRadius: 20,
-            borderWidth: 5,
-            barThickness: 20,
-            maxBarThickness: 20,
-            data: [600, 700, 1000, 700, 650, 800],
-            },
-            {
-            label: "",
-            backgroundColor: "#d50100",
-            borderColor: "transparent",
-            borderRadius: 20,
-            borderWidth: 5,
-            barThickness: 20,
-            maxBarThickness: 20,
-            data: [690, 740, 720, 1120, 876, 900],
-            },
-        ],
-        },
-        options: {
-        // Configure conforme necessário
-        }
-    });
-    }
-
-    /**********************************
-     * 3. Lógica do Tema (Light/Dark)
-     **********************************/
-    const lightThemeColors = { darkBorder: "rgba(143, 146, 161, .1)", darkColor: "#5A6A85" };
-    const darkThemeColors = { darkBorder: "#2b2b42", darkColor: "#838C9A" };
-
-    function applyThemeColors(themeColors) {
-    // Exemplo: se houver gráficos, atualize as cores
-    if(window.chart3 && chart3.options && chart3.update){
-        chart3.options.scales.y.grid.color = themeColors.darkBorder;
-        chart3.options.scales.y.grid.borderColor = themeColors.darkBorder;
-        chart3.options.scales.x.ticks.color = themeColors.darkColor;
-        chart3.options.scales.y.ticks.color = themeColors.darkColor;
-        chart3.update();
-    }
-    if(window.chart4 && chart4.options && chart4.update){
-        chart4.options.scales.y.grid.color = themeColors.darkBorder;
-        chart4.options.scales.y.grid.borderColor = themeColors.darkBorder;
-        chart4.options.scales.x.ticks.color = themeColors.darkColor;
-        chart4.options.scales.y.ticks.color = themeColors.darkColor;
-        chart4.update();
-    }
-    }
-
-    const darkThemeButton = document.querySelector('.darkThemeButton');
-    const lightThemeButton = document.querySelector('.lightThemeButton');
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-    applyThemeColors(darkThemeColors);
-    } else {
-    applyThemeColors(lightThemeColors);
-    }
-
-    darkThemeButton?.addEventListener('click', () => { applyThemeColors(darkThemeColors); });
-    lightThemeButton?.addEventListener('click', () => { applyThemeColors(lightThemeColors); });
-
-    /**********************************
-     * 4. Lógica do Calendário e Filtro por Data
-     **********************************/
-    // Este bloco é implementado como um módulo para aproveitar a importação do componente.
-    import { createCalendarComponent } from "assets/js/calendarComponent.js";
-
+    import { createCalendarComponent } from "./assets/js/calendarComponent.js";
+    
     const btnOpenCalendar = document.getElementById("openCalendarBtn");
     const calendarRow = document.getElementById("calendarRow");
     const calendarContainer = document.getElementById("calendarContainer");
     const selectedDatesEl = document.getElementById("selectedDates");
-
-    // Cria o componente do calendário e o insere no container
+    
+    // Cria e insere o componente do calendário
     const calendarEl = createCalendarComponent();
     calendarContainer.appendChild(calendarEl);
-
+    
     // Exibir/ocultar o calendário ao clicar no botão "Selecionar Data"
     btnOpenCalendar.addEventListener("click", () => {
-    calendarRow.style.display = (!calendarRow.style.display || calendarRow.style.display === "none") ? "block" : "none";
+      calendarRow.style.display = (!calendarRow.style.display || calendarRow.style.display === "none") ? "block" : "none";
     });
-
-    // Ao confirmar a seleção, atualize o campo "Datas selecionadas" e invoque a função de filtro por data
+    
+    // Ao confirmar a seleção, atualize o campo "Datas selecionadas" e filtre os dados via API (a lógica deve ser implementada)
     const btnApply = calendarEl.querySelector(".calendar__button--primary");
     btnApply.addEventListener("click", () => {
-    // Aqui, capture as datas selecionadas via seu componente
-    // Exemplo fixo: se não houver retorno da API, exibe datas "0" ou alguma mensagem default
-    selectedDatesEl.textContent = "01/04/2025 - 23/04/2025";
-    // Chame aqui sua função para filtrar os dados conforme a data selecionada:
-    // filterDataByDate(startDate, endDate);
-    
-    calendarRow.style.display = "none";
+      // Exemplo: capture as datas selecionadas; se a API não retornar dados, exibe "0"
+      selectedDatesEl.textContent = "01/04/2025 - 23/04/2025";
+      // Aqui, invocar sua função para filtrar todos os dados (cartões, pedidos, etc.) conforme a data selecionada:
+      // filterDataByDate(startDate, endDate);
+      calendarRow.style.display = "none";
     });
-
-    // Botão "Voltar" para fechar o calendário sem confirmar
+    
+    // Botão "Voltar" fecha o calendário sem confirmar
     const btnBack = calendarEl.querySelector(".calendar__button--grey");
     btnBack.addEventListener("click", () => {
-    calendarRow.style.display = "none";
+      calendarRow.style.display = "none";
     });
-
+    
     /**********************************
-     * 5. Lógica de Pedidos Recentes com Paginação
+     * 2. Lógica de Pedidos Recentes com Paginação
+     * Se a API não retornar dados, os campos serão "0"
      **********************************/
-    // Sem dados simulados: se a API não retornar, o array fica vazio e os campos serão "0"
-    const pedidosRecentesAPI = [];  // Aqui, você fará a chamada real à API
+    // Aqui NÃO utilizamos dados simulados; se a API não retornar, o array fica vazio.
+    const pedidosRecentesAPI = [];  // Realize a chamada à API aqui.
     const pedidosData = pedidosRecentesAPI.length > 0 ? pedidosRecentesAPI : [];
-
+    
     let currentPage = 1;
     const perPage = 15;
     const pedidosBody = document.getElementById("pedidosBody");
     const prevPageBtn = document.getElementById("prevPageBtn");
     const nextPageBtn = document.getElementById("nextPageBtn");
     const paginationInfo = document.getElementById("paginationInfo");
-
+    
     function renderPedidos(page = 1) {
-    pedidosBody.innerHTML = "";
-    const startIndex = (page - 1) * perPage;
-    const endIndex = page * perPage;
-    const pageData = pedidosData.slice(startIndex, endIndex);
-
-    if (pageData.length === 0) {
+      pedidosBody.innerHTML = "";
+      const startIndex = (page - 1) * perPage;
+      const endIndex = page * perPage;
+      const pageData = pedidosData.slice(startIndex, endIndex);
+    
+      if (pageData.length === 0) {
         // Se não houver dados, exibe uma linha padrão com "0"
         const tr = document.createElement("tr");
         tr.innerHTML = `
-        <td>0</td>
-        <td>0</td>
-        <td>R$ 0</td>
-        <td class="text-end">0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>R$ 0</td>
+          <td class="text-end">0</td>
         `;
         pedidosBody.appendChild(tr);
-    } else {
+      } else {
         pageData.forEach((p) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
             <td>
-            <div class="d-flex align-items-center">
+              <div class="d-flex align-items-center">
                 <div class="icon default-bg me-2">
-                <i class="lni lni-user"></i>
+                  <i class="lni lni-user"></i>
                 </div>
                 <span class="text-sm fw-500 text-gray">${p.cliente || "0"}</span>
-            </div>
+              </div>
             </td>
             <td>
-            <p class="text-sm fw-500 text-gray">${p.vendedor || "0"}</p>
+              <p class="text-sm fw-500 text-gray">${p.vendedor || "0"}</p>
             </td>
             <td>
-            <p class="text-sm fw-500 text-gray">R$ ${p.valor?.toLocaleString("pt-BR") ?? "0"}</p>
+              <p class="text-sm fw-500 text-gray">R$ ${p.valor?.toLocaleString("pt-BR") ?? "0"}</p>
             </td>
             <td class="text-end">
-            <span class="status-btn">${p.status || "0"}</span>
+              <span class="status-btn">${p.status || "0"}</span>
             </td>
-        `;
-        pedidosBody.appendChild(tr);
+          `;
+          pedidosBody.appendChild(tr);
         });
+      }
+    
+      const total = pedidosData.length;
+      const totalPages = Math.ceil(total / perPage);
+      paginationInfo.textContent = `Página ${page} de ${totalPages} (${total} registros)`;
+    
+      prevPageBtn.disabled = (page <= 1);
+      nextPageBtn.disabled = (page >= totalPages || totalPages === 0);
     }
-
-    const total = pedidosData.length;
-    const totalPages = Math.ceil(total / perPage);
-    paginationInfo.textContent = `Página ${page} de ${totalPages} (${total} registros)`;
-
-    prevPageBtn.disabled = (page <= 1);
-    nextPageBtn.disabled = (page >= totalPages || totalPages === 0);
-    }
-
+    
     prevPageBtn.addEventListener("click", () => {
-    if (currentPage > 1) {
+      if (currentPage > 1) {
         currentPage--;
         renderPedidos(currentPage);
-    }
+      }
     });
-
+    
     nextPageBtn.addEventListener("click", () => {
-    const totalPages = Math.ceil(pedidosData.length / perPage);
-    if (currentPage < totalPages) {
+      const totalPages = Math.ceil(pedidosData.length / perPage);
+      if (currentPage < totalPages) {
         currentPage++;
         renderPedidos(currentPage);
-    }
+      }
     });
-
+    
     // Renderiza a primeira página de pedidos
     renderPedidos(currentPage);
+  </script>
+  
+  <!-- =========== Lógica de Tema (Light/Dark) ========= -->
+  <script>
+    const lightThemeColors = { darkBorder: "rgba(143, 146, 161, .1)", darkColor: "#5A6A85" };
+    const darkThemeColors = { darkBorder: "#2b2b42", darkColor: "#838C9A" };
+    
+    function applyThemeColors(themeColors) {
+      // Se houver gráficos ou outros elementos a atualizar, insira a lógica aqui.
+      if(window.chart3 && chart3.options && chart3.update){
+        chart3.options.scales.y.grid.color = themeColors.darkBorder;
+        chart3.options.scales.y.grid.borderColor = themeColors.darkBorder;
+        chart3.options.scales.x.ticks.color = themeColors.darkColor;
+        chart3.options.scales.y.ticks.color = themeColors.darkColor;
+        chart3.update();
+      }
+      if(window.chart4 && chart4.options && chart4.update){
+        chart4.options.scales.y.grid.color = themeColors.darkBorder;
+        chart4.options.scales.y.grid.borderColor = themeColors.darkBorder;
+        chart4.options.scales.x.ticks.color = themeColors.darkColor;
+        chart4.options.scales.y.ticks.color = themeColors.darkColor;
+        chart4.update();
+      }
+    }
+    
+    const darkThemeButton = document.querySelector('.darkThemeButton');
+    const lightThemeButton = document.querySelector('.lightThemeButton');
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      applyThemeColors(darkThemeColors);
+    } else {
+      applyThemeColors(lightThemeColors);
+    }
+    
+    darkThemeButton?.addEventListener('click', () => { applyThemeColors(darkThemeColors); });
+    lightThemeButton?.addEventListener('click', () => { applyThemeColors(lightThemeColors); });
   </script>
 </body>
 </html>
