@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -979,39 +980,60 @@
     ];
 
     const jvm = new jsVectorMap({
-      map: "world_merc",
-      selector: "#map",
-      zoomButtons: false,
+        // O mapa utilizado (aqui usamos o 'world_merc')
+        map: "world_merc",
+        // Seletor do elemento HTML onde o mapa será renderizado
+        selector: "#map",
+        // Ativa os botões de zoom automaticamente (eles aparecerão no canto superior esquerdo)
+        zoomButtons: true,
+        // Para centralizar no Brasil, você pode usar uma das opções abaixo:
 
-      regionStyle: {
+        // Opção 1: Foco pelo código do país:
+        focusOn: { region: 'BR' },
+
+        // Opção 2: Foco por coordenadas e escala (descomente esta linha e remova a linha acima se preferir):
+        // focusOn: { lat: -14.2350, lng: -51.9253, scale: 3 },
+
+        regionStyle: {
         initial: {
-          fill: "#d1d5db",
+            fill: "#d1d5db",
         },
-      },
+        },
 
-      labels: {
+        labels: {
         markers: {
-          render: (marker) => marker.name,
+            // Exibe o nome de cada marcador
+            render: (marker) => marker.name,
         },
-      },
+        },
 
-      markersSelectable: true,
-      selectedMarkers: markers.map((marker, index) => {
+        markersSelectable: true,
+        selectedMarkers: markers.map((marker, index) => {
         if (marker.name === "São Paulo" || marker.name === "Rio de Janeiro") {
-          return index;
+            return index;
         }
-      }).filter(index => index !== undefined),
-      markers: markers,
-      markerStyle: {
+        }).filter(index => index !== undefined),
+        
+        // Definição dos marcadores (capitais)
+        markers: [
+        { name: "São Paulo", coords: [-23.5505, -46.6333] },
+        { name: "Rio de Janeiro", coords: [-22.9068, -43.1729] },
+        { name: "Belo Horizonte", coords: [-19.8157, -43.9542] },
+        { name: "Salvador", coords: [-12.9714, -38.5014] },
+        { name: "Porto Alegre", coords: [-30.0346, -51.2177] },
+        ],
+
+        markerStyle: {
         initial: { fill: "#4A6CF7" },
         selected: { fill: "#ff5050" },
-      },
-      markerLabelStyle: {
-        initial: {
-          fontWeight: 400,
-          fontSize: 14,
         },
-      },
+
+        markerLabelStyle: {
+        initial: {
+            fontWeight: 400,
+            fontSize: 14,
+        },
+        },
     });
 
     // =========== chart three start
