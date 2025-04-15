@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="assets/images/favicon.svg" type="image/x-icon" />
-    <title>Airland</title>
+    <title>Login | PlainAdmin Demo</title>
     <!-- ========== All CSS files linkup ========= -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="assets/css/lineicons.css" />
@@ -131,7 +131,7 @@
     <script src="assets/js/Sortable.min.js"></script>
     <!-- Removido assets/js/main.js para evitar conflitos -->
 
-    <!-- Lógica de login via JavaScript utilizando Supabase Auth via endpoint /api/login -->
+    <!-- Lógica de login via JavaScript utilizando o endpoint /api/login -->
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         const form = document.getElementById("login-form");
@@ -155,14 +155,14 @@
           }
 
           try {
-            // Envia a requisição para o endpoint que realiza a autenticação via Supabase
+            // Usa uma URL relativa para acessar o endpoint de API internamente
             const response = await fetch("/api/login", {
               method: "POST",
               headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json"
               },
               credentials: "include", // Para envio/recebimento de cookies de sessão
-              body: JSON.stringify({ email, password }),
+              body: JSON.stringify({ email, password })
             });
 
             // Se a resposta não for OK, tenta ler a mensagem de erro e lança a exceção
