@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="assets/images/favicon.svg" type="image/x-icon" />
-    <title>Airland</title>
+    <title>Airland - Login</title>
     <!-- ========== All CSS files linkup ========= -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="assets/css/lineicons.css" />
@@ -15,9 +15,6 @@
     <link rel="stylesheet" href="assets/css/morris.css" />
     <link rel="stylesheet" href="assets/css/datatable.css" />
     <link rel="stylesheet" href="assets/css/main.css" />
-
-    <!-- Importa o player do LottieFiles -->
-    <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
   </head>
   <body>
     <div class="row g-0 auth-row">
@@ -31,15 +28,7 @@
               </p>
             </div>
             <div class="cover-image">
-              <!-- Substituído a imagem estática pela animação Lottie -->
-              <dotlottie-player 
-                src="https://lottie.host/0f3802d7-72e2-4e84-a2d6-032aff18c6fe/ksMxUn3lXW.lottie" 
-                background="transparent" 
-                speed="1" 
-                style="width: 500px; height: 500px" 
-                loop 
-                autoplay>
-              </dotlottie-player>
+              <img src="assets/images/auth/signin-image.svg" alt="Imagem de login" />
             </div>
             <div class="shape-image">
               <img src="assets/images/auth/shape.svg" alt="Shape" />
@@ -47,11 +36,11 @@
           </div>
         </div>
       </div>
-      <!-- end col -->
+      <!-- Fim da coluna de imagem -->
       <div class="col-lg-6">
         <div class="signin-wrapper">
           <div class="form-wrapper">
-            <h6 class="mb-15">Acesso a Plataforma</h6>
+            <h6 class="mb-15">Acesso à Plataforma</h6>
             <p class="text-sm mb-25">
               É neste lugar que o comum fica para trás e o extraordinário se torna possível.
             </p>
@@ -104,7 +93,7 @@
             <div class="singin-option pt-40">
               <p class="text-sm text-medium text-dark text-center">
                 Ainda não tem uma conta?
-                <a href="https://airland.com.br">Crie uma conta</a>
+                <a href="signup.html">Crie uma conta</a>
               </p>
             </div>
           </div>
@@ -127,93 +116,8 @@
     <script src="assets/js/quill.min.js"></script>
     <script src="assets/js/datatable.js"></script>
     <script src="assets/js/Sortable.min.js"></script>
-    
-    <!-- Lógica de login via JavaScript -->
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const form = document.getElementById('login-form');
-        const errorDiv = document.getElementById('error-message');
-      
-        form.addEventListener('submit', async function(e) {
-          e.preventDefault();
-          
-          // Limpa mensagem de erro
-          errorDiv.style.display = 'none';
-          errorDiv.innerText = '';
-      
-          // Obtém os valores do formulário
-          const email = form.email.value.trim();
-          const password = form.password.value.trim();
-      
-          if (!email || !password) {
-            errorDiv.innerText = 'Por favor, preencha todos os campos.';
-            errorDiv.style.display = 'block';
-            return;
-          }
-      
-          try {
-            // Realiza o POST para a API de login
-            const response = await fetch('/api/login', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({ email, password })
-            });
-      
-            const data = await response.json();
-      
-            if (!response.ok) {
-              errorDiv.innerText = data.error || 'Email ou senha incorretos!';
-              errorDiv.style.display = 'block';
-              return;
-            }
-            
-            // Aqui, verifica se o usuário pertence ao affiliate correto.
-            // Vamos supor que data.affiliate contenha o affiliate_id do usuário e que
-            // essa informação deva estar alinhada com o subdomínio atual.
-            // Você pode obter o subdomínio a partir de window.location.host:
-            const host = window.location.host.split(":")[0]; // remove a porta, se houver
-            const baseDomain = "airland.com.br";
-            let subdomain = null;
-            if (host.toLowerCase() !== baseDomain) {
-              if (host.toLowerCase().endsWith(`.${baseDomain}`)) {
-                subdomain = host.substring(0, host.length - baseDomain.length - 1).toLowerCase();
-              } else {
-                subdomain = host.toLowerCase();
-              }
-            }
-      
-            // Considerando que o objeto data.affiliate já possui dados do afiliado do login,
-            // compare, por exemplo, o slug ou domain.
-            // Se, no seu cadastro, o slug é "LucasTur" e o domínio está como "lucastur.airland.com.br",
-            // você pode fazer:
-            if (!data.affiliate || !data.affiliate.slug) {
-              errorDiv.innerText = "Dados do afiliado não encontrados.";
-              errorDiv.style.display = 'block';
-              return;
-            }
-      
-            // Converte o slug para minúsculas para comparação (se necessário)
-            const userAffiliateSlug = data.affiliate.slug.toLowerCase();
-            // Suponha que o subdomínio esperado seja igual ao slug (ou parte dele)
-            if (!subdomain || subdomain !== userAffiliateSlug) {
-              errorDiv.innerText = "Você não tem permissão para acessar este subdomínio.";
-              errorDiv.style.display = 'block';
-              return;
-            }
-      
-            // Se tudo estiver OK, salve a sessão e redirecione para o dashboard.
-            localStorage.setItem('affiliateUser', JSON.stringify(data.user));
-            // Redireciona para o dashboard. Pode ser que a rota seja /dashboard ou outra.
-            window.location.href = '/dashboard.html';
-          } catch (err) {
-            console.error(err);
-            errorDiv.innerText = 'Ocorreu um erro ao realizar o login.';
-            errorDiv.style.display = 'block';
-          }
-        });
-      });
-    </script>
+    <script src="assets/js/main.js"></script>
+    <!-- Script do Login -->
+    <script src="assets/js/login.js"></script>
   </body>
 </html>
