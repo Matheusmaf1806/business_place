@@ -449,96 +449,97 @@
     <script src="assets/js/main.js"></script>
 
     <script type="module">
-      import { createCalendarComponent } from "./assets/js/calendarComponent.js";
-
-      const btnOpenCalendar = document.getElementById("openCalendarBtn");
-      const selectedDatesEl = document.getElementById("selectedDates");
-      // Por padrão, o bloco de datas selecionadas ficará oculto até a busca efetiva
-      selectedDatesEl.style.display = "none";
-
-      // Cria o componente do calendário
-      const calendarEl = createCalendarComponent();
-      // Configura o calendário para atuar com posicionamento absoluto
-      calendarEl.style.position = "absolute";
-      calendarEl.style.display = "none";
-      calendarEl.style.zIndex = "1000";
-      // Adiciona o calendário no final do body
-      document.body.appendChild(calendarEl);
-
-      // Função para posicionar o calendário próximo ao botão, garantindo que fique dentro da tela
-      function positionCalendar() {
-        const rect = btnOpenCalendar.getBoundingClientRect();
-        calendarEl.style.top = (rect.bottom + window.scrollY) + "px";
-        calendarEl.style.left = (rect.left + window.scrollX) + "px";
-
-        requestAnimationFrame(() => {
-          const calendarRect = calendarEl.getBoundingClientRect();
-          if (calendarRect.right > window.innerWidth) {
-            const shiftX = calendarRect.right - window.innerWidth + 10;
-            calendarEl.style.left = (parseFloat(calendarEl.style.left) - shiftX) + "px";
-          }
-          if (calendarRect.bottom > window.innerHeight) {
-            const shiftY = calendarRect.bottom - window.innerHeight + 10;
-            calendarEl.style.top = (parseFloat(calendarEl.style.top) - shiftY) + "px";
-          }
-        });
-      }
-
-      // ------ NOVA LÓGICA PARA ABRIR O CALENDÁRIO APENAS COM CLICK ------
-      btnOpenCalendar.addEventListener("click", () => {
-        // Posiciona e exibe o calendário quando o botão for clicado
-        positionCalendar();
-        calendarEl.style.display = "block";
-      });
-
-      // Opcional: Adicione um listener para fechar o calendário ao clicar fora dele,
-      // se desejar um comportamento semelhante ao de dropdown.
-      document.addEventListener("click", (event) => {
-        // Verifica se o clique ocorreu fora do botão e do calendário
-        if (!btnOpenCalendar.contains(event.target) && !calendarEl.contains(event.target)) {
-          calendarEl.style.display = "none";
+    import { createCalendarComponent } from "./assets/js/calendarComponent.js";
+  
+    const btnOpenCalendar = document.getElementById("openCalendarBtn");
+    const selectedDatesEl = document.getElementById("selectedDates");
+    // Inicialmente, o bloco de datas fica oculto até ser atualizado
+    selectedDatesEl.style.display = "none";
+  
+    // Cria o componente do calendário
+    const calendarEl = createCalendarComponent();
+    calendarEl.style.position = "absolute";
+    calendarEl.style.display = "none";
+    calendarEl.style.zIndex = "1000";
+    document.body.appendChild(calendarEl);
+  
+    // Função para posicionar o calendário próximo ao botão
+    function positionCalendar() {
+      const rect = btnOpenCalendar.getBoundingClientRect();
+      calendarEl.style.top = (rect.bottom + window.scrollY) + "px";
+      calendarEl.style.left = (rect.left + window.scrollX) + "px";
+  
+      requestAnimationFrame(() => {
+        const calendarRect = calendarEl.getBoundingClientRect();
+        if (calendarRect.right > window.innerWidth) {
+          const shiftX = calendarRect.right - window.innerWidth + 10;
+          calendarEl.style.left = (parseFloat(calendarEl.style.left) - shiftX) + "px";
+        }
+        if (calendarRect.bottom > window.innerHeight) {
+          const shiftY = calendarRect.bottom - window.innerHeight + 10;
+          calendarEl.style.top = (parseFloat(calendarEl.style.top) - shiftY) + "px";
         }
       });
-      // --------------------------------------------------------------------
-
-      // Função simulada para buscar novos dados com base na data selecionada
-      function fetchData(dateRange) {
-        // Exemplo de requisição; ajuste a URL e o processamento conforme sua API
-        fetch(`https://seuservidor.com/api/pedidos?data=${encodeURIComponent(dateRange)}`)
-          .then(response => response.json())
-          .then(data => {
-            // Aqui você atualiza a tabela de pedidos ou outros elementos com os dados recebidos
-            console.log("Dados atualizados:", data);
-            // Exemplo: updateTable(data);
-          })
-          .catch(error => {
-            console.error("Erro ao buscar novos dados:", error);
-          });
+    }
+  
+    // Abre o calendário com um clique
+    btnOpenCalendar.addEventListener("click", () => {
+      positionCalendar();
+      calendarEl.style.display = "block";
+    });
+  
+    // Fecha o calendário ao clicar fora (opcional)
+    document.addEventListener("click", (event) => {
+      if (!btnOpenCalendar.contains(event.target) && !calendarEl.contains(event.target)) {
+        calendarEl.style.display = "none";
       }
-
-      // Ao confirmar a seleção no calendário (botão "Aplicar"), capture a data, atualize a exibição
-      // e faça a nova busca
-      const btnApply = calendarEl.querySelector(".calendar__button--primary");
-      btnApply.addEventListener("click", () => {
-        // Aqui você deve capturar as datas selecionadas pelo usuário.
-        // No exemplo, usamos um valor fixo; substitua pela leitura dinâmica do componente do calendário.
-        const datasSelecionadas = "01/04/2025 - 23/04/2025";
-        // Atualiza o bloco de "Datas selecionadas"
+    });
+  
+    // Função para buscar novos dados com base na data selecionada
+    function fetchData(dateRange) {
+      fetch(`https://seuservidor.com/api/pedidos?data=${encodeURIComponent(dateRange)}`)
+        .then(response => response.json())
+        .then(data => {
+          console.log("Dados atualizados:", data);
+          // Aqui, atualize sua tabela ou outros elementos com os dados recebidos
+        })
+        .catch(error => {
+          console.error("Erro ao buscar dados:", error);
+        });
+    }
+  
+    // Evento para o botão "Aplicar"
+    const btnApply = calendarEl.querySelector(".calendar__button--primary");
+    btnApply.addEventListener("click", () => {
+      // Supondo que o componente possua dois inputs para data de início e fim:
+      const startInput = calendarEl.querySelector(".calendar__input-start");
+      const endInput = calendarEl.querySelector(".calendar__input-end");
+  
+      // Se os inputs existirem, capture os valores selecionados
+      if (startInput && endInput && startInput.value && endInput.value) {
+        const startDate = startInput.value; // Ex: "09/04/2025"
+        const endDate = endInput.value;     // Ex: "23/04/2025"
+        const datasSelecionadas = startDate + " - " + endDate;
+  
+        // Atualiza o elemento que exibe as datas selecionadas
         selectedDatesEl.textContent = datasSelecionadas;
         selectedDatesEl.style.display = "inline";
-
-        // Chama a função que busca os novos dados com base nas datas escolhidas
+  
+        // Realiza a busca com as datas atualizadas
         fetchData(datasSelecionadas);
-
+  
         // Fecha o calendário
         calendarEl.style.display = "none";
-      });
-
-      // Botão "Voltar" fecha o calendário sem confirmar a seleção
-      const btnBack = calendarEl.querySelector(".calendar__button--grey");
-      btnBack.addEventListener("click", () => {
-        calendarEl.style.display = "none";
-      });
-    </script>
+      } else {
+        console.error("Seleção de data inválida!");
+      }
+    });
+  
+    // Botão "Voltar" para fechar o calendário sem confirmar
+    const btnBack = calendarEl.querySelector(".calendar__button--grey");
+    btnBack.addEventListener("click", () => {
+      calendarEl.style.display = "none";
+    });
+  </script>
   </body>
 </html>
