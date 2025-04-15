@@ -2,173 +2,130 @@
 const express = require("express");
 const path = require("path");
 const app = express();
+const { createClient } = require("@supabase/supabase-js");
+
+// Porta local ou variável de ambiente
 const PORT = process.env.PORT || 3000;
 
-/* -----------------------------------------------------------------------------
-   1) Middleware para interpretar JSON
------------------------------------------------------------------------------ */
+// Verificação das variáveis de ambiente para Supabase
+if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+  throw new Error(
+    "As variáveis de ambiente SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY são necessárias."
+  );
+}
+
+// Inicializa o client Supabase
+const supabaseClient = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+);
+
+/* ----------------------------------------------------------
+   1) Middleware para interpretar JSON no body
+---------------------------------------------------------- */
 app.use(express.json());
 
-/* -----------------------------------------------------------------------------
-   2) Middleware de CORS
------------------------------------------------------------------------------ */
+/* ----------------------------------------------------------
+   2) Middleware de CORS básico
+   (Ajuste conforme a necessidade real de origem e credenciais)
+---------------------------------------------------------- */
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "https://businessplace.airland.com.br");
-  res.header("Access-Control-Allow-Credentials", "true");
+  // Liberando origem para testes (outra abordagem seria especificar domínios)
+  res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  // Se quiser enviar cookies (credentials), não use "*"
+  // res.header("Access-Control-Allow-Origin", "http://seu-dominio.com");
+  // res.header("Access-Control-Allow-Credentials", "true");
+
   if (req.method === "OPTIONS") {
     return res.sendStatus(200);
   }
   next();
 });
 
-/* -----------------------------------------------------------------------------
-   3) Middleware para extrair o subdomínio do header "Host"
------------------------------------------------------------------------------ */
+/* ----------------------------------------------------------
+   3) (Opcional) Extração simples de subdomínio
+   Se não precisar, remova este bloco
+---------------------------------------------------------- */
 app.use((req, res, next) => {
-  const host = req.headers.host;
-  if (!host) {
-    req.subdomain = null;
-    return next();
-  }
-  const hostWithoutPort = host.split(":")[0];
-  const baseDomain = "airland.com.br";
-  let subdomain = null;
-
-  if (hostWithoutPort.toLowerCase() === baseDomain.toLowerCase()) {
-    subdomain = null;
-  } else if (hostWithoutPort.toLowerCase().endsWith(`.${baseDomain.toLowerCase()}`)) {
-    subdomain = hostWithoutPort.substring(0, hostWithoutPort.length - baseDomain.length - 1);
-  } else {
-    subdomain = hostWithoutPort;
-  }
-  req.subdomain = subdomain ? subdomain.toLowerCase() : null;
-  console.log("Subdomínio extraído:", req.subdomain);
+  const host = req.headers.host || "";
+  const [possibleSubdomain] = host.split(".");
+  // Se "possibleSubdomain" for "businessplace" ou outra
+  // Lógica adicional pode ser feita aqui
+  req.subdomain = possibleSubdomain;
+  console.log("Subdomínio detectado:", req.subdomain);
   next();
 });
 
-/* -----------------------------------------------------------------------------
-   4) Inicialização do Supabase
-      SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY devem estar configuradas.
------------------------------------------------------------------------------ */
-if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
-  throw new Error("As variáveis de ambiente SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY são necessárias.");
-}
-const { createClient } = require("@supabase/supabase-js");
-const supabaseClient = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-);
+/* ----------------------------------------------------------
+   4) Rotas de API
+---------------------------------------------------------- */
 
-/* -----------------------------------------------------------------------------
-   5) Criação do Router para as rotas da API
------------------------------------------------------------------------------ */
-const apiRouter = express.Router();
-
-apiRouter.get("/affiliate", async (req, res) => {
-  if (!req.subdomain) {
-    return res.status(400).json({ error: "Subdomínio não definido na requisição." });
-  }
-  try {
-    const fullSubdomain = req.subdomain + ".airland.com.br";
-    const { data, error } = await supabaseClient
-      .from("affiliates")
-      .select("*")
-      .eq("subdomain", fullSubdomain)
-      .single();
-    if (error) {
-      return res.status(404).json({
-        error: `Agência não encontrada para '${fullSubdomain}'. Detalhes: ${error.message}`,
-      });
-    }
-    return res.status(200).json({ affiliate: data });
-  } catch (err) {
-    console.error("Erro ao consultar afiliado:", err);
-    return res.status(500).json({ error: "Erro interno no servidor." });
-  }
-});
-
-apiRouter.post("/login", async (req, res) => {
+// POST /api/login
+app.post("/api/login", async (req, res) => {
   const { email, password } = req.body;
+
+  // Validação básica
   if (!email || !password) {
     return res.status(400).json({ error: "Email e senha são obrigatórios." });
   }
-  if (!req.subdomain) {
-    return res.status(400).json({ error: "Subdomínio não identificado." });
-  }
+
   try {
-    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+    // Autenticação via Supabase
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+      email,
+      password,
+    });
     if (error) {
+      // Retorna 401 se credenciais forem inválidas
       return res.status(401).json({ error: error.message });
     }
+
     const { user, session } = data;
 
-    const { data: userAffiliate, error: userAffError } = await supabaseClient
-      .from("user_affiliates")
-      .select("*")
-      .eq("user_id", user.id)
-      .single();
-    if (userAffError) {
-      console.error("Erro ao buscar dados do afiliado:", userAffError);
-      return res.status(500).json({ error: "Erro ao recuperar dados do afiliado." });
-    }
+    // Exemplo de lookup em outra tabela (se houver):
+    // const { data: extraData, error: extraError } = await supabaseClient
+    //   .from("some_table")
+    //   .select("*")
+    //   .eq("user_id", user.id)
+    //   .single();
+    // if (extraError) {
+    //   return res.status(500).json({ error: "Erro ao buscar dados extras." });
+    // }
 
-    const { data: affiliate, error: affiliateError } = await supabaseClient
-      .from("affiliates")
-      .select("*")
-      .eq("id", userAffiliate.affiliate_id)
-      .single();
-    if (affiliateError) {
-      console.error("Erro ao buscar informações da agência:", affiliateError);
-      return res.status(500).json({ error: "Erro ao recuperar informações da agência." });
-    }
-
-    const affiliateSlug = affiliate.slug ? affiliate.slug.toLowerCase() : "";
-    if (req.subdomain !== "businessplace" && req.subdomain !== affiliateSlug) {
-      return res.status(403).json({ error: "Você não tem permissão para acessar este subdomínio." });
-    }
-
-    return res.status(200).json({
+    // Retorna objeto com dados de sucesso
+    return res.json({
       success: true,
       user,
       session,
-      affiliate,
-      expiresIn: session?.expires_in || 3600,
+      // exampleExtra: extraData,
     });
   } catch (err) {
-    console.error("Erro no login:", err);
-    return res.status(500).json({ error: "Erro interno no servidor durante o login." });
+    console.error("Erro durante login:", err);
+    return res
+      .status(500)
+      .json({ error: "Erro interno no servidor durante o login." });
   }
 });
 
-/* -----------------------------------------------------------------------------
-   6) Registro do Router da API
------------------------------------------------------------------------------ */
-app.use("/api", apiRouter);
+/* ----------------------------------------------------------
+   5) Servindo arquivos estáticos
+---------------------------------------------------------- */
+app.use(express.static(path.join(__dirname, "public")));
 
-/* -----------------------------------------------------------------------------
-   7) Middleware para servir arquivos estáticos EXCETO para rotas que iniciam com /api
------------------------------------------------------------------------------ */
-app.use((req, res, next) => {
-  if (req.url.startsWith("/api")) return next();
-  express.static(path.join(__dirname, "public"))(req, res, next);
-});
-
-/* -----------------------------------------------------------------------------
-   8) Rota catch-all para requisições GET (não /api)
------------------------------------------------------------------------------ */
+/* ----------------------------------------------------------
+   6) Rota catch-all (para qualquer outra rota GET que não seja /api/)
+---------------------------------------------------------- */
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-/* -----------------------------------------------------------------------------
-   9) Inicialização do servidor
------------------------------------------------------------------------------ */
-if (process.env.NODE_ENV === "development") {
-  app.listen(PORT, () => {
-    console.log(`Servidor rodando na porta ${PORT}`);
-  });
-}
+/* ----------------------------------------------------------
+   7) Inicializa o servidor
+---------------------------------------------------------- */
+app.listen(PORT, () => {
+  console.log(`Servidor iniciado na porta ${PORT}`);
+});
 
 module.exports = app;
