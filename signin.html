@@ -125,62 +125,69 @@
     <script src="assets/js/Sortable.min.js"></script>
     <!-- Removido assets/js/main.js para evitar conflitos -->
 
-    <!-- Lógica de login via JavaScript utilizando o endpoint /api/login -->
+    <!-- Trecho do signin.html (script de login) -->
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const form = document.getElementById("login-form");
-        const errorDiv = document.getElementById("error-message");
-
-        form.addEventListener("submit", async function (e) {
-          e.preventDefault();
-
-          // Limpa mensagem de erro
-          errorDiv.style.display = "none";
-          errorDiv.innerText = "";
-
-          // Obtém os valores do formulário
-          const email = form.email.value.trim();
-          const password = form.password.value.trim();
-
-          if (!email || !password) {
-            errorDiv.innerText = "Por favor, preencha todos os campos.";
-            errorDiv.style.display = "block";
-            return;
+    document.addEventListener("DOMContentLoaded", function () {
+      const form = document.getElementById("login-form");
+      const errorDiv = document.getElementById("error-message");
+    
+      form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+    
+        // Limpa mensagem de erro
+        errorDiv.style.display = "none";
+        errorDiv.innerText = "";
+    
+        // Obtém os valores do formulário
+        const email = form.email.value.trim();
+        const password = form.password.value.trim();
+    
+        if (!email || !password) {
+          errorDiv.innerText = "Por favor, preencha todos os campos.";
+          errorDiv.style.display = "block";
+          return;
+        }
+    
+        try {
+          // URL relativa para acessar o endpoint de API (deve bater com a rota definida no server.js)
+          const response = await fetch("/api/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ email, password })
+          });
+    
+          // Verifica se o content-type da resposta indica JSON
+          const contentType = response.headers.get("content-type") || "";
+          let data;
+          if (contentType.indexOf("application/json") !== -1) {
+            data = await response.json();
+          } else {
+            // Caso não seja JSON, captura o texto para ajudar no debug
+            const textData = await response.text();
+            throw new Error("Resposta inesperada (não é JSON): " + textData);
           }
-
-          try {
-            // URL relativa para acessar o endpoint de API (Next.js)
-            const response = await fetch("/api/login", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              credentials: "include",
-              body: JSON.stringify({ email, password })
-            });
-
-            // Se a resposta não for OK, tenta extrair o erro do JSON
-            if (!response.ok) {
-              const errorData = await response.json();
-              throw new Error(errorData.error || "Erro na requisição: " + response.status);
-            }
-
-            const data = await response.json();
-
-            if (data.success) {
-              // Salva os dados do usuário no localStorage se necessário
-              localStorage.setItem("affiliateUser", JSON.stringify(data.user));
-              // Redireciona para a área logada
-              window.location.href = "http://businessplace.airland.com.br/index.html";
-            } else {
-              errorDiv.innerText = data.error || "Email ou senha incorretos!";
-              errorDiv.style.display = "block";
-            }
-          } catch (err) {
-            console.error(err);
-            errorDiv.innerText = "Ocorreu um erro ao realizar o login: " + err.message;
+    
+          if (!response.ok) {
+            throw new Error(data.error || "Erro na requisição: " + response.status);
+          }
+    
+          if (data.success) {
+            // Salva os dados do usuário no localStorage se necessário
+            localStorage.setItem("affiliateUser", JSON.stringify(data.user));
+            // Redireciona para a área logada
+            window.location.href = "http://businessplace.airland.com.br/index.html";
+          } else {
+            errorDiv.innerText = data.error || "Email ou senha incorretos!";
             errorDiv.style.display = "block";
           }
-        });
+        } catch (err) {
+          console.error(err);
+          errorDiv.innerText = "Ocorreu um erro ao realizar o login: " + err.message;
+          errorDiv.style.display = "block";
+        }
       });
+    });
     </script>
   </body>
 </html>
