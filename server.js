@@ -5,16 +5,14 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 /* -----------------------------------------------------------------------------
-   1) Middleware para interpretar JSON (body parser)
+   1) Middleware para interpretar JSON
 ----------------------------------------------------------------------------- */
 app.use(express.json());
 
 /* -----------------------------------------------------------------------------
-   2) Middleware de CORS para permitir métodos e credenciais
+   2) Middleware de CORS
 ----------------------------------------------------------------------------- */
 app.use((req, res, next) => {
-  // Ajuste conforme necessário; se quiser liberar geral, pode usar "*",
-  // mas com "credentials: true" não pode ser "*". Ajuste para o domínio correto.
   res.header("Access-Control-Allow-Origin", "https://businessplace.airland.com.br");
   res.header("Access-Control-Allow-Credentials", "true");
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
@@ -26,15 +24,15 @@ app.use((req, res, next) => {
 });
 
 /* -----------------------------------------------------------------------------
-   3) Middleware para extrair o subdomínio a partir do header "Host"
+   3) Middleware para extrair o subdomínio do header "Host"
 ----------------------------------------------------------------------------- */
 app.use((req, res, next) => {
-  const host = req.headers.host; // Ex.: "businessplace.airland.com.br:3000"
+  const host = req.headers.host;
   if (!host) {
     req.subdomain = null;
     return next();
   }
-  const hostWithoutPort = host.split(":")[0]; // remove a porta
+  const hostWithoutPort = host.split(":")[0];
   const baseDomain = "airland.com.br";
   let subdomain = null;
 
@@ -43,10 +41,7 @@ app.use((req, res, next) => {
   } else if (
     hostWithoutPort.toLowerCase().endsWith(`.${baseDomain.toLowerCase()}`)
   ) {
-    subdomain = hostWithoutPort.substring(
-      0,
-      hostWithoutPort.length - baseDomain.length - 1
-    );
+    subdomain = hostWithoutPort.substring(0, hostWithoutPort.length - baseDomain.length - 1);
   } else {
     subdomain = hostWithoutPort;
   }
@@ -56,13 +51,11 @@ app.use((req, res, next) => {
 });
 
 /* -----------------------------------------------------------------------------
-   4) Inicialização da integração com Supabase
-      (Certifique-se de que SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY estejam configuradas!)
+   4) Inicialização do Supabase
+      SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY devem estar configuradas.
 ----------------------------------------------------------------------------- */
 if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
-  throw new Error(
-    "As variáveis de ambiente SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY são necessárias."
-  );
+  throw new Error("As variáveis de ambiente SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY são necessárias.");
 }
 const { createClient } = require("@supabase/supabase-js");
 const supabaseClient = createClient(
@@ -71,15 +64,13 @@ const supabaseClient = createClient(
 );
 
 /* -----------------------------------------------------------------------------
-   5) Rotas de API – DEFINIDAS ANTES de servir arquivos estáticos
+   5) Criação do Router para as rotas da API
 ----------------------------------------------------------------------------- */
+const apiRouter = express.Router();
 
-/* GET /api/affiliate – Obtém os dados do afiliado com base no subdomínio */
-app.get("/api/affiliate", async (req, res) => {
+apiRouter.get("/affiliate", async (req, res) => {
   if (!req.subdomain) {
-    return res
-      .status(400)
-      .json({ error: "Subdomínio não definido na requisição." });
+    return res.status(400).json({ error: "Subdomínio não definido na requisição." });
   }
   try {
     const fullSubdomain = req.subdomain + ".airland.com.br";
@@ -100,8 +91,7 @@ app.get("/api/affiliate", async (req, res) => {
   }
 });
 
-/* POST /api/login – Faz login via Supabase Auth e valida o subdomínio */
-app.post("/api/login", async (req, res) => {
+apiRouter.post("/login", async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
     return res.status(400).json({ error: "Email e senha são obrigatórios." });
@@ -111,10 +101,7 @@ app.post("/api/login", async (req, res) => {
   }
   try {
     // Autenticação via Supabase Auth
-    const { data, error } = await supabaseClient.auth.signInWithPassword({
-      email,
-      password,
-    });
+    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
     if (error) {
       return res.status(401).json({ error: error.message });
     }
@@ -128,9 +115,7 @@ app.post("/api/login", async (req, res) => {
       .single();
     if (userAffError) {
       console.error("Erro ao buscar dados do afiliado:", userAffError);
-      return res
-        .status(500)
-        .json({ error: "Erro ao recuperar dados do afiliado." });
+      return res.status(500).json({ error: "Erro ao recuperar dados do afiliado." });
     }
 
     // Consulta à tabela affiliates para obter os dados da agência
@@ -141,19 +126,13 @@ app.post("/api/login", async (req, res) => {
       .single();
     if (affiliateError) {
       console.error("Erro ao buscar informações da agência:", affiliateError);
-      return res
-        .status(500)
-        .json({ error: "Erro ao recuperar informações da agência." });
+      return res.status(500).json({ error: "Erro ao recuperar informações da agência." });
     }
 
     // Se o subdomínio não for "businessplace" (backoffice), verifica se ele bate com o slug do afiliado
     const affiliateSlug = affiliate.slug ? affiliate.slug.toLowerCase() : "";
     if (req.subdomain !== "businessplace" && req.subdomain !== affiliateSlug) {
-      return res
-        .status(403)
-        .json({
-          error: "Você não tem permissão para acessar este subdomínio.",
-        });
+      return res.status(403).json({ error: "Você não tem permissão para acessar este subdomínio." });
     }
 
     return res.status(200).json({
@@ -170,10 +149,13 @@ app.post("/api/login", async (req, res) => {
 });
 
 /* -----------------------------------------------------------------------------
-   6) Rotas para páginas não-API
+   6) Registro do Router da API
 ----------------------------------------------------------------------------- */
+app.use("/api", apiRouter);
 
-// Exemplo: Página de login do agente
+/* -----------------------------------------------------------------------------
+   7) Rotas para páginas não-API
+----------------------------------------------------------------------------- */
 app.get("/login-agente", (req, res) => {
   if (!req.subdomain) {
     return res.status(400).send("Subdomínio não identificado.");
@@ -181,7 +163,6 @@ app.get("/login-agente", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "login-agente.html"));
 });
 
-// Exemplo: Dashboard
 app.get("/dashboard", (req, res) => {
   if (!req.subdomain) {
     return res.status(400).send("Subdomínio não identificado.");
@@ -190,20 +171,19 @@ app.get("/dashboard", (req, res) => {
 });
 
 /* -----------------------------------------------------------------------------
-   7) Middleware para servir arquivos estáticos (depois das rotas API)
+   8) Servir arquivos estáticos
 ----------------------------------------------------------------------------- */
 app.use(express.static(path.join(__dirname, "public")));
 
 /* -----------------------------------------------------------------------------
-   8) Rota catch-all: Serve index.html para outras requisições
+   9) Rota catch-all para requisições GET
 ----------------------------------------------------------------------------- */
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 /* -----------------------------------------------------------------------------
-   9) Inicia o servidor localmente se NODE_ENV for "development"
-      Em produção, o app será exportado para uso como função serverless
+   10) Inicialização do servidor
 ----------------------------------------------------------------------------- */
 if (process.env.NODE_ENV === "development") {
   app.listen(PORT, () => {
