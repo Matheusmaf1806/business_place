@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3000;
 // ------------------------------
 app.use(express.json());
 
-// (Opcional) Handler para OPTIONS, se necessário para pré-requisições
+// (Opcional) Handler para OPTIONS, se necessário
 app.options("/*", (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
@@ -22,14 +22,14 @@ app.options("/*", (req, res) => {
 // Middleware para extrair o subdomínio
 // ------------------------------
 app.use((req, res, next) => {
-  // Obtém o header "Host". Exemplo local: "lucastur.airland.com.br:3000"
+  // Obtém o header "Host". Ex.: "lucastur.airland.com.br:3000"
   const host = req.headers.host;
   if (!host) {
     req.subdomain = null;
     return next();
   }
   
-  // Remove a porta, se existir
+  // Remove a porta (se existir)
   const hostWithoutPort = host.split(":")[0];
 
   // Define o domínio base – ajuste conforme necessário
@@ -43,7 +43,7 @@ app.use((req, res, next) => {
     // Exemplo: "lucastur.airland.com.br" → extrai "lucastur"
     subdomain = hostWithoutPort.substring(0, hostWithoutPort.length - baseDomain.length - 1);
   } else {
-    // Caso o host não siga o padrão, usa o host completo
+    // Se não seguir o padrão, usa o host completo
     subdomain = hostWithoutPort;
   }
   
@@ -60,7 +60,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // ------------------------------
 // Rota para a página de login do agente
-// Exemplo: acessando "lucastur.airland.com.br/login-agente"
+// Exemplo: "lucastur.airland.com.br/login-agente"
 app.get("/login-agente", (req, res) => {
   if (!req.subdomain) {
     return res.status(400).send("Subdomínio não identificado. Use um subdomínio válido.");
@@ -79,11 +79,10 @@ app.get("/dashboard", (req, res) => {
 });
 
 // ------------------------------
-// Rota API para obter os dados do afiliado com base no subdomínio
+// Rota API para obter dados do afiliado com base no subdomínio
 // ------------------------------
-
 if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
-  throw new Error("As variáveis de ambiente SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY devem estar configuradas.");
+  throw new Error("As variáveis SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY devem estar configuradas.");
 }
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -96,7 +95,7 @@ app.get("/api/affiliate", async (req, res) => {
   }
   
   try {
-    // Exemplo: se o campo "subdomain" está armazenado como "lucastur.airland.com.br"
+    // Supondo que o campo "subdomain" na tabela inclua o domínio completo
     const fullSubdomain = req.subdomain + ".airland.com.br";
     
     const { data, error } = await supabaseClient
@@ -106,11 +105,15 @@ app.get("/api/affiliate", async (req, res) => {
       .single();
       
     if (error) {
-      return res.status(404).json({ error: "Agência não encontrada para o subdomínio '" + fullSubdomain + "'. Detalhes: " + error.message });
+      return res.status(404).json({
+        error: "Agência não encontrada para o subdomínio '" +
+               fullSubdomain +
+               "'. Detalhes: " +
+               error.message
+      });
     }
     
     return res.status(200).json({ affiliate: data });
-    
   } catch (err) {
     console.error("Erro ao consultar afiliado:", err);
     return res.status(500).json({ error: "Erro interno no servidor" });
@@ -137,7 +140,7 @@ app.post("/api/login", async (req, res) => {
     }
     const { user, session } = data;
 
-    // Consulta à tabela user_affiliates para obter o affiliate_id associado ao usuário
+    // Consulta na tabela user_affiliates para obter affiliate_id
     const { data: userAffiliate, error: userAffError } = await supabaseClient
       .from("user_affiliates")
       .select("*")
@@ -148,7 +151,7 @@ app.post("/api/login", async (req, res) => {
       return res.status(500).json({ error: "Erro ao recuperar dados do afiliado." });
     }
 
-    // Consulta à tabela affiliates para obter os dados da agência usando o affiliate_id
+    // Consulta na tabela affiliates para obter os dados da agência
     const { data: affiliate, error: affiliateError } = await supabaseClient
       .from("affiliates")
       .select("*")
@@ -159,7 +162,7 @@ app.post("/api/login", async (req, res) => {
       return res.status(500).json({ error: "Erro ao recuperar informações da agência." });
     }
 
-    // Se o subdomínio não for "businessplace" (backoffice), verificar se ele corresponde ao slug do afiliado
+    // Se o subdomínio não for "businessplace" (backoffice), verifica se ele bate com o slug do afiliado
     const affiliateSlug = affiliate.slug ? affiliate.slug.toLowerCase() : "";
     if (req.subdomain !== "businessplace" && req.subdomain !== affiliateSlug) {
       return res.status(403).json({ error: "Você não tem permissão para acessar este subdomínio." });
@@ -180,15 +183,18 @@ app.post("/api/login", async (req, res) => {
 
 // ------------------------------
 // Rota catch-all para outras requisições:
-// Se nenhuma das rotas acima for atendida, envia o arquivo index.html da pasta public.
+// Se nenhuma rota for atendida, envia o arquivo index.html da pasta public.
 // ------------------------------
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// ------------------------------
-// Inicia o servidor
-// ------------------------------
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
-});
+// Se estivermos em ambiente de desenvolvimento, inicia o servidor normalmente.
+if (process.env.NODE_ENV === "development") {
+  app.listen(PORT, () => {
+    console.log(`Servidor rodando na porta ${PORT}`);
+  });
+}
+
+// Exporta o app para que o Vercel o invoque como uma função serverless.
+module.exports = app;
