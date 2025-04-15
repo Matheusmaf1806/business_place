@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
   <head>
@@ -484,7 +483,8 @@
     }
   
     // Abre o calendário com um clique
-    btnOpenCalendar.addEventListener("click", () => {
+    btnOpenCalendar.addEventListener("click", (event) => {
+      event.stopPropagation(); // Previne que o clique se propague e feche o calendário
       positionCalendar();
       calendarEl.style.display = "block";
     });
@@ -512,27 +512,34 @@
     // Evento para o botão "Aplicar"
     const btnApply = calendarEl.querySelector(".calendar__button--primary");
     btnApply.addEventListener("click", () => {
-      // Tenta capturar os elementos de data
-      const startInput = calendarEl.querySelector(".calendar__input-start");
-      const endInput = calendarEl.querySelector(".calendar__input-end");
-
-      // Adicione logs para depuração
-      console.log("startInput:", startInput, "Valor:", startInput ? startInput.value : null);
-      console.log("endInput:", endInput, "Valor:", endInput ? endInput.value : null);
-
-      // Verifica se os inputs existem e possuem valores
+      // Tenta capturar os elementos de data via inputs
+      let startInput = calendarEl.querySelector(".calendar__input-start");
+      let endInput   = calendarEl.querySelector(".calendar__input-end");
+  
+      let startDate, endDate;
+  
       if (startInput && endInput && startInput.value && endInput.value) {
-        const startDate = startInput.value; // Ex: "09/04/2025"
-        const endDate = endInput.value;     // Ex: "23/04/2025" ou o novo valor selecionado
+        startDate = startInput.value;
+        endDate   = endInput.value;
+      } else {
+        // Caso os inputs não existam ou estejam vazios, tente usar atributos de dados
+        startDate = calendarEl.getAttribute("data-start-date");
+        endDate   = calendarEl.getAttribute("data-end-date");
+      }
+  
+      console.log("startDate:", startDate);
+      console.log("endDate:", endDate);
+  
+      if (startDate && endDate) {
         const datasSelecionadas = startDate + " - " + endDate;
-
+        
         // Atualiza o elemento que exibe as datas selecionadas
         selectedDatesEl.textContent = datasSelecionadas;
         selectedDatesEl.style.display = "inline";
-
+  
         // Realiza a busca com as datas atualizadas
         fetchData(datasSelecionadas);
-
+  
         // Fecha o calendário
         calendarEl.style.display = "none";
       } else {
