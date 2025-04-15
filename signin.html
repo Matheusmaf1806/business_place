@@ -5,11 +5,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="shortcut icon"
-      href="assets/images/favicon.svg"
-      type="image/x-icon"
-    />
+    <link rel="shortcut icon" href="assets/images/favicon.svg" type="image/x-icon" />
     <title>Login | PlainAdmin Demo</title>
     <!-- ========== CSS ========= -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
@@ -28,15 +24,10 @@
           <div class="auth-cover">
             <div class="title text-center">
               <h1 class="text-primary mb-10">Bem-vindo de volta</h1>
-              <p class="text-medium">
-                Entre na sua conta existente para continuar
-              </p>
+              <p class="text-medium">Entre na sua conta existente para continuar</p>
             </div>
             <div class="cover-image">
-              <img
-                src="assets/images/auth/signin-image.svg"
-                alt="Imagem de login"
-              />
+              <img src="assets/images/auth/signin-image.svg" alt="Imagem de login" />
             </div>
             <div class="shape-image">
               <img src="assets/images/auth/shape.svg" alt="Shape" />
@@ -51,15 +42,10 @@
           <div class="form-wrapper">
             <h6 class="mb-15">Acesso a Plataforma</h6>
             <p class="text-sm mb-25">
-              É neste lugar que o comum fica para trás e o extraordinário se
-              torna possível.
+              É neste lugar que o comum fica para trás e o extraordinário se torna possível.
             </p>
             <!-- Div para exibir erros -->
-            <div
-              id="error-message"
-              class="alert alert-danger"
-              style="display: none;"
-            ></div>
+            <div id="error-message" class="alert alert-danger" style="display: none;"></div>
             <!-- Formulário de login -->
             <form id="login-form">
               <div class="row">
@@ -73,22 +59,13 @@
                 <div class="col-12">
                   <div class="input-style-1">
                     <label>Senha</label>
-                    <input
-                      type="password"
-                      name="password"
-                      placeholder="Senha"
-                      required
-                    />
+                    <input type="password" name="password" placeholder="Senha" required />
                   </div>
                 </div>
                 <!-- end col -->
                 <div class="col-xxl-6 col-lg-12 col-md-6">
                   <div class="form-check checkbox-style mb-30">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      id="checkbox-remember"
-                    />
+                    <input class="form-check-input" type="checkbox" id="checkbox-remember" />
                     <label class="form-check-label" for="checkbox-remember">
                       Lembre-se de mim.
                     </label>
@@ -96,35 +73,22 @@
                 </div>
                 <!-- end col -->
                 <div class="col-xxl-6 col-lg-12 col-md-6">
-                  <div
-                    class="text-start text-md-end text-lg-start text-xxl-end mb-30"
-                  >
-                    <a href="reset-Senha.html" class="hover-underline"
-                      >Esqueceu sua senha?</a
-                    >
+                  <div class="text-start text-md-end text-lg-start text-xxl-end mb-30">
+                    <a href="reset-Senha.html" class="hover-underline">Esqueceu sua senha?</a>
                   </div>
                 </div>
                 <!-- end col -->
                 <div class="col-12">
                   <div class="button-group d-flex justify-content-center flex-wrap">
-                    <button
-                      type="submit"
-                      class="main-btn primary-btn btn-hover w-100 text-center"
-                    >
-                      Login
-                    </button>
+                    <button type="submit" class="main-btn primary-btn btn-hover w-100 text-center">Login</button>
                   </div>
                 </div>
               </div>
               <!-- end row -->
             </form>
             <div class="singin-option pt-40">
-              <p class="text-sm text-medium text-center text-gray">
-                Login facilitado com
-              </p>
-              <div
-                class="button-group pt-40 pb-40 d-flex justify-content-center flex-wrap"
-              >
+              <p class="text-sm text-medium text-center text-gray">Login facilitado com</p>
+              <div class="button-group pt-40 pb-40 d-flex justify-content-center flex-wrap">
                 <button class="main-btn primary-btn-outline m-2">
                   <i class="lni lni-facebook-fill mr-10"></i>Facebook
                 </button>
@@ -178,12 +142,12 @@
           }
 
           try {
-            // Faz o POST para /api/login (usando a mesma origem/subdomínio)
+            // Faz o POST para /api/login (rota definida via router)
             const response = await fetch("/api/login", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               credentials: "include",
-              body: JSON.stringify({ email, password }),
+              body: JSON.stringify({ email, password })
             });
 
             const contentType = response.headers.get("content-type") || "";
@@ -208,8 +172,7 @@
             }
           } catch (err) {
             console.error(err);
-            errorDiv.innerText =
-              "Ocorreu um erro ao realizar o login: " + err.message;
+            errorDiv.innerText = "Ocorreu um erro ao realizar o login: " + err.message;
             errorDiv.style.display = "block";
           }
         });
