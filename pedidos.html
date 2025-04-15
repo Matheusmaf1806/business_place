@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
   <head>
@@ -511,23 +512,27 @@
     // Evento para o botão "Aplicar"
     const btnApply = calendarEl.querySelector(".calendar__button--primary");
     btnApply.addEventListener("click", () => {
-      // Supondo que o componente possua dois inputs para data de início e fim:
+      // Tenta capturar os elementos de data
       const startInput = calendarEl.querySelector(".calendar__input-start");
       const endInput = calendarEl.querySelector(".calendar__input-end");
-  
-      // Se os inputs existirem, capture os valores selecionados
+
+      // Adicione logs para depuração
+      console.log("startInput:", startInput, "Valor:", startInput ? startInput.value : null);
+      console.log("endInput:", endInput, "Valor:", endInput ? endInput.value : null);
+
+      // Verifica se os inputs existem e possuem valores
       if (startInput && endInput && startInput.value && endInput.value) {
         const startDate = startInput.value; // Ex: "09/04/2025"
-        const endDate = endInput.value;     // Ex: "23/04/2025"
+        const endDate = endInput.value;     // Ex: "23/04/2025" ou o novo valor selecionado
         const datasSelecionadas = startDate + " - " + endDate;
-  
+
         // Atualiza o elemento que exibe as datas selecionadas
         selectedDatesEl.textContent = datasSelecionadas;
         selectedDatesEl.style.display = "inline";
-  
+
         // Realiza a busca com as datas atualizadas
         fetchData(datasSelecionadas);
-  
+
         // Fecha o calendário
         calendarEl.style.display = "none";
       } else {
