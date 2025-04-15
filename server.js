@@ -10,11 +10,19 @@ const PORT = process.env.PORT || 3000;
 // ------------------------------
 app.use(express.json());
 
+// (Opcional) Handler para OPTIONS, se necessário para pré-requisições
+app.options("/*", (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type");
+  res.sendStatus(200);
+});
+
 // ------------------------------
 // Middleware para extrair o subdomínio
 // ------------------------------
 app.use((req, res, next) => {
-  // Obtém o header "Host". Em ambiente local pode vir com a porta, ex.: "lucastur.airland.com.br:3000"
+  // Obtém o header "Host". Exemplo local: "lucastur.airland.com.br:3000"
   const host = req.headers.host;
   if (!host) {
     req.subdomain = null;
@@ -24,7 +32,7 @@ app.use((req, res, next) => {
   // Remove a porta, se existir
   const hostWithoutPort = host.split(":")[0];
 
-  // Define o domínio base (ajuste conforme necessário)
+  // Define o domínio base – ajuste conforme necessário
   const baseDomain = "airland.com.br";
   let subdomain = null;
 
@@ -39,7 +47,7 @@ app.use((req, res, next) => {
     subdomain = hostWithoutPort;
   }
   
-  // Força subdomínio para minúsculas para padronização
+  // Padroniza para minúsculas
   req.subdomain = subdomain ? subdomain.toLowerCase() : null;
   console.log("Subdomínio extraído:", req.subdomain);
   next();
@@ -74,7 +82,6 @@ app.get("/dashboard", (req, res) => {
 // Rota API para obter os dados do afiliado com base no subdomínio
 // ------------------------------
 
-// Usamos Supabase com a chave de serviço, que é segura no ambiente server-side
 if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
   throw new Error("As variáveis de ambiente SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY devem estar configuradas.");
 }
@@ -152,7 +159,7 @@ app.post("/api/login", async (req, res) => {
       return res.status(500).json({ error: "Erro ao recuperar informações da agência." });
     }
 
-    // Se o subdomínio não for "businessplace" (o backoffice), verifique se ele corresponde ao slug do afiliado
+    // Se o subdomínio não for "businessplace" (backoffice), verificar se ele corresponde ao slug do afiliado
     const affiliateSlug = affiliate.slug ? affiliate.slug.toLowerCase() : "";
     if (req.subdomain !== "businessplace" && req.subdomain !== affiliateSlug) {
       return res.status(403).json({ error: "Você não tem permissão para acessar este subdomínio." });
