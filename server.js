@@ -1,5 +1,4 @@
 // server.js
-
 const express = require("express");
 const path = require("path");
 const app = express();
@@ -11,13 +10,19 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 /* -----------------------------------------------------------------------------
-   2) (Opcional) Handler para requisições OPTIONS – útil para pré-requisições CORS
+   2) Middleware de CORS para permitir métodos e credenciais
 ----------------------------------------------------------------------------- */
-app.options("/*", (req, res) => {
-  res.header("Access-Control-Allow-Origin", "*");
+app.use((req, res, next) => {
+  // Ajuste conforme necessário; se quiser liberar geral, pode usar "*",
+  // mas com "credentials: true" não pode ser "*". Ajuste para o domínio correto.
+  res.header("Access-Control-Allow-Origin", "https://businessplace.airland.com.br");
+  res.header("Access-Control-Allow-Credentials", "true");
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.header("Access-Control-Allow-Headers", "Content-Type");
-  res.sendStatus(200);
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  next();
 });
 
 /* -----------------------------------------------------------------------------
@@ -35,8 +40,13 @@ app.use((req, res, next) => {
 
   if (hostWithoutPort.toLowerCase() === baseDomain.toLowerCase()) {
     subdomain = null;
-  } else if (hostWithoutPort.toLowerCase().endsWith(`.${baseDomain.toLowerCase()}`)) {
-    subdomain = hostWithoutPort.substring(0, hostWithoutPort.length - baseDomain.length - 1);
+  } else if (
+    hostWithoutPort.toLowerCase().endsWith(`.${baseDomain.toLowerCase()}`)
+  ) {
+    subdomain = hostWithoutPort.substring(
+      0,
+      hostWithoutPort.length - baseDomain.length - 1
+    );
   } else {
     subdomain = hostWithoutPort;
   }
@@ -50,7 +60,9 @@ app.use((req, res, next) => {
       (Certifique-se de que SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY estejam configuradas!)
 ----------------------------------------------------------------------------- */
 if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
-  throw new Error("As variáveis de ambiente SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY são necessárias.");
+  throw new Error(
+    "As variáveis de ambiente SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY são necessárias."
+  );
 }
 const { createClient } = require("@supabase/supabase-js");
 const supabaseClient = createClient(
@@ -65,7 +77,9 @@ const supabaseClient = createClient(
 /* GET /api/affiliate – Obtém os dados do afiliado com base no subdomínio */
 app.get("/api/affiliate", async (req, res) => {
   if (!req.subdomain) {
-    return res.status(400).json({ error: "Subdomínio não definido na requisição." });
+    return res
+      .status(400)
+      .json({ error: "Subdomínio não definido na requisição." });
   }
   try {
     const fullSubdomain = req.subdomain + ".airland.com.br";
@@ -97,12 +111,15 @@ app.post("/api/login", async (req, res) => {
   }
   try {
     // Autenticação via Supabase Auth
-    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+      email,
+      password,
+    });
     if (error) {
       return res.status(401).json({ error: error.message });
     }
     const { user, session } = data;
-    
+
     // Consulta à tabela user_affiliates para obter o affiliate_id
     const { data: userAffiliate, error: userAffError } = await supabaseClient
       .from("user_affiliates")
@@ -111,7 +128,9 @@ app.post("/api/login", async (req, res) => {
       .single();
     if (userAffError) {
       console.error("Erro ao buscar dados do afiliado:", userAffError);
-      return res.status(500).json({ error: "Erro ao recuperar dados do afiliado." });
+      return res
+        .status(500)
+        .json({ error: "Erro ao recuperar dados do afiliado." });
     }
 
     // Consulta à tabela affiliates para obter os dados da agência
@@ -122,13 +141,19 @@ app.post("/api/login", async (req, res) => {
       .single();
     if (affiliateError) {
       console.error("Erro ao buscar informações da agência:", affiliateError);
-      return res.status(500).json({ error: "Erro ao recuperar informações da agência." });
+      return res
+        .status(500)
+        .json({ error: "Erro ao recuperar informações da agência." });
     }
 
     // Se o subdomínio não for "businessplace" (backoffice), verifica se ele bate com o slug do afiliado
     const affiliateSlug = affiliate.slug ? affiliate.slug.toLowerCase() : "";
     if (req.subdomain !== "businessplace" && req.subdomain !== affiliateSlug) {
-      return res.status(403).json({ error: "Você não tem permissão para acessar este subdomínio." });
+      return res
+        .status(403)
+        .json({
+          error: "Você não tem permissão para acessar este subdomínio.",
+        });
     }
 
     return res.status(200).json({
