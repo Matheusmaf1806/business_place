@@ -451,12 +451,13 @@
     <script type="module">
     import { createCalendarComponent } from "./assets/js/calendarComponent.js";
   
+    // Referências dos elementos
     const btnOpenCalendar = document.getElementById("openCalendarBtn");
     const selectedDatesEl = document.getElementById("selectedDates");
-    // Inicialmente, o bloco de datas fica oculto até ser atualizado
+    // Oculta inicialmente o bloco que mostra as datas selecionadas
     selectedDatesEl.style.display = "none";
   
-    // Cria o componente do calendário
+    // Cria o componente do calendário e o adiciona no final do body
     const calendarEl = createCalendarComponent();
     calendarEl.style.position = "absolute";
     calendarEl.style.display = "none";
@@ -482,62 +483,68 @@
       });
     }
   
-    // Abre o calendário com um clique
+    // Abre o calendário ao clicar no botão (usando click, não mouseenter)
     btnOpenCalendar.addEventListener("click", (event) => {
       event.stopPropagation(); // Previne que o clique se propague e feche o calendário
       positionCalendar();
       calendarEl.style.display = "block";
     });
   
-    // Fecha o calendário ao clicar fora (opcional)
+    // Fecha o calendário ao clicar fora dele e do botão
     document.addEventListener("click", (event) => {
       if (!btnOpenCalendar.contains(event.target) && !calendarEl.contains(event.target)) {
         calendarEl.style.display = "none";
       }
     });
   
-    // Função para buscar novos dados com base na data selecionada
+    // Função para buscar dados com base no intervalo de data informado
     function fetchData(dateRange) {
       fetch(`https://seuservidor.com/api/pedidos?data=${encodeURIComponent(dateRange)}`)
         .then(response => response.json())
         .then(data => {
           console.log("Dados atualizados:", data);
-          // Aqui, atualize sua tabela ou outros elementos com os dados recebidos
+          // Atualize sua tabela ou outros elementos com os dados recebidos aqui.
         })
         .catch(error => {
           console.error("Erro ao buscar dados:", error);
         });
     }
   
-    // Evento para o botão "Aplicar"
+    // Função auxiliar para capturar as datas selecionadas no componente do calendário
+    function getCalendarDates() {
+      // Se o componente fornecer um método para obter datas, use-o.
+      if (typeof calendarEl.getSelectedDates === 'function') {
+        return calendarEl.getSelectedDates();
+      }
+      // Tenta capturar os inputs esperados
+      const startInput = calendarEl.querySelector(".calendar__input-start");
+      const endInput = calendarEl.querySelector(".calendar__input-end");
+      if (startInput && endInput && startInput.value && endInput.value) {
+        return { start: startInput.value, end: endInput.value };
+      }
+      // Se não houver inputs, tenta ler atributos de data (data-start-date e data-end-date)
+      const startDate = calendarEl.getAttribute("data-start-date");
+      const endDate = calendarEl.getAttribute("data-end-date");
+      if (startDate && endDate) {
+        return { start: startDate, end: endDate };
+      }
+      // Se nada for encontrado, retorna null
+      return null;
+    }
+  
+    // Evento para o botão "Aplicar" do calendário
     const btnApply = calendarEl.querySelector(".calendar__button--primary");
     btnApply.addEventListener("click", () => {
-      // Tenta capturar os elementos de data via inputs
-      let startInput = calendarEl.querySelector(".calendar__input-start");
-      let endInput   = calendarEl.querySelector(".calendar__input-end");
+      const dates = getCalendarDates();
   
-      let startDate, endDate;
-  
-      if (startInput && endInput && startInput.value && endInput.value) {
-        startDate = startInput.value;
-        endDate   = endInput.value;
-      } else {
-        // Caso os inputs não existam ou estejam vazios, tente usar atributos de dados
-        startDate = calendarEl.getAttribute("data-start-date");
-        endDate   = calendarEl.getAttribute("data-end-date");
-      }
-  
-      console.log("startDate:", startDate);
-      console.log("endDate:", endDate);
-  
-      if (startDate && endDate) {
-        const datasSelecionadas = startDate + " - " + endDate;
-        
-        // Atualiza o elemento que exibe as datas selecionadas
+      console.log("Selected dates:", dates);
+      if (dates && dates.start && dates.end) {
+        const datasSelecionadas = dates.start + " - " + dates.end;
+        // Atualiza o bloco que mostra as datas selecionadas
         selectedDatesEl.textContent = datasSelecionadas;
         selectedDatesEl.style.display = "inline";
   
-        // Realiza a busca com as datas atualizadas
+        // Chama a função para buscar os dados atualizados
         fetchData(datasSelecionadas);
   
         // Fecha o calendário
@@ -547,7 +554,7 @@
       }
     });
   
-    // Botão "Voltar" para fechar o calendário sem confirmar
+    // Botão "Voltar" do calendário: apenas fecha o calendário sem confirmar a seleção
     const btnBack = calendarEl.querySelector(".calendar__button--grey");
     btnBack.addEventListener("click", () => {
       calendarEl.style.display = "none";
