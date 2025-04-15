@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3000;
 // ------------------------------
 app.use(express.json());
 
-// (Opcional) Handler para OPTIONS, se necessário
+// (Opcional) Handler para OPTIONS (útil para pré-requisições)
 app.options("/*", (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
@@ -36,7 +36,6 @@ app.use((req, res, next) => {
   const baseDomain = "airland.com.br";
   let subdomain = null;
 
-  // Se o host for exatamente o domínio base, não há subdomínio
   if (hostWithoutPort.toLowerCase() === baseDomain.toLowerCase()) {
     subdomain = null;
   } else if (hostWithoutPort.toLowerCase().endsWith(`.${baseDomain.toLowerCase()}`)) {
@@ -79,10 +78,10 @@ app.get("/dashboard", (req, res) => {
 });
 
 // ------------------------------
-// Rota API para obter dados do afiliado com base no subdomínio
+// Rota API para obter os dados do afiliado com base no subdomínio
 // ------------------------------
 if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
-  throw new Error("As variáveis SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY devem estar configuradas.");
+  throw new Error("As variáveis de ambiente SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY devem estar configuradas.");
 }
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -95,7 +94,6 @@ app.get("/api/affiliate", async (req, res) => {
   }
   
   try {
-    // Supondo que o campo "subdomain" na tabela inclua o domínio completo
     const fullSubdomain = req.subdomain + ".airland.com.br";
     
     const { data, error } = await supabaseClient
@@ -140,7 +138,7 @@ app.post("/api/login", async (req, res) => {
     }
     const { user, session } = data;
 
-    // Consulta na tabela user_affiliates para obter affiliate_id
+    // Consulta na tabela user_affiliates para obter o affiliate_id
     const { data: userAffiliate, error: userAffError } = await supabaseClient
       .from("user_affiliates")
       .select("*")
@@ -189,7 +187,7 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// Se estivermos em ambiente de desenvolvimento, inicia o servidor normalmente.
+// Se estamos em ambiente de desenvolvimento, inicia o servidor normalmente.
 if (process.env.NODE_ENV === "development") {
   app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
