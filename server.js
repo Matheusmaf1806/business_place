@@ -152,9 +152,9 @@ app.post("/api/login", async (req, res) => {
       return res.status(500).json({ error: "Erro ao recuperar informações da agência." });
     }
 
-    // Verificação se o subdomínio (extraído anteriormente) corresponde ao afiliado cadastrado
+    // Se o subdomínio não for "businessplace" (o backoffice), verifique se ele corresponde ao slug do afiliado
     const affiliateSlug = affiliate.slug ? affiliate.slug.toLowerCase() : "";
-    if (req.subdomain !== affiliateSlug) {
+    if (req.subdomain !== "businessplace" && req.subdomain !== affiliateSlug) {
       return res.status(403).json({ error: "Você não tem permissão para acessar este subdomínio." });
     }
 
