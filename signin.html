@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -65,7 +65,7 @@
                 <!-- end col -->
                 <div class="col-xxl-6 col-lg-12 col-md-6">
                   <div class="form-check checkbox-style mb-30">
-                    <input class="form-check-input" type="checkbox" value="" id="checkbox-remember" />
+                    <input class="form-check-input" type="checkbox" id="checkbox-remember" />
                     <label class="form-check-label" for="checkbox-remember">
                       Lembre-se de mim.
                     </label>
@@ -74,26 +74,20 @@
                 <!-- end col -->
                 <div class="col-xxl-6 col-lg-12 col-md-6">
                   <div class="text-start text-md-end text-lg-start text-xxl-end mb-30">
-                    <a href="reset-Senha.html" class="hover-underline">
-                      Esqueceu sua senha?
-                    </a>
+                    <a href="reset-Senha.html" class="hover-underline">Esqueceu sua senha?</a>
                   </div>
                 </div>
                 <!-- end col -->
                 <div class="col-12">
                   <div class="button-group d-flex justify-content-center flex-wrap">
-                    <button type="submit" class="main-btn primary-btn btn-hover w-100 text-center">
-                      Login
-                    </button>
+                    <button type="submit" class="main-btn primary-btn btn-hover w-100 text-center">Login</button>
                   </div>
                 </div>
               </div>
               <!-- end row -->
             </form>
             <div class="singin-option pt-40">
-              <p class="text-sm text-medium text-center text-gray">
-                Login facilitado com
-              </p>
+              <p class="text-sm text-medium text-center text-gray">Login facilitado com</p>
               <div class="button-group pt-40 pb-40 d-flex justify-content-center flex-wrap">
                 <button class="main-btn primary-btn-outline m-2">
                   <i class="lni lni-facebook-fill mr-10"></i>
@@ -155,17 +149,15 @@
           }
 
           try {
-            // Usa uma URL relativa para acessar o endpoint de API internamente
+            // URL relativa para acessar o endpoint de API (Next.js)
             const response = await fetch("/api/login", {
               method: "POST",
-              headers: {
-                "Content-Type": "application/json"
-              },
-              credentials: "include", // Para envio/recebimento de cookies de sessão
+              headers: { "Content-Type": "application/json" },
+              credentials: "include",
               body: JSON.stringify({ email, password })
             });
 
-            // Se a resposta não for OK, tenta ler a mensagem de erro e lança a exceção
+            // Se a resposta não for OK, tenta extrair o erro do JSON
             if (!response.ok) {
               const errorData = await response.json();
               throw new Error(errorData.error || "Erro na requisição: " + response.status);
@@ -174,10 +166,9 @@
             const data = await response.json();
 
             if (data.success) {
-              // Salva os dados do usuário no localStorage (pode incluir também session e affiliate se necessário)
+              // Salva os dados do usuário no localStorage se necessário
               localStorage.setItem("affiliateUser", JSON.stringify(data.user));
-
-              // Redireciona para a área logada (dashboard, etc.)
+              // Redireciona para a área logada
               window.location.href = "http://businessplace.airland.com.br/index.html";
             } else {
               errorDiv.innerText = data.error || "Email ou senha incorretos!";
