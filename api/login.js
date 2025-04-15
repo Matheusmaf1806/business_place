@@ -1,3 +1,4 @@
+// api/login.js
 const { createClient } = require("@supabase/supabase-js");
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
@@ -7,13 +8,13 @@ if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
   throw new Error("As variáveis de ambiente SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY são necessárias.");
 }
 
-const supabaseClient = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
 module.exports = async (req, res) => {
-  // Só aceita método POST
+  // Aceita somente método POST
   if (req.method !== "POST") {
     res.setHeader("Allow", ["POST"]);
-    return res.status(405).json({ error: "Método não permitido" });
+    return res.status(405).json({ error: "Method Not Allowed" });
   }
 
   const { email, password } = req.body;
@@ -22,10 +23,7 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const { data, error } = await supabaseClient.auth.signInWithPassword({
-      email,
-      password,
-    });
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) {
       return res.status(401).json({ error: error.message });
     }
