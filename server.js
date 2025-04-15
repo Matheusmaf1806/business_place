@@ -38,9 +38,7 @@ app.use((req, res, next) => {
 
   if (hostWithoutPort.toLowerCase() === baseDomain.toLowerCase()) {
     subdomain = null;
-  } else if (
-    hostWithoutPort.toLowerCase().endsWith(`.${baseDomain.toLowerCase()}`)
-  ) {
+  } else if (hostWithoutPort.toLowerCase().endsWith(`.${baseDomain.toLowerCase()}`)) {
     subdomain = hostWithoutPort.substring(0, hostWithoutPort.length - baseDomain.length - 1);
   } else {
     subdomain = hostWithoutPort;
@@ -100,14 +98,12 @@ apiRouter.post("/login", async (req, res) => {
     return res.status(400).json({ error: "Subdomínio não identificado." });
   }
   try {
-    // Autenticação via Supabase Auth
     const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
     if (error) {
       return res.status(401).json({ error: error.message });
     }
     const { user, session } = data;
 
-    // Consulta à tabela user_affiliates para obter o affiliate_id
     const { data: userAffiliate, error: userAffError } = await supabaseClient
       .from("user_affiliates")
       .select("*")
@@ -118,7 +114,6 @@ apiRouter.post("/login", async (req, res) => {
       return res.status(500).json({ error: "Erro ao recuperar dados do afiliado." });
     }
 
-    // Consulta à tabela affiliates para obter os dados da agência
     const { data: affiliate, error: affiliateError } = await supabaseClient
       .from("affiliates")
       .select("*")
@@ -129,7 +124,6 @@ apiRouter.post("/login", async (req, res) => {
       return res.status(500).json({ error: "Erro ao recuperar informações da agência." });
     }
 
-    // Se o subdomínio não for "businessplace" (backoffice), verifica se ele bate com o slug do afiliado
     const affiliateSlug = affiliate.slug ? affiliate.slug.toLowerCase() : "";
     if (req.subdomain !== "businessplace" && req.subdomain !== affiliateSlug) {
       return res.status(403).json({ error: "Você não tem permissão para acessar este subdomínio." });
@@ -154,36 +148,22 @@ apiRouter.post("/login", async (req, res) => {
 app.use("/api", apiRouter);
 
 /* -----------------------------------------------------------------------------
-   7) Rotas para páginas não-API
+   7) Middleware para servir arquivos estáticos EXCETO para rotas que iniciam com /api
 ----------------------------------------------------------------------------- */
-app.get("/login-agente", (req, res) => {
-  if (!req.subdomain) {
-    return res.status(400).send("Subdomínio não identificado.");
-  }
-  res.sendFile(path.join(__dirname, "public", "login-agente.html"));
-});
-
-app.get("/dashboard", (req, res) => {
-  if (!req.subdomain) {
-    return res.status(400).send("Subdomínio não identificado.");
-  }
-  res.sendFile(path.join(__dirname, "public", "dashboard.html"));
+app.use((req, res, next) => {
+  if (req.url.startsWith("/api")) return next();
+  express.static(path.join(__dirname, "public"))(req, res, next);
 });
 
 /* -----------------------------------------------------------------------------
-   8) Servir arquivos estáticos
------------------------------------------------------------------------------ */
-app.use(express.static(path.join(__dirname, "public")));
-
-/* -----------------------------------------------------------------------------
-   9) Rota catch-all para requisições GET
+   8) Rota catch-all para requisições GET (não /api)
 ----------------------------------------------------------------------------- */
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 /* -----------------------------------------------------------------------------
-   10) Inicialização do servidor
+   9) Inicialização do servidor
 ----------------------------------------------------------------------------- */
 if (process.env.NODE_ENV === "development") {
   app.listen(PORT, () => {
