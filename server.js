@@ -6,10 +6,15 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // ------------------------------
+// Middleware para interpretar JSON no corpo da requisição
+// ------------------------------
+app.use(express.json());
+
+// ------------------------------
 // Middleware para extrair o subdomínio
 // ------------------------------
 app.use((req, res, next) => {
-  // Obtém o header "Host". Em ambiente local pode vir com a porta, por exemplo, "lucastur.airland.com.br:3000"
+  // Obtém o header "Host". Em ambiente local pode vir com a porta, ex.: "lucastur.airland.com.br:3000"
   const host = req.headers.host;
   if (!host) {
     req.subdomain = null;
@@ -52,7 +57,6 @@ app.get("/login-agente", (req, res) => {
   if (!req.subdomain) {
     return res.status(400).send("Subdomínio não identificado. Use um subdomínio válido.");
   }
-  // Envia o arquivo login-agente.html da pasta public
   res.sendFile(path.join(__dirname, "public", "login-agente.html"));
 });
 
@@ -70,13 +74,13 @@ app.get("/dashboard", (req, res) => {
 // Rota API para obter os dados do afiliado com base no subdomínio
 // ------------------------------
 
-// Usamos Supabase com a chave de serviço, que deve ser protegida no ambiente server-side
+// Usamos Supabase com a chave de serviço, que é segura no ambiente server-side
 if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
   throw new Error("As variáveis de ambiente SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY devem estar configuradas.");
 }
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const { createClient } = require('@supabase/supabase-js');
+const { createClient } = require("@supabase/supabase-js");
 const supabaseClient = createClient(supabaseUrl, supabaseServiceKey);
 
 app.get("/api/affiliate", async (req, res) => {
@@ -85,12 +89,9 @@ app.get("/api/affiliate", async (req, res) => {
   }
   
   try {
-    // Se no cadastro o subdomínio foi armazenado com o domínio completo,
-    // ex: "lucastur.airland.com.br", então concatene se necessário.
-    // Aqui, assumimos que o campo "subdomain" está armazenado assim.
-    const fullSubdomain = req.subdomain + "." + "airland.com.br";
+    // Exemplo: se o campo "subdomain" está armazenado como "lucastur.airland.com.br"
+    const fullSubdomain = req.subdomain + ".airland.com.br";
     
-    // Consulta a tabela affiliates para obter o registro com o subdomínio específico.
     const { data, error } = await supabaseClient
       .from("affiliates")
       .select("*")
@@ -101,7 +102,6 @@ app.get("/api/affiliate", async (req, res) => {
       return res.status(404).json({ error: "Agência não encontrada para o subdomínio '" + fullSubdomain + "'. Detalhes: " + error.message });
     }
     
-    // Retorna os dados do afiliado (incluindo o campo "id", que deverá ser usado como affiliate_id)
     return res.status(200).json({ affiliate: data });
     
   } catch (err) {
@@ -111,8 +111,69 @@ app.get("/api/affiliate", async (req, res) => {
 });
 
 // ------------------------------
-// Rota catch-all para outras requisições: se nenhuma das anteriores for atendida,
-// envia o arquivo index.html, por exemplo, para rotas genéricas.
+// Rota API para login (POST /api/login)
+// ------------------------------
+app.post("/api/login", async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).json({ error: "Email e senha são obrigatórios." });
+  }
+  if (!req.subdomain) {
+    return res.status(400).json({ error: "Subdomínio não identificado. Use um subdomínio." });
+  }
+
+  try {
+    // Autenticação via Supabase Auth
+    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+    if (error) {
+      return res.status(401).json({ error: error.message });
+    }
+    const { user, session } = data;
+
+    // Consulta à tabela user_affiliates para obter o affiliate_id associado ao usuário
+    const { data: userAffiliate, error: userAffError } = await supabaseClient
+      .from("user_affiliates")
+      .select("*")
+      .eq("user_id", user.id)
+      .single();
+    if (userAffError) {
+      console.error("Erro ao buscar dados do afiliado:", userAffError);
+      return res.status(500).json({ error: "Erro ao recuperar dados do afiliado." });
+    }
+
+    // Consulta à tabela affiliates para obter os dados da agência usando o affiliate_id
+    const { data: affiliate, error: affiliateError } = await supabaseClient
+      .from("affiliates")
+      .select("*")
+      .eq("id", userAffiliate.affiliate_id)
+      .single();
+    if (affiliateError) {
+      console.error("Erro ao buscar dados na tabela affiliates:", affiliateError);
+      return res.status(500).json({ error: "Erro ao recuperar informações da agência." });
+    }
+
+    // Verificação se o subdomínio (extraído anteriormente) corresponde ao afiliado cadastrado
+    const affiliateSlug = affiliate.slug ? affiliate.slug.toLowerCase() : "";
+    if (req.subdomain !== affiliateSlug) {
+      return res.status(403).json({ error: "Você não tem permissão para acessar este subdomínio." });
+    }
+
+    return res.status(200).json({
+      success: true,
+      user,
+      session,
+      affiliate,
+      expiresIn: session?.expires_in || 3600
+    });
+  } catch (err) {
+    console.error("Erro no login:", err);
+    return res.status(500).json({ error: "Erro interno no servidor durante o login." });
+  }
+});
+
+// ------------------------------
+// Rota catch-all para outras requisições:
+// Se nenhuma das rotas acima for atendida, envia o arquivo index.html da pasta public.
 // ------------------------------
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
