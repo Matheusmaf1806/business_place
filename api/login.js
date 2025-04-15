@@ -1,4 +1,4 @@
-// api/login.js
+// pages/api/login.js
 import { createClient } from '@supabase/supabase-js';
 
 // Valida as variáveis de ambiente necessárias
@@ -14,8 +14,9 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export default async function handler(req, res) {
-  // Permite somente o método POST
+  // Permite somente o método POST e informa os métodos permitidos
   if (req.method !== "POST") {
+    res.setHeader("Allow", ["POST"]);
     return res.status(405).json({ error: "Método não permitido. Use POST." });
   }
 
@@ -35,7 +36,7 @@ export default async function handler(req, res) {
   const baseDomain = "airland.com.br";
   let extractedSubdomain = "";
   if (hostWithoutPort === baseDomain) {
-    // Se o host for igual ao domínio principal, não há subdomínio – rejeita acesso.
+    // Se o host for igual ao domínio principal, não há subdomínio – retorna erro
     return res.status(400).json({ error: "Acesso pelo domínio principal não permitido. Use um subdomínio." });
   } else if (hostWithoutPort.endsWith(`.${baseDomain}`)) {
     // Exemplo: "lucastur.airland.com.br" → extrai "lucastur"
@@ -60,7 +61,7 @@ export default async function handler(req, res) {
     .single();
 
   if (userAffError) {
-    console.error("Erro ao buscar dados do afiliado na tabela user_affiliates:", userAffError);
+    console.error("Erro na tabela user_affiliates:", userAffError);
     return res.status(500).json({ error: "Erro ao recuperar dados do afiliado." });
   }
 
@@ -72,7 +73,7 @@ export default async function handler(req, res) {
     .single();
 
   if (affiliateError) {
-    console.error("Erro ao buscar dados na tabela affiliates:", affiliateError);
+    console.error("Erro na tabela affiliates:", affiliateError);
     return res.status(500).json({ error: "Erro ao recuperar informações da agência." });
   }
 
@@ -82,12 +83,12 @@ export default async function handler(req, res) {
     return res.status(403).json({ error: "Você não tem permissão para acessar este subdomínio." });
   }
 
-  // --- Se tudo estiver OK, retorna os dados do usuário, sessão e os dados do afiliado ---
+  // Se tudo estiver OK, retorna os dados do usuário, sessão e afiliado
   return res.status(200).json({
     success: true,
     user,
     session,
     affiliate,
-    expiresIn: session?.expires_in || 3600,
+    expiresIn: session?.expires_in || 3600
   });
 }
