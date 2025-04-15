@@ -23,9 +23,7 @@
           <div class="auth-cover">
             <div class="title text-center">
               <h1 class="text-primary mb-10">Bem-vindo de volta</h1>
-              <p class="text-medium">
-                Entre na sua conta existente para continuar
-              </p>
+              <p class="text-medium">Entre na sua conta existente para continuar</p>
             </div>
             <div class="cover-image">
               <img src="assets/images/auth/signin-image.svg" alt="Imagem de login" />
@@ -41,9 +39,7 @@
         <div class="signin-wrapper">
           <div class="form-wrapper">
             <h6 class="mb-15">Acesso a Plataforma</h6>
-            <p class="text-sm mb-25">
-              É neste lugar que o comum fica para trás e o extraordinário se torna possível.
-            </p>
+            <p class="text-sm mb-25">É neste lugar que o comum fica para trás e o extraordinário se torna possível.</p>
             <!-- Div para exibir erros -->
             <div id="error-message" class="alert alert-danger" style="display: none;"></div>
             <!-- Formulário de login -->
@@ -66,9 +62,7 @@
                 <div class="col-xxl-6 col-lg-12 col-md-6">
                   <div class="form-check checkbox-style mb-30">
                     <input class="form-check-input" type="checkbox" id="checkbox-remember" />
-                    <label class="form-check-label" for="checkbox-remember">
-                      Lembre-se de mim.
-                    </label>
+                    <label class="form-check-label" for="checkbox-remember">Lembre-se de mim.</label>
                   </div>
                 </div>
                 <!-- end col -->
@@ -90,17 +84,14 @@
               <p class="text-sm text-medium text-center text-gray">Login facilitado com</p>
               <div class="button-group pt-40 pb-40 d-flex justify-content-center flex-wrap">
                 <button class="main-btn primary-btn-outline m-2">
-                  <i class="lni lni-facebook-fill mr-10"></i>
-                  Facebook
+                  <i class="lni lni-facebook-fill mr-10"></i>Facebook
                 </button>
                 <button class="main-btn danger-btn-outline m-2">
-                  <i class="lni lni-google mr-10"></i>
-                  Google
+                  <i class="lni lni-google mr-10"></i>Google
                 </button>
               </div>
               <p class="text-sm text-medium text-dark text-center">
-                Ainda não tem uma conta?
-                <a href="signup.html">Crie uma conta</a>
+                Ainda não tem uma conta?<a href="signup.html"> Crie uma conta</a>
               </p>
             </div>
           </div>
@@ -125,69 +116,60 @@
     <script src="assets/js/Sortable.min.js"></script>
     <!-- Removido assets/js/main.js para evitar conflitos -->
 
-    <!-- Trecho do signin.html (script de login) -->
     <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const form = document.getElementById("login-form");
-      const errorDiv = document.getElementById("error-message");
+      document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("login-form");
+        const errorDiv = document.getElementById("error-message");
     
-      form.addEventListener("submit", async function (e) {
-        e.preventDefault();
+        form.addEventListener("submit", async function (e) {
+          e.preventDefault();
+          errorDiv.style.display = "none";
+          errorDiv.innerText = "";
     
-        // Limpa mensagem de erro
-        errorDiv.style.display = "none";
-        errorDiv.innerText = "";
+          const email = form.email.value.trim();
+          const password = form.password.value.trim();
     
-        // Obtém os valores do formulário
-        const email = form.email.value.trim();
-        const password = form.password.value.trim();
-    
-        if (!email || !password) {
-          errorDiv.innerText = "Por favor, preencha todos os campos.";
-          errorDiv.style.display = "block";
-          return;
-        }
-    
-        try {
-          // URL relativa para acessar o endpoint de API (deve bater com a rota definida no server.js)
-          const response = await fetch("/api/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-            body: JSON.stringify({ email, password })
-          });
-    
-          // Verifica se o content-type da resposta indica JSON
-          const contentType = response.headers.get("content-type") || "";
-          let data;
-          if (contentType.indexOf("application/json") !== -1) {
-            data = await response.json();
-          } else {
-            // Caso não seja JSON, captura o texto para ajudar no debug
-            const textData = await response.text();
-            throw new Error("Resposta inesperada (não é JSON): " + textData);
+          if (!email || !password) {
+            errorDiv.innerText = "Por favor, preencha todos os campos.";
+            errorDiv.style.display = "block";
+            return;
           }
     
-          if (!response.ok) {
-            throw new Error(data.error || "Erro na requisição: " + response.status);
-          }
+          try {
+            const response = await fetch("/api/login", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              credentials: "include",
+              body: JSON.stringify({ email, password })
+            });
     
-          if (data.success) {
-            // Salva os dados do usuário no localStorage se necessário
-            localStorage.setItem("affiliateUser", JSON.stringify(data.user));
-            // Redireciona para a área logada
-            window.location.href = "http://businessplace.airland.com.br/index.html";
-          } else {
-            errorDiv.innerText = data.error || "Email ou senha incorretos!";
+            const contentType = response.headers.get("content-type") || "";
+            let data;
+            if (contentType.indexOf("application/json") !== -1) {
+              data = await response.json();
+            } else {
+              const textData = await response.text();
+              throw new Error("Resposta inesperada (não é JSON): " + textData);
+            }
+    
+            if (!response.ok) {
+              throw new Error(data.error || "Erro na requisição: " + response.status);
+            }
+    
+            if (data.success) {
+              localStorage.setItem("affiliateUser", JSON.stringify(data.user));
+              window.location.href = "http://businessplace.airland.com.br/index.html";
+            } else {
+              errorDiv.innerText = data.error || "Email ou senha incorretos!";
+              errorDiv.style.display = "block";
+            }
+          } catch (err) {
+            console.error(err);
+            errorDiv.innerText = "Ocorreu um erro ao realizar o login: " + err.message;
             errorDiv.style.display = "block";
           }
-        } catch (err) {
-          console.error(err);
-          errorDiv.innerText = "Ocorreu um erro ao realizar o login: " + err.message;
-          errorDiv.style.display = "block";
-        }
+        });
       });
-    });
     </script>
   </body>
 </html>
