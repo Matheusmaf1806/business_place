@@ -506,19 +506,13 @@
   async function hashPassword(password) {
     return await new Promise((resolve, reject) => {
       bcrypt.hash(password, 10, (err, hash) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(hash);
-        }
+        if (err) reject(err);
+        else resolve(hash);
       });
     });
   }
 
   // Função para upload de arquivo para o Supabase Storage.
-  // bucketName: Nome do bucket (ex: 'logos' ou 'profile-images')
-  // file: Objeto File selecionado
-  // filePath: Caminho/destino relativo (ex: 'Agencia_nome.png')
   async function uploadFileToStorage(bucketName, file, filePath) {
     try {
       // Realiza o upload do arquivo
@@ -529,11 +523,9 @@
         console.error("Erro no upload:", error);
         throw error;
       }
-
       // Obtém a URL pública do arquivo
-      const { data: publicData, error: urlError } = supabaseClient.storage
-        .from(bucketName)
-        .getPublicUrl(uploadData.path);
+      const { data: publicData, error: urlError } =
+        supabaseClient.storage.from(bucketName).getPublicUrl(uploadData.path);
       if (urlError) {
         throw urlError;
       }
@@ -583,9 +575,23 @@
     }
   }
 
+  // Função para limpar os formulários e retornar ao Step 1
+  function clearForms() {
+    document.getElementById("userForm").reset();
+    document.getElementById("affiliateForm").reset();
+    document.getElementById("subdomainPreview").textContent = "";
+    document.getElementById("step2").classList.remove("active");
+    document.getElementById("step1").classList.add("active");
+  }
+
+  // Exibe ou oculta o spinner de carregamento (se utilizado)
+  function showSpinner(show) {
+    const preloader = document.getElementById("preloader");
+    preloader.style.display = show ? "block" : "none";
+  }
+
   // Função principal para enviar os formulários e inserir dados no Supabase.
   async function submitForms() {
-    // Captura o nome da agência e arquivo da logo
     const agencyName = document.querySelector('input[name="agency_name"]').value.trim();
     const logoInput = document.querySelector('input[name="logo_url"]');
     const logoFile = logoInput.files[0];
@@ -674,7 +680,7 @@
 
     const affiliateId = affiliateInsertResult.data[0].id;
 
-    // Gera o hash da senha usando bcryptjs (a função hashPassword foi ajustada para bcryptjs)
+    // Gera o hash da senha usando bcryptjs
     const rawPassword = document.getElementById("password").value;
     const hashedPassword = await hashPassword(rawPassword);
     console.log("Senha em texto:", rawPassword);
@@ -715,24 +721,13 @@
     }
   }
 
-  function clearForms() {
-    document.getElementById("userForm").reset();
-    document.getElementById("affiliateForm").reset();
-    document.getElementById("subdomainPreview").textContent = "";
-    document.getElementById("step2").classList.remove("active");
-    document.getElementById("step1").classList.add("active");
-  }
-
-  function showSpinner(show) {
-    const preloader = document.getElementById("preloader");
-    preloader.style.display = show ? "block" : "none";
-  }
-
   // Torna as funções globais acessíveis via atributos inline
   window.goToStep2 = goToStep2;
   window.toggleDomainFields = toggleDomainFields;
   window.updateSubdomainPreview = updateSubdomainPreview;
   window.submitForms = submitForms;
+  window.clearForms = clearForms;
+  window.showSpinner = showSpinner;
 </script>
 </body>
 </html>
