@@ -21,7 +21,8 @@
   <link rel="stylesheet" href="assets/css/datatable.css" />
   <link rel="stylesheet" href="assets/css/main.css" />
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.4.3/bcrypt.min.js"></script>
+  <!-- BcryptJS global -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.4.3/bcrypt.min.js" defer></script>
 
   <!-- Estilo para controle dos steps -->
   <style>
@@ -493,235 +494,199 @@
        Ajustado para importar o supabaseClient do arquivo supabaseClient.js
        ============================================================= -->
        <!-- Código JavaScript Principal com integração ao Supabase e hashing com bcryptjs -->
-  <script type="module" defer>
-    import supabaseClient from "./supabaseClient.js";
-
-    // Função para sanitizar nomes de arquivos
-    function sanitizeFileName(fileName) {
-      return fileName.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_.-]/g, '');
-    }
-
-    // Função para gerar hash bcrypt da senha utilizando bcryptjs
-    async function hashPassword(password) {
-      return new Promise((resolve, reject) => {
-        // Usa o bcrypt que já foi carregado no head
-        bcrypt.hash(password, 10, (err, hash) => {
-          if (err) reject(err);
-          else resolve(hash);
-        });
-      });
-    }
-
-    // Função para upload de arquivo para o Supabase Storage.
-    async function uploadFileToStorage(bucketName, file, filePath) {
-      try {
-        let { data: uploadData, error } = await supabaseClient.storage
-          .from(bucketName)
-          .upload(filePath, file);
-        if (error) {
-          console.error("Erro no upload:", error);
-          throw error;
+       <script type="module" defer>
+        import supabaseClient from "./supabaseClient.js";
+      
+        // pega o bcrypt que foi carregado no <head> via CDN
+        const bcrypt = window.bcrypt;
+      
+        // sanitiza nomes de arquivos (remove espaços e caracteres inválidos)
+        function sanitizeFileName(fileName) {
+          return fileName
+            .replace(/\s+/g, "_")
+            .replace(/[^a-zA-Z0-9_.-]/g, "");
         }
-        const { data: publicData, error: urlError } =
-          supabaseClient.storage.from(bucketName).getPublicUrl(uploadData.path);
-        if (urlError) {
-          throw urlError;
+      
+        // gera hash bcrypt da senha
+        async function hashPassword(password) {
+          return new Promise((resolve, reject) => {
+            bcrypt.hash(password, 10, (err, hash) => {
+              if (err) reject(err);
+              else resolve(hash);
+            });
+          });
         }
-        return publicData.publicUrl;
-      } catch (err) {
-        console.error("Upload falhou:", err);
-        throw err;
-      }
-    }
-
-    // Função para transitar do STEP 1 para o STEP 2 (valida as senhas)
-    function goToStep2() {
-      const password = document.getElementById("password").value;
-      const confirmPassword = document.getElementById("confirm_password").value;
-      if (password !== confirmPassword) {
-        alert("As senhas não coincidem!");
-        return;
-      }
-      document.getElementById("step1").classList.remove("active");
-      document.getElementById("step2").classList.add("active");
-    }
-
-    // Exibe ou oculta os campos de Domínio/Subdomínio
-    function toggleDomainFields() {
-      const hasDomain = document.querySelector('input[name="has_domain"]:checked').value;
-      if (hasDomain === "sim") {
-        document.getElementById("domainField").style.display = "block";
-        document.getElementById("subdomainField").style.display = "none";
-        document.querySelector('input[name="domain"]').required = true;
-        document.querySelector('input[name="subdomain"]').required = false;
-      } else if (hasDomain === "nao") {
-        document.getElementById("domainField").style.display = "none";
-        document.getElementById("subdomainField").style.display = "block";
-        document.querySelector('input[name="subdomain"]').required = true;
-        document.querySelector('input[name="domain"]').required = false;
-      }
-    }
-
-    // Atualiza a pré-visualização do subdomínio
-    function updateSubdomainPreview() {
-      const typedSubdomain = document.getElementById("subdomainInput").value.trim();
-      const preview = document.getElementById("subdomainPreview");
-      if (typedSubdomain) {
-        preview.textContent = "Sua loja ficará: " + typedSubdomain.toLowerCase() + ".airland.com.br";
-      } else {
-        preview.textContent = "";
-      }
-    }
-
-    // Função principal para enviar os formulários e inserir dados no Supabase.
-    async function submitForms() {
-      const agencyName = document.querySelector('input[name="agency_name"]').value.trim();
-      const logoInput = document.querySelector('input[name="logo_url"]');
-      const logoFile = logoInput.files[0];
-
-      if (!agencyName || !logoFile) {
-        alert('Por favor, preencha todos os campos obrigatórios da Agência (Nome e Logo).');
-        return;
-      }
-
-      const hasDomainElem = document.querySelector('input[name="has_domain"]:checked');
-      if (!hasDomainElem) {
-        alert('Por favor, responda se possui domínio próprio.');
-        return;
-      }
-      const hasDomain = hasDomainElem.value;
-
-      let domainValue = "";
-      let subdomainValue = "";
-      if (hasDomain === "sim") {
-        domainValue = document.querySelector('input[name="domain"]').value.trim().toLowerCase();
-        if (!domainValue) {
-          alert("Por favor, informe o domínio.");
-          return;
+      
+        // faz upload de arquivo no Supabase Storage e retorna URL pública
+        async function uploadFileToStorage(bucketName, file, filePath) {
+          const { data: uploadData, error: uploadError } =
+            await supabaseClient.storage
+              .from(bucketName)
+              .upload(filePath, file);
+          if (uploadError) throw uploadError;
+      
+          const { data: publicData, error: urlError } =
+            supabaseClient.storage.from(bucketName).getPublicUrl(uploadData.path);
+          if (urlError) throw urlError;
+      
+          return publicData.publicUrl;
         }
-        subdomainValue = domainValue;
-      } else if (hasDomain === "nao") {
-        const subdomainInput = document.getElementById("subdomainInput").value.trim().toLowerCase();
-        if (!subdomainInput) {
-          alert("Por favor, informe o subdomínio.");
-          return;
+      
+        // passa do step 1 para o 2, validando senha
+        function goToStep2() {
+          const pw = document.getElementById("password").value;
+          const cpw = document.getElementById("confirm_password").value;
+          if (pw !== cpw) {
+            alert("As senhas não coincidem!");
+            return;
+          }
+          document.getElementById("step1").classList.remove("active");
+          document.getElementById("step2").classList.add("active");
         }
-        subdomainValue = subdomainInput + ".airland.com.br";
-        domainValue = subdomainValue;
-      }
-
-      const primeiroNome = document.querySelector('input[name="primeiro_nome"]').value.trim();
-      const ultimoNome = document.querySelector('input[name="ultimo_nome"]').value.trim();
-      const telefone = document.querySelector('input[name="telefone"]').value.trim();
-      const email = document.querySelector('input[name="email"]').value.trim();
-      document.getElementById("name").value = primeiroNome + " " + ultimoNome;
-
-      let logoURL = "";
-      let profileURL = "";
-      try {
-        const sanitizedLogoFileName = sanitizeFileName(logoFile.name);
-        const logoPath = agencyName + "_" + sanitizedLogoFileName;
-        logoURL = await uploadFileToStorage("logos", logoFile, logoPath);
-        console.log("Logo URL:", logoURL);
-
-        const profileInput = document.querySelector('input[name="fotodeperfil"]');
-        if (profileInput && profileInput.files.length > 0) {
-          const profileFile = profileInput.files[0];
-          const sanitizedProfileFileName = sanitizeFileName(profileFile.name);
-          const profilePath = agencyName + "_" + sanitizedProfileFileName;
-          profileURL = await uploadFileToStorage("profile-images", profileFile, profilePath);
-          console.log("Profile URL:", profileURL);
+      
+        // mostra/oculta campos de domínio vs subdomínio
+        function toggleDomainFields() {
+          const hasDomain = document.querySelector('input[name="has_domain"]:checked').value;
+          document.getElementById("domainField").style.display = hasDomain === "sim" ? "block" : "none";
+          document.getElementById("subdomainField").style.display = hasDomain === "nao" ? "block" : "none";
+          document.querySelector('input[name="domain"]').required = hasDomain === "sim";
+          document.querySelector('input[name="subdomain"]').required = hasDomain === "nao";
         }
-      } catch (uploadError) {
-        alert("Erro no upload dos arquivos: " + uploadError.message);
-        return;
-      }
-
-      const affiliateData = {
-        slug: agencyName,
-        name: agencyName,
-        domain: domainValue,
-        subdomain: subdomainValue,
-        logo_url: logoURL,
-        primary_color: document.querySelector('input[name="primary_color"]').value.trim(),
-        background_color: document.querySelector('input[name="background_color"]').value.trim(),
-        button_color: document.querySelector('input[name="button_color"]').value.trim(),
-        button_text_color: document.querySelector('input[name="button_text_color"]').value.trim(),
-        button_hover: document.querySelector('input[name="button_hover"]').value.trim()
-      };
-
-      let affiliateInsertResult = await supabaseClient
-        .from("affiliates")
-        .insert(affiliateData, { upsert: true, onConflict: "slug" })
-        .select();
-
-      if (affiliateInsertResult.error) {
-        alert("Erro ao cadastrar agência: " + affiliateInsertResult.error.message);
-        console.error(affiliateInsertResult.error);
-        return;
-      }
-
-      const affiliateId = affiliateInsertResult.data[0].id;
-
-      const rawPassword = document.getElementById("password").value;
-      let hashedPassword;
-      try {
-        hashedPassword = await hashPassword(rawPassword);
-      } catch (err) {
-        alert("Erro ao gerar hash da senha.");
-        console.error(err);
-        return;
-      }
-
-      const userData = {
-        primeiro_nome: primeiroNome,
-        ultimo_nome: ultimoNome,
-        telefone: telefone,
-        email: email,
-        fotodeperfil: profileURL,
-        password: hashedPassword,
-        affiliate_id: affiliateId,
-        name: document.getElementById("name").value
-      };
-
-      console.log("Dados da Agência:", affiliateData);
-      console.log("Dados do Usuário:", userData);
-
-      try {
-        let { data: userInsert, error: userError } = await supabaseClient
-          .from("user_affiliates")
-          .insert(userData)
-          .select();
-
-        if (userError) {
-          alert("Erro ao cadastrar usuário: " + userError.message);
-          console.error(userError);
-          return;
+      
+        // atualiza preview do subdomínio
+        function updateSubdomainPreview() {
+          const val = document.getElementById("subdomainInput").value.trim().toLowerCase();
+          document.getElementById("subdomainPreview").textContent =
+            val ? `Sua loja ficará: ${val}.airland.com.br` : "";
         }
-
-        console.log("Registro inserido em user_affiliates:", userInsert);
-        alert("Loja criada com sucesso! Agência: " + agencyName);
-        clearForms();
-      } catch (err) {
-        console.error(err);
-        alert("Erro ao enviar o formulário. Verifique o console para mais detalhes.");
-      }
-    }
-
-    // Função para limpar os formulários e retornar ao STEP 1
-    function clearForms() {
-      document.getElementById("userForm").reset();
-      document.getElementById("affiliateForm").reset();
-      document.getElementById("subdomainPreview").textContent = "";
-      document.getElementById("step2").classList.remove("active");
-      document.getElementById("step1").classList.add("active");
-    }
-
-    // Tornando as funções globais acessíveis
-    window.goToStep2 = goToStep2;
-    window.toggleDomainFields = toggleDomainFields;
-    window.updateSubdomainPreview = updateSubdomainPreview;
-    window.submitForms = submitForms;
-  </script>
+      
+        // coleta dados, faz uploads, gera hash e insere no Supabase
+        async function submitForms() {
+          // validações básicas
+          const agencyName = document.querySelector('input[name="agency_name"]').value.trim();
+          const logoFile = document.querySelector('input[name="logo_url"]').files[0];
+          if (!agencyName || !logoFile) {
+            alert("Nome da agência e logo são obrigatórios.");
+            return;
+          }
+      
+          const hasDomainInput = document.querySelector('input[name="has_domain"]:checked');
+          if (!hasDomainInput) {
+            alert("Escolha se você tem domínio próprio.");
+            return;
+          }
+          const hasDomain = hasDomainInput.value;
+          let domainValue = "", subdomainValue = "";
+          if (hasDomain === "sim") {
+            domainValue = document.querySelector('input[name="domain"]').value.trim().toLowerCase();
+            if (!domainValue) return alert("Informe o domínio.");
+            subdomainValue = domainValue;
+          } else {
+            const sd = document.getElementById("subdomainInput").value.trim().toLowerCase();
+            if (!sd) return alert("Informe o subdomínio.");
+            subdomainValue = `${sd}.airland.com.br`;
+            domainValue = subdomainValue;
+          }
+      
+          // dados do usuário
+          const primeiroNome = document.querySelector('input[name="primeiro_nome"]').value.trim();
+          const ultimoNome  = document.querySelector('input[name="ultimo_nome"]').value.trim();
+          const telefone    = document.querySelector('input[name="telefone"]').value.trim();
+          const email       = document.querySelector('input[name="email"]').value.trim();
+          document.getElementById("name").value = `${primeiroNome} ${ultimoNome}`;
+      
+          // upload de arquivos
+          let logoURL, profileURL = null;
+          try {
+            const logoPath = `${agencyName}_${sanitizeFileName(logoFile.name)}`;
+            logoURL = await uploadFileToStorage("logos", logoFile, logoPath);
+      
+            const profileInput = document.querySelector('input[name="fotodeperfil"]');
+            if (profileInput.files[0]) {
+              const pf = profileInput.files[0];
+              const pfPath = `${agencyName}_${sanitizeFileName(pf.name)}`;
+              profileURL = await uploadFileToStorage("profile-images", pf, pfPath);
+            }
+          } catch (err) {
+            return alert("Erro no upload: " + err.message);
+          }
+      
+          // prepara dados da agência
+          const affiliateData = {
+            slug: agencyName,
+            name: agencyName,
+            domain: domainValue,
+            subdomain: subdomainValue,
+            logo_url: logoURL,
+            primary_color: document.querySelector('input[name="primary_color"]').value.trim(),
+            background_color: document.querySelector('input[name="background_color"]').value.trim(),
+            button_color: document.querySelector('input[name="button_color"]').value.trim(),
+            button_text_color: document.querySelector('input[name="button_text_color"]').value.trim(),
+            button_hover: document.querySelector('input[name="button_hover"]').value.trim()
+          };
+      
+          // upsert na tabela affiliates
+          const { data: affData, error: affError } = await supabaseClient
+            .from("affiliates")
+            .upsert(affiliateData, { onConflict: "slug" })
+            .select()
+            .single();
+          if (affError) {
+            console.error(affError);
+            return alert("Erro ao cadastrar agência: " + affError.message);
+          }
+      
+          // gera hash da senha
+          const rawPassword = document.getElementById("password").value;
+          let hashedPassword;
+          try {
+            hashedPassword = await hashPassword(rawPassword);
+          } catch (err) {
+            console.error(err);
+            return alert("Erro ao gerar hash da senha.");
+          }
+      
+          // prepara objeto user_affiliates
+          const userData = {
+            primeiro_nome: primeiroNome,
+            ultimo_nome: ultimoNome,
+            telefone,
+            email,
+            fotodeperfil: profileURL,
+            password: hashedPassword,
+            affiliate_id: affData.id,
+            name: document.getElementById("name").value
+          };
+      
+          // insere usuário
+          const { data: userResult, error: userError } = await supabaseClient
+            .from("user_affiliates")
+            .insert(userData)
+            .select()
+            .single();
+          if (userError) {
+            console.error(userError);
+            return alert("Erro ao cadastrar usuário: " + userError.message);
+          }
+      
+          alert("Loja criada com sucesso!");
+          clearForms();
+        }
+      
+        // limpa formulário e volta ao step 1
+        function clearForms() {
+          document.getElementById("userForm").reset();
+          document.getElementById("affiliateForm").reset();
+          document.getElementById("subdomainPreview").textContent = "";
+          document.getElementById("step2").classList.remove("active");
+          document.getElementById("step1").classList.add("active");
+        }
+      
+        // expõe funções para uso em onClick inline
+        window.goToStep2 = goToStep2;
+        window.toggleDomainFields = toggleDomainFields;
+        window.updateSubdomainPreview = updateSubdomainPreview;
+        window.submitForms = submitForms;
+      </script>      
 </body>
 </html>
