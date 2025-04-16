@@ -492,8 +492,8 @@
        ============================================================= -->
        <!-- Código JavaScript Principal com integração ao Supabase e hashing com bcryptjs -->
   <script type="module" defer>
-  // Importa o bcryptjs da CDN (versão para uso no navegador)
-  import bcrypt from "https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js";
+  // Importa o bcryptjs usando o import * as porque não há export default
+  import * as bcrypt from "https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js";
   // Importa o cliente do Supabase (ajuste o caminho conforme sua estrutura)
   import supabaseClient from "./supabaseClient.js";
 
@@ -506,8 +506,11 @@
   async function hashPassword(password) {
     return await new Promise((resolve, reject) => {
       bcrypt.hash(password, 10, (err, hash) => {
-        if (err) reject(err);
-        else resolve(hash);
+        if (err) {
+          reject(err);
+        } else {
+          resolve(hash);
+        }
       });
     });
   }
