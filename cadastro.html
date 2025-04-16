@@ -21,6 +21,8 @@
   <link rel="stylesheet" href="assets/css/datatable.css" />
   <link rel="stylesheet" href="assets/css/main.css" />
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.4.3/bcrypt.min.js"></script>
+
   <!-- Estilo para controle dos steps -->
   <style>
     .step { 
@@ -502,12 +504,10 @@
     // Função para gerar hash bcrypt da senha utilizando bcryptjs
     async function hashPassword(password) {
       return new Promise((resolve, reject) => {
+        // Usa o bcrypt que já foi carregado no head
         bcrypt.hash(password, 10, (err, hash) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(hash);
-          }
+          if (err) reject(err);
+          else resolve(hash);
         });
       });
     }
@@ -664,7 +664,7 @@
       const affiliateId = affiliateInsertResult.data[0].id;
 
       const rawPassword = document.getElementById("password").value;
-      let hashedPassword = "";
+      let hashedPassword;
       try {
         hashedPassword = await hashPassword(rawPassword);
       } catch (err) {
