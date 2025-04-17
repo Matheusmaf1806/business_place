@@ -973,37 +973,7 @@
 
   <!-- ========== Scripts do layout e do form ========== -->
   <script>
-    // 1) Verificar sessão e carregar perfil
-    async function checkSession() {
-      try {
-        const response = await fetch("https://airland.com.br/affiliatesacess/login_api.php/check", {
-          credentials: 'include'
-        });
-        const result = await response.json();
-        if (!result.logged_in) {
-          window.location.replace("https://businessplace.airland.com.br/signin.html");
-        } else {
-          // Mostra o body
-          document.body.style.display = "block";
-  
-          // Se o usuário tiver ID, guardamos no hidden
-          if (result.user_data && typeof result.user_data.id !== "undefined") {
-            document.getElementById('agente_id').value = result.user_data.id;
-          }
-          // Se tiver affiliate_id, guardamos no hidden e carregamos usuários
-          if (result.user_data && typeof result.user_data.affiliate_id !== "undefined") {
-            document.getElementById('affiliate_id').value = result.user_data.affiliate_id;
-            loadAffiliateUsers(result.user_data.affiliate_id);
-          }
-          // Define status default
-          document.getElementById('status').value = "Aguardando Emissão";
-        }
-      } catch (error) {
-        console.error("Erro ao verificar a sessão:", error);
-        window.location.replace("https://businessplace.airland.com.br/signin.html");
-      }
-    }
-  
+    
     // 2) Buscar usuários do afiliado e preencher selects
     function loadAffiliateUsers(affiliateId) {
       fetch(`https://airland.com.br/affiliatesacess/get_affiliate_users.php?affiliate_id=${affiliateId}`, {
