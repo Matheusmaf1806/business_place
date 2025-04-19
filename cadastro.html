@@ -633,7 +633,20 @@
         } catch (err) {
           return alert("Erro no upload: " + err.message);
         }
-    
+        
+        try {
+          const { data: footerResult, error: footerError } = await supabaseClient
+            .from("footer")
+            .insert({
+              cnpj: cnpj,
+              logo_url: logoURL
+            });
+          if (footerError) throw footerError;
+          console.log("Footer atualizado:", footerResult);
+        } catch (err) {
+          console.error("Erro ao gravar na tabela footer:", err.message);
+        }
+
         // Prepara dados da agência
         const affiliateData = {
           slug: agencyName,
@@ -713,4 +726,4 @@
       window.submitForms = submitForms;
     </script>
   </body>
-  </html>
+</html>
