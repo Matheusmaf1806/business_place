@@ -245,445 +245,472 @@
     <!-- =============================================================
          Seção de Cadastro (Formulários dos Steps)
          ============================================================= -->
-    <section class="signin-section">
-      <div class="container-fluid">
-        <!-- Título e Breadcrumb -->
-        <div class="title-wrapper pt-30">
-          <div class="row align-items-center">
-            <div class="col-md-6">
-              <div class="title">
-                <h2>Cadastro de Agência</h2>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="breadcrumb-wrapper">
-                <nav aria-label="breadcrumb">
-                  <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#0">Dashboard</a></li>
-                    <li class="breadcrumb-item"><a href="#0">Cadastro</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Agência</li>
-                  </ol>
-                </nav>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Área dos formulários (Steps) -->
-        <div class="row g-0 auth-row">
-          <!-- Coluna ilustrativa -->
-          <div class="col-lg-6">
-            <div class="auth-cover-wrapper bg-primary-100">
-              <div class="auth-cover">
-                <div class="title text-center">
-                  <h1 class="text-primary mb-10">Bem-vindo!</h1>
-                  <p class="text-medium">Comece criando a melhor experiência para seus clientes.</p>
+         <section class="signin-section">
+          <div class="container-fluid">
+            <!-- Título e Breadcrumb -->
+            <div class="title-wrapper pt-30">
+              <div class="row align-items-center">
+                <div class="col-md-6">
+                  <div class="title">
+                    <h2>Cadastro de Agência</h2>
+                  </div>
                 </div>
-                <div class="cover-image">
-                  <img src="assets/images/auth/signin-image.svg" alt="" />
-                </div>
-                <div class="shape-image">
-                  <img src="assets/images/auth/shape.svg" alt="" />
+                <div class="col-md-6">
+                  <div class="breadcrumb-wrapper">
+                    <nav aria-label="breadcrumb">
+                      <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="#0">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="#0">Cadastro</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Agência</li>
+                      </ol>
+                    </nav>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <!-- Fim da Coluna ilustrativa -->
-
-          <!-- Coluna dos formulários -->
-          <div class="col-lg-6">
-            <div class="signup-wrapper">
-              <div class="form-wrapper">
-                <!-- STEP 1: Dados do Usuário -->
-                <div id="step1" class="step active">
-                  <h6 class="mb-15">Dados do Usuário</h6>
-                  <p class="text-sm mb-25">Preencha os dados abaixo para criar sua conta.</p>
-                  <form id="userForm">
-                    <div class="row">
-                      <!-- Primeiro Nome e Último Nome -->
-                      <div class="col-md-6">
-                        <div class="input-style-1">
-                          <label>Primeiro Nome *</label>
-                          <input type="text" name="primeiro_nome" placeholder="Primeiro Nome" required />
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="input-style-1">
-                          <label>Último Nome *</label>
-                          <input type="text" name="ultimo_nome" placeholder="Último Nome" required />
-                        </div>
-                      </div>
-                      <!-- Telefone e Email -->
-                      <div class="col-md-6">
-                        <div class="input-style-1">
-                          <label>Telefone *</label>
-                          <input type="text" name="telefone" placeholder="Telefone" required />
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="input-style-1">
-                          <label>Email *</label>
-                          <input type="email" name="email" placeholder="Email" required />
-                        </div>
-                      </div>
-                      <!-- Foto de Perfil -->
-                      <div class="col-12">
-                        <div class="input-style-1">
-                          <label>Foto de Perfil</label>
-                          <input type="file" name="fotodeperfil" accept="image/*" />
-                        </div>
-                      </div>
-                      <!-- Senha e Repetir Senha -->
-                      <div class="col-md-6">
-                        <div class="input-style-1">
-                          <label>Senha *</label>
-                          <input type="password" id="password" name="password" placeholder="Senha" required />
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="input-style-1">
-                          <label>Repetir Senha *</label>
-                          <input type="password" id="confirm_password" name="confirm_password" placeholder="Repetir Senha" required />
-                        </div>
-                      </div>
-                      <!-- Campos ocultos para dados complementares -->
-                      <input type="hidden" name="affiliate_id" id="affiliate_id" />
-                      <input type="hidden" name="name" id="name" />
-                      <!-- Botão para avançar para o Step 2 -->
-                      <div class="col-12">
-                        <div class="button-group d-flex justify-content-center flex-wrap">
-                          <button type="button" class="main-btn primary-btn btn-hover w-100 text-center" onclick="goToStep2()">Próximo</button>
-                        </div>
-                      </div>
+    
+            <!-- Área dos formulários (Steps) -->
+            <div class="row g-0 auth-row">
+              <!-- Coluna ilustrativa -->
+              <div class="col-lg-6">
+                <div class="auth-cover-wrapper bg-primary-100">
+                  <div class="auth-cover">
+                    <div class="title text-center">
+                      <h1 class="text-primary mb-10">Bem-vindo!</h1>
+                      <p class="text-medium">Comece criando a melhor experiência para seus clientes.</p>
                     </div>
-                  </form>
+                    <div class="cover-image">
+                      <img src="assets/images/auth/signin-image.svg" alt="" />
+                    </div>
+                    <div class="shape-image">
+                      <img src="assets/images/auth/shape.svg" alt="" />
+                    </div>
+                  </div>
                 </div>
-                <!-- Fim do STEP 1 -->
-
-                <!-- =============================================================
-                     STEP 2: Dados da Agência
-                     ============================================================= -->
-                <div id="step2" class="step">
-                  <h6 class="mb-15">Dados da Agência</h6>
-                  <p class="text-sm mb-25">Preencha os dados da sua agência.</p>
-                  <form id="affiliateForm">
-                    <div class="row">
-                      <!-- Nome da Agência -->
-                      <div class="col-12">
-                        <div class="input-style-1">
-                          <label>Nome da Agência *</label>
-                          <input type="text" name="agency_name" placeholder="Nome da Agência" required />
-                        </div>
-                      </div>
-                      <!-- Domínio ou Subdomínio -->
-                      <div class="col-12">
-                        <div class="input-style-1">
-                          <label>Você tem domínio próprio? *</label>
-                          <div>
-                            <div class="form-check form-check-inline">
-                              <input class="form-check-input" type="radio" name="has_domain" id="domainYes" value="sim" onclick="toggleDomainFields()" required>
-                              <label class="form-check-label" for="domainYes">Sim</label>
+              </div>
+              <!-- Fim da Coluna ilustrativa -->
+    
+              <!-- Coluna dos formulários -->
+              <div class="col-lg-6">
+                <div class="signup-wrapper">
+                  <div class="form-wrapper">
+                    <!-- STEP 1: Dados do Usuário -->
+                    <div id="step1" class="step active">
+                      <h6 class="mb-15">Dados do Usuário</h6>
+                      <p class="text-sm mb-25">Preencha os dados abaixo para criar sua conta.</p>
+                      <form id="userForm">
+                        <div class="row">
+                          <!-- Primeiro Nome e Último Nome -->
+                          <div class="col-md-6">
+                            <div class="input-style-1">
+                              <label>Primeiro Nome *</label>
+                              <input type="text" name="primeiro_nome" placeholder="Primeiro Nome" required />
                             </div>
-                            <div class="form-check form-check-inline">
-                              <input class="form-check-input" type="radio" name="has_domain" id="domainNo" value="nao" onclick="toggleDomainFields()" required>
-                              <label class="form-check-label" for="domainNo">Não</label>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="input-style-1">
+                              <label>Último Nome *</label>
+                              <input type="text" name="ultimo_nome" placeholder="Último Nome" required />
+                            </div>
+                          </div>
+                          <!-- Telefone e Email -->
+                          <div class="col-md-6">
+                            <div class="input-style-1">
+                              <label>Telefone *</label>
+                              <input type="text" name="telefone" placeholder="Telefone" required />
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="input-style-1">
+                              <label>Email *</label>
+                              <input type="email" name="email" placeholder="Email" required />
+                            </div>
+                          </div>
+                          <!-- Foto de Perfil e CNPJ -->
+                          <div class="col-md-6">
+                            <div class="input-style-1">
+                              <label>Foto de Perfil</label>
+                              <input type="file" name="fotodeperfil" accept="image/*" />
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="input-style-1">
+                              <label>CNPJ *</label>
+                              <input
+                                type="text"
+                                name="cnpj"
+                                id="cnpj"
+                                placeholder="00.000.000/0000-00"
+                                required
+                                oninput="formatCNPJ(this)"
+                              />
+                            </div>
+                          </div>
+                          <!-- Senha e Repetir Senha -->
+                          <div class="col-md-6">
+                            <div class="input-style-1">
+                              <label>Senha *</label>
+                              <input type="password" id="password" name="password" placeholder="Senha" required />
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="input-style-1">
+                              <label>Repetir Senha *</label>
+                              <input type="password" id="confirm_password" name="confirm_password" placeholder="Repetir Senha" required />
+                            </div>
+                          </div>
+                          <!-- Campos ocultos para dados complementares -->
+                          <input type="hidden" name="affiliate_id" id="affiliate_id" />
+                          <input type="hidden" name="name" id="name" />
+                          <!-- Botão para avançar para o Step 2 -->
+                          <div class="col-12">
+                            <div class="button-group d-flex justify-content-center flex-wrap">
+                              <button type="button" class="main-btn primary-btn btn-hover w-100 text-center" onclick="goToStep2()">Próximo</button>
                             </div>
                           </div>
                         </div>
-                      </div>
-                      <!-- Campo para domínio (quando sim) -->
-                      <div class="col-12" id="domainField" style="display:none;">
-                        <div class="input-style-1">
-                          <label>Domínio *</label>
-                          <input type="text" name="domain" placeholder="seuagencia.com" />
-                        </div>
-                      </div>
-                      <!-- Campo para subdomínio (quando não) -->
-                      <div class="col-12" id="subdomainField" style="display:none;">
-                        <div class="input-style-1">
-                          <label>Subdomínio *</label>
-                          <div class="input-group">
-                            <input type="text" class="form-control" name="subdomain" id="subdomainInput" placeholder="lojadobreno" oninput="updateSubdomainPreview()" />
-                            <span class="input-group-text">.airland.com.br</span>
-                          </div>
-                          <p class="text-sm mt-2" id="subdomainPreview"></p>
-                        </div>
-                      </div>
-                      <!-- Upload da Logo -->
-                      <div class="col-12">
-                        <div class="input-style-1">
-                          <label>Logo *</label>
-                          <input type="file" name="logo_url" accept="image/*" required />
-                        </div>
-                      </div>
-                      <!-- Configurações de cores -->
-                      <div class="col-md-6">
-                        <div class="input-style-1">
-                          <label>Cor Principal</label>
-                          <input type="text" name="primary_color" placeholder="Ex: #000000" />
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="input-style-1">
-                          <label>Cor Secundária</label>
-                          <input type="text" name="background_color" placeholder="Ex: #FFFFFF" />
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="input-style-1">
-                          <label>Cor do Botão</label>
-                          <input type="text" name="button_color" placeholder="Ex: #FF0000" />
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="input-style-1">
-                          <label>Cor do Texto do Botão</label>
-                          <input type="text" name="button_text_color" placeholder="Ex: #FFFFFF" />
-                        </div>
-                      </div>
-                      <div class="col-12">
-                        <div class="input-style-1">
-                          <label>Cor do Botão ao Clicar</label>
-                          <input type="text" name="button_hover" placeholder="Ex: #CCCCCC" />
-                        </div>
-                      </div>
-                      <!-- Botão Final: Criar Loja -->
-                      <div class="col-12">
-                        <div class="button-group d-flex justify-content-center flex-wrap">
-                          <button type="button" class="main-btn primary-btn btn-hover w-100 text-center" onclick="submitForms()">Criar Loja</button>
-                        </div>
-                      </div>
+                      </form>
                     </div>
-                  </form>
+                    <!-- Fim do STEP 1 -->
+    
+                    <!-- =============================================================
+                         STEP 2: Dados da Agência
+                         ============================================================= -->                  
+                    <div id="step2" class="step">
+                      <h6 class="mb-15">Dados da Agência</h6>
+                      <p class="text-sm mb-25">Preencha os dados da sua agência.</p>
+                      <form id="affiliateForm">
+                        <div class="row">
+                          <!-- Nome da Agência -->
+                          <div class="col-12">
+                            <div class="input-style-1">
+                              <label>Nome da Agência *</label>
+                              <input type="text" name="agency_name" placeholder="Nome da Agência" required />
+                            </div>
+                          </div>
+                          <!-- Domínio ou Subdomínio -->
+                          <div class="col-12">
+                            <div class="input-style-1">
+                              <label>Você tem domínio próprio? *</label>
+                              <div>
+                                <div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="radio" name="has_domain" id="domainYes" value="sim" onclick="toggleDomainFields()" required>
+                                  <label class="form-check-label" for="domainYes">Sim</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="radio" name="has_domain" id="domainNo" value="nao" onclick="toggleDomainFields()" required>
+                                  <label class="form-check-label" for="domainNo">Não</label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- Campo para domínio (quando sim) -->
+                          <div class="col-12" id="domainField" style="display:none;">
+                            <div class="input-style-1">
+                              <label>Domínio *</label>
+                              <input type="text" name="domain" placeholder="seuagencia.com" />
+                            </div>
+                          </div>
+                          <!-- Campo para subdomínio (quando não) -->
+                          <div class="col-12" id="subdomainField" style="display:none;">
+                            <div class="input-style-1">
+                              <label>Subdomínio *</label>
+                              <div class="input-group">
+                                <input type="text" class="form-control" name="subdomain" id="subdomainInput" placeholder="lojadobreno" oninput="updateSubdomainPreview()" />
+                                <span class="input-group-text">.airland.com.br</span>
+                              </div>
+                              <p class="text-sm mt-2" id="subdomainPreview"></p>
+                            </div>
+                          </div>
+                          <!-- Upload da Logo -->
+                          <div class="col-12">
+                            <div class="input-style-1">
+                              <label>Logo *</label>
+                              <input type="file" name="logo_url" accept="image/*" required />
+                            </div>
+                          </div>
+                          <!-- Configurações de cores -->
+                          <div class="col-md-6">
+                            <div class="input-style-1">
+                              <label>Cor Principal</label>
+                              <input type="text" name="primary_color" placeholder="Ex: #000000" />
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="input-style-1">
+                              <label>Cor Secundária</label>
+                              <input type="text" name="background_color" placeholder="Ex: #FFFFFF" />
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="input-style-1">
+                              <label>Cor do Botão</label>
+                              <input type="text" name="button_color" placeholder="Ex: #FF0000" />
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="input-style-1">
+                              <label>Cor do Texto do Botão</label>
+                              <input type="text" name="button_text_color" placeholder="Ex: #FFFFFF" />
+                            </div>
+                          </div>
+                          <div class="col-12">
+                            <div class="input-style-1">
+                              <label>Cor do Botão ao Clicar</label>
+                              <input type="text" name="button_hover" placeholder="Ex: #CCCCCC" />
+                            </div>
+                          </div>
+                          <!-- Botão Final: Criar Loja -->
+                          <div class="col-12">
+                            <div class="button-group d-flex justify-content-center flex-wrap">
+                              <button type="button" class="main-btn primary-btn btn-hover w-100 text-center" onclick="submitForms()">Criar Loja</button>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                    <!-- =============================================================
+                         Fim do STEP 2
+                         ============================================================= -->
+                  </div>
                 </div>
-                <!-- =============================================================
-                     Fim do STEP 2
-                     ============================================================= -->
               </div>
+              <!-- Fim da Coluna dos formulários -->
             </div>
           </div>
-          <!-- Fim da Coluna dos formulários -->
-        </div>
-      </div>
-    </section>
-    <!-- =============================================================
-         Fim da Seção de Cadastro
-         ============================================================= -->
-  </main>
-  <!-- =============================================================
-       Fim do Main Wrapper
-       ============================================================= -->
-
-  <!-- (Inclua seus scripts de plugins/CSS padrão abaixo) -->
-  <script src="assets/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/js/Chart.min.js"></script>
-  <script src="assets/js/apexcharts.min.js"></script>
-  <script src="assets/js/dynamic-pie-chart.js"></script>
-  <script src="assets/js/moment.min.js"></script>
-  <script src="assets/js/fullcalendar.js"></script>
-  <script src="assets/js/jvectormap.min.js"></script>
-  <script src="assets/js/world-merc.js"></script>
-  <script src="assets/js/polyfill.js"></script>
-  <script src="assets/js/quill.min.js"></script>
-  <script src="assets/js/datatable.js"></script>
-  <script src="assets/js/Sortable.min.js"></script>
-  <script src="assets/js/main.js"></script>
-
-  <script type="module" defer>
-  import supabaseClient from "./supabaseClient.js";
-
-  // Pega o bcrypt carregado no <head> via CDN (bcryptjs expõe em window.dcodeIO.bcrypt)
-  const bcrypt = window.dcodeIO && window.dcodeIO.bcrypt 
-    ? window.dcodeIO.bcrypt 
-    : window.bcrypt;
-
-  if (!bcrypt) {
-    console.error("bcryptjs não carregado corretamente");
-  }
-
-  // Sanitiza nomes de arquivos (remove espaços e caracteres inválidos)
-  function sanitizeFileName(fileName) {
-    return fileName
-      .replace(/\s+/g, "_")
-      .replace(/[^a-zA-Z0-9_.-]/g, "");
-  }
-
-  // Gera hash bcrypt da senha
-  async function hashPassword(password) {
-    return new Promise((resolve, reject) => {
-      bcrypt.hash(password, 10, (err, hash) => {
-        if (err) reject(err);
-        else resolve(hash);
-      });
-    });
-  }
-
-  // Faz upload de arquivo no Supabase Storage e retorna URL pública
-  async function uploadFileToStorage(bucketName, file, filePath) {
-    const { data: uploadData, error: uploadError } =
-      await supabaseClient.storage.from(bucketName).upload(filePath, file);
-    if (uploadError) throw uploadError;
-
-    const { data: publicData, error: urlError } =
-      supabaseClient.storage.from(bucketName).getPublicUrl(uploadData.path);
-    if (urlError) throw urlError;
-
-    return publicData.publicUrl;
-  }
-
-  // Passa do step 1 para o 2, validando senha
-  function goToStep2() {
-    const pw = document.getElementById("password").value;
-    const cpw = document.getElementById("confirm_password").value;
-    if (pw !== cpw) {
-      alert("As senhas não coincidem!");
-      return;
-    }
-    document.getElementById("step1").classList.remove("active");
-    document.getElementById("step2").classList.add("active");
-  }
-
-  // Mostra/oculta campos de domínio vs subdomínio
-  function toggleDomainFields() {
-    const hasDomain = document.querySelector('input[name="has_domain"]:checked').value;
-    document.getElementById("domainField").style.display = hasDomain === "sim" ? "block" : "none";
-    document.getElementById("subdomainField").style.display = hasDomain === "nao" ? "block" : "none";
-    document.querySelector('input[name="domain"]').required = hasDomain === "sim";
-    document.querySelector('input[name="subdomain"]').required = hasDomain === "nao";
-  }
-
-  // Atualiza preview do subdomínio
-  function updateSubdomainPreview() {
-    const val = document.getElementById("subdomainInput").value.trim().toLowerCase();
-    document.getElementById("subdomainPreview").textContent =
-      val ? `Sua loja ficará: ${val}.airland.com.br` : "";
-  }
-
-  // Coleta dados, faz uploads, gera hash e insere no Supabase
-  async function submitForms() {
-    // Validações básicas
-    const agencyName = document.querySelector('input[name="agency_name"]').value.trim();
-    const logoFile = document.querySelector('input[name="logo_url"]').files[0];
-    if (!agencyName || !logoFile) {
-      return alert("Nome da agência e logo são obrigatórios.");
-    }
-
-    const hasDomainInput = document.querySelector('input[name="has_domain"]:checked');
-    if (!hasDomainInput) {
-      return alert("Escolha se você tem domínio próprio.");
-    }
-    const hasDomain = hasDomainInput.value;
-    let domainValue = "", subdomainValue = "";
-    if (hasDomain === "sim") {
-      domainValue = document.querySelector('input[name="domain"]').value.trim().toLowerCase();
-      if (!domainValue) return alert("Informe o domínio.");
-      subdomainValue = domainValue;
-    } else {
-      const sd = document.getElementById("subdomainInput").value.trim().toLowerCase();
-      if (!sd) return alert("Informe o subdomínio.");
-      subdomainValue = `${sd}.airland.com.br`;
-      domainValue = subdomainValue;
-    }
-
-    // Dados do usuário
-    const primeiroNome = document.querySelector('input[name="primeiro_nome"]').value.trim();
-    const ultimoNome  = document.querySelector('input[name="ultimo_nome"]').value.trim();
-    const telefone    = document.querySelector('input[name="telefone"]').value.trim();
-    const email       = document.querySelector('input[name="email"]').value.trim();
-    document.getElementById("name").value = `${primeiroNome} ${ultimoNome}`;
-
-    // Upload de arquivos
-    let logoURL, profileURL = null;
-    try {
-      const logoPath = `${agencyName}_${sanitizeFileName(logoFile.name)}`;
-      logoURL = await uploadFileToStorage("logos", logoFile, logoPath);
-
-      const profileInput = document.querySelector('input[name="fotodeperfil"]');
-      if (profileInput.files[0]) {
-        const pf = profileInput.files[0];
-        const pfPath = `${agencyName}_${sanitizeFileName(pf.name)}`;
-        profileURL = await uploadFileToStorage("profile-images", pf, pfPath);
+        </section>
+        <!-- =============================================================
+             Fim da Seção de Cadastro
+             ============================================================= -->
+      </main>
+      <!-- =============================================================
+           Fim do Main Wrapper
+           ============================================================= -->
+    
+      <!-- (Inclua seus scripts de plugins/CSS padrão abaixo) -->
+      <script src="assets/js/bootstrap.bundle.min.js"></script>
+      <script src="assets/js/Chart.min.js"></script>
+      <script src="assets/js/apexcharts.min.js"></script>
+      <script src="assets/js/dynamic-pie-chart.js"></script>
+      <script src="assets/js/moment.min.js"></script>
+      <script src="assets/js/fullcalendar.js"></script>
+      <script src="assets/js/jvectormap.min.js"></script>
+      <script src="assets/js/world-merc.js"></script>
+      <script src="assets/js/polyfill.js"></script>
+      <script src="assets/js/quill.min.js"></script>
+      <script src="assets/js/datatable.js"></script>
+      <script src="assets/js/Sortable.min.js"></script>
+      <script src="assets/js/main.js"></script>
+    
+      <script type="module" defer>
+      import supabaseClient from "./supabaseClient.js";
+    
+      // Pega o bcrypt carregado no <head> via CDN (bcryptjs expõe em window.dcodeIO.bcrypt)
+      const bcrypt = window.dcodeIO && window.dcodeIO.bcrypt 
+        ? window.dcodeIO.bcrypt 
+        : window.bcrypt;
+    
+      if (!bcrypt) {
+        console.error("bcryptjs não carregado corretamente");
       }
-    } catch (err) {
-      return alert("Erro no upload: " + err.message);
-    }
-
-    // Prepara dados da agência
-    const affiliateData = {
-      slug: agencyName,
-      name: agencyName,
-      domain: domainValue,
-      subdomain: subdomainValue,
-      logo_url: logoURL,
-      primary_color: document.querySelector('input[name="primary_color"]').value.trim(),
-      background_color: document.querySelector('input[name="background_color"]').value.trim(),
-      button_color: document.querySelector('input[name="button_color"]').value.trim(),
-      button_text_color: document.querySelector('input[name="button_text_color"]').value.trim(),
-      button_hover: document.querySelector('input[name="button_hover"]').value.trim()
-    };
-
-    // Upsert na tabela affiliates
-    const { data: affData, error: affError } = await supabaseClient
-      .from("affiliates")
-      .upsert(affiliateData, { onConflict: "slug" })
-      .select()
-      .single();
-    if (affError) {
-      console.error(affError);
-      return alert("Erro ao cadastrar agência: " + affError.message);
-    }
-
-    // Gera hash da senha
-    const rawPassword = document.getElementById("password").value;
-    let hashedPassword;
-    try {
-      hashedPassword = await hashPassword(rawPassword);
-    } catch (err) {
-      console.error(err);
-      return alert("Erro ao gerar hash da senha.");
-    }
-
-    // Prepara objeto user_affiliates
-    const userData = {
-      primeiro_nome: primeiroNome,
-      ultimo_nome: ultimoNome,
-      telefone,
-      email,
-      fotodeperfil: profileURL,
-      password: hashedPassword,
-      affiliate_id: affData.id,
-      name: document.getElementById("name").value
-    };
-
-    // Insere usuário
-    const { data: userResult, error: userError } = await supabaseClient
-      .from("user_affiliates")
-      .insert(userData)
-      .select()
-      .single();
-    if (userError) {
-      console.error(userError);
-      return alert("Erro ao cadastrar usuário: " + userError.message);
-    }
-
-    alert("Loja criada com sucesso!");
-    clearForms();
-  }
-
-  // Limpa formulário e volta ao step 1
-  function clearForms() {
-    document.getElementById("userForm").reset();
-    document.getElementById("affiliateForm").reset();
-    document.getElementById("subdomainPreview").textContent = "";
-    document.getElementById("step2").classList.remove("active");
-    document.getElementById("step1").classList.add("active");
-  }
-
-  // Expõe funções para uso em onClick inline
-  window.goToStep2 = goToStep2;
-  window.toggleDomainFields = toggleDomainFields;
-  window.updateSubdomainPreview = updateSubdomainPreview;
-  window.submitForms = submitForms;
-</script>
-</body>
-</html>
+    
+      // Formata CNPJ enquanto digita: 00.000.000/0000-00
+      function formatCNPJ(input) {
+        let v = input.value.replace(/\D/g, '').slice(0, 14);
+        v = v.replace(/^(\d{2})(\d)/, '$1.$2');
+        v = v.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
+        v = v.replace(/\.(\d{3})(\d)/, '.$1/$2');
+        v = v.replace(/(\d{4})(\d)/, '$1-$2');
+        input.value = v;
+      }
+    
+      // Sanitiza nomes de arquivos (remove espaços e caracteres inválidos)
+      function sanitizeFileName(fileName) {
+        return fileName
+          .replace(/\s+/g, "_")
+          .replace(/[^a-zA-Z0-9_.-]/g, "");
+      }
+    
+      // Gera hash bcrypt da senha
+      async function hashPassword(password) {
+        return new Promise((resolve, reject) => {
+          bcrypt.hash(password, 10, (err, hash) => {
+            if (err) reject(err);
+            else resolve(hash);
+          });
+        });
+      }
+    
+      // Faz upload de arquivo no Supabase Storage e retorna URL pública
+      async function uploadFileToStorage(bucketName, file, filePath) {
+        const { data: uploadData, error: uploadError } =
+          await supabaseClient.storage.from(bucketName).upload(filePath, file);
+        if (uploadError) throw uploadError;
+    
+        const { data: publicData, error: urlError } =
+          supabaseClient.storage.from(bucketName).getPublicUrl(uploadData.path);
+        if (urlError) throw urlError;
+    
+        return publicData.publicUrl;
+      }
+    
+      // Passa do step 1 para o 2, validando senha
+      function goToStep2() {
+        const pw = document.getElementById("password").value;
+        const cpw = document.getElementById("confirm_password").value;
+        if (pw !== cpw) {
+          alert("As senhas não coincidem!");
+          return;
+        }
+        document.getElementById("step1").classList.remove("active");
+        document.getElementById("step2").classList.add("active");
+      }
+    
+      // Mostra/oculta campos de domínio vs subdomínio
+      function toggleDomainFields() {
+        const hasDomain = document.querySelector('input[name="has_domain"]:checked').value;
+        document.getElementById("domainField").style.display = hasDomain === "sim" ? "block" : "none";
+        document.getElementById("subdomainField").style.display = hasDomain === "nao" ? "block" : "none";
+        document.querySelector('input[name="domain"]').required = hasDomain === "sim";
+        document.querySelector('input[name="subdomain"]').required = hasDomain === "nao";
+      }
+    
+      // Atualiza preview do subdomínio
+      function updateSubdomainPreview() {
+        const val = document.getElementById("subdomainInput").value.trim().toLowerCase();
+        document.getElementById("subdomainPreview").textContent =
+          val ? `Sua loja ficará: ${val}.airland.com.br` : "";
+      }
+    
+      // Coleta dados, faz uploads, gera hash e insere no Supabase
+      async function submitForms() {
+        // Validações básicas
+        const agencyName = document.querySelector('input[name="agency_name"]').value.trim();
+        const logoFile = document.querySelector('input[name="logo_url"]').files[0];
+        if (!agencyName || !logoFile) {
+          return alert("Nome da agência e logo são obrigatórios.");
+        }
+    
+        const hasDomainInput = document.querySelector('input[name="has_domain"]:checked');
+        if (!hasDomainInput) {
+          return alert("Escolha se você tem domínio próprio.");
+        }
+        const hasDomain = hasDomainInput.value;
+        let domainValue = "", subdomainValue = "";
+        if (hasDomain === "sim") {
+          domainValue = document.querySelector('input[name="domain"]').value.trim().toLowerCase();
+          if (!domainValue) return alert("Informe o domínio.");
+          subdomainValue = domainValue;
+        } else {
+          const sd = document.getElementById("subdomainInput").value.trim().toLowerCase();
+          if (!sd) return alert("Informe o subdomínio.");
+          subdomainValue = `${sd}.airland.com.br`;
+          domainValue = subdomainValue;
+        }
+    
+        // Dados do usuário
+        const primeiroNome = document.querySelector('input[name="primeiro_nome"]').value.trim();
+        const ultimoNome  = document.querySelector('input[name="ultimo_nome"]').value.trim();
+        const telefone    = document.querySelector('input[name="telefone"]').value.trim();
+        const email       = document.querySelector('input[name="email"]').value.trim();
+        document.getElementById("name").value = `${primeiroNome} ${ultimoNome}`;
+    
+        // CNPJ
+        const cnpj = document.getElementById("cnpj").value.trim();
+    
+        // Upload de arquivos
+        let logoURL, profileURL = null;
+        try {
+          const logoPath = `${agencyName}_${sanitizeFileName(logoFile.name)}`;
+          logoURL = await uploadFileToStorage("logos", logoFile, logoPath);
+    
+          const profileInput = document.querySelector('input[name="fotodeperfil"]');
+          if (profileInput.files[0]) {
+            const pf = profileInput.files[0];
+            const pfPath = `${agencyName}_${sanitizeFileName(pf.name)}`;
+            profileURL = await uploadFileToStorage("profile-images", pf, pfPath);
+          }
+        } catch (err) {
+          return alert("Erro no upload: " + err.message);
+        }
+    
+        // Prepara dados da agência
+        const affiliateData = {
+          slug: agencyName,
+          name: agencyName,
+          domain: domainValue,
+          subdomain: subdomainValue,
+          logo_url: logoURL,
+          primary_color: document.querySelector('input[name="primary_color"]').value.trim(),
+          background_color: document.querySelector('input[name="background_color"]').value.trim(),
+          button_color: document.querySelector('input[name="button_color"]').value.trim(),
+          button_text_color: document.querySelector('input[name="button_text_color"]').value.trim(),
+          button_hover: document.querySelector('input[name="button_hover"]').value.trim(),
+          cnpj: cnpj
+        };
+    
+        // Upsert na tabela affiliates
+        const { data: affData, error: affError } = await supabaseClient
+          .from("affiliates")
+          .upsert(affiliateData, { onConflict: "slug" })
+          .select()
+          .single();
+        if (affError) {
+          console.error(affError);
+          return alert("Erro ao cadastrar agência: " + affError.message);
+        }
+    
+        // Gera hash da senha
+        const rawPassword = document.getElementById("password").value;
+        let hashedPassword;
+        try {
+          hashedPassword = await hashPassword(rawPassword);
+        } catch (err) {
+          console.error(err);
+          return alert("Erro ao gerar hash da senha.");
+        }
+    
+        // Prepara objeto user_affiliates
+        const userData = {
+          primeiro_nome: primeiroNome,
+          ultimo_nome: ultimoNome,
+          telefone,
+          email,
+          fotodeperfil: profileURL,
+          password: hashedPassword,
+          affiliate_id: affData.id,
+          name: document.getElementById("name").value
+        };
+    
+        // Insere usuário
+        const { data: userResult, error: userError } = await supabaseClient
+          .from("user_affiliates")
+          .insert(userData)
+          .select()
+          .single();
+        if (userError) {
+          console.error(userError);
+          return alert("Erro ao cadastrar usuário: " + userError.message);
+        }
+    
+        alert("Loja criada com sucesso!");
+        clearForms();
+      }
+    
+      // Limpa formulário e volta ao step 1
+      function clearForms() {
+        document.getElementById("userForm").reset();
+        document.getElementById("affiliateForm").reset();
+        document.getElementById("subdomainPreview").textContent = "";
+        document.getElementById("step2").classList.remove("active");
+        document.getElementById("step1").classList.add("active");
+      }
+    
+      // Expõe funções para uso em onClick inline
+      window.goToStep2 = goToStep2;
+      window.toggleDomainFields = toggleDomainFields;
+      window.updateSubdomainPreview = updateSubdomainPreview;
+      window.submitForms = submitForms;
+    </script>
+  </body>
+  </html>
